@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="" type="image/png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <title>❭❭ 📊 Gabriel Groehs</title>
+    <title rel="shortcut icon">📊</title>
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .titulosdois {
+            color: gold;
+            animation: scroller 2s infinite;
+            background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+            border-radius: 8px 0 0 8px;
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            text-align: right;
+            margin-top: 0;
+            padding-right: 12px;
+            padding: 4px;
+        }
+        
+        .principal {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            border-radius: 26px 26px 0px 0px;
+            background-attachment: local;
+            background-color: black;
+            background-size: auto;
+            background-image: url('https://cdn.dribbble.com/users/1100256/screenshots/7124464/media/94a5e074f80ae9466705cf4c833c3432.gif');
+        }
+        
+        .container {
+            max-width: 980px;
+            background-color: rgb(48, 48, 48);
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+        }
+        
+        .principal .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-areas: "nome foto" "formacao redes" "formacao informacoes" "experiencia informacoes" "experiencia informacoes" "experiencia informacoes" "gifs gifs" "gifs gifs";
+        }
+        
+        .gifs {
+            grid-area: gifs;
+            text-align: center;
+        }
+        
+        .gifs .dash {
+            height: 14rem;
+        }
+        
+        .informacoes {
+            color: white;
+            font-size: 1.4rem;
+            list-style: circle;
+            line-height: 2.6rem;
+            grid-area: informacoes;
+            background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+            box-shadow: -4px 4px 25px -4px rgba(0, 0, 0, 0.75);
+        }
+        
+        .nome {
+            grid-area: nome;
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            background-color: white;
+        }
+        
+        .redes {
+            box-shadow: -4px 4px 25px -4px rgba(0, 0, 0, 0.75);
+        }
+        
+        .formacao {
+            grid-area: formacao;
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            background-color: rgb(255, 255, 255);
+        }
+        
+        .formacao ul {
+            background-color: white;
+            border-radius: 4px;
+            margin: 0px 0px 0px 8px;
+            height: 80%;
+            border: solid 1px rgb(204, 204, 204);
+            box-shadow: -19px 26px 18px -27px rgba(0, 0, 0, 0.75);
+        }
+        
+        .experiencia {
+            grid-area: experiencia;
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            background-color: white;
+        }
+        
+        .experiencia #listaexperiencia {
+            background-color: white;
+            border-radius: 4px;
+            margin: 0px 0px 0px 8px;
+            border: solid 1px rgb(204, 204, 204);
+            box-shadow: -19px 26px 18px -27px rgba(0, 0, 0, 0.75);
+        }
+        
+        .experiencia #listaexperiencia li {
+            border: none;
+        }
+        
+        .redes {
+            grid-area: redes;
+            background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+        }
+        
+        .nome h1:hover {
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+        }
+        
+        .nome #subtitulo {
+            padding: 4px;
+            animation: scroller 2s infinite;
+        }
+        
+        #minhafoto {
+            animation: heartbeat 5s ease-in-out infinite both;
+        }
+        
+        @keyframes heartbeat {
+            from {
+                transform: scale(1);
+                transform-origin: center center;
+                animation-timing-function: ease-out;
+            }
+            10% {
+                transform: scale(0.91);
+                animation-timing-function: ease-in;
+            }
+            17% {
+                transform: scale(0.98);
+                animation-timing-function: ease-out;
+            }
+            33% {
+                transform: scale(0.87);
+                animation-timing-function: ease-in;
+            }
+            45% {
+                transform: scale(1);
+                animation-timing-function: ease-out;
+            }
+        }
+        
+        @keyframes scroller {
+            0% {
+                text-shadow: 0 0 0 rgba(39, 39, 39, 0);
+            }
+            50% {
+                text-shadow: 4px 4px 12px rgb(7, 7, 7);
+            }
+            100% {
+                text-shadow: 0 0 0 rgba(86, 255, 34, 0);
+            }
+        }
+        
+        .nome p {
+            padding: 4px;
+            background-color: white;
+            border-radius: 4px;
+            margin: 0px 0px 8px 8px;
+            border: solid 1px rgb(204, 204, 204);
+            box-shadow: -19px 26px 18px -27px rgba(0, 0, 0, 0.75);
+        }
+        
+        .nome #subtitulo:hover {
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            border-radius: 8px 0 0 8px;
+            background-color: rgb(255, 166, 0);
+            cursor: pointer;
+        }
+        
+        .nome p:hover {
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            border-radius: 8px 0 0 8px;
+            background-image: linear-gradient(to right, rgb(255, 242, 166), rgb(255, 255, 255));
+            cursor: pointer;
+        }
+        
+        .foto {
+            background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+            box-shadow: -3px 4px 25px -4px rgb(59, 59, 59);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .foto img {
+            grid-area: foto;
+            animation: heartbeat 1.5s ease-in-out infinite both;
+            box-shadow: -3px 4px 25px -4px rgb(255, 255, 255);
+            width: 14rem;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: aliceblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2px;
+            animation: scroller 2s infinite;
+        }
+        
+        .foto img:hover {
+            border-radius: 50%;
+            animation: rotacao 1s linear both;
+        }
+        
+        @keyframes rotacao {
+            0% {
+                transform: scale(1) rotate3d(1, 1, 0, 0deg);
+            }
+            50% {
+                transform: scale(1.2) rotate3d(1, 1, 0, 180deg);
+            }
+            100% {
+                transform: scale(1) rotate3d(1, 1, 0, 360deg);
+            }
+        }
+        
+        li {
+            list-style: none;
+        }
+        
+        #curriculo {
+            box-shadow: 10px 10px 25px -13px rgba(0, 0, 0, 0.75);
+            border-radius: 8px 0 0 8px;
+            line-height: 3rem;
+            color: gold;
+            margin-top: 0;
+            padding-left: 8px;
+            background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+        }
+        
+        .titulosdois:hover {
+            box-shadow: 10px 10px 10px -8px rgba(0, 0, 0, 0.75);
+            color: rgb(61, 61, 61);
+            cursor: pointer;
+            background-image: linear-gradient(to top, rgb(255, 187, 0), rgb(255, 215, 104));
+        }
+        
+        @keyframes rotacao2 {
+            0% {
+                transform: rotateX(0);
+            }
+            100% {
+                transform: rotateX(380deg);
+            }
+        }
+        
+        #curriculo:hover {
+            box-shadow: 10px 10px 10px -8px rgba(0, 0, 0, 0.75);
+            line-height: 3.1rem;
+            color: rgb(61, 61, 61);
+            cursor: pointer;
+            background-image: linear-gradient(to top, rgb(255, 187, 0), rgb(255, 215, 104));
+        }
+        
+        .nomefomacao {
+            padding: .5rem;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .nomefomacao:hover {
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+            cursor: pointer;
+        }
+        
+        .nomefomacao .universidade {
+            font-weight: 100;
+        }
+        
+        .redes div {
+            box-shadow: 10px 0px 45px -11px rgba(0, 0, 0, 0.75);
+            height: 20%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .redes div .imagem {
+            width: 30%;
+            height: 100%;
+        }
+        
+        .redes div .textorede {
+            height: 100%;
+        }
+        
+        .redes div .textorede a {
+            text-decoration: none;
+            color: rgb(53, 53, 53);
+        }
+        
+        .redes div .textorede a:hover {
+            color: aliceblue;
+        }
+        
+        .redes div#linkedin {
+            font-size: 2rem;
+            box-shadow: 15px 7px 25px 4px rgba(0, 0, 0, 0.75);
+            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            text-decoration: none;
+        }
+        
+        .redes div#linkedin:hover {
+            background-image: linear-gradient(to right, rgb(0, 54, 204), rgb(118, 155, 255));
+            color: aliceblue;
+        }
+        
+        .redes div#whats {
+            font-size: 2rem;
+            box-shadow: 15px 7px 25px 4px rgba(0, 0, 0, 0.75);
+            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+        }
+        
+        .redes div#whats:hover {
+            background-image: linear-gradient(to right, rgb(0, 204, 92), rgb(118, 255, 198));
+            color: aliceblue;
+        }
+        
+        .redes div#email {
+            font-size: 2rem;
+            box-shadow: 15px 7px 25px 4px rgba(0, 0, 0, 0.75);
+            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+        }
+        
+        .redes div#email:hover {
+            background-image: linear-gradient(to right, rgb(204, 0, 0), rgb(255, 61, 61));
+            color: aliceblue;
+        }
+        
+        .redes div#youtube {
+            font-size: 2rem;
+            box-shadow: 15px 7px 25px 4px rgba(0, 0, 0, 0.75);
+            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+        }
+        
+        .redes div#youtube:hover {
+            background-image: linear-gradient(to right, rgb(204, 0, 27), rgb(255, 47, 75));
+            color: aliceblue;
+        }
+        
+        .redes div#git {
+            font-size: 2rem;
+            box-shadow: 15px 7px 25px 4px rgba(0, 0, 0, 0.75);
+            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+        }
+        
+        .redes div#git:hover {
+            background-image: linear-gradient(to right, rgb(80, 80, 80), rgb(0, 0, 0));
+            color: aliceblue;
+        }
+        
+        .flecha {
+            padding: 0;
+            left: 4px;
+            text-align: left;
+        }
+        
+        .experiencia ul .nomeexperiencia {
+            font-size: 1.1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            padding: 5px;
+        }
+        
+        .experiencia ul .nomeexperiencia:hover {
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+            cursor: pointer;
+        }
+        
+        .experiencia ul .nomeexperiencia ul li {
+            padding: 5px;
+            font-weight: 100;
+        }
+        
+        .experiencia ul .nomeexperiencia:hover ul li {
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            background-image: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
+            cursor: pointer;
+        }
+        
+        .salario {
+            grid-template: salario;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: rgb(255, 217, 47);
+            background-color: rgb(53, 53, 53);
+            box-shadow: 10px 10px 22px -4px rgba(0, 0, 0, 0.75);
+            font-size: 2rem;
+            text-shadow: 7px 1px 7px rgb(24, 24, 24);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /*animation: scroller2 8s infinite;*/
+        }
+        
+        @keyframes scroller2 {
+            from {
+                transform: scale(1);
+                transform-origin: center center;
+                animation-timing-function: ease-out;
+            }
+            10% {
+                transform: scale(0.8);
+                animation-timing-function: ease-in;
+            }
+            17% {
+                transform: scale(0.6);
+                animation-timing-function: ease-out;
+            }
+            33% {
+                transform: scale(0.8);
+                animation-timing-function: ease-in;
+            }
+            45% {
+                transform: scale(1);
+                animation-timing-function: ease-out;
+            }
+        }
+    </style>
+</head>
+
+<body class="principal">
+    <div class="container">
+        <div class="nome">
+            <h1 id="curriculo"><span class="flecha">❱❭</span> &nbsp&nbspGabriel Groehs 📊</h1>
+            <div class="resumo">
+                <h2 id="subtitulo">📚Estratégica Economica Tecnologia orientada a dados</h2>
+                <p id="resumo">Profissional de Finanças 4.0, Controladoria, Ciência de Dados, (desde 2010). 💱FP&A (Planejamento Financeiro) Capex, Opex, P&L(DRE), Budget(Orçamento), OBZ, Torre despesas, Métodos de Custeio, EBITDA, Cash Flow 📊 BI&A Business Intelligence
+                    Power BI, SQL, Data Warehouse, ETL, Data Lake, Data Analytics, Dashboard 💻 Tech Skill's: DAX, M, SQL, Power BI, HTML, CSS, JavaScript, Python</p>
+            </div>
+        </div>
+        <div class="foto">
+            <img id="minhafoto" src="https://media-exp1.licdn.com/dms/image/C4E03AQFw83n1d6uWJg/profile-displayphoto-shrink_200_200/0?e=1602720000&v=beta&t=UM6NJ8fZZ8S9-Dz2bIswu1FgB0r1EDTfFC86inrB064" alt="">
+        </div>
+        <div class="formacao">
+
+            <h1 class="titulosdois">🎓 &nbsp&nbsp Formação Academica &nbsp&nbsp</h1>
+            <ul>
+                <li class="nomefomacao">Graduação Gestão Financeira<span class="universidade"> Uninter 2017</span></li>
+                <li class="nomefomacao">Graduação Engenharia da Computação<span class="universidade"> Uninter 2022</span></li>
+                <li class="nomefomacao">Graduação Ciências Economicas<span class="universidade"> Unopar 2023</span></li>
+                <li class="nomefomacao">Graduação Ciências de Dados<span class="universidade"> Unicsul 2020</span></li>
+                <li class="nomefomacao">Graduação Engenharia da Produção<span class="universidade"> 2022</span></li>
+                <li class="nomefomacao">Pós-Graduação Engenharia de Produção<span class="universidade"> Unisselvi 2019</span></li>
+                <li class="nomefomacao">Pós-Graduação Big Data Ciência de Dados<span class="universidade"> Unyleya 2020</span></li>
+                <li class="nomefomacao">MBA Gestão de Projetos<span class="universidade"> Unisselvi 2019</span></li>
+                <li class="nomefomacao">MBA Gestão Contabilidade e Finanças Empresariais<span class="universidade"> UCAM 2020</span></li>
+                <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> UCAM 2020</span></li>
+            </ul>
+        </div>
+        <div class="experiencia">
+            <h1 class="titulosdois">👔&nbsp&nbsp Carreira Profissional &nbsp&nbsp</h1>
+            <ul id="listaexperiencia">
+                <li class="nomeexperiencia">Supervisor Planejamento/Projetos Financeiro e TI
+                    <ul>
+                        <li>Budget, DRE, DFC, Balanço, Controladoria, PowerBI, Inteligência de negócios, Projetos</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia"> FP&A Planejamento Orçamentário Estratégico-Dufrio 18-19
+                    <ul>
+                        <li>Budget, DRE, DFC, Balanço e Controladoria Gerencial Analises, Apresentações Board Diretoria, Relatórios Gerenciais Data Analytics DB, SQL, ETL, DW, Business Intelligence Power BI Dashboard</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia"> BI&A Planejamento Business Intelligence 2DWEB–18
+                    <ul>
+                        <li>DB, SQL, ETL, DW, Fato, View, Dimensão, Cubo e BI</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">FP&A Planejamento Estratégico Financeiro PowerBI-Grupo Priority 17-18
+                    <ul>
+                        <li>Sell In, Sell Out, Budget, OTB, Supply Analises de Dados, Dashboards e gráficos</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">S&OP Consultor-Olitécnica-16-17
+                    <ul>
+                        <li>DRE, DFC, Balanço, Controladoria, Custeio, Princing Dashboard, Gráficos, analises de dados, Reports apresentações Diretoria DB, SQL, ETL, DW, Cubo, BI, Power BI, ERP Implantação de Softwares</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">FP&A Diretor Financeiro-Brazilian Way 13-15
+                    <ul>
+                        <li>SQL - Fluxograma BI</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">S&OP Planejamento Estratégico BI-Grupo Priority 12-13
+                    <ul>
+                        <li>Analises Comerciais, inteligencia de mercado, BI Dashboard Data Analytics</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Supervisor Planejamento/Projetos Financeir e TI
+                    <ul>
+                        <li>Big Data, Budget, FP&A, Power BI</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="redes">
+            <div id="linkedin">
+                <div class="imagem"><span class="fa fa-linkedin" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="https://www.linkedin.com/in/gabrielgroehs/" class="likedin" target="_blank">linkedin</a></div>
+            </div>
+            <div id="whats">
+                <div class="imagem"><span class="fa fa-whatsapp" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="https://api.whatsapp.com/send?phone=5551997306409&text=Ol%C3%A1,%20Gabriel%20Gostaríamos%20de%20conversar%20sobre%20uma%20proposta!" class="whats" target="_blank">Whats</a></div>
+            </div>
+            <div id="email">
+                <div class="imagem"><span class="fa fa-google" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="mailto: bw.gabrielgroehs@gmail.com?subject=Proposta&body=Olá Gabriel, temos uma proposta para você" class="email" target="_blank">E-mail</a></div>
+            </div>
+            <div id="git">
+                <div class="imagem"><span class="fa fa-git" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="https://github.com/Gabriel-Groehs" class="git" target="_blank">GIT</a></div>
+            </div>
+            <div id="youtube">
+                <div class="imagem"><span class="fa fa-youtube" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="https://www.youtube.com/watch?v=78B4Ui0L4Mc" class="youtube" target="_blank">YouTube</a></div>
+            </div>
+        </div>
+        <div class="informacoes">
+            <h1>Skill's.:</h1>
+            <ul>
+                <li>💱FP&A</li>
+                <li>💱Budget</li>
+                <li>💱Controladoria</li>
+                <li>💱Contabilidade Debit Credit</li>
+                <li>📊DRE P&L</li>
+                <li>📊Planejamento</li>
+                <li>📊Centros de Custos</li>
+                <li>📊Mapas de Despesas</li>
+                <li>📊Excel Avançado</li>
+                <li>📊Power Point</li>
+                <li>📊Apresenações de Board Conselho</li>
+                <li>💻Power BI</li>
+                <li>💻SQL</li>
+                <li>💻DAX</li>
+                <li>💻HTML</li>
+                <li>💻CSS</li>
+                <li>💻JavaScript</li>
+                <li>📊Dashboard</li>
+                <li>📊Business Intelligence</li>
+            </ul>
+        </div>
+        <div class="gifs">
+            <img class="dash" src="https://i.gifer.com/3rNn.gif" alt="">
+            <img class="dash" src="https://www.finereport.com/en/wp-content/uploads/2019/07/smart-city.gif" alt="" class="dash">
+            <img class="dash" src="https://cdn.dribbble.com/users/5094323/screenshots/11184058/media/21d762e9bf83e02db2e7c2fab41320e1.gif" alt="">
+            <img class="dash" src="https://oslo-production.s3.amazonaws.com/uploads/medium/asset/46/coding_gif" alt="">
+            <img class="dash" src="https://miro.medium.com/max/1663/0*BQxUm9OGscTcW__a.gif" alt="" class="dash">
+        </div>
+    </div>
+
+</body>
+
+</html>
