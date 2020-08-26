@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+
+        3SWikicorp
+    </title>
+    <meta>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: rgb(243, 243, 243);
+            font-family: 'Segoe UI';
+            align-items: center;
+            justify-content: center;
+        }
+        
+        nav ul ul {
+            display: none;
+        }
+        
+        nav ul li:hover>ul {
+            display: block;
+        }
+        
+        nav {
+            margin: 0 0;
+            text-align: center;
+            top: 0;
+        }
+        
+        nav ul {
+            background: #efefef;
+            background-image: linear-gradient(to top, #1d1d1d, #535353);
+            box-shadow: 1px 1px 1px 1px rgb(250, 171, 0);
+            padding: 0 20px;
+            border-radius: 10px;
+            list-style: none;
+            position: relative;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            display: inline-table;
+            color: white;
+        }
+        
+        nav ul:after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+        
+        nav ul li {
+            float: left;
+        }
+        
+        nav ul li:hover {
+            background-image: linear-gradient(to top, #4f5964, #5f6975);
+        }
+        
+        nav ul li:hover a {
+            color: #fff;
+        }
+        
+        nav ul li a {
+            display: block;
+            padding: 15px 20px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        
+        nav ul ul {
+            background: #5f6975;
+            border-radius: 0px;
+            padding: 0;
+            position: absolute;
+            top: 100%;
+        }
+        
+        nav ul ul li {
+            float: none;
+            border-top: 1px solid #6b727c;
+            border-bottom: 1px solid #575f6a;
+            position: relative;
+        }
+        
+        nav ul ul li a {
+            padding: 15px 20px;
+            color: #fff;
+        }
+        
+        nav ul ul li a:hover {
+            background: #4b545f;
+        }
+        
+        nav ul ul ul {
+            position: absolute;
+            left: 100%;
+            top: 0;
+        }
+        
+        #h {
+            font-size: 35px;
+            font-family: 'Segoe UI';
+            box-shadow: 10px 10px 22px -5px rgba(0, 0, 0, 0.75);
+            font-weight: bold;
+            color: rgb(255, 171, 44);
+            background-color: ;
+            border-radius: 12px;
+            position: fixed;
+            text-align: center;
+            padding: 14px;
+            align-items: center;
+            justify-self: center;
+            justify-content: center;
+            animation: h 4s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+        }
+        
+        #h2 {
+            font-size: 35px;
+            font-family: 'Segoe UI';
+            box-shadow: 10px 10px 22px -5px rgba(0, 0, 0, 0.75);
+            font-weight: bold;
+            color: rgb(255, 171, 44);
+            right: 26px;
+            background-color: ;
+            border-radius: 12px;
+            position: fixed;
+            text-align: center;
+            padding: 14px;
+            align-items: center;
+            justify-self: center;
+            justify-content: center;
+            animation: h2 4s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+        }
+        
+        img {
+            box-shadow: 13px 13px 5px -11px rgba(0, 0, 0, 0.75);
+            text-align: center;
+            align-content: center;
+            animation-delay: 10s;
+            display: table-cell;
+            vertical-align: middle;
+            border-radius: 8px;
+        }
+        
+        img:hover {
+            box-shadow: 13px 13px 5px -11px rgba(0, 0, 0, 0.75);
+            box-shadow: 13px 13px 5px 2px rgba(0, 0, 0, 0.44);
+            text-align: center;
+            width: 100%;
+            display: table-cell;
+            vertical-align: middle;
+            border-radius: 8px;
+        }
+        
+        section #ramal {
+            background-color: rgb(51, 51, 51);
+        }
+        
+        section #ramal:hover {
+            background-color: rgb(51, 51, 51);
+            width: 180px;
+        }
+        
+        .popup {
+            box-shadow: 13px 13px 5px -11px rgba(0, 0, 0, 0.75);
+            text-align: center;
+            align-content: center;
+            animation-delay: 10s;
+            display: table-cell;
+            vertical-align: middle;
+        }
+        
+        .popup:hover {
+            box-shadow: 13px 13px 5px -11px rgba(0, 0, 0, 0.75);
+            box-shadow: 13px 13px 5px 2px rgba(0, 0, 0, 0.44);
+            text-align: center;
+            width: 1200px;
+            display: table-cell;
+            vertical-align: middle;
+        }
+        
+        header {
+            background: rgb(131, 0, 218);
+            box-shadow: 10px 10px 22px -5px rgba(0, 0, 0, 0.75);
+            position: fixed;
+            width: 100%;
+            margin-left: 0;
+            left: 0px;
+            top: 0px;
+        }
+        
+        section {
+            margin-left: 60px;
+            background-color: white;
+            padding-bottom: 10px;
+            padding-top: 1px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-right: 60px;
+            box-shadow: 10px 10px 22px -5px rgba(0, 0, 0, 0.75);
+            border-radius: 10px;
+            margin-top: 100px;
+            border: aquamarine 1px;
+        }
+        
+        #headmargin {
+            height: 60px;
+        }
+        
+        h2 {
+            color: rgb(255, 255, 255);
+            padding: 2px;
+            box-shadow: 2px 2px 0px 0px rgb(255, 136, 0);
+            padding-left: 10px;
+            padding-bottom: 5px;
+            background-image: linear-gradient(to top, rgb(90, 2, 173), blueviolet);
+            border-radius: 8px;
+        }
+        
+        article {
+            color: grey;
+            padding: 10px;
+            margin-left: ;
+        }
+        
+        button {}
+        
+        .buttonmais {
+            background-color: rgb(24, 24, 24);
+            color: white;
+            margin-bottom: 2px;
+            font-weight: bold;
+            border: none;
+            font-size: 20px;
+            border-radius: 5px;
+            border-color: white;
+            width: 30px;
+            height: 30px;
+        }
+        
+        .buttonmais:hover {
+            background-color: rgb(73, 73, 73);
+            color: rgb(255, 136, 0);
+            margin-bottom: 2px;
+            font-weight: bold;
+            border: none;
+            font-size: 25px;
+            border-radius: 5px;
+            border-color: white;
+            width: 30px;
+            height: 30px;
+        }
+        
+        #mais0 {
+            display: none;
+        }
+        
+        #mais {
+            display: none;
+        }
+        
+        #mais2 {
+            display: none;
+        }
+        
+        #img1 {
+            width: 200px;
+            box-shadow: 4px 4px 4px 4px, grey;
+        }
+        
+        #img2 {
+            box-shadow: 2px 2px 2px 2px rgba(49, 49, 49, 0.671);
+        }
+        
+        #yt {}
+        
+        input {
+            outline: none;
+            margin: 5px;
+        }
+        
+        input[type=search] {
+            -webkit-appearance: textfield;
+            -webkit-box-sizing: content-box;
+            font-family: inherit;
+            font-size: 100%;
+        }
+        
+        input::-webkit-search-decoration,
+        input::-webkit-search-cancel-button {
+            display: none;
+        }
+        
+        input[type=search] {
+            background: #ededed url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
+            border: solid 1px #ccc;
+            padding: 9px 10px 9px 32px;
+            width: 55px;
+            -webkit-border-radius: 10em;
+            -moz-border-radius: 10em;
+            border-radius: 10em;
+            -webkit-transition: all .5s;
+            -moz-transition: all .5s;
+            transition: all .5s;
+        }
+        
+        input[type=search]:focus {
+            width: 130px;
+            background-color: #fff;
+            border-color: #ff8282;
+            -webkit-box-shadow: 0 0 5px rgba(246, 109, 109, 0.5);
+            -moz-box-shadow: 0 0 5px rgba(246, 109, 109, 0.5);
+            box-shadow: 0 0 5px rgba(246, 109, 109, 0.5);
+        }
+        
+        input:-moz-placeholder {
+            color: #999;
+        }
+        
+        input::-webkit-input-placeholder {
+            color: #999;
+        }
+        
+        #rotatecenter {
+            background-image: linear-gradient(to top, rgb(90, 2, 173), blueviolet);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: ;
+            text-align: ;
+            font-size: 30px;
+            border-radius: 8px;
+            margin-top: 100px;
+            box-shadow: 24px 24px 102px -27px rgba(0, 0, 0, 0.75);
+            animation: rotatecenter 6.6s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+            color: rgb(255, 185, 34);
+            font-weight: bold;
+            text-align: center;
+            justify-items: center;
+            width: 120px;
+            height: 120px;
+            position: initial;
+        }
+        
+        @keyframes rotatecenter {
+            0% {
+                transform: rotatey(0);
+            }
+            10% {
+                transform: scale(1.2)rotatey(360deg);
+            }
+            20% {
+                transform: scale(1) rotateZ(0);
+            }
+            30% {
+                transform: scale(1.2) rotateZ(180deg);
+            }
+            40% {
+                transform: scale(1) rotateZ(360deg);
+            }
+            50% {
+                transform: scale(1) rotateZ(-360deg);
+            }
+            60% {
+                transform: scale(1) rotatex(360deg);
+            }
+            70% {
+                transform: scale(1) rotate3d(1, 1, 0, 0deg);
+            }
+            80% {
+                transform: scale(1) rotate3d(1, 1, 0, -180deg);
+            }
+            90% {
+                transform: scale(1) rotate3d(1, 1, 0, -360deg);
+            }
+            100% {
+                transform: scale(1) rotate3d(1, 1, 0, 0deg);
+            }
+        }
+        
+        @keyframes h {
+            0% {
+                transform: scale(0.8) rotatey(0);
+            }
+            50% {
+                transform: scale(1) rotatey(360deg);
+            }
+            100% {
+                transform: scale(0.8) rotatey(0deg);
+            }
+        }
+        
+        @keyframes h2 {
+            0% {
+                transform: scale(0.8) rotate3d(1, 1, 0, 0deg);
+            }
+            50% {
+                transform: scale(1) rotate3d(1, 1, 0, 360deg);
+            }
+            100% {
+                transform: scale(0.8) rotate3d(1, 1, 0, 0deg);
+            }
+        }
+        
+        .redes {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 180px;
+            background-color: ;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Lato', sans-serif;
+            border-radius: 8px;
+        }
+        
+        .redes .redesocial {
+            position: relative;
+            list-style: none;
+            width: 60px;
+            height: 60px;
+            margin: 0 30px;
+            transform: rotate(-30deg) skew(25deg);
+            background: #ccc;
+            border-radius: 8px;
+        }
+        
+        .redes .redesocial span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: 0.5s;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 30px !important;
+            border-radius: 8px;
+        }
+        
+        .redes .redesocial:hover span {
+            box-shadow: -1px 1px 1px rgba(0, 0, 0, .1);
+            border-radius: 8px;
+        }
+        
+        .redes .redesocial:hover span:nth-child(5) {
+            transform: translate(40px, -40px);
+            opacity: 1;
+        }
+        
+        .redes .redesocial:hover span:nth-child(4) {
+            transform: translate(30px, -30px);
+            opacity: 0.8;
+        }
+        
+        .redes .redesocial:hover span:nth-child(3) {
+            transform: translate(20px, -20px);
+            opacity: 0.6;
+        }
+        
+        .redes .redesocial:hover span:nth-child(2) {
+            transform: translate(10px, -10px);
+            opacity: 0.4;
+        }
+        
+        .redes .redesocial:hover span:nth-child(1) {
+            transform: translate(0, 0);
+            opacity: .8;
+        }
+        
+        .redes .redesocial:nth-child(1) span {
+            background: #3b5999;
+        }
+        
+        .redes .redesocial:nth-child(2) span {
+            background: #55ee76;
+        }
+        
+        .redes .redesocial:nth-child(3) span {
+            background: #dd4b39;
+        }
+        
+        .redes .redesocial:nth-child(4) span {
+            background: #0077b5;
+        }
+        
+        .redes .redesocial:nth-child(5) span {
+            background: #e4405f;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="#"><b id="h"> 3SC Wiki </b></a>
+        <nav>
+            <ul>
+
+                <li><a href="#">Tool's🛠️</a>
+                    <ul>
+                        <li><a href="#todoist">To Do ist</a></li>
+                        <li><a href="#marinetraffic">Marine Traffic</a></li>
+                        <li><a href="#workflow">Workflow</a></li>
+                        <li><a href="#NCM">NCM</a></li>
+                        <li><a href="#ilog">Ilog</a></li>
+                        <li><a href="#3cx">Ramal 3CX</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Importação🌐</a>
+                    <ul>
+                        <li><a href="#embarque">Embarque</a>
+                            <ul>
+                                <li><a href="#marinetraffic">Marine Traffic</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#carregamento">Carregamento</a></li>
+                        <li><a href="#desembaraco">Desembaraço</a>
+                            <ul>
+                                <li><a href="#anuenciali">Anuência LI</a>
+                                    <li><a href="#conferenciadocumentos">Conferência Documentos</a>
+                                        <ul>
+                                            <li><a href="#">jQuery</a></li>
+                                            <li><a href="#">Angular</a></li>
+                                            <li><a href="#">jQuery</a></li>
+                                            <li><a href="#">esse</a>
+                                                <ul>
+                                                    <li><a href="#">jQuery</a></li>
+                                                    <li><a href="#">Angular</a></li>
+                                                    <li><a href="#">jQuery</a></li>
+                                                    <li><a href="#">esse</a>
+                                                        <ul>
+                                                            <li><a href="#2">Putaço</a></li>
+                                                            <li><a href="#">Angular</a></li>
+                                                            <li><a href="#">jQuery</a></li>
+                                                            <li><a href="#">Angular</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#workflow">Workflow BI</a></li>
+                            </ul>
+                            </li>
+                    </ul>
+                    </li>
+                    <li><a href="#metas">Metas🏆</a></li>
+                    <li><a href="#NCM">NCM Robo👨🏻‍🦰</a></li>
+                    <li><a href="BID.bat" download="BID">RPA🤖</a></li>
+                    <li><a href="#ilog">Ilog💻</a>
+                        <LI>
+                            <form>
+                                <input type="search" placeholder="Search">
+                            </form>
+                        </LI>
+            </ul>
+            <a href="#"><b id="h2">3S</b></a>
+        </nav>
+
+    </header><br/>
+    <center>
+        <div id="rotatecenter" style="">3SWiki</div>
+    </center>
+    </br>
+
+    <ul class="redes">
+        <li class="redesocial">
+            <a href="https://www.facebook.com/3SCorporate/photos/o-3s-corporate-%C3%A9-um-grupo-de-gest%C3%A3o-empresarial-fundado-em-2011-com-unidade-em-h/965501893567963/" target="_blank">
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="fa fa-facebook" aria-hidden="true"></span>
+            </a>
+        </li>
+        <li class="redesocial">
+            <a href="https://api.whatsapp.com/send?phone=5551996695777" target="_blank">
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="fa fa-whatsapp" aria-hidden="true"></span>
+            </a>
+        </li>
+        <li class="redesocial">
+            <a href="https://www.youtube.com/channel/UC3-691wFb8CHwRcjk3uXhxg" target="_blank">
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="fa fa-youtube" aria-hidden="true"></span>
+            </a>
+        </li>
+        <li class="redesocial">
+            <a href="https://br.linkedin.com/company/3s-corp" target="_blank">
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="fa fa-linkedin" aria-hidden="true"></span>
+            </a>
+        </li>
+        <li class="redesocial">
+            <a href="https://www.instagram.com/3s_corp/" target="_blank">
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="rdscl"></span>
+                <span class="fa fa-instagram" aria-hidden="true"></span>
+            </a>
+        </li>
+    </ul>
+
+    <section>
+        <h2>3S Corporate ✈ </h2>
+        <iframe id="yt" width="100%" height="570" src="https://www.youtube.com/embed/9TYKB_srTk8" frameborder="0" allowfullscreen="true"></iframe>
+    </section>
+
+    <div id="headmargin"></div>
+    <div>
+
+        <div id="todoist"></div>
+        <br>
+        <section>
+            <h2>To Do Ist</h2>
+            <iframe width="100%" height="600" src="https://todoist.com/app/#start" frameborder="0" allowFullScreen="true"></iframe>
+
+        </section>
+        </br>
+        <div id="3cx"></div>
+        <br>
+        <section>
+            <h2>Ramal 3CX</h2>
+            <center>
+                <a href="https://3scorp.my3cx.com.br/webclient/#/people" target="_blank"><img id="ramal" src="https://d1adoz58a2hhe1.cloudfront.net/wp-content/uploads/sites/18/logo-3.png"></a>
+            </center>
+        </section>
+        </br>
+        <div id="metas"></div>
+        <br>
+        <section>
+            <h2>Metas 3S ✈</h2>
+            <iframe width="100%" height="300" src="https://app.powerbi.com/view?r=eyJrIjoiMWVjOTk5YjItMzk4Zi00ZDUxLWFjOGUtYTllMGFhMTljMTAzIiwidCI6ImNmNzg3YTE1LWU0ZWQtNDFlZi04ZGRlLWJiN2E2Yjg1MzVlMCJ9" frameborder="0" allowFullScreen="true"></iframe>
+        </section>
+        </br>
+
+
+
+        <section>
+            <h2>Mercado ✈</h2>
+            <iframe width="100%" height="800" src="https://app.powerbi.com/reportEmbed?reportId=229afe79-5c59-4943-bd4e-31e4e390fdf2&autoAuth=true&ctid=cf787a15-e4ed-41ef-8dde-bb7a6b8535e0&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+                frameborder="0" allowFullScreen="true"></iframe>
+        </section>
+        </br>
+        <div id="desembaraco"></div>
+        <br>
+        <section>
+
+            <h2>Desembaraço Aduaneiro ✈ </h2>
+
+
+            <article>
+                <li><b>O que é Desembaraço Aduaneiro?</b></li>
+                <ul>
+                    <p>Desembaraço aduaneiro, no Direito aduaneiro, é a liberação de uma mercadoria pela alfândega para a entrada no país ou sua saída e o comprovante do pagamento do imposto sobre circulação de mercadorias e serviços, só aí é que a mercadoria
+                        poderá ser entregue ao importador ou exportador
+                        <center>
+                            <img class="popup" src="https://chinalinktrading.com/blog/wp-content/uploads/2018/04/importa%C3%A7%C3%A3o-4.jpg" alt="" width="300px">
+                        </center>
+                    </p>
+                </ul>
+
+
+                <div id="anuenciali"></div>
+                <br/><br/><br/><br/>
+                <h2>Anuência de LI &nbsp<i> (Great John)&nbsp</i><button class="buttonmais" onclick="leiamais()" id="btnleiamais">+</button></h2>
+                <span id="pontos">...</span>
+                <span id="mais">
+                    
+                    <h3>Descrição do processo:</h3> 
+                        <p>Trata-se do conjunto de procedimentos até a obtenção do deferimento de uma LI da ANVISA, dentro do procedimento 5.1 (Alimentos).
+                        <br><b>Responsável: 
+                        Analista de Importação.</b></p>
+                    <h3>Etapa(s) anterior(es):</h3> 
+                        <ul>
+                        <li>Registro de LI;</li>
+                        <li>Confirmação de embarque;</li>
+                        <li>Recebimento dos documentos finais assinados.</li>
+                        </ul>
+                    <h3>Etapa(s) posterior(es):</h3>
+                        <ul>
+                        <li>Chegada, presença de carga;</li>
+                        <li>Registro de DI.</li>
+                        </ul>
+                    <h3>Regras e Diretrizes Internas:</h3>
+                        <ul>
+                        <li>Quando se tratando de embarque marítimo, a LI precisa estar deferida antes da chegada do navio. Portanto, o procedimento deve ser realizado com a máxima brevidade, assim que recebidos os documentos originais;</li>
+                        <li>Para evitar qualquer tipo de indeferimento por insuficiência documental, a GRU só deve ser paga após anexação completa no dossiê.</li>
+                        </ul>
+                    <h3>Aspectos Importantes, Riscos e Cuidados Especiais:</h3>
+                        <ul>
+                        <li>A anuência é prévia ao desembaraço, portanto não haverá restrição de embarque;</li>
+                        <li>Em via de regra, não é necessário registro de produto na ANVISA;</li>
+                        <li>CUMPRIMENTO DE EXIGÊNCIA: devem ser realizados através do dossiê: Escolher o tipo de documento “Petição para Fiscalização e Liberação Sanitária” e utilizar a palavra-chave “90099 - Cumprimento de exigência”. </li>
+                        <li>LI SUBSTITUTIVA: Deve-se manter o dossiê inicial. Todos os documentos de petições secundárias, incluindo as LI´s substitutivas, entram como nova documentação no dossiê inicial/original, através de Petição Secundária, utilizando código de assunto específico.</li>
+                        <li>ADITAMENTO: Escolher o tipo de documento “Petição para Fiscalização e Liberação Sanitária” e utilizar a palavra-chave “9803 – ADITAMENTO”.</li>
+                        <li>Em caso de dúvidas, acessar a Cartilha de Peticionamento Eletrônico da ANVISA para esclarecimentos: <a href="http://portal.anvisa.gov.br/documents/375992/3626147/Cartilha+PEI+-+usu%C3%A1rio+externo+VERS%C3%83O+4.3.pdf/a1fc4d0b-1dbe-4e98-95b1-96a2bdafeb8a" target="_blank">http://portal.anvisa.gov.br/documents/375992/3626147/Cartilha+PEI+-+usu%C3%A1rio+externo+VERS%C3%83O+4.3.pdf/a1fc4d0b-1dbe-4e98-95b1-96a2bdafeb8a</a></li>
+                        <li>Caso a NCM tenha dupla anuência com um órgão anuente de licenciamento não-automático (prévio ao embarque), é importante ter cuidado redobrado, pois qualquer indeferimento por parte da ANVISA fará com que a LI inteira seja indeferida, extinguindo o deferimento previamente conquistado junto ao DECEX. Quando isso acontece, é necessário registrar uma nova LI e, se o embarque já tiver sido efetivado, haverá aplicação de multa de 30% do Valor Aduaneiro, com mínimo de R$ 500,00 e máximo de R$ 2.500,00, conforme... (legislação);</li>
+                        <li>Caso a situação acima ocorra, é possível abrir recurso administrativo contra a ANVISA, expondo os devidos argumentos e solicitando que o indeferimento seja retroagido, passando para “em exigência”;</li>
+                        <li>As situações que podem ocasionar o indeferimento são: 
+                            <ul>
+                            <li>Insuficiência documental no dossiê eletrônico;</li>
+                            <li>Informações erradas na LI.</li>
+                            </ul>
+                        </li>
+                        <li>Os documentos exigidos são (Alterado pelo art. 24, da Resolução RDC ANVISA nº 208, DOU 08/01/2018):
+                            <ul>
+                            <li>Fatura comercial (assinada);</li>
+                            <li>Packing List (assinado);</li>
+                            <li>Conhecimento de embarque (assinado);</li>
+                            <li>Alvará Sanitário (Importador);</li>
+                            <li>Alvará Sanitário (Armazenador);</li>
+                            <li>Alvará Sanitário do transportador (Rodoviários);</li>
+                            <li>Declaração de lotes;</li>
+                            <li>Tela de peticionamento (código de alimentos do procedimento 5.1 (PODE VARIAR – atentar para o tipo de produto e quantidade de itens);</li>
+                            <li>Procuração;</li>
+                            <li>Certificado de origem (quando houver);</li>
+                            <li>Licença de Importação;</li>
+                            </ul>
+                        </li>
+                        <li>Caso o importador não possua Alvará Sanitário, é possível apresentar um Contrato de Locação com alguma empresa que tenha Alvará de armazenador;</li>
+                        <li>Em operações Conta e Ordem:
+                            <ul>
+                            <li>Fatura comercial (assinada);</li>
+                            <li>Packing List (assinado);</li>
+                            <li>Conhecimento de embarque (assinado);</li>
+                            <li>Alvará Sanitário (do adquirente/armazenador);</li>
+                            <li>Alvará Sanitário (Armazenador);</li>
+                            <li>Alvará Sanitário do transportador (Rodoviários);</li>
+                            <li>Contrato de armazenamento (se o adquirente não for o armazenador);</li>
+                            <li>Declaração de uso de alvará de terceiro;</li>
+                            <li>Declaração de lotes;</li>
+                            <li>Tela de peticionamento (código de alimentos do procedimento 5.1 (PODE VARIAR – atentar para o tipo de produto e quantidade de itens);</li>
+                            <li>Procuração;</li>
+                            <li>Certificado de origem (quando houver);</li>
+                            <li>Licença de Importação</li>
+                            </ul>
+                        </li>
+                        </ul>	
+                    <h3>Histórico de clientes/processos para consulta e referência:</h3>
+                        <ul>
+                        <li>Johann - Batatas pré-fritas (2004.10.00);</li>
+                        <li>Frutlife; Gengibre em conserva (2008.99.00); Farinha (1901.90.90); Temperos (2103 e suas variações);</li>
+                        <li>Frumar - Batatas pré-fritas (2004.10.00);</li>
+                        <li>Riberfoods - Batatas pré-fritas (2004.10.00); Cerejas (2008.60.10);</li>
+                        <li>Pampafoods - Batatas pré-fritas (2004.10.00); Anéis de Cebola (2004.90.00).</li>
+                        </ul>
+                    <h3>Histórico de ocorrências de falhas:</h3>
+                        <ul>
+                        <li>No processo 7659/19 (Pampafoods) a GRU foi paga sem ter documentos anexados no dossiê. Além disso, não pedimos o Alvará Sanitário com antecedência ao cliente, fazendo somente no dia em que a ANVISA indeferiu a LI, justamente pela falta deste documento. O resultado foi um grande desgaste interno e com o cliente, além da uma multa de R$ 2.500,00, que por fim conseguimos reverter.</li>
+                        <li>Já tivemos um caso em processo da Johann Alimentos (Rodoviário) que fomos autorizados a seguir sem alvará sanitário da transportadora. A Anvisa analisou e colocou em exigência, até que o alvará fosse anexado. Após, o processo entrou novamente para a fila de análise e levou cerca de mais 3 dias para ser deferido. Ou seja, é imprescindível todos os documentos estarem anexados, para que não hajam situações de atrasos ou até indeferimentos.</li>
+                        </ul>
+                    <h3>Manual (passo a passo):</h3>
+                        <ol>
+                            <li>Recebimento dos documentos de embarque finais e assinados (por e-mail).</li>
+                            <li>Anexação dos documentos exigidos (citados acima) em novo dossiê, através do Portal Único, atentando para o “CÓDIGO DA PETIÇÃO”, pois irá variar de acordo com o tipo do seu produto e a quantidade de ITENS. Todos os documentos devem ser direcionados a ANVISA, conforme exemplo abaixo:</li>
+                            <center>
+                            <a href="https://i.ibb.co/G7n4s4w/anuencia-1.png" target="_blank">
+                                <img class="popup" src="https://i.ibb.co/G7n4s4w/anuencia-1.png" width="1000px"  border="0" alt=""></br></br>
+                            </center>
+                            </a>
+                            <li><b>Não esquecer de vincular o dossiê ao número da LI.</b></li>
+                            <li>Aguardar cerca de 30 minutos, entrar no sistema de peticionamento da ANVISA <a href="https://sso.anvisa.gov.br/sso/internet/login?service=https%3A%2F%2Fsolicita.anvisa.gov.br%2Fsolicita%2F" target="_blank">(https://sso.anvisa.gov.br/sso/internet/login?service=https%3A%2F%2Fsolicita.anvisa.gov.br%2Fsolicita%2F)</a>, encontrar a mensagem de peticionamento de importação referente a LI utilizada e abri-la.</li>
+                            <li>Exemplo da tela de peticionamentos:</li>
+                            <center>
+                            <img class="popup" src="https://i.ibb.co/JtXtjdq/anuencia-2.png" width="1000px"  border="0" alt=""></br></br>
+                            </center>
+                            <li>Preencher dados da GRU de acordo com a documentação do processo (verificar todos os campos).</li>
+                            <li>Os dados de preenchimento irão variar de acordo com o tipo de produto/NCM, sejam eles: finalidade da mercadoria, datas de fabricação, validade, número de lotes, condição da mercadoria, se há condião especial ou não, CNPJ da transportadora, do adquirente, número do conhecimento de embarque, etc. Em casos de dúvidas sobre a classificação do produto, deve ser realizada uma pesquisa no site da ANVISA para descobrir em qual “categoria” o seu produto se enquadra. Deve ser atentando todos os detalhes, visto que em casos de preenchimentos errados a ANVISA pode colocar a LI em exigência ou até mesmo INDEFERIR, resultando em problemas graves para o cliente, dependendo do caso.</li>
+                            <li>Em operações Conta e Ordem, atentar para preencher o campo de “Conta e Ordem” e mencionar o CNPJ do adquirente.</li>
+                            <li>Gerar GRU e solicitar pagamento no I-LOG através do boleto, para AGENCIA NACIONAL DE VIGILÂNCIA SANITÁRIA (valor da taxa varia de acordo com o porte da empresa).</li>
+                            <li>No dia útil seguinte, entrar no sistema de peticionamento da ANVISA novamente (conforme link informado acima), procurar a mensagem de comprovante de protocolização referente a LI utilizada.</li>
+                            <li>Abrir o comprovante de protocolização, salvar, anexar no i-log e fechar (o comprovante de protocolização é uma espécie de comprovante de pagamento da ANVISA)..</li>
+                            <li>Após, sempre ficar acompanhando/consultando a LI no SISCOMEX para verificar o deferimento da ANVISA.</li>
+
+
+                        </ol>
+                    
+
+                    </span>
+
+
+
+                <div id="conferenciadocumentos"></div>
+                <br/><br/><br/><br/>
+                <h2>Conferência de Documentos &nbsp🛳&nbsp<button class="buttonmais" onclick="leiamais2()" id="btnleiamais2">+</button></h2>
+                <span id="pontos2">...</span>
+                <span id="mais2">
+                        <ul>
+                    <li>-Banco de Dados SQL, MySQL, SQL server, Oracle, Nosql, Postgred</li>
+                    <li>-Conhecimento em Cloud PaSS, SaSS</li>
+                    <li>-Scrum, XP, Sprint, PMI, Kanban, Canvas e BPM</li>
+                    <li>-Conhecimento em Avançado Power BI, Dashboards, Paineís</li>
+                    <li>-Excel Avançado, Tabela dinamica, Gráficos, Dashboards</li>
+                    <li>-Marcadores Web HTML, CSS, XML</li>
+                    <li>-Linguagens HTML, CSS, Javascript, Node.js, Jquery, SQL, NoSQL, React Native, ReactJS, Angular e Flutter</li>
+                    <li>-Graduação e Pós Graduação Completas na área</li>
+                
+                </span>
+            </article>
+
+            </ul>
+        </section>
+
+        <div id=carregamento></div>
+        <br/>
+        <div>
+            <section id="2">
+
+                <h2>Carregamento 🛩</h2>
+
+                <button class="buttonmais" onclick="leiamais0()" id="btnleiamais0">+</button></h2>
+                <span id="pontos0">...</span>
+                <span id="mais0">
+                <article>
+                   <h3>✈ Descrição do processo:</h3>
+                    <ul>Trata-se da solicitação de cotação com empresas parceiras e também transportadoras a ingressar. Além da cotação, analise de novos parceiros para certificação da confiabilidade e segurança no transporte das mercadorias.
+                     <b>Responsável: Analista de Importação.</b></ul>
+                    
+                    <h3>Etapa(s) anterior(es): </h3>
+                    <ul>
+                        <li>Solicitação de no mínimo 3 cotações;</li>
+                        <li>Analise e comparação dos valores;</li>
+                        <li>Negociação do valor de comissionamento;</li>
+                        <li>Aprovação da proposta;</li>
+                        <li>Solicitação de documentação;</li>
+                    </ul>
+
+                    <h3>Etapa(s) posterior(es):</h3>
+                    <ul>
+                        <li>E-mail para programação de carregamento;</li>
+                        <li>Acordar previsão de entrega e demais solicitações do cliente;</li>
+                    </ul>
+                    <h3>Regras e Diretrizes Internas:</h3>
+                    <ul>
+                        <li>Priorizar transportadoras vindas de alguma indicação, de alguém que possa atestar pela qualidade do serviço prestado. Questionar se o preposto local a conhece;</li>
+                        <li>Pesquisar no Google Avaliações e no Reclame Aqui o nível de satisfação dos clientes, analisar se houve algum relato crítico;</li>
+                        <li>Verificar o site e a popularidade das redes sociais da empresa;</li>
+                        <li>Consultar o endereço no Google Street View, para confirmar que o estabelecimento físico realmente existe;</li>
+                        <li>Solicitar o histórico da empresa;</li>
+                        <li>Solicitar referência de clientes dela (e ligar para um principal cliente para confirmar);</li>
+                        <li>Solicitar cópia da apólice de seguro;</li>
+                        <li>Se possível, solicitar uma visita presencial na 3S para criarmos proximidade.</li>
+                    
+                    </ul>
+                    <h3>Histórico de ocorrências de falhas:</h3>
+                    <ul>
+                    <li>Solicitada cotação e fechado frete com transportadora localizada pela internet pois na ocasião, tratava-se de uma operação atípica, de frete consolidado partindo de Guarulhos até Salvador e não havia indicação de transportadora parceira que fosse competitiva. Ocorreu que transportadora sumiu após coletar mercadoria.</li>
+                    </ul> 
+                    <h3>Manual (passo a passo):</h3>
+                    <ol>
+                    <li>Reunir dados da mercadoria e origem/destino para envio das solicitações de cotação;</li>
+                    <li>Em caso de novo contato/parceiro para cotação é necessário realizar a analise conforme “Regras e Diretrizes Internas”;</li>
+                    <li>Realizar no mínimo 3 cotações de frete para analise;</li>
+                    <li>Questionar valor de comissão nas propostas (se incluir no valor ou se o valor já considera);</li>
+                    <li>Enviar melhores propostas para análise do cliente;</li>
+                    <li>Definir carregamento e alinhar entrega com transportadora escolhida.</li> 
+                    </ol>
+
+
+
+                    <h3>Checklist de Procedimentos:</h3>
+                    <ul>
+                    <li><a>Remoção (DTC/DTA)</a></li>
+                    <li>Lanç. MAPA	</li>
+                    <li>Vistoria MAPA</li>
+                    <li>Liberação de BL - termo e pag</li>
+                    <li>Definição do frete</li>
+                    <li>Consulta ICMS</li>
+                    <li>Pagamento ICMS	</li>
+                    <li>Consulta Siscarga</li>
+                    <li>Liberação Faturamento</li>
+                    <li>Agendamento carregamento</li>
+                    <li>Envio de docs para transp.</li>
+                    <li>Anexar docs para faturamento	</li>
+                    <li>Data de Carregamento </li>
+                    <li>Data de entrega</li>
+                    </ul>
+                    <h3>Remoção DTC</h3>
+                    <p>   As Remoções DTC (Declaração de Trânsito de Contêiner) devem ser tidas como prioridade, e solicitadas observando a antecedência mínima informada pelo terminal. Por padrão, utilizamos o período de até 5 dias de antecedência para solicitá-las. Para tal, deve-se proceder da seguinte maneira:</p>
+                    <li>Verifique o terminal que deve realizar a remoção;</li>
+                    <li>Um e-mail deve ser encaminhado ao terminal (Verificar os endereços de e-mail de cada Terminal), </li>
+                    <li>Neste e-mail devem conter uma cópia do HBL original e do CE Mercante;</li></br>
+                     <h4>Segue o exemplo abaixo:</h4>
+                    
+                     <b><i>
+                        Prezados,<br>
+                        Bom dia/Boa <br><br>
+                        
+                        Segue anexo documentos para solicitação de remoção via DTC. <br>
+                        Fico no aguardo da confirmação <br>
+                        Qualquer dúvida estamos à disposição. <br><br>
+                        
+                        Obrigado! <br>
+                        Atenciosamente;
+                     </i>   
+                     </b><br><br>
+                     <p>	Deve-se permanecer verificando se a DTC foi incluída no agendamento do terminal e se há uma confirmação da remoção em tempo hábil, sempre anteriormente a data de atracação.
+                        Assim que confirmado, o follow-up do processo deve ser atualizado.
+                    </p><br><br>
+
+                    <h3>Solicitação de Liberação do MAPA</h3>
+                    <p>   A solicitação de liberação do MAPA de um processo também é tida como um procedimento padrão. Esse procedimento é feito antes que se obtenha a parametrização da DI, e, portanto, o pedido para que se realize a solicitação desta liberação parte do Accounting, mas é solicitado pelo Carregamento.
+                        A liberação deve ser solicitada sempre para o parceiro VPO Despachos, via e-mail, para os endereços:
+                   </p>
+                    <li><a href="mailto:someone@example.com?subject=Solicitação de Liberação do MAPA&body=Prezados, bom dia; Seguem documentos para liberação do MAPA no terminal Itapoá; Desde já, muito obrigado; Atenciosamente;
+                    " title="" >vpo@vpodespachos.com.br</a></li>
+                    <li><a href="mailto:someone@example.com?subject=Solicitação de Liberação do MAPA&body=Prezados, bom dia; Seguem documentos para liberação do MAPA no terminal Itapoá; Desde já, muito obrigado; Atenciosamente;
+                    " title="" >operacional2@vpodespachos.com.br</a></li>
+                    <li><a href="mailto:someone@example.com?subject=Solicitação de Liberação do MAPA&body=Prezados, bom dia; Seguem documentos para liberação do MAPA no terminal Itapoá; Desde já, muito obrigado; Atenciosamente;
+                        " title="" >operacional1@vpodespachos.com.br</a></li>
+                    <h4>Segue um exemplo de e-mail:</h4>
+
+                    <b><i> Prezados, bom dia; <br><br>
+
+                    Seguem documentos para liberação do MAPA no terminal Itapoá;<br>
+
+                    Desde já, muito obrigado;<br>
+
+                    Atenciosamente;</i></b><br>
+
+                    <p>   O e-mail deve conter uma cópia do HBL original e uma cópia do CE Mercante.</p>
+                    <p>   Para esse procedimento, também deve-se aguardar a confirmação do lançamento da liberação do MAPA por parte da VPO, a cobrando frequentemente se necessário.
+                    Assim que solicitado, o follow-up deve ser atualizado.</p>
+
+                    <h3>Solicitação de Vistoria MAPA</h3>
+
+
+                    <p>Para o caso de alguma unidade ser selecionada para vistoria do Mapa, deve-se proceder com o agendamento da vistoria.</p>	
+                    <p>	A vistoria também é agendada pelo VPO, porém, é responsabilidade do Carregamento que se crie um dossiê de anexação de documentos no Portal Único, para que os documentos sejam acessados pelos fiscais para a vistoria.
+                    Segue o procedimento de criação de dossiê e anexação de documentos:</p>
+
+
+                    <ul>
+                    1 – Acesse o Portal Único (<a href="https://portalunico.siscomex.gov.br/portal/#/" target="_blank">https://portalunico.siscomex.gov.br/portal/#/</a>)</ul>
+                    <ul>
+                    2 – Certifique-se de informar a opção Importador/Exportador/Despachante e clicar na caixa de verificação, acessando a página com o certificado digital correspondente ao despachante:</ul> 
+                    <center>
+                    <img width="600px" class="popup" src="https://i.ibb.co/k69sRp0/sicomex-1.png"  border="0">
+                    </center>
+                    <ul>3 – Acesse a opção Importação:</ul>
+                    <center>
+                    <img width="600px" class="popup" src="https://i.ibb.co/pQ3KDbQ/sicosmex-2.png" " border="0">
+                    </center>
+                    <ul>4 – Clique na opção Anexação de Documentos > Anexar Documentos > A Novo Dossiê.</ul>
+                    <center>
+                    <img width="600px" class="popup" src="https://i.ibb.co/5TXDdwx/sicosmex-3.png" " border="0">
+                    </center>
+                    <ul>5 – A seguinte tela será exibida:</ul>
+                    <center>
+                    <img width="600px" class="popup" src="https://i.ibb.co/XDyyZ20/sicosmex-4.png" " border="0">
+                    </center>
+                    <ul>6 – Deve-se portanto preencher o CNPJ do importador;</ul>
+                    <ul>7 – No campo Tipo, deve-se escolher a opção Dossiê de Importação;</ul>
+                    <ul>8 – E na Descrição, deve-se informar um título para o Dossiê. Sugestão: Solicitação de Vistoria MAPA – NOME DO CLIENTE – REFERÊNCIA</ul>
+                    <ul>9 – Ao se clicar em CRIAR, a seguinte janela é aberta:</ul>
+                    <center>
+                    <img width="600px" class="popup" src="https://i.ibb.co/4pc4jvB/sicosmex-5.png" " border="0">
+                    </center>
+                    <ul>OBS: O número do Dossiê deve ser copiado e inserido na Aba Diário, no iLog do processo, para controle.</ul>
+                    <ul> Ao fechar a Janela de Criação do Dossiê, a seguinte janela é aberta:</ul>
+                    <center>
+                    <img width="600px" class="popup" src="https://i.ibb.co/kKqww8r/sicosmex-6.png"  border="0">
+                    </center>
+                   
+                    <p>   Este é o momento de se anexar uma cópia do BL original, e do CE Mercante ao Dossiê.</p>
+                    <p> - Se informa o tipo do documento (‘Conhecimento de Embarque’ para os BLs e ‘Documentos – Outros’ para o CE Mercante).
+                    Se confirma o upload.</p>
+                    <p> E antes de enviar, é importante se certificar de que a opção de confirmação de Ciência esteja marcada. Por fim, se clica em Assinar e Anexar e o Dossiê está criado.</p>                    
+                
+                        <center><H1>Acesso ao Portal Siscomex</H1></center>
+                    <iframe src="https://portalunico.siscomex.gov.br/portal/#/" style="--aspect-ratio: 16/9; align-content: center;" width="100%" height="400px"  frameborder="0" ></iframe>
+                </article>
+            </span>
+            </section>
+
+
+            <div id="marinetraffic"></div>
+            <br/>
+        </div>
+        <section>
+            <h2>Marinetraffic ✈</h2>
+            <iframe width="100%" height="800" src="https://www.marinetraffic.com/pt/ais/home/centerx:-14.9/centery:11.2/zoom:2" frameborder="0" allowFullScreen="true"></iframe>
+        </section>
+        </br>
+
+
+        <div id="ilog"></div>
+        <br/>
+    </div>
+    <section>
+        <h2>ILOG WEB ✈</h2>
+        <iframe width="100%" height="800" src="http://192.168.0.7:8000/iLOGWeb/" frameborder="0" allowFullScreen="true"></iframe>
+    </section>
+    </br>
+
+
+
+    <div id="embarque"></div>
+    <br/>
+    </div>
+    <section>
+
+        <h2>Embarque ✈️ 🚢 </h2>
+        <article>
+            <p> A Logística Internacional ocorre quando as cadeias cruzam as fronteiras internacionais do país. Está relacionado ao fluxo de materiais de um país para outro. É sobre o movimento de materiais para exportação ou importação, um fator chave para
+                satisfazer a demanda nos mercados internacionais. Em um ambiente globalizado, não são apenas os produtos que competem, as cadeias logísticas também competem. Essas cadeias representam combinações de fabricantes, distribuidores e operadores
+                logísticos, que colaboram para produzir a mais alta eficiência e o menor custo possível para cada produto, com os requisitos de disponibilidade e flexibilidade necessários a qualquer momento. Por sua vez, as cadeias logísticas giram em
+                torno de polos logísticos intermodais especializados de alta capacidade, redes e elementos de infraestrutura de transporte.</p>
+            <li>-APIs, SOAP, REST</li>
+            <li>-Gestão de Projetos de Alta Performance</li>
+            <li>-ETL, PipeLine e Engenharia de Dados</li>
+            <li>-Extrair dados de diversas fontes e sistemas</li>
+            <li>-Banco de Dados SQL, MySQL, SQL server, Oracle, Nosql, Postgred</li>
+            <li>-Conhecimento em Cloud PaSS, SaSS</li>
+            <li>-Scrum, XP, Sprint, PMI, Kanban, Canvas e BPM</li>
+            <li>-Conhecimento em Avançado Power BI, Dashboards, Paineís</li>
+            <li>-Excel Avançado, Tabela dinamica, Gráficos, Dashboards</li>
+            <li>-Marcadores Web HTML, CSS, XML</li>
+            <li>-Linguagens HTML, CSS, Javascript, Node.js, Jquery, SQL, NoSQL, React Native, ReactJS, Angular e Flutter</li>
+            <li>-Graduação e Pós Graduação Completas na área</li>
+        </article>
+    </section>
+    <div id="workflow">
+    </div>
+    <br>
+    <section>
+
+        <h2>Work Flow ✈</h2>
+        <iframe width="100%" height="600" src="https://app.powerbi.com/reportEmbed?reportId=1493bb84-0252-4276-985e-221643901e31&autoAuth=true&ctid=cf787a15-e4ed-41ef-8dde-bb7a6b8535e0&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+            frameborder="0" allowFullScreen="true"></iframe>
+    </section>
+    <div id="NCM"></div>
+    <br>
+    <section>
+
+        <h2>AI Robo NCM👨🏻‍🦰</h2>
+        <iframe width="100%" height="600" src="https://app.powerbi.com/reportEmbed?reportId=5d5ddde6-a5d0-4d7d-af8c-38727a414da7&autoAuth=true&ctid=cf787a15-e4ed-41ef-8dde-bb7a6b8535e0&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+            frameborder="0" allowFullScreen="true"></iframe>
+    </section>
+    </div>
+
+
+
+    <script>
+        function leiamais() {
+            var pontos = document.getElementById("pontos");
+            var maistexto = document.getElementById("mais");
+            var btnleiamais = document.getElementById("btnleiamais");
+
+            if (pontos.style.display === "none") {
+                pontos.style.display = "inline";
+                maistexto.style.display = "none";
+                btnleiamais.innerHTML = "+";
+            } else {
+                pontos.style.display = "none";
+                maistexto.style.display = "inline";
+                btnleiamais.innerHTML = "-";
+            }
+        }
+
+        function leiamais2() {
+            var pontos = document.getElementById("pontos2");
+            var maistexto = document.getElementById("mais2");
+            var btnleiamais = document.getElementById("btnleiamais2");
+
+            if (pontos.style.display === "none") {
+                pontos.style.display = "inline";
+                maistexto.style.display = "none";
+                btnleiamais.innerHTML = "+";
+            } else {
+                pontos.style.display = "none";
+                maistexto.style.display = "inline";
+                btnleiamais.innerHTML = "-";
+            }
+        }
+
+        function leiamais0() {
+            var pontos = document.getElementById("pontos0");
+            var maistexto = document.getElementById("mais0");
+            var btnleiamais = document.getElementById("btnleiamais0");
+
+            if (pontos.style.display === "none") {
+                pontos.style.display = "inline";
+                maistexto.style.display = "none";
+                btnleiamais.innerHTML = "+";
+            } else {
+                pontos.style.display = "none";
+                maistexto.style.display = "inline";
+                btnleiamais.innerHTML = "-";
+            }
+        }
+    </script>
+</body>
+
+</html>
