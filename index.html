@@ -130,6 +130,8 @@
         .nome #subtitulo {
             padding: 0.25rem;
             animation: scroller 2s infinite;
+            font-size: 8px;
+            margin: 1px;
         }
         
         #minhafoto {
@@ -179,7 +181,10 @@
             margin: 0px 0px 0.5rem 0.5rem;
             border: solid 1px rgb(204, 204, 204);
             box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            gap: 0;
         }
+        
+        .nome #subtitulo {}
         
         .nome #subtitulo:hover {
             box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
@@ -246,10 +251,9 @@
         #curriculo {
             box-shadow: 0.625rem 0.625rem 25px -13px rgba(0, 0, 0, 0.75);
             border-radius: 0.5rem 0 0 0.5rem;
-            line-height: 3rem;
             color: gold;
-            margin-top: 0;
-            padding-left: 0.5rem;
+            margin-top: 0px;
+            padding-left: 2rem;
             background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
             box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
         }
@@ -450,14 +454,51 @@
 </head>
 
 <body class="principal">
+
     <div class="container">
         <div class="nome">
-            <h1 id="curriculo"><span class="flecha">❱❭</span> &nbsp&nbspGabriel Groehs 📊</h1>
+            <center>
+                <h1 id="curriculo">
+                    <span class="flecha" style="color: rgb(109, 109, 109);">❱❭</span> Gabriel Groehs <span class="flecha" style="color: rgb(109, 109, 109);">❱❭</span>
+                    <br><small style="font-size: 0.8rem;color: rgb(255, 255, 255);">📊 Estratégia Economica Tech Orientada a Dados</small>
+                </h1>
+            </center>
+
             <div class="resumo">
-                <h2 id="subtitulo">&nbspEstratégica Economica Tecnologia Orientada a Dados</h2>
-                <p id="resumo">Profissional de Finanças 4.0, Controladoria, Ciência de Dados, (desde 2010).
+                <h2 id="subtitulo">
+                    <!-- TradingView Widget BEGIN -->
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                        {
+                            "symbols": [{
+                                "proName": "FOREXCOM:SPXUSD",
+                                "title": "S&P 500"
+                            }, {
+                                "proName": "FOREXCOM:NSXUSD",
+                                "title": "Nasdaq 1000"
+                            }, {
+                                "description": "IBOV",
+                                "proName": "BMFBOVESPA:IBOV"
+                            }, {
+                                "description": "BRL/USD",
+                                "proName": "FX_IDC:BRLUSD"
+                            }, {
+                                "description": "BRL/EUR",
+                                "proName": "FX_IDC:BRLEUR"
+                            }, {
+                                "description": "PETRO",
+                                "proName": "BMFBOVESPA:PETR4"
+                            }],
+                            "colorTheme": "dark",
+                            "isTransparent": false,
+                            "displayMode": "regular",
+                            "locale": "br"
+                        }
+                    </script>
+                    <!-- TradingView Widget END -->
+                </h2>
+                <p id="resumo">Profissional de Finanças 4.0 & Tech, Controladoria, Ciência de Dados, (desde 2010).
                     <br>💱FP&A (Planejamento Financeiro) Capex, Opex, P&L(DRE), Budget(Orçamento), OBZ, Torre despesas, Métodos de Custeio, EBITDA, Cash Flow
-                    <br>📊 BI&A Business Intelligence Power BI, SQL, Data Warehouse, ETL, Data Lake, Data Analytics, Dashboard
+                    <br>📊 BI&A Business Intelligence Power BI, SQL, Data Warehouse, ETL, Dashboard
                     <br>💻 Tech Skill's: DAX, M, SQL, Power BI, HTML, CSS, JavaScript, Python</p>
             </div>
         </div>
@@ -468,16 +509,16 @@
 
             <h1 class="titulosdois">🎓 &nbsp&nbsp Formação Academica &nbsp&nbsp</h1>
             <ul>
-                <li class="nomefomacao">Graduação Gestão Financeira<span class="universidade"> Uninter 2017</span></li>
-                <li class="nomefomacao">Graduação Engenharia da Computação<span class="universidade"> Uninter 2022</span></li>
-                <li class="nomefomacao">Graduação Ciências Economicas<span class="universidade"> Unopar 2023</span></li>
-                <li class="nomefomacao">Graduação Ciências de Dados<span class="universidade"> Unicsul 2020</span></li>
-                <li class="nomefomacao">Graduação Engenharia da Produção<span class="universidade"> 2022</span></li>
-                <li class="nomefomacao">Pós-Graduação Engenharia de Produção<span class="universidade"> Unisselvi 2019</span></li>
-                <li class="nomefomacao">Pós-Graduação Big Data Ciência de Dados<span class="universidade"> Unyleya 2020</span></li>
-                <li class="nomefomacao">MBA Gestão de Projetos<span class="universidade"> Unisselvi 2019</span></li>
-                <li class="nomefomacao">MBA Gestão Contabilidade e Finanças Empresariais<span class="universidade"> UCAM 2020</span></li>
-                <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> UCAM 2020</span></li>
+                <li class="nomefomacao">Graduação Gestão Financeira<span class="universidade"> Uninter 2017🎓</span></li>
+                <li class="nomefomacao">Graduação Engenharia da Computação<span class="universidade"> Uninter 2022⌛</span></li>
+                <li class="nomefomacao">Graduação Ciências Economicas<span class="universidade"> Unopar 2023⌛</span></li>
+                <li class="nomefomacao">Graduação Ciências de Dados<span class="universidade"> Unicsul 2020🎓</span></li>
+                <li class="nomefomacao">Graduação Engenharia da Produção<span class="universidade"> 2022⌛</span></li>
+                <li class="nomefomacao">Pós-Graduação Engenharia de Produção<span class="universidade"> Unisselvi 2019🎓</span></li>
+                <li class="nomefomacao">Pós-Graduação Big Data Ciência de Dados<span class="universidade"> Unyleya 2020🎓</span></li>
+                <li class="nomefomacao">MBA Gestão de Projetos<span class="universidade"> Unisselvi 2019🎓</span></li>
+                <li class="nomefomacao">MBA Gestão Contabilidade Finanças Empresariais<span class="universidade"> UCAM 2020🎓</span></li>
+                <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> UCAM 2020🎓</span></li>
             </ul>
         </div>
         <div class="experiencia">
@@ -553,7 +594,9 @@
             </div>
         </div>
         <div class="informacoes">
-            <h1>&nbspSkill's:</h1>
+            <center>
+                <h1>Skill's:</h1>
+            </center>
             <ul>
                 <li>💱FP&A</li>
                 <li>💱Budget</li>
@@ -566,12 +609,13 @@
                 <li>📊Excel Avançado</li>
                 <li>📊Power Point</li>
                 <li>📊Apresenações de Board Conselho</li>
-                <li>💻Power BI</li>
-                <li>💻SQL</li>
-                <li>💻DAX</li>
-                <li>💻HTML</li>
-                <li>💻CSS</li>
-                <li>💻JavaScript</li>
+                <li>💻Power BI📊</li>
+                <li>💻Python🐍</li>
+                <li>💻SQL🔋</li>
+                <li>💻DAX⌨</li>
+                <li>💻HTML📄</li>
+                <li>💻CSS🎨</li>
+                <li>💻JavaScript📱</li>
                 <li>📊Dashboard</li>
                 <li>📊Business Intelligence</li>
             </ul>
