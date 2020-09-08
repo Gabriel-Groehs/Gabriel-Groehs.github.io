@@ -49,12 +49,7 @@
             box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
         }
         
-        .principal .container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-            grid-template-areas: "nome foto" "formacao redes" "formacao informacoes" "experiencia informacoes" "experiencia informacoes" "experiencia informacoes" "gifs gifs" "gifs gifs";
-        }
+        .principal .container {}
         
         .gifs {
             grid-area: gifs;
@@ -62,7 +57,7 @@
         }
         
         .gifs .dash {
-            height: 11rem;
+            height: 14rem;
         }
         
         .informacoes {
@@ -136,6 +131,90 @@
         
         #minhafoto {
             animation: heartbeat 5s ease-in-out infinite both;
+        }
+        
+        @media (min-width: 62rem) {
+            .principal .container {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                grid-template-areas: "nome foto" "formacao redes" "formacao informacoes" "experiencia informacoes" "experiencia informacoes" "experiencia informacoes" "gifs gifs" "gifs gifs";
+            }
+            .gifs {
+                grid-area: gifs;
+                text-align: center;
+            }
+            .gifs .dash {
+                height: 11rem;
+            }
+            .informacoes {
+                color: white;
+                font-size: 1.4rem;
+                list-style: circle;
+                line-height: 2.6rem;
+                grid-area: informacoes;
+                background-image: linear-gradient(to top, rgb(66, 66, 66), rgb(73, 73, 73));
+                box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .nome {
+                grid-area: nome;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: white;
+            }
+            .redes {
+                box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .formacao {
+                grid-area: formacao;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: rgb(255, 255, 255);
+            }
+            .formacao ul {
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0px 0.5rem;
+                height: 80%;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            }
+            .experiencia {
+                grid-area: experiencia;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: white;
+            }
+            .experiencia #listaexperiencia {
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0px 0.5rem;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            }
+            .experiencia #listaexperiencia li {
+                border: none;
+            }
+            .redes {
+                grid-area: redes;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+            }
+            .nome h1:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .nome #subtitulo {
+                padding: 0.25rem;
+                animation: scroller 2s infinite;
+                font-size: 8px;
+                margin: 1px;
+            }
+            #minhafoto {
+                animation: heartbeat 5s ease-in-out infinite both;
+            }
+            .gifs {
+                grid-area: gifs;
+                text-align: center;
+            }
+            .gifs .dash {
+                height: 11rem;
+            }
         }
         
         @keyframes heartbeat {
