@@ -20,120 +20,410 @@
             font-family: Arial, Helvetica, sans-serif;
         }
         
-        .titulosdois {
-            color: gold;
-            animation: scroller 2s infinite;
-            background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
-            border-radius: 0.5rem 0 0 0.5rem;
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            text-align: right;
-            margin-top: 0;
-            padding-right: 0.75rem;
-            padding: 0.25rem;
+        @media (max-width: 60rem) {
+            .titulosdois {
+                color: gold;
+                animation: scroller 2s infinite;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+                border-radius: 0.5rem 0 0 0.5rem;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                text-align: center;
+                font-size: 1.2rem;
+                margin-top: 0;
+                padding-right: 0rem;
+                padding: 0rem;
+            }
+            .principal {
+                background-color: white;
+                display: flex;
+                justify-content: center;
+                background-attachment: fixed;
+                margin: 0rem 2rem 0rem 2rem;
+                background-color: black;
+                background-size: contain;
+                background-image: url('https://cdn.dribbble.com/users/931696/screenshots/4897278/untitled-2.gif');
+            }
+            .container {
+                background-color: rgb(48, 48, 48);
+                margin: 0rem 2rem 0rem 2rem;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .gifs {
+                text-align: center;
+            }
+            .gifs .dash {
+                height: 8rem;
+            }
+            .informacoes {
+                color: white;
+                font-size: 1rem;
+                list-style: circle;
+                line-height: 2.6rem;
+                background-image: linear-gradient(to top, rgb(66, 66, 66), rgb(73, 73, 73));
+                box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .nome {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: white;
+            }
+            .nome h1 {
+                font-size: 1.6rem;
+            }
+            .nome small {
+                font-size: 1rem;
+            }
+            .redes {
+                box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .formacao {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: rgb(255, 255, 255);
+            }
+            .formacao ul {
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0px 0.5rem;
+                height: 80%;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            }
+            .experiencia {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: white;
+            }
+            .experiencia #listaexperiencia {
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0px 0.5rem;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            }
+            .experiencia #listaexperiencia li {
+                border: none;
+            }
+            .redes {
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+            }
+            .nome h1:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .nome #subtitulo {
+                padding: 0.25rem;
+                animation: scroller 2s infinite;
+                font-size: 2px;
+                margin: 1px;
+            }
+            #minhafoto {
+                animation: heartbeat 5s ease-in-out infinite both;
+            }
+            .nome p {
+                padding: 0rem;
+                font-size: 0.8rem;
+                background-color: white;
+                border-radius: 0rem;
+                text-align: center;
+                display: flex;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+                gap: 0px;
+            }
+            .nome #subtitulo:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                background-color: rgb(255, 166, 0);
+                cursor: pointer;
+            }
+            .nome p:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                background-image: linear-gradient(to right, rgb(255, 242, 166), rgb(255, 255, 255));
+                cursor: pointer;
+            }
+            .foto {
+                background-attachment: scroll;
+                background-size: contain;
+                background-image: url('https://thumbs.gfycat.com/CookedBeautifulDungbeetle-size_restricted.gif');
+                border-radius: 2.6rem;
+                margin: 0.88rem;
+                box-shadow: -3px 0.25rem 25px -0.25rem rgb(59, 59, 59);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .foto img {
+                grid-area: foto;
+                animation: heartbeat 1.5s ease-in-out infinite both;
+                box-shadow: 5px 0.25rem 8px -0.25rem rgb(255, 255, 255);
+                padding: 0.5rem;
+                border-radius: 50%;
+                background-color: aliceblue;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.125rem;
+                animation: scroller 2s infinite;
+            }
+            .foto img:hover {
+                border-radius: 50%;
+                animation: rotacao 1s linear both;
+            }
+            li {
+                list-style: none;
+            }
+            #curriculo {
+                box-shadow: 0.625rem 0.625rem 25px -13px rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
+                color: gold;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .titulosdois:hover {
+                box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
+                color: rgb(61, 61, 61);
+                cursor: pointer;
+                background-image: linear-gradient(to top, rgb(255, 187, 0), rgb(255, 215, 104));
+            }
+            #curriculo:hover {
+                box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
+                color: rgb(61, 61, 61);
+                cursor: pointer;
+                background-image: linear-gradient(to top, rgb(233, 171, 2), rgb(255, 187, 0));
+            }
+            .nomefomacao {
+                padding: .2rem;
+                border-radius: 0.5rem;
+                width: 100%;
+                font-weight: bold;
+                font-size: 1rem;
+            }
+            .nomefomacao:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+                cursor: pointer;
+            }
+            .nomefomacao .universidade {
+                font-weight: 100;
+            }
+            .redes div {
+                box-shadow: 0.625rem 0px 45px -11px rgba(0, 0, 0, 0.75);
+                height: 20%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .redes div .imagem {
+                width: 30%;
+                height: 100%;
+            }
+            .redes div .textorede {
+                height: 100%;
+            }
+            .redes div .textorede a {
+                text-decoration: none;
+                color: rgb(53, 53, 53);
+            }
+            .redes div .textorede a:hover {
+                color: aliceblue;
+            }
+            .redes div#linkedin {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+                text-decoration: none;
+            }
+            .redes div#linkedin:hover {
+                background-image: linear-gradient(to right, rgb(0, 54, 204), rgb(118, 155, 255));
+                color: aliceblue;
+            }
+            .redes div#whats {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#whats:hover {
+                background-image: linear-gradient(to right, rgb(0, 204, 92), rgb(118, 255, 198));
+                color: aliceblue;
+            }
+            .redes div#email {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#email:hover {
+                background-image: linear-gradient(to right, rgb(204, 0, 0), rgb(255, 61, 61));
+                color: aliceblue;
+            }
+            .redes div#youtube {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#youtube:hover {
+                background-image: linear-gradient(to right, rgb(204, 0, 27), rgb(255, 47, 75));
+                color: aliceblue;
+            }
+            .redes div#git {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#git:hover {
+                background-image: linear-gradient(to right, rgb(80, 80, 80), rgb(0, 0, 0));
+                color: aliceblue;
+            }
+            .flecha {
+                padding: 0;
+                left: 0.25rem;
+                text-align: left;
+            }
+            .experiencia ul .nomeexperiencia {
+                font-size: 1rem;
+                border-radius: 5px;
+                font-weight: bold;
+                padding: 1px;
+            }
+            .experiencia ul .nomeexperiencia:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+                cursor: pointer;
+            }
+            .experiencia ul .nomeexperiencia ul li {
+                padding: 5px;
+                font-weight: 100;
+            }
+            .experiencia ul .nomeexperiencia:hover ul li {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
+                cursor: pointer;
+            }
+            .salario {
+                grid-template: salario;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                color: rgb(255, 217, 47);
+                background-color: rgb(53, 53, 53);
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                font-size: 2rem;
+                text-shadow: 7px 1px 7px rgb(24, 24, 24);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                /*animation: scroller2 8s infinite;*/
+            }
         }
         
-        .principal {
-            background-color: white;
-            display: flex;
-            justify-content: center;
-            border-radius: 1.625rem 1.625rem 0px 0px;
-            background-attachment: fixed;
-            background-color: black;
-            background-size: contain;
-            background-image: url('https://cdn.dribbble.com/users/931696/screenshots/4897278/untitled-2.gif');
+        @keyframes heartbeat {
+            from {
+                transform: scale(1);
+                transform-origin: center center;
+                animation-timing-function: ease-out;
+            }
+            10% {
+                transform: scale(0.91);
+                animation-timing-function: ease-in;
+            }
+            17% {
+                transform: scale(0.98);
+                animation-timing-function: ease-out;
+            }
+            33% {
+                transform: scale(0.87);
+                animation-timing-function: ease-in;
+            }
+            45% {
+                transform: scale(1);
+                animation-timing-function: ease-out;
+            }
         }
         
-        .container {
-            max-width: 61.25rem;
-            background-color: rgb(48, 48, 48);
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+        @keyframes scroller {
+            0% {
+                text-shadow: 0 0 0 rgba(39, 39, 39, 0);
+            }
+            50% {
+                text-shadow: 0.25rem 0.25rem 12px rgb(7, 7, 7);
+            }
+            100% {
+                text-shadow: 0 0 0 rgba(86, 255, 34, 0);
+            }
         }
         
-        .principal .container {}
-        
-        .gifs {
-            grid-area: gifs;
-            text-align: center;
+        @keyframes rotacao {
+            0% {
+                transform: scale(1) rotate3d(1, 1, 0, 0deg);
+            }
+            50% {
+                transform: scale(1.2) rotate3d(1, 1, 0, 180deg);
+            }
+            100% {
+                transform: scale(1) rotate3d(1, 1, 0, 360deg);
+            }
         }
         
-        .gifs .dash {
-            height: 14rem;
+        @keyframes rotacao2 {
+            0% {
+                transform: rotateX(0);
+            }
+            100% {
+                transform: rotateX(380deg);
+            }
         }
         
-        .informacoes {
-            color: white;
-            font-size: 1.4rem;
-            list-style: circle;
-            line-height: 2.6rem;
-            grid-area: informacoes;
-            background-image: linear-gradient(to top, rgb(66, 66, 66), rgb(73, 73, 73));
-            box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+        @keyframes scroller2 {
+            from {
+                transform: scale(1);
+                transform-origin: center center;
+                animation-timing-function: ease-out;
+            }
+            10% {
+                transform: scale(0.8);
+                animation-timing-function: ease-in;
+            }
+            17% {
+                transform: scale(0.6);
+                animation-timing-function: ease-out;
+            }
+            33% {
+                transform: scale(0.8);
+                animation-timing-function: ease-in;
+            }
+            45% {
+                transform: scale(1);
+                animation-timing-function: ease-out;
+            }
         }
-        
-        .nome {
-            grid-area: nome;
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            background-color: white;
-        }
-        
-        .redes {
-            box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
-        }
-        
-        .formacao {
-            grid-area: formacao;
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            background-color: rgb(255, 255, 255);
-        }
-        
-        .formacao ul {
-            background-color: white;
-            border-radius: 0.25rem;
-            margin: 0px 0px 0px 0.5rem;
-            height: 80%;
-            border: solid 1px rgb(204, 204, 204);
-            box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
-        }
-        
-        .experiencia {
-            grid-area: experiencia;
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            background-color: white;
-        }
-        
-        .experiencia #listaexperiencia {
-            background-color: white;
-            border-radius: 0.25rem;
-            margin: 0px 0px 0px 0.5rem;
-            border: solid 1px rgb(204, 204, 204);
-            box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
-        }
-        
-        .experiencia #listaexperiencia li {
-            border: none;
-        }
-        
-        .redes {
-            grid-area: redes;
-            background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
-        }
-        
-        .nome h1:hover {
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-        }
-        
-        .nome #subtitulo {
-            padding: 0.25rem;
-            animation: scroller 2s infinite;
-            font-size: 8px;
-            margin: 1px;
-        }
-        
-        #minhafoto {
-            animation: heartbeat 5s ease-in-out infinite both;
-        }
+        /*------------------------
+    -----------------------*/
         
         @media (min-width: 62rem) {
+            .titulosdois {
+                color: gold;
+                animation: scroller 2s infinite;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+                border-radius: 0.5rem 0 0 0.5rem;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                text-align: right;
+                margin-top: 0;
+                padding-right: 0.75rem;
+                padding: 0.25rem;
+            }
+            .principal {
+                background-color: white;
+                display: flex;
+                justify-content: center;
+                border-radius: 1.625rem 1.625rem 0px 0px;
+                background-attachment: fixed;
+                background-color: black;
+                background-size: contain;
+                background-image: url('https://cdn.dribbble.com/users/931696/screenshots/4897278/untitled-2.gif');
+            }
+            .container {
+                max-width: 61.25rem;
+                background-color: rgb(48, 48, 48);
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
             .principal .container {
                 display: grid;
                 grid-template-columns: 2fr 1fr;
@@ -160,6 +450,9 @@
                 grid-area: nome;
                 box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
                 background-color: white;
+            }
+            .nome small {
+                font-size: 1rem;
             }
             .redes {
                 box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
@@ -208,323 +501,209 @@
             #minhafoto {
                 animation: heartbeat 5s ease-in-out infinite both;
             }
-            .gifs {
-                grid-area: gifs;
-                text-align: center;
+            .nome p {
+                padding: 0.25rem;
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0.5rem 0.5rem;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+                gap: 0;
             }
-            .gifs .dash {
-                height: 11rem;
+            .nome #subtitulo:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                background-color: rgb(255, 166, 0);
+                cursor: pointer;
             }
-        }
-        
-        @keyframes heartbeat {
-            from {
-                transform: scale(1);
-                transform-origin: center center;
-                animation-timing-function: ease-out;
+            .nome p:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                background-image: linear-gradient(to right, rgb(255, 242, 166), rgb(255, 255, 255));
+                cursor: pointer;
             }
-            10% {
-                transform: scale(0.91);
-                animation-timing-function: ease-in;
+            .foto {
+                background-attachment: scroll;
+                background-size: contain;
+                background-image: url('https://thumbs.gfycat.com/CookedBeautifulDungbeetle-size_restricted.gif');
+                border-radius: 2.6rem;
+                margin: 0.88rem;
+                box-shadow: -3px 0.25rem 25px -0.25rem rgb(59, 59, 59);
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
-            17% {
-                transform: scale(0.98);
-                animation-timing-function: ease-out;
+            .foto img {
+                grid-area: foto;
+                animation: heartbeat 1.5s ease-in-out infinite both;
+                box-shadow: 5px 0.25rem 8px -0.25rem rgb(255, 255, 255);
+                width: 14rem;
+                padding: 0.5rem;
+                border-radius: 50%;
+                background-color: aliceblue;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.125rem;
+                animation: scroller 2s infinite;
             }
-            33% {
-                transform: scale(0.87);
-                animation-timing-function: ease-in;
+            .foto img:hover {
+                border-radius: 50%;
+                animation: rotacao 1s linear both;
             }
-            45% {
-                transform: scale(1);
-                animation-timing-function: ease-out;
+            #curriculo {
+                box-shadow: 0.625rem 0.625rem 25px -13px rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                color: gold;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                padding-left: 2rem;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
             }
-        }
-        
-        @keyframes scroller {
-            0% {
-                text-shadow: 0 0 0 rgba(39, 39, 39, 0);
+            .titulosdois:hover {
+                box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
+                color: rgb(61, 61, 61);
+                cursor: pointer;
+                background-image: linear-gradient(to top, rgb(255, 187, 0), rgb(255, 215, 104));
             }
-            50% {
-                text-shadow: 0.25rem 0.25rem 12px rgb(7, 7, 7);
+            @keyframes rotacao2 {
+                0% {
+                    transform: rotateX(0);
+                }
+                100% {
+                    transform: rotateX(380deg);
+                }
             }
-            100% {
-                text-shadow: 0 0 0 rgba(86, 255, 34, 0);
+            #curriculo:hover {
+                box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
+                color: rgb(61, 61, 61);
+                cursor: pointer;
+                background-image: linear-gradient(to top, rgb(233, 171, 2), rgb(255, 187, 0));
             }
-        }
-        
-        .nome p {
-            padding: 0.25rem;
-            background-color: white;
-            border-radius: 0.25rem;
-            margin: 0px 0px 0.5rem 0.5rem;
-            border: solid 1px rgb(204, 204, 204);
-            box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
-            gap: 0;
-        }
-        
-        .nome #subtitulo:hover {
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            border-radius: 0.5rem 0 0 0.5rem;
-            background-color: rgb(255, 166, 0);
-            cursor: pointer;
-        }
-        
-        .nome p:hover {
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            border-radius: 0.5rem 0 0 0.5rem;
-            background-image: linear-gradient(to right, rgb(255, 242, 166), rgb(255, 255, 255));
-            cursor: pointer;
-        }
-        
-        .foto {
-            background-attachment: scroll;
-            background-size: contain;
-            background-image: url('https://thumbs.gfycat.com/CookedBeautifulDungbeetle-size_restricted.gif');
-            border-radius: 2.6rem;
-            margin: 0.88rem;
-            box-shadow: -3px 0.25rem 25px -0.25rem rgb(59, 59, 59);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .foto img {
-            grid-area: foto;
-            animation: heartbeat 1.5s ease-in-out infinite both;
-            box-shadow: 5px 0.25rem 8px -0.25rem rgb(255, 255, 255);
-            width: 14rem;
-            padding: 0.5rem;
-            border-radius: 50%;
-            background-color: aliceblue;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.125rem;
-            animation: scroller 2s infinite;
-        }
-        
-        .foto img:hover {
-            border-radius: 50%;
-            animation: rotacao 1s linear both;
-        }
-        
-        @keyframes rotacao {
-            0% {
-                transform: scale(1) rotate3d(1, 1, 0, 0deg);
+            .nomefomacao {
+                padding: .5rem;
+                border-radius: 0.5rem;
+                width: 100%;
+                font-weight: bold;
+                font-size: 1.2rem;
             }
-            50% {
-                transform: scale(1.2) rotate3d(1, 1, 0, 180deg);
+            .nomefomacao:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+                cursor: pointer;
             }
-            100% {
-                transform: scale(1) rotate3d(1, 1, 0, 360deg);
+            .nomefomacao .universidade {
+                font-weight: 100;
             }
-        }
-        
-        li {
-            list-style: none;
-        }
-        
-        #curriculo {
-            box-shadow: 0.625rem 0.625rem 25px -13px rgba(0, 0, 0, 0.75);
-            border-radius: 0.5rem 0 0 0.5rem;
-            color: gold;
-            margin-top: 0px;
-            margin-bottom: 0px;
-            padding-left: 2rem;
-            background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-        }
-        
-        .titulosdois:hover {
-            box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
-            color: rgb(61, 61, 61);
-            cursor: pointer;
-            background-image: linear-gradient(to top, rgb(255, 187, 0), rgb(255, 215, 104));
-        }
-        
-        @keyframes rotacao2 {
-            0% {
-                transform: rotateX(0);
+            .redes div {
+                box-shadow: 0.625rem 0px 45px -11px rgba(0, 0, 0, 0.75);
+                height: 20%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
-            100% {
-                transform: rotateX(380deg);
+            .redes div .imagem {
+                width: 30%;
+                height: 100%;
             }
-        }
-        
-        #curriculo:hover {
-            box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
-            color: rgb(61, 61, 61);
-            cursor: pointer;
-            background-image: linear-gradient(to top, rgb(233, 171, 2), rgb(255, 187, 0));
-        }
-        
-        .nomefomacao {
-            padding: .5rem;
-            border-radius: 0.5rem;
-            width: 100%;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .nomefomacao:hover {
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
-            cursor: pointer;
-        }
-        
-        .nomefomacao .universidade {
-            font-weight: 100;
-        }
-        
-        .redes div {
-            box-shadow: 0.625rem 0px 45px -11px rgba(0, 0, 0, 0.75);
-            height: 20%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .redes div .imagem {
-            width: 30%;
-            height: 100%;
-        }
-        
-        .redes div .textorede {
-            height: 100%;
-        }
-        
-        .redes div .textorede a {
-            text-decoration: none;
-            color: rgb(53, 53, 53);
-        }
-        
-        .redes div .textorede a:hover {
-            color: aliceblue;
-        }
-        
-        .redes div#linkedin {
-            font-size: 2rem;
-            box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
-            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
-            text-decoration: none;
-        }
-        
-        .redes div#linkedin:hover {
-            background-image: linear-gradient(to right, rgb(0, 54, 204), rgb(118, 155, 255));
-            color: aliceblue;
-        }
-        
-        .redes div#whats {
-            font-size: 2rem;
-            box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
-            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
-        }
-        
-        .redes div#whats:hover {
-            background-image: linear-gradient(to right, rgb(0, 204, 92), rgb(118, 255, 198));
-            color: aliceblue;
-        }
-        
-        .redes div#email {
-            font-size: 2rem;
-            box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
-            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
-        }
-        
-        .redes div#email:hover {
-            background-image: linear-gradient(to right, rgb(204, 0, 0), rgb(255, 61, 61));
-            color: aliceblue;
-        }
-        
-        .redes div#youtube {
-            font-size: 2rem;
-            box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
-            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
-        }
-        
-        .redes div#youtube:hover {
-            background-image: linear-gradient(to right, rgb(204, 0, 27), rgb(255, 47, 75));
-            color: aliceblue;
-        }
-        
-        .redes div#git {
-            font-size: 2rem;
-            box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
-            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
-        }
-        
-        .redes div#git:hover {
-            background-image: linear-gradient(to right, rgb(80, 80, 80), rgb(0, 0, 0));
-            color: aliceblue;
-        }
-        
-        .flecha {
-            padding: 0;
-            left: 0.25rem;
-            text-align: left;
-        }
-        
-        .experiencia ul .nomeexperiencia {
-            font-size: 1.1rem;
-            border-radius: 5px;
-            font-weight: bold;
-            padding: 5px;
-        }
-        
-        .experiencia ul .nomeexperiencia:hover {
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
-            cursor: pointer;
-        }
-        
-        .experiencia ul .nomeexperiencia ul li {
-            padding: 5px;
-            font-weight: 100;
-        }
-        
-        .experiencia ul .nomeexperiencia:hover ul li {
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            background-image: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
-            cursor: pointer;
-        }
-        
-        .salario {
-            grid-template: salario;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            color: rgb(255, 217, 47);
-            background-color: rgb(53, 53, 53);
-            box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
-            font-size: 2rem;
-            text-shadow: 7px 1px 7px rgb(24, 24, 24);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /*animation: scroller2 8s infinite;*/
-        }
-        
-        @keyframes scroller2 {
-            from {
-                transform: scale(1);
-                transform-origin: center center;
-                animation-timing-function: ease-out;
+            .redes div .textorede {
+                height: 100%;
             }
-            10% {
-                transform: scale(0.8);
-                animation-timing-function: ease-in;
+            .redes div .textorede a {
+                text-decoration: none;
+                color: rgb(53, 53, 53);
             }
-            17% {
-                transform: scale(0.6);
-                animation-timing-function: ease-out;
+            .redes div .textorede a:hover {
+                color: aliceblue;
             }
-            33% {
-                transform: scale(0.8);
-                animation-timing-function: ease-in;
+            .redes div#linkedin {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+                text-decoration: none;
             }
-            45% {
-                transform: scale(1);
-                animation-timing-function: ease-out;
+            .redes div#linkedin:hover {
+                background-image: linear-gradient(to right, rgb(0, 54, 204), rgb(118, 155, 255));
+                color: aliceblue;
+            }
+            .redes div#whats {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#whats:hover {
+                background-image: linear-gradient(to right, rgb(0, 204, 92), rgb(118, 255, 198));
+                color: aliceblue;
+            }
+            .redes div#email {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#email:hover {
+                background-image: linear-gradient(to right, rgb(204, 0, 0), rgb(255, 61, 61));
+                color: aliceblue;
+            }
+            .redes div#youtube {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#youtube:hover {
+                background-image: linear-gradient(to right, rgb(204, 0, 27), rgb(255, 47, 75));
+                color: aliceblue;
+            }
+            .redes div#git {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#git:hover {
+                background-image: linear-gradient(to right, rgb(80, 80, 80), rgb(0, 0, 0));
+                color: aliceblue;
+            }
+            .flecha {
+                padding: 0;
+                left: 0.25rem;
+                text-align: left;
+            }
+            .experiencia ul .nomeexperiencia {
+                font-size: 1.1rem;
+                border-radius: 5px;
+                font-weight: bold;
+                padding: 5px;
+            }
+            .experiencia ul .nomeexperiencia:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+                cursor: pointer;
+            }
+            .experiencia ul .nomeexperiencia ul li {
+                padding: 5px;
+                font-weight: 100;
+            }
+            .experiencia ul .nomeexperiencia:hover ul li {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
+                cursor: pointer;
+            }
+            li {
+                list-style: none;
+            }
+            .salario {
+                grid-template: salario;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                color: rgb(255, 217, 47);
+                background-color: rgb(53, 53, 53);
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                font-size: 2rem;
+                text-shadow: 7px 1px 7px rgb(24, 24, 24);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                /*animation: scroller2 8s infinite;*/
             }
         }
     </style>
@@ -537,7 +716,7 @@
             <center>
                 <h1 id="curriculo">
                     <span class="flecha" style="color: rgb(109, 109, 109);">❱❭</span> Gabriel Groehs <span class="flecha" style="color: rgb(109, 109, 109);">❱❭</span>
-                    <br><small style="font-size: 1rem;color: rgb(255, 255, 255);">📊 Estratégia Economica Tech Orientada a Dados</small>
+                    <br><small style="color: rgb(255, 255, 255);">📊 Estratégia Economica Tech Orientada a Dados</small>
                 </h1>
             </center>
 
