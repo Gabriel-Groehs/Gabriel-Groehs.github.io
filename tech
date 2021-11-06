@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og: title" content="Curriculum Gabriel Groehs">
+    <meta property="og: description" content="Currículo Gabriel Groehs">
+    <meta property="og: url" content="https://gabriel-groehs.github.io">
+    <meta property="og:image" itemprop="image" content="https://scontent.fcxj6-1.fna.fbcdn.net/v/t1.0-9/s960x960/85173085_2813658218729252_280362743389749248_o.jpg?_nc_cat=106&_nc_sid=19026a&_nc_eui2=AeEVfH6hAl8MOeCXNgYsCVXaGh5SDRds95AaHlINF2z3kBx14eizV8T8HiKl61X6jy0SXORSSpweV_PEkZVK-Biq&_nc_ohc=z2TV7xwHCIgAX8O537g&_nc_ht=scontent.fcxj6-1.fna&tp=7&oh=dce84346e50c8773250126b1991b1705&oe=5F733672">
+    <meta property="og:type" content="website">
+    <meta property="favicon: image" content="https://media-exp1.licdn.com/dms/image/C4E03AQFw83n1d6uWJg/profile-displayphoto-shrink_100_100/0?e=1603929600&v=beta&t=35D_-ccIyUo9EjL0u9OydoH4rCSHutumAyKzCwTE4Vg">
+    <link rel="shortcut icon" href="" type="https://media-exp1.licdn.com/dms/image/C4E2DAQHfuqksOyxUjQ/profile-treasury-image-shrink_8192_8192/0?e=1598724000&v=beta&t=_nTF789P5_WzohVhaDZQjdr86XXGATsyUhR5Jq4JKWc">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <title>❭❭ 📊 Gabriel Groehs</title>
+    <title rel="shortcut icon">📊</title>
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        @media (max-width: 60rem) {
+            .titulosdois {
+                color: gold;
+                animation: scroller 2s infinite;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+                border-radius: 0.5rem 0 0 0.5rem;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                text-align: center;
+                font-size: 1.2rem;
+                margin-top: 0;
+                padding-right: 0rem;
+                padding: 0rem;
+            }
+            .principal {
+                background-color: white;
+                display: flex;
+                justify-content: center;
+                background-attachment: fixed;
+                margin: 0rem 2rem 0rem 2rem;
+                background-color: black;
+                background-size: contain;
+                background-image: url('https://cdn.dribbble.com/users/931696/screenshots/4897278/untitled-2.gif');
+            }
+            .container {
+                background-color: rgb(48, 48, 48);
+                margin: 0rem 2rem 0rem 2rem;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .gifs {
+                text-align: center;
+            }
+            .gifs .dash {
+                height: 8rem;
+            }
+            .informacoes {
+                color: white;
+                font-size: 1rem;
+                list-style: circle;
+                line-height: 2.6rem;
+                background-image: linear-gradient(to top, rgb(66, 66, 66), rgb(73, 73, 73));
+                box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+                text-decoration: none;
+            }
+            .dsh {
+                color: white;
+                text-decoration: none;
+            }
+            .nome {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: white;
+            }
+            .nome h1 {
+                font-size: 1.6rem;
+            }
+            .nome small {
+                font-size: 1rem;
+            }
+            .redes {
+                box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .formacao {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: rgb(255, 255, 255);
+            }
+            .formacao ul {
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0px 0.5rem;
+                height: 80%;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            }
+            .experiencia {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: white;
+            }
+            .experiencia #listaexperiencia {
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0px 0.5rem;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            }
+            .experiencia #listaexperiencia li {
+                border: none;
+            }
+            .redes {
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+            }
+            .nome h1:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .nome #subtitulo {
+                padding: 0.25rem;
+                animation: scroller 2s infinite;
+                font-size: 2px;
+                margin: 1px;
+            }
+            #minhafoto {
+                animation: heartbeat 5s ease-in-out infinite both;
+            }
+            .nome p {
+                padding: 0rem;
+                font-size: 0.8rem;
+                background-color: white;
+                border-radius: 0rem;
+                text-align: center;
+                display: flex;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+                gap: 0px;
+            }
+            .nome #subtitulo:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                background-color: rgb(255, 166, 0);
+                cursor: pointer;
+            }
+            .nome p:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                background-image: linear-gradient(to right, rgb(255, 242, 166), rgb(255, 255, 255));
+                cursor: pointer;
+            }
+            .foto {
+                background-attachment: scroll;
+                background-size: contain;
+                background-image: url('https://thumbs.gfycat.com/CookedBeautifulDungbeetle-size_restricted.gif');
+                border-radius: 2.6rem;
+                margin: 0.88rem;
+                box-shadow: -3px 0.25rem 25px -0.25rem rgb(59, 59, 59);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .foto img {
+                grid-area: foto;
+                animation: heartbeat 1.5s ease-in-out infinite both;
+                box-shadow: 5px 0.25rem 8px -0.25rem rgb(255, 255, 255);
+                padding: 0.5rem;
+                border-radius: 50%;
+                background-color: aliceblue;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.125rem;
+                animation: scroller 2s infinite;
+            }
+            .foto img:hover {
+                border-radius: 50%;
+                animation: rotacao 1s linear both;
+            }
+            li {
+                list-style: none;
+            }
+            #curriculo {
+                box-shadow: 0.625rem 0.625rem 25px -13px rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
+                color: gold;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .titulosdois:hover {
+                box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
+                color: rgb(61, 61, 61);
+                cursor: pointer;
+                background-image: linear-gradient(to top, rgb(255, 187, 0), rgb(255, 215, 104));
+            }
+            #curriculo:hover {
+                box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
+                color: rgb(61, 61, 61);
+                cursor: pointer;
+                background-image: linear-gradient(to top, rgb(233, 171, 2), rgb(255, 187, 0));
+            }
+            .nomefomacao {
+                padding: .2rem;
+                text-decoration: none;
+                border-radius: 0.5rem;
+                width: 100%;
+                font-weight: bold;
+                font-size: 1rem;
+            }
+            .nomefomacao:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+                cursor: pointer;
+            }
+            .nomefomacao .universidade {
+                font-weight: 100;
+            }
+            .redes div {
+                box-shadow: 0.625rem 0px 45px -11px rgba(0, 0, 0, 0.75);
+                height: 20%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .redes div .imagem {
+                width: 30%;
+                height: 100%;
+            }
+            .redes div .textorede {
+                height: 100%;
+            }
+            .redes div .textorede a {
+                text-decoration: none;
+                color: rgb(53, 53, 53);
+            }
+            .redes div .textorede a:hover {
+                color: aliceblue;
+            }
+            .redes div#linkedin {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+                text-decoration: none;
+            }
+            .redes div#linkedin:hover {
+                background-image: linear-gradient(to right, rgb(0, 54, 204), rgb(118, 155, 255));
+                color: aliceblue;
+            }
+            .redes div#whats {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#whats:hover {
+                background-image: linear-gradient(to right, rgb(0, 204, 92), rgb(118, 255, 198));
+                color: aliceblue;
+            }
+            .redes div#email {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#email:hover {
+                background-image: linear-gradient(to right, rgb(204, 0, 0), rgb(255, 61, 61));
+                color: aliceblue;
+            }
+            .redes div#youtube {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#youtube:hover {
+                background-image: linear-gradient(to right, rgb(204, 0, 27), rgb(255, 47, 75));
+                color: aliceblue;
+            }
+            .redes div#git {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#git:hover {
+                background-image: linear-gradient(to right, rgb(80, 80, 80), rgb(0, 0, 0));
+                color: aliceblue;
+            }
+            .flecha {
+                padding: 0;
+                left: 0.25rem;
+                text-align: left;
+            }
+            .experiencia ul .nomeexperiencia {
+                font-size: 1rem;
+                border-radius: 5px;
+                font-weight: bold;
+                padding: 1px;
+            }
+            .experiencia ul .nomeexperiencia:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+                cursor: pointer;
+            }
+            .experiencia ul .nomeexperiencia ul li {
+                padding: 1px;
+                font-weight: 100;
+            }
+            .experiencia ul .nomeexperiencia:hover ul li {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
+                cursor: pointer;
+            }
+            .salario {
+                grid-template: salario;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                color: rgb(255, 217, 47);
+                background-color: rgb(53, 53, 53);
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                font-size: 2rem;
+                text-shadow: 7px 1px 7px rgb(24, 24, 24);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                /*animation: scroller2 8s infinite;*/
+            }
+        }
+        
+        @keyframes heartbeat {
+            from {
+                transform: scale(1);
+                transform-origin: center center;
+                animation-timing-function: ease-out;
+            }
+            10% {
+                transform: scale(0.91);
+                animation-timing-function: ease-in;
+            }
+            17% {
+                transform: scale(0.98);
+                animation-timing-function: ease-out;
+            }
+            33% {
+                transform: scale(0.87);
+                animation-timing-function: ease-in;
+            }
+            45% {
+                transform: scale(1);
+                animation-timing-function: ease-out;
+            }
+        }
+        
+        @keyframes scroller {
+            0% {
+                text-shadow: 0 0 0 rgba(39, 39, 39, 0);
+            }
+            50% {
+                text-shadow: 0.25rem 0.25rem 12px rgb(7, 7, 7);
+            }
+            100% {
+                text-shadow: 0 0 0 rgba(86, 255, 34, 0);
+            }
+        }
+        
+        @keyframes rotacao {
+            0% {
+                transform: scale(1) rotate3d(1, 1, 0, 0deg);
+            }
+            50% {
+                transform: scale(1.2) rotate3d(1, 1, 0, 180deg);
+            }
+            100% {
+                transform: scale(1) rotate3d(1, 1, 0, 360deg);
+            }
+        }
+        
+        @keyframes rotacao2 {
+            0% {
+                transform: rotateX(0);
+            }
+            100% {
+                transform: rotateX(380deg);
+            }
+        }
+        
+        @keyframes scroller2 {
+            from {
+                transform: scale(1);
+                transform-origin: center center;
+                animation-timing-function: ease-out;
+            }
+            10% {
+                transform: scale(0.8);
+                animation-timing-function: ease-in;
+            }
+            17% {
+                transform: scale(0.6);
+                animation-timing-function: ease-out;
+            }
+            33% {
+                transform: scale(0.8);
+                animation-timing-function: ease-in;
+            }
+            45% {
+                transform: scale(1);
+                animation-timing-function: ease-out;
+            }
+        }
+        /*------------------------
+-----------------------*/
+        
+        @media (min-width: 60rem) {
+            .titulosdois {
+                color: gold;
+                animation: scroller 2s infinite;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+                border-radius: 0.5rem 0 0 0.5rem;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                text-align: right;
+                margin-top: 0;
+                padding-right: 0.75rem;
+                padding: 0.25rem;
+            }
+            .principal {
+                background-color: white;
+                display: flex;
+                justify-content: center;
+                border-radius: 1.625rem 1.625rem 0px 0px;
+                background-attachment: fixed;
+                background-color: black;
+                background-size: contain;
+                background-image: url('https://cdn.dribbble.com/users/931696/screenshots/4897278/untitled-2.gif');
+            }
+            .container {
+                max-width: 61.25rem;
+                background-color: rgb(48, 48, 48);
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .principal .container {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                grid-template-areas: "nome foto" "formacao redes" "formacao informacoes" "experiencia informacoes" "experiencia informacoes" "experiencia informacoes" "gifs gifs" "gifs gifs";
+            }
+            .gifs {
+                grid-area: gifs;
+                text-align: center;
+            }
+            .gifs .dash {
+                height: 11rem;
+            }
+            .informacoes {
+                color: white;
+                font-size: 1rem;
+                list-style: circle;
+                grid-area: informacoes;
+                background-image: linear-gradient(to top, rgb(66, 66, 66), rgb(73, 73, 73));
+                box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .dsh {
+                color: white;
+                text-decoration: none;
+            }
+            .dsh:hover {
+                background-color: rgb(32, 32, 32);
+                color: rgb(255, 220, 21);
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .nome {
+                grid-area: nome;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: white;
+            }
+            .nome small {
+                font-size: 1rem;
+            }
+            .redes {
+                box-shadow: -0.25rem 0.25rem 25px -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .formacao {
+                grid-area: formacao;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: rgb(255, 255, 255);
+            }
+            .formacao ul {
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0px 0.5rem;
+                height: auto;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            }
+            .experiencia {
+                grid-area: experiencia;
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-color: white;
+            }
+            .experiencia #listaexperiencia {
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0px 0.5rem;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+            }
+            .experiencia #listaexperiencia li {
+                border: none;
+            }
+            .redes {
+                grid-area: redes;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+            }
+            .nome h1:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .nome #subtitulo {
+                padding: 0.25rem;
+                animation: scroller 2s infinite;
+                font-size: 8px;
+                margin: 1px;
+            }
+            #minhafoto {
+                animation: heartbeat 5s ease-in-out infinite both;
+            }
+            .nome p {
+                padding: 0.25rem;
+                background-color: white;
+                border-radius: 0.25rem;
+                margin: 0px 0px 0.5rem 0.5rem;
+                border: solid 1px rgb(204, 204, 204);
+                box-shadow: -19px 1.625rem 1.125rem -27px rgba(0, 0, 0, 0.75);
+                gap: 0;
+            }
+            .nome #subtitulo:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                background-color: rgb(255, 166, 0);
+                cursor: pointer;
+            }
+            .nome p:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                background-image: linear-gradient(to right, rgb(255, 242, 166), rgb(255, 255, 255));
+                cursor: pointer;
+            }
+            .foto {
+                background-attachment: scroll;
+                background-size: contain;
+                background-image: url('https://thumbs.gfycat.com/CookedBeautifulDungbeetle-size_restricted.gif');
+                border-radius: 2.6rem;
+                margin: 0.88rem;
+                box-shadow: -3px 0.25rem 25px -0.25rem rgb(59, 59, 59);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .foto img {
+                grid-area: foto;
+                animation: heartbeat 1.5s ease-in-out infinite both;
+                box-shadow: 5px 0.25rem 8px -0.25rem rgb(255, 255, 255);
+                width: 14rem;
+                padding: 0.5rem;
+                border-radius: 50%;
+                background-color: aliceblue;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.125rem;
+                animation: scroller 2s infinite;
+            }
+            .foto img:hover {
+                border-radius: 50%;
+                animation: rotacao 1s linear both;
+            }
+            #curriculo {
+                box-shadow: 0.625rem 0.625rem 25px -13px rgba(0, 0, 0, 0.75);
+                border-radius: 0.5rem 0 0 0.5rem;
+                color: gold;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                padding-left: 2rem;
+                background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+            }
+            .titulosdois:hover {
+                box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
+                color: rgb(61, 61, 61);
+                cursor: pointer;
+                background-image: linear-gradient(to top, rgb(255, 187, 0), rgb(255, 215, 104));
+            }
+            @keyframes rotacao2 {
+                0% {
+                    transform: rotateX(0);
+                }
+                100% {
+                    transform: rotateX(380deg);
+                }
+            }
+            #curriculo:hover {
+                box-shadow: 0.625rem 0.625rem 0.625rem -8px rgba(0, 0, 0, 0.75);
+                color: rgb(61, 61, 61);
+                cursor: pointer;
+                background-image: linear-gradient(to top, rgb(233, 171, 2), rgb(255, 187, 0));
+            }
+            .nomefomacao {
+                padding: .2rem;
+                text-decoration: none;
+                border-radius: 0.5rem;
+                width: 100%;
+                font-weight: bold;
+                font-size: 1.2rem;
+            }
+            .nomefomacao:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+                cursor: pointer;
+            }
+            .nomefomacao .universidade {
+                font-weight: 100;
+            }
+            .redes div {
+                box-shadow: 0.625rem 0px 45px -11px rgba(0, 0, 0, 0.75);
+                height: 20%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .redes div .imagem {
+                width: 30%;
+                height: 100%;
+            }
+            .redes div .textorede {
+                height: 100%;
+            }
+            .redes div .textorede a {
+                text-decoration: none;
+                color: rgb(53, 53, 53);
+            }
+            .redes div .textorede a:hover {
+                color: aliceblue;
+            }
+            .redes div#linkedin {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+                text-decoration: none;
+            }
+            .redes div#linkedin:hover {
+                background-image: linear-gradient(to right, rgb(0, 54, 204), rgb(118, 155, 255));
+                color: aliceblue;
+            }
+            .redes div#whats {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#whats:hover {
+                background-image: linear-gradient(to right, rgb(0, 204, 92), rgb(118, 255, 198));
+                color: aliceblue;
+            }
+            .redes div#email {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#email:hover {
+                background-image: linear-gradient(to right, rgb(204, 0, 0), rgb(255, 61, 61));
+                color: aliceblue;
+            }
+            .redes div#youtube {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#youtube:hover {
+                background-image: linear-gradient(to right, rgb(204, 0, 27), rgb(255, 47, 75));
+                color: aliceblue;
+            }
+            .redes div#git {
+                font-size: 2rem;
+                box-shadow: 15px 7px 25px 0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 196, 34));
+            }
+            .redes div#git:hover {
+                background-image: linear-gradient(to right, rgb(80, 80, 80), rgb(0, 0, 0));
+                color: aliceblue;
+            }
+            .flecha {
+                padding: 0;
+                left: 0.25rem;
+                text-align: left;
+            }
+            .experiencia ul .nomeexperiencia {
+                font-size: 1.1rem;
+                border-radius: 5px;
+                font-weight: bold;
+                padding: 5px;
+            }
+            .experiencia ul .nomeexperiencia:hover {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 187, 0), rgb(255, 187, 0));
+                cursor: pointer;
+            }
+            .experiencia ul .nomeexperiencia ul li {
+                padding: 1px;
+                font-weight: 100;
+            }
+            .experiencia ul .nomeexperiencia:hover ul li {
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
+                cursor: pointer;
+            }
+            li {
+                list-style: none;
+            }
+            .salario {
+                grid-template: salario;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                color: rgb(255, 217, 47);
+                background-color: rgb(53, 53, 53);
+                box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
+                font-size: 2rem;
+                text-shadow: 7px 1px 7px rgb(24, 24, 24);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                /*animation: scroller2 8s infinite;*/
+            }
+        }
+    </style>
+</head>
+
+<body class="principal">
+
+    <div class="container">
+        <div class="nome">
+            <center>
+                <h1 id="curriculo">
+                    <span class="flecha" style="color: rgb(109, 109, 109);">❱❭</span> Gabriel Groehs <span class="flecha" style="color: rgb(109, 109, 109);">❱❭</span>
+                    <br><small style="color: rgb(255, 255, 255);">📊 Estratégia Economica Tech Orientada a Dados</small>
+                </h1>
+            </center>
+
+            <div class="resumo">
+                <h2 id="subtitulo">
+                    <!-- TradingView Widget BEGIN -->
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                        {
+                            "symbols": [{
+                                "description": "",
+                                "proName": "INDEX:IBOV"
+                            }, {
+                                "description": "",
+                                "proName": "NASDAQ:MSFT"
+                            }, {
+                                "proName": "FOREXCOM:SPXUSD",
+                                "title": "S&P 500"
+                            }, {
+                                "proName": "FOREXCOM:NSXUSD",
+                                "title": "Nasdaq 1000"
+                            }, {
+                                "description": "BRL/USD",
+                                "proName": "FX_IDC:BRLUSD"
+                            }, {
+                                "description": "BRL/EUR",
+                                "proName": "FX_IDC:BRLEUR"
+                            }],
+                            "colorTheme": "dark",
+                            "isTransparent": false,
+                            "displayMode": "adaptive",
+                            "locale": "br"
+                        }
+                    </script>
+                    <!-- TradingView Widget END -->
+                </h2>
+                <p id="resumo">Profissional de FP&A Finanças 4.0 & Tech, Controladoria, Dados, Banking (desde 2010).
+                    <br>💱FP&A (Planejamento Financeiro) Capex, Opex, P&L(DRE), Budget(Orçamento), OBZ, GMD GMR, Pricing, EBITDA, Cash Flow, ROAE, VPL, TIR, NOPAT, ROIC, Wacc, Capm, EVA, MVA, firm Value, Modelagem Financeira
+                    <br>📊 BI&A Business Intelligence Power BI, SQL, Data Warehouse, ETL, Dashboard
+                    <br>💻 Tech Skill's: DAX, M, SQL, Power BI, HTML, CSS, JavaScript, Python</p>
+            </div>
+        </div>
+        <div class="foto">
+            <img id="minhafoto" src="https://media-exp1.licdn.com/dms/image/C4E03AQEqOB2ee68JOw/profile-displayphoto-shrink_200_200/0/1618404175043?e=1639008000&v=beta&t=Ox7ivYyT5vAqOHpnRtzPb6mJlsVx_6ak0Vfyj-HIHmU">
+        </div>
+        <div class="formacao">
+
+            <h1 class="titulosdois">🎓 &nbsp&nbsp Formação Academica &nbsp&nbsp</h1>
+            <ul>
+            <a>Formado</a>
+                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:346503475/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1545496271460)&section=education%3A346503475&treasuryCount=2" target="_blank">Graduação Gestão Financeira</a><span class="universidade"> Uninter 2017🎓</span></li>
+ 
+                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:569283702/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1618266866177)&section=education%3A569283702&treasuryCount=2" target="_blank">Graduação Ciências de Dados</a><span class="universidade"> Unicsul 2020🎓</span></li>
+
+                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:497755687/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1580314158744)&section=education%3A497755687&treasuryCount=3" target="_blank">Pós-Graduação Engenharia de Produção</a><span class="universidade"> Unisselvi 2019🎓</span></li>
+                <li class="nomefomacao">Pós-Graduação Big Data Ciência de Dados<span class="universidade"> Unyleya 2020🎓</span></li>
+                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:540751084/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1578248895268)&section=education%3A540751084&treasuryCount=3" target="_blank">MBA Gestão de Projetos</a><span class="universidade"> Unisselvi 2019🎓</span></li>
+                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:580507476/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1635451598710)&section=education%3A580507476&treasuryCount=2" target="_blank">MBA Gestão Contabilidade Finanças Empresariais</a><span class="universidade"> UCAM 2020🎓</span></li>
+                <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> UCAM 2020🎓</span></li>
+                <li class="nomefomacao">Bootcamp Ciência de Dados 148 horas<span class="universidade"> IGTI🎓</span></li>
+                <li class="nomefomacao">Bootcamp Engenharia Econômica<span class="universidade"> USP🎓</span></li>
+            </ul>
+            <ul>
+            <a>Cursando</a>
+                <li class="nomefomacao">Graduação Ciências Econômicas<span class="universidade"> Unopar 2023⌛ 60%</span></li>
+                <li class="nomefomacao">Graduação Ciências Contábeis<span class="universidade"> UnifCV 2022⌛ 80%</span></li>
+                <li class="nomefomacao">Graduação Estatística<span class="universidade"> Anhembi 2024⌛ 60%</span></li>
+                <li class="nomefomacao">Graduação Engenharia da Computação<span class="universidade"> Unicsul 2023⌛ 60%</span></li>
+                <li class="nomefomacao">Grad trancado Engenharia da Produção<span class="universidade"> Unicsul 2022⌛ 70%</span></li>
+            </ul>
+        </div>
+        <div class="experiencia">
+            <h1 class="titulosdois">👔&nbsp&nbsp Carreira Profissional &nbsp&nbsp</h1>
+            <ul id="listaexperiencia">
+                <li class="nomeexperiencia">Analista Controladoria FP&A Power BI SQL - Banking CALCARD 2021-atual
+                    <ul>
+                        <li>Budget, DRE, DFC, Balanço, Controladoria, PowerBI, Inteligência de negócios, Projetos</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Analista FP&A Senior Power BI - CredSIS 2020-2021
+                    <ul>
+                        <li>Budget, DRE, DFC, Balanço, Controladoria, PowerBI, Inteligência de negócios, Projetos</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Supervisor FP&A e Inteligencia Power BI 3SCORP 2019-2020
+                    <ul>
+                        <li>Budget, DRE, DFC, Balanço, Controladoria, PowerBI, Inteligência de negócios, Projetos</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Analista FP&A Senior Power BI -DUFRIO 2018-2019
+                    <ul>
+                        <li>Budget, DRE, DFC, Balanço e Controladoria Gerencial Analises, Apresentações Board Diretoria, Relatórios Gerenciais Data Analytics DB, SQL, ETL, DW, Business Intelligence Power BI Dashboard</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Analista FP&A BI&A -2DWEB 2018
+                    <ul>
+                        <li>DB, SQL, ETL, DW, Fato, View, Dimensão, Cubo e BI</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Analista FP&A - Arezzo&CO 2018
+                    <ul>
+                        <li>Sell In, Sell Out, Budget, OTB, Supply Analises de Dados, Dashboards e gráficos</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Analista Planejamento FP&A Senior Power BI - WEST COAST 2017-2018
+                    <ul>
+                        <li>PowerBI, DRE, DFC, Balanço, Controladoria, Custeio, Princing Dashboard, Gráficos, analises de dados, Reports apresentações Diretoria DB, SQL, ETL, DW, Cubo, BI, Power BI, ERP Implantação de Softwares</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Consultor S&OP - Olitécnica-2016-2017
+                    <ul>
+                        <li>SQL - Fluxograma BI</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Head Financeiro FP&A - Brazilian Way 2013-2015
+                    <ul>
+                        <li>Planejamento Estratégico Orientado a Dados, Direção Financeira, Modelagem Financeira</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Analista Planejamento Estratégico BI S&OP - WEST COAST 2012-2013
+                    <ul>
+                        <li>Analises Comerciais, inteligencia de mercado, BI Dashboard Data Analytics</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Planejamento Financeiro/Produção/Custos
+                    <ul>
+                        <li>2008-2012</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="redes">
+            <div id="linkedin">
+                <div class="imagem"><span class="fa fa-linkedin" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="https://www.linkedin.com/in/gabrielgroehs/" class="likedin" target="_blank">Linkedin</a></div>
+            </div>
+            <div id="whats">
+                <div class="imagem"><span class="fa fa-whatsapp" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="https://api.whatsapp.com/send?phone=5551997306409&text=Ol%C3%A1,%20Gabriel%20Gostaríamos%20de%20conversar%20sobre%20uma%20proposta!" class="whats" target="_blank">Whats</a></div>
+            </div>
+            <div id="email">
+                <div class="imagem"><span class="fa fa-google" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="mailto: bw.gabrielgroehs@gmail.com?subject=Proposta&body=Olá Gabriel, temos uma proposta para você" class="email" target="_blank">E-mail</a></div>
+            </div>
+            <div id="git">
+                <div class="imagem"><span class="fa fa-git" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="https://github.com/Gabriel-Groehs" class="git" target="_blank">GIT</a></div>
+            </div>
+            <div id="youtube">
+                <div class="imagem"><span class="fa fa-youtube" aria-hidden="true"></span></div>
+                <div class="textorede"><a href="https://www.youtube.com/channel/UCyELJ-wn_62ejLOqFM2x-Yg/featured" class="youtube" target="_blank">YouTube</a></div>
+            </div>
+        </div>
+        <div class="informacoes">
+            <center>
+                <h2>Skill's:</h2>
+            </center>
+            <ul>
+                <li>💱FP&A</li>
+                <li>💱ROAE, VPL, TIR, Payback</li>
+                <li>💱Controladoria</li>
+                <li>💱Contabilidade Gerencial</li>
+                <li>📊DRE P&L</li>
+                <li>📊Planejamento</li>
+                <li>📊Centros de Custos</li>
+                <li>📊Mapas de Despesas</li>
+                <li>📊Excel Avançado📊Power Point</li>
+                <li>📊Apresenações de Board Conselho</li>
+                <li>💻Power BI📊Python🐍SQL🔋DAX⌨HTML📄CSS🎨JavaScript📱</li>
+                <li>📊Dashboard</li>
+                <li>📊Business Intelligence</li>
+            </ul>
+            <center>
+                <h2>Paineis DashBoardS</h2>
+                <h4>Clique no nome</h4>
+            </center>
+            <ul>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMjEyYTM3OTctZjkwMC00MjM3LTkwOWMtNzE3OTk5MmU0ZDkwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Bank Seguros 📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiOGE4YjY3MjAtNGNhMS00OWRjLWI0MjktNzQ3Nzg1YmJmNTg1IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        DRE Finanças 💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZWUzNDYzYTYtMjc4NS00YmM0LTljMDctOGYxMDQxMzRhZTI5IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Cash Flow Tesouraria 📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNzliNzNiODMtNjMzNi00ZTFkLWI2YzYtOWE5MGNlZTVmOTk0IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Dashboard Invictos cliente Militar 💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNTczOGY3NzItY2Y1Ny00MzJmLThhNjgtZDFhZDQxMjUxM2QzIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Custos Cliente Borch 📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNjQ1ODE3NWUtNGQ3Yi00NGM3LWJmNjAtM2U0NjIzZTlkYmUxIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Dashboard Workflow 💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMzNkMTJjYjItOGY1NC00YmJhLWJhNjEtNmFiMTYxZTgwN2MwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Dashboard desempenho 📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiOTM0YzBjOWQtYTg5Ny00OWVlLWI3ODYtNzFlNmUxNzNlZTllIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel embarque 💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiYWMwYjA5MTgtYmRhNi00YmZmLWE5ZTUtN2FjMjM0OTA4N2NhIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Controle Comissões Fornecedores 📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiYzZjZjdmODgtZjE3NC00YzhlLWIwMjUtZTg2NTA3MjBkZmU4IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Logistica 💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZjYwZWRlOTYtMzc0Ni00M2I2LWE4NWQtMDJmMDg1MjEwMmFhIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Dashboard Transit flow📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiODA1ZjE4ODctNDQzYi00NzQ3LWE3NGUtOTU1YTMxOGU2ZjY3IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Entreposto💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMmI5N2JkNzgtY2Q2Mi00ZDFlLTg0NjAtNDdiMTFiNWNhNzMwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Estratégico Origem📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZTdkZjNmN2EtZDVhYS00MjcwLTllMGYtMGQxMWU0MDNkMzk1IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Logcomex💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMjdmY2FmMGEtMDM3NC00NDEyLThkODktMzJjNDhiY2Q5Zjk4IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                        Painel Cliente Immac📊</a>
+                </li>
+
+            </ul>
+            <center>
+                <h2>Videos DashBoardS</h2>
+            </center>
+            <ul>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=qaHaFf8Cq0w" target="_blank">
+                        DRE X📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=0_x2o4ARNVs" target="_blank">
+                        DRE Budget💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=QhNGnBJ6Npc" target="_blank">
+                        Tesouraria Gestão Financeira📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=teCTuPMeLsg" target="_blank">
+                        WorkFlow Clientes💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=6e2Ljz21IeE" target="_blank">
+                        Painel Estratégico Militar📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=dblNGLlv0j8" target="_blank">
+                        Comercial Estratégico💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=3I-uca5HQOQ" target="_blank">
+                        Desempenho📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=7IJqrm3R85w" target="_blank">
+                        Bank Controle Seguros💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=8kS_IkAccvo" target="_blank">
+                        Metas por Serviço📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=dblNGLlv0j8" target="_blank">
+                        Comercial Estratégico💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=dLlirco_uks" target="_blank">
+                        Estratégico Embarque📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=v_LztrVE4xM" target="_blank">
+                        WorkFlow💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=ysT7PWN6XX0" target="_blank">
+                        Clone LogComex📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=fGdY3oSdWaQ" target="_blank">
+                        Mutuus💱</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=4WJLT-Br7CI" target="_blank">
+                        Sistema de Embarque Work Flow📊</a>
+                </li>
+                <li>
+                    <a class="dsh" href="https://www.youtube.com/watch?v=joc7egamapM" target="_blank">
+                        Portal Cliente📊</a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="gifs">
+            <img class="dash" src="https://i.gifer.com/3rNn.gif" alt="">
+            <img class="dash" src="https://www.finereport.com/en/wp-content/uploads/2019/07/smart-city.gif" alt="" class="dash">
+            <img class="dash" src="https://cdn.dribbble.com/users/5094323/screenshots/11184058/media/21d762e9bf83e02db2e7c2fab41320e1.gif" alt="">
+            <img class="dash" src="https://oslo-production.s3.amazonaws.com/uploads/medium/asset/46/coding_gif" alt="">
+            <img class="dash" src="https://miro.medium.com/max/1663/0*BQxUm9OGscTcW__a.gif" alt="" class="dash">
+            <img class="dash" src="https://miro.medium.com/max/1776/1*9gXKh54IoiqcX2K47V92eA.gif" alt="" class="dash">
+            <img class="dash" src="https://miro.medium.com/max/2560/1*N4owGiAMBU8aftjalWcoXw.gif" alt="">
+            <img class="dash" src="https://www.finereport.com/en/wp-content/uploads/2019/10/2019051608A.gif" alt="" class="dash">
+            <img class="dash" src="https://s3.amazonaws.com/creativetim_bucket/github/gif/black-dashboard.gif" alt="">
+        </div>
+    </div>
+
+</body>
+
+</html>
