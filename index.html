@@ -119,7 +119,7 @@
                 margin: 1px;
             }
             #minhafoto {
-                animation: heartbeat 5s ease-in-out infinite both;
+                /*animation: heartbeat 5s ease-in-out infinite both;*/
             }
             .nome p {
                 padding: 0rem;
@@ -158,10 +158,10 @@
             .foto img {
                 grid-area: foto;
                 animation: heartbeat 1.5s ease-in-out infinite both;
-                box-shadow: 5px 0.25rem 8px -0.25rem rgb(255, 255, 255);
+                box-shadow: 5px 0.25rem 8px -0.25rem rgb(0, 204, 126);
                 padding: 0.5rem;
-                border-radius: 50%;
-                background-color: aliceblue;
+                border-radius: 30%;
+                background-color: rgb(8, 209, 156);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -169,7 +169,7 @@
                 animation: scroller 2s infinite;
             }
             .foto img:hover {
-                border-radius: 50%;
+                border-radius: 30%;
                 animation: rotacao 1s linear both;
             }
             li {
@@ -405,8 +405,9 @@
         
         @media (min-width: 60rem) {
             .titulosdois {
-                color: gold;
-                animation: scroller 2s infinite;
+                color: rgb(232, 232, 228);
+                font-size: 1.488rem;
+                animation: scroller 20s infinite;
                 background-image: linear-gradient(to top, rgb(44, 44, 44), rgb(73, 73, 73));
                 border-radius: 0.5rem 0 0 0.5rem;
                 box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
@@ -416,14 +417,20 @@
                 padding: 0.25rem;
             }
             .principal {
-                background-color: white;
+                background-color: rgb(70, 68, 68);
+                opacity: 0.5;
                 display: flex;
                 justify-content: center;
                 border-radius: 1.625rem 1.625rem 0px 0px;
                 background-attachment: fixed;
-                background-color: black;
-                background-size: contain;
-                background-image: url('http://1.bp.blogspot.com/-ENVxK7i8ePI/VXSx-8Y5S1I/AAAAAAAAYPQ/7_mDGqrIEYA/s1600/2406963758_8f906b682a_o.gif');
+                background-color: rgba(0, 0, 0, 0.152);
+                background-size: auto;
+                opacity: 0.98;
+                background-image: url('http://3.bp.blogspot.com/-Zz7qVeK4ia4/VXSyW_zMdfI/AAAAAAAAYP4/1DbuaZaiI5g/s1600/2DSC06374.gif' )  ;
+
+            }
+            .principal2 {background-color: rgb(53, 53, 53);
+                opacity: 10;
             }
             .container {
                 max-width: 61.25rem;
@@ -513,7 +520,7 @@
                 margin: 1px;
             }
             #minhafoto {
-                animation: heartbeat 5s ease-in-out infinite both;
+                /*animation: heartbeat 5s ease-in-out infinite both;*/
             }
             .nome p {
                 padding: 0.25rem;
@@ -539,7 +546,7 @@
             .foto {
                 background-attachment: scroll;
                 background-size: cover;
-                background-image: url('https://media4.giphy.com/media/rM0wxzvwsv5g4/giphy.gif?cid=790b76113c22f06c93adbee377eae7b1a8f7963e6a5540b3&rid=giphy.gif&ct=g');
+                background-image: url('https://thumbs.gfycat.com/CookedBeautifulDungbeetle-size_restricted.gif');
                 border-radius: 2.6rem;
                 margin: 0.88rem;
                 box-shadow: -3px 0.25rem 25px -0.25rem rgb(59, 59, 59);
@@ -550,11 +557,11 @@
             .foto img {
                 grid-area: foto;
                 animation: heartbeat 1.5s ease-in-out infinite both;
-                box-shadow: 5px 0.25rem 8px -0.25rem rgb(255, 255, 255);
+                box-shadow: 5px 0.25rem 8px -0.25rem rgb(5, 189, 149);
                 width: 14rem;
                 padding: 0.5rem;
-                border-radius: 50%;
-                background-color: aliceblue;
+                border-radius: 30%;
+                background-color: rgb(2, 189, 164);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -562,7 +569,7 @@
                 animation: scroller 80s infinite;
             }
             .foto img:hover {
-                border-radius: 50%;
+                border-radius: 0%;
                 animation: rotacao 80s linear both;
             }
             #curriculo {
@@ -725,13 +732,13 @@
 </head>
 
 <body class="principal">
-
+<div class="principal2">
     <div class="container">
         <div class="nome">
             <center>
                 <h1 id="curriculo">
-                    <span class="flecha" style="color: rgb(109, 109, 109);">❱❭</span> Gabriel Groehs <span class="flecha" style="color: rgb(109, 109, 109);">❱❭</span>
-                    <br><small style="color: rgb(255, 255, 255);">📊 Gestão Financeira 4.0 e FP&A Orientada a Dados</small>
+                    <span class="flecha" style="color: rgb(109, 109, 109);">◈</span> Gabriel Groehs <span class="flecha" style="color: rgb(109, 109, 109);">◈</span>
+                    <br><small style="color: rgb(255, 255, 255);">Gestão Financeira 4.0 e FP&A Orientada a Dados</small>
                 </h1>
             </center>
 
@@ -768,7 +775,7 @@
                     <!-- TradingView Widget END -->
                 </h2>
                 <p id="resumo">Profissional de FP&A Finanças 4.0 & Tech, Controladoria, Dados, Banking (desde 2010).
-                    <br>💱FP&A (Planejamento Financeiro) Capex, Opex, P&L(DRE), Budget(Orçamento), OBZ, GMD GMR, Pricing, EBITDA, Cash Flow, ROAE, VPL, TIR, NOPAT, ROIC, Wacc, Capm, EVA, MVA, firm Value, Modelagem Financeira
+                    <br>💱FP&A (Planejamento Financeiro), P&L(DRE), Budget(Orçamento), GMD GMR, Pricing, EBITDA, Cash Flow, ROAE, VPL, TIR, NOPAT, ROIC, Wacc, Capm, EVA, MVA, firm Value, Modelagem Financeira
                     <br>📊 BI&A Business Intelligence Power BI, SQL, Data Warehouse, ETL, Dashboard
                     <br>💻 Tech Skill's: DAX, M, SQL, Power BI, HTML, CSS, JavaScript, Python</p>
             </div>
@@ -778,9 +785,9 @@
         </div>
         <div class="formacao">
 
-            <h1 class="titulosdois">🎓&nbsp&nbsp Formação Academica &nbsp&nbsp</h1>
+            <h1 class="titulosdois">&nbsp&nbsp Formação Academica &nbsp&nbsp</h1>
             <ul>
-            <a>Formado</a>
+            <a>Formado::</a>
                 <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:346503475/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1545496271460)&section=education%3A346503475&treasuryCount=2" target="_blank">Graduação Gestão Financeira</a><span class="universidade"> Uninter 2017🎓</span></li>
  
                 <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:569283702/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1618266866177)&section=education%3A569283702&treasuryCount=2" target="_blank">Graduação Ciências de Dados</a><span class="universidade"> Unicsul 2020🎓</span></li>
@@ -789,12 +796,12 @@
                 <li class="nomefomacao">Pós-Graduação Big Data Ciência de Dados<span class="universidade"> Unyleya 2020🎓</span></li>
                 <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:540751084/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1578248895268)&section=education%3A540751084&treasuryCount=3" target="_blank">MBA Gestão de Projetos</a><span class="universidade"> Unisselvi 2019🎓</span></li>
                 <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:580507476/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1635451598710)&section=education%3A580507476&treasuryCount=2" target="_blank">MBA Gestão Contabilidade Finanças Empresariais</a><span class="universidade"> UCAM 2020🎓</span></li>
-                <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> UCAM 2020🎓</span></li>
+                <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> ESPG 2020🎓</span></li>
                 <li class="nomefomacao">Bootcamp Ciência de Dados 148 horas<span class="universidade"> IGTI🎓</span></li>
                 <li class="nomefomacao">Bootcamp Engenharia Econômica<span class="universidade"> USP🎓</span></li>
             </ul>
             <ul>
-            <a>Cursando</a>
+            <a>Cursando::</a>
                 <li class="nomefomacao">Graduação Ciências Econômicas<span class="universidade"> Unopar 2023⌛ 60%</span></li>
                 <li class="nomefomacao">Graduação Ciências Contábeis<span class="universidade"> UnifCV 2022⌛ 80%</span></li>
                 <li class="nomefomacao">Graduação Estatística<span class="universidade"> Anhembi 2024⌛ 60%</span></li>
@@ -803,14 +810,19 @@
             </ul>
         </div>
         <div class="experiencia">
-            <h1 class="titulosdois">👔&nbsp&nbsp Carreira Profissional &nbsp&nbsp</h1>
+            <h1 class="titulosdois">&nbsp&nbsp Carreira Profissional &nbsp&nbsp</h1>
             <ul id="listaexperiencia">
-                <li class="nomeexperiencia">Analista FP&A Senior Power BI SQL - Banking CALCARD 2021-atual
+                <li class="nomeexperiencia">Especialista FP&A Power BI SQL - Dufrio 2021-atual
                     <ul>
                         <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
                     </ul>
                 </li>
-                <li class="nomeexperiencia">Analista FP&A Senior Power BI - CredSIS 2020-2021
+                <li class="nomeexperiencia">Analista FP&A Senior Power BI SQL - Banking Calcard 2021
+                    <ul>
+                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                    </ul>
+                </li>
+                <li class="nomeexperiencia">Analista FP&A Senior Power BI - Banking CredSIS 2020-2021
                     <ul>
                         <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
                     </ul>
@@ -837,7 +849,7 @@
                 </li>
                 <li class="nomeexperiencia">Analista FP&A Pleno - WEST COAST 2012-2013
                     <ul>
-                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, =Power BI, SQL, Apresentação Board</li>
                     </ul>
                 </li>
             </ul>
@@ -872,7 +884,7 @@
                 <li>💱FP&A</li>
                 <li>💱ROAE, VPL, TIR, Payback</li>
                 <li>💱Controladoria</li>
-                <li>💱Contabilidade Gerencial</li>
+                <li>💱Modelagem Financeira</li>
                 <li>📊DRE P&L</li>
                 <li>📊Planejamento</li>
                 <li>📊Centros de Custos</li>
@@ -1033,7 +1045,7 @@
             <img class="dash" src="https://s3.amazonaws.com/creativetim_bucket/github/gif/black-dashboard.gif" alt="">
         </div>
     </div>
-
+</div>
 </body>
 
 </html>
