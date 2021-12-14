@@ -426,10 +426,10 @@
                 background-color: rgba(0, 0, 0, 0.152);
                 background-size: auto;
                 opacity: 0.98;
-                background-image: url('http://3.bp.blogspot.com/-Zz7qVeK4ia4/VXSyW_zMdfI/AAAAAAAAYP4/1DbuaZaiI5g/s1600/2DSC06374.gif' )  ;
-
+                background-image: url('http://3.bp.blogspot.com/-Zz7qVeK4ia4/VXSyW_zMdfI/AAAAAAAAYP4/1DbuaZaiI5g/s1600/2DSC06374.gif');
             }
-            .principal2 {background-color: rgb(53, 53, 53);
+            .principal2 {
+                background-color: rgb(53, 53, 53);
                 opacity: 10;
             }
             .container {
@@ -608,7 +608,7 @@
                 border-radius: 0.5rem;
                 width: 100%;
                 font-weight: bold;
-                font-size: 1.2rem;
+                font-size: 1.0rem;
             }
             .nomefomacao:hover {
                 box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
@@ -732,320 +732,493 @@
 </head>
 
 <body class="principal">
-<div class="principal2">
-    <div class="container">
-        <div class="nome">
-            <center>
-                <h1 id="curriculo">
-                    <span class="flecha" style="color: rgb(109, 109, 109);">◈</span> Gabriel Groehs <span class="flecha" style="color: rgb(109, 109, 109);">◈</span>
-                    <br><small style="color: rgb(255, 255, 255);">Gestão Financeira 4.0 e FP&A Orientada a Dados</small>
-                </h1>
-            </center>
+    <div class="principal2">
+        <div class="container">
+            <div class="nome">
+                <center>
+                    <h1 id="curriculo">
+                        <span class="flecha" style="color: rgb(109, 109, 109);">◈</span> Gabriel Groehs <span class="flecha" style="color: rgb(109, 109, 109);">◈</span>
+                        <br><small style="color: rgb(255, 255, 255);">Gestão Financeira 4.0 e FP&A Orientada a Dados</small>
+                    </h1>
+                </center>
 
-            <div class="resumo">
-                <h2 id="subtitulo">
-                    <!-- TradingView Widget BEGIN -->
-                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                        {
-                            "symbols": [{
-                                "description": "",
-                                "proName": "INDEX:IBOV"
-                            }, {
-                                "description": "",
-                                "proName": "NASDAQ:MSFT"
-                            }, {
-                                "proName": "FOREXCOM:SPXUSD",
-                                "title": "S&P 500"
-                            }, {
-                                "proName": "FOREXCOM:NSXUSD",
-                                "title": "Nasdaq 1000"
-                            }, {
-                                "description": "BRL/USD",
-                                "proName": "FX_IDC:BRLUSD"
-                            }, {
-                                "description": "BRL/EUR",
-                                "proName": "FX_IDC:BRLEUR"
-                            }],
-                            "colorTheme": "dark",
-                            "isTransparent": false,
-                            "displayMode": "adaptive",
-                            "locale": "br"
-                        }
-                    </script>
-                    <!-- TradingView Widget END -->
-                </h2>
-                <p id="resumo">Profissional de FP&A Finanças 4.0 & Tech, Controladoria, Dados, Banking (desde 2010).
-                    <br>💱FP&A (Planejamento Financeiro), P&L(DRE), Budget(Orçamento), GMD GMR, Pricing, EBITDA, Cash Flow, ROAE, VPL, TIR, NOPAT, ROIC, Wacc, Capm, EVA, MVA, firm Value, Modelagem Financeira
-                    <br>📊 BI&A Business Intelligence Power BI, SQL, Data Warehouse, ETL, Dashboard
-                    <br>💻 Tech Skill's: DAX, M, SQL, Power BI, HTML, CSS, JavaScript, Python</p>
-            </div>
-        </div>
-        <div class="foto">
-            <img id="minhafoto" src="https://media-exp1.licdn.com/dms/image/C4E03AQEqOB2ee68JOw/profile-displayphoto-shrink_200_200/0/1618404175043?e=1639008000&v=beta&t=Ox7ivYyT5vAqOHpnRtzPb6mJlsVx_6ak0Vfyj-HIHmU">
-        </div>
-        <div class="formacao">
+                <div class="resumo">
+                    <h2 id="subtitulo">
+                        <!-- TradingView Widget BEGIN -->
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                            {
+                                "symbols": [{
+                                    "description": "",
+                                    "proName": "INDEX:IBOV"
+                                }, {
+                                    "description": "",
+                                    "proName": "NASDAQ:MSFT"
+                                }, {
+                                    "proName": "FOREXCOM:SPXUSD",
+                                    "title": "S&P 500"
+                                }, {
+                                    "proName": "FOREXCOM:NSXUSD",
+                                    "title": "Nasdaq 1000"
+                                }, {
+                                    "description": "BRL/USD",
+                                    "proName": "FX_IDC:BRLUSD"
+                                }, {
+                                    "description": "BRL/EUR",
+                                    "proName": "FX_IDC:BRLEUR"
+                                }],
+                                "colorTheme": "dark",
+                                "isTransparent": false,
+                                "displayMode": "adaptive",
+                                "locale": "br"
+                            }
+                        </script>
+                        <!-- TradingView Widget END -->
+                    </h2>
+                    <div>
 
-            <h1 class="titulosdois">&nbsp&nbsp Formação Academica &nbsp&nbsp</h1>
-            <ul>
-            <a>Formado::</a>
-                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:346503475/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1545496271460)&section=education%3A346503475&treasuryCount=2" target="_blank">Graduação Gestão Financeira</a><span class="universidade"> Uninter 2017🎓</span></li>
- 
-                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:569283702/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1618266866177)&section=education%3A569283702&treasuryCount=2" target="_blank">Graduação Ciências de Dados</a><span class="universidade"> Unicsul 2020🎓</span></li>
+                        <ul>
+                            <li>Profissional de FP&A Finanças 4.0 & Tech, Dados, Banking (desde 2010).</li>
 
-                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:497755687/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1580314158744)&section=education%3A497755687&treasuryCount=3" target="_blank">Pós-Graduação Engenharia de Produção</a><span class="universidade"> Unisselvi 2019🎓</span></li>
-                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:548343599/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1635475867462)&section=education%3A548343599&treasuryCount=4" target="_blank">Pós-Graduação Big Data Ciência de Dados<span class="universidade"> Unyleya 2020🎓</span></li>
-                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:540751084/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1578248895268)&section=education%3A540751084&treasuryCount=3" target="_blank">MBA Gestão de Projetos</a><span class="universidade"> Unisselvi 2019🎓</span></li>
-                <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:580507476/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1635451598710)&section=education%3A580507476&treasuryCount=2" target="_blank">MBA Gestão Contabilidade Finanças Empresariais</a><span class="universidade"> UCAM 2020🎓</span></li>
-                <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> ESPG 2020🎓</span></li>
-                <li class="nomefomacao">Bootcamp Ciência de Dados 148 horas<span class="universidade"> IGTI🎓</span></li>
-                <li class="nomefomacao">Bootcamp Engenharia Econômica<span class="universidade"> USP🎓</span></li>
-            </ul>
-            <ul>
-            <a>Cursando::</a>
-                <li class="nomefomacao">Graduação Ciências Econômicas<span class="universidade"> Unopar 2023⌛ 60%</span></li>
-                <li class="nomefomacao">Graduação Ciências Contábeis<span class="universidade"> UnifCV 2022⌛ 80%</span></li>
-                <li class="nomefomacao">Graduação Estatística<span class="universidade"> Anhembi 2024⌛ 60%</span></li>
-                <li class="nomefomacao">Graduação Engenharia da Computação<span class="universidade"> Unicsul 2023⌛ 60%</span></li>
-                <li class="nomefomacao">Grad trancado Engenharia da Produção<span class="universidade"> Unicsul 2022⌛ 70%</span></li>
-            </ul>
-        </div>
-        <div class="experiencia">
-            <h1 class="titulosdois">&nbsp&nbsp Carreira Profissional &nbsp&nbsp</h1>
-            <ul id="listaexperiencia">
-                <li class="nomeexperiencia">Especialista FP&A Power BI SQL - Dufrio 2021-atual
-                    <ul>
-                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
-                    </ul>
-                </li>
-                <li class="nomeexperiencia">Analista FP&A Senior Power BI SQL - Banking Calcard 2021
-                    <ul>
-                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
-                    </ul>
-                </li>
-                <li class="nomeexperiencia">Analista FP&A Senior Power BI - Banking CredSIS 2020-2021
-                    <ul>
-                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
-                    </ul>
-                </li>
-                <li class="nomeexperiencia">Supervisor FP&A e Inteligencia Power BI 3SCORP 2019-2020
-                    <ul>
-                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
-                    </ul>
-                </li>
-                <li class="nomeexperiencia">Analista FP&A Senior Power BI -DUFRIO 2018-2019
-                    <ul>
-                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
-                    </ul>
-                </li>
-                <li class="nomeexperiencia">Analista FP&A Senior Power BI - WEST COAST 2016-2018
-                    <ul>
-                        <li>Budget, Modelagem Financeira, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, Apresentação Board</li>
-                    </ul>
-                </li>
-                <li class="nomeexperiencia">Head Financeiro FP&A - Brazilian Way 2013-2015
-                    <ul>
-                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
-                    </ul>
-                </li>
-                <li class="nomeexperiencia">Analista FP&A Pleno - WEST COAST 2012-2013
-                    <ul>
-                        <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, =Power BI, SQL, Apresentação Board</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="redes">
-            <div id="linkedin">
-                <div class="imagem"><span class="fa fa-linkedin" aria-hidden="true"></span></div>
-                <div class="textorede"><a href="https://www.linkedin.com/in/gabrielgroehs/" class="likedin" target="_blank">Linkedin</a></div>
+                            <li> 💱FP&A (Planejamento Financeiro):
+                                <details>
+                                    <summary style="font-size: small;"><a style="">....</a>
+                                    </summary>
+                                    P&L(DRE), Budget(Orçamento), GMD GMR, Pricing, EBITDA, Tesouraria, Banking e C´redito, Cash Flow, ROAE, VPL, TIR, NOPAT, ROIC, Wacc, Capm, EVA, MVA, firm Value, Modelagem Financeira
+                            </li>
+                            </details>
+                            <li> 📊 BI&A:</li>
+                            <details>
+                                <summary style="font-size: small;">....
+                                </summary>
+                                <li>
+                                    Business Intelligence Power BI, SQL, Data Warehouse, ETL, Dashboard
+                                </li>
+                            </details>
+                            <li> 💻 Tech Skill's:</li>
+                            <details>
+                                <summary style="font-size: small;">....
+                                </summary>
+                                <li>
+                                    DAX, M, SQL, Power BI, HTML, CSS, JavaScript, Python
+                                </li>
+                            </details>
+                            </li>
+                        </ul>
+
+
+                    </div>
+                </div>
             </div>
-            <div id="whats">
-                <div class="imagem"><span class="fa fa-whatsapp" aria-hidden="true"></span></div>
-                <div class="textorede"><a href="https://api.whatsapp.com/send?phone=5551997306409&text=Ol%C3%A1,%20Gabriel%20Gostaríamos%20de%20conversar%20sobre%20uma%20proposta!" class="whats" target="_blank">Whats</a></div>
+            <div class="foto">
+                <img id="minhafoto" src="https://media-exp1.licdn.com/dms/image/C4E03AQEqOB2ee68JOw/profile-displayphoto-shrink_800_800/0/1618404175043?e=1645056000&v=beta&t=y3vsQKbiVxpsZyfmI7bk_7xlxTCQRmd7i6L3X-Q7yTI">
             </div>
-            <div id="email">
-                <div class="imagem"><span class="fa fa-google" aria-hidden="true"></span></div>
-                <div class="textorede"><a href="mailto: bw.gabrielgroehs@gmail.com?subject=Proposta&body=Olá Gabriel, temos uma proposta para você" class="email" target="_blank">E-mail</a></div>
+            <div class="formacao">
+
+                <h1 class="titulosdois">&nbsp&nbsp Formação Academica &nbsp&nbsp</h1>
+                <ul>
+                    <a style="font-weight: bold;">Formado::</a>
+                    <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:346503475/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1545496271460)&section=education%3A346503475&treasuryCount=2"
+                            target="_blank" title="Bankink, Tesouraria, Risco e Crédito, Finanças, FP&A e Controladoria">Graduação Gestão Financeira</a><span class="universidade"> Uninter 2017🎓
+                                <details> 
+                                    <summary style="font-size: small;"><a style="">....</a>
+                                    </summary>
+                                    <li>Bankink, Tesouraria, Risco e Crédito, Finanças, FP&A e Controladoria</li>
+                                </details></span></li>
+
+                    <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:569283702/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1618266866177)&section=education%3A569283702&treasuryCount=2"
+                            target="_blank">Graduação Ciências de Dados</a><span class="universidade"> Unicsul 2020🎓
+                                <details> 
+                                    <summary style="font-size: small;"><a style="">....</a>
+                                    </summary>
+                                    <li>Estatística, BI, SQL, ETL, DW, Machine learning, Python R</li>
+                                </details></span></li>
+                    </span>
+                    </li>
+
+                    <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:497755687/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1580314158744)&section=education%3A497755687&treasuryCount=3"
+                            target="_blank">Pós-Graduação Engenharia de Produção</a><span class="universidade"> Unisselvi 2019🎓
+                                <details> 
+                                    <summary style="font-size: small;"><a style="">....</a>
+                                    </summary>
+                                    <li>Pesquisa Operacional, Gestão de Processos</li>
+                                </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:548343599/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1635475867462)&section=education%3A548343599&treasuryCount=4"
+                            target="_blank">Pós-Graduação Big Data Ciência de Dados<span class="universidade"> Unyleya 2020🎓
+                                <details> 
+                                    <summary style="font-size: small;"><a style="">....</a>
+                        </summary>
+                        <li>Big Data, BI, SQL, ETL, DW, Machine learning, Python R</li>
+                        </details>
+                        </span>
+                    </li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:540751084/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1578248895268)&section=education%3A540751084&treasuryCount=3"
+                            target="_blank">MBA Gestão de Projetos</a>
+                        <span class="universidade"> Unisselvi 2019🎓
+                            <details> 
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <li>Viabilidade Economica, Gerenciamento de Projetos, Administração Financeira</li>
+                            </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:580507476/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1635451598710)&section=education%3A580507476&treasuryCount=2"
+                            target="_blank">MBA Gestão Contabilidade Finanças Empresariais</a><span class="universidade"> UCAM 2020🎓
+                                <details> 
+                                    <summary style="font-size: small;"><a style="">....</a>
+                                    </summary>
+                                    <li>Fluxo de Caixa, VPL, DFC, TIR, Gerenciamento de Ativos e Passivos, Demonstrações Financeiras</li>
+                                </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> ESPG 2020🎓
+                    <details> 
+                        <summary style="font-size: small;"><a style="">....</a>
+                        </summary>
+                        <li>Banking, Tesouraria, Risco e Crédito, Carteira, FP&A</li>
+                    </details>
+                </span></li>
+                    <li class="nomefomacao">Bootcamp Ciência de Dados 148 horas<span class="universidade"> IGTI🎓
+
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Bootcamp Engenharia Econômica<span class="universidade"> USP🎓
+
+                    </span>
+                    </li>
+                </ul>
+                <ul>
+                    <a style="font-weight: bold;">Cursando::</a>
+                    <li class="nomefomacao">Graduação Ciências Econômicas<span class="universidade"> Unopar 2023⌛ 60%
+                        <details> 
+                            <summary style="font-size: small;"><a style="">....</a>
+                            </summary>
+                            <li>Econometria, Macroeconomia, Microeconomia e Políticas Monetária e Fiscal</li>
+                        </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Graduação Ciências Contábeis<span class="universidade"> UnifCV 2022⌛ 80%
+                        <details> 
+                            <summary style="font-size: small;"><a style="">....</a>
+                            </summary>
+                            <li>Contabilidade Financeira, Industrial, Tributária e Fiscal</li>
+                        </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Graduação Estatística<span class="universidade"> Anhembi 2024⌛ 60%
+                        <details> 
+                            <summary style="font-size: small;"><a style="">....</a>
+                            </summary>
+                            <li>Big Data, Data Science, Bayseana, Analise Multivariada e Séries Temporais</li>
+                        </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Graduação Engenharia da Computação<span class="universidade"> Unicsul 2023⌛ 60%
+                        <details> 
+                            <summary style="font-size: small;"><a style="">....</a>
+                            </summary>
+                            <li>Eletônica, Programação e Arquitetura</li>
+                        </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Grad trancado Engenharia de Software<span class="universidade"> Unicsul 2022⌛ 70%
+                        <details> 
+                            <summary style="font-size: small;"><a style="">....</a>
+                            </summary>
+                            <li>Fronte End, Back End, Python, Java, Java script, Scrum, Arquitetura</li>
+                        </details></span></li>
+                    </span>
+                    </li>
+                </ul>
             </div>
-            <div id="git">
-                <div class="imagem"><span class="fa fa-git" aria-hidden="true"></span></div>
-                <div class="textorede"><a href="https://github.com/Gabriel-Groehs" class="git" target="_blank">GIT</a></div>
+            <div class="experiencia">
+                <h1 class="titulosdois">&nbsp&nbsp Carreira Profissional &nbsp&nbsp</h1>
+                <ul id="listaexperiencia">
+                    <li class="nomeexperiencia">Especialista FP&A Power BI SQL - Dufrio 2021-atual
+                        <ul>
+                            <details>
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <p>
+                                    <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                                </p>
+                            </details>
+                        </ul>
+                    </li>
+                    <li class="nomeexperiencia">Analista FP&A Senior Power BI SQL - Banking Calcard 2021
+                        <ul>
+                            <details>
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <p>
+                                    <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                                </p>
+                            </details>
+                        </ul>
+                    </li>
+                    <li class="nomeexperiencia">Analista FP&A Senior Power BI - Banking CredSIS 2020-2021
+                        <ul>
+                            <details>
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <p>
+                                    <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                                </p>
+                            </details>
+                        </ul>
+                    </li>
+                    <li class="nomeexperiencia">Supervisor FP&A e Inteligencia Power BI 3SCORP 2019-2020
+                        <ul>
+                            <details>
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <p>
+                                    <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                                </p>
+                            </details>
+                        </ul>
+                    </li>
+                    <li class="nomeexperiencia">Analista FP&A Senior Power BI -DUFRIO 2018-2019
+                        <ul>
+                            <details>
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <p>
+                                    <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                                </p>
+                            </details>
+                        </ul>
+                    </li>
+                    <li class="nomeexperiencia">Analista FP&A Senior Power BI - WEST COAST 2016-2018
+                        <ul>
+                            <details>
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <p>
+                                    <li>Budget, Modelagem Financeira, DRE, DFC, Balanço, VPL, TIR, PTesouraria Banking, ayback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, Apresentação Board</li>
+                                </p>
+                            </details>
+                        </ul>
+                    </li>
+                    <li class="nomeexperiencia">Head Financeiro FP&A - Brazilian Way 2013-2015
+                        <ul>
+                            <details>
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <p>
+                                    <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                                </p>
+                            </details>
+                        </ul>
+                    </li>
+                    <li class="nomeexperiencia">Analista FP&A Pleno - WEST COAST 2012-2013
+                        <ul>
+                            <details>
+                                <summary style="font-size: small;"><a style="">....</a>
+                                </summary>
+                                <p>
+                                    <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Power BI, Tesouraria Banking, SQL, Apresentação Board</li>
+                                </p>
+                            </details>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-            <div id="youtube">
-                <div class="imagem"><span class="fa fa-youtube" aria-hidden="true"></span></div>
-                <div class="textorede"><a href="https://www.youtube.com/channel/UCyELJ-wn_62ejLOqFM2x-Yg/featured" class="youtube" target="_blank">YouTube</a></div>
+            <div class="redes">
+                <div id="linkedin">
+                    <div class="imagem"><span class="fa fa-linkedin" aria-hidden="true"></span></div>
+                    <div class="textorede"><a href="https://www.linkedin.com/in/gabrielgroehs/" class="likedin" target="_blank">Linkedin</a></div>
+                </div>
+                <div id="whats">
+                    <div class="imagem"><span class="fa fa-whatsapp" aria-hidden="true"></span></div>
+                    <div class="textorede"><a href="https://api.whatsapp.com/send?phone=5551997306409&text=Ol%C3%A1,%20Gabriel%20Gostaríamos%20de%20conversar%20sobre%20uma%20proposta!" class="whats" target="_blank">Whats</a></div>
+                </div>
+                <div id="email">
+                    <div class="imagem"><span class="fa fa-google" aria-hidden="true"></span></div>
+                    <div class="textorede"><a href="mailto: bw.gabrielgroehs@gmail.com?subject=Proposta&body=Olá Gabriel, temos uma proposta para você" class="email" target="_blank">E-mail</a></div>
+                </div>
+                <div id="git">
+                    <div class="imagem"><span class="fa fa-git" aria-hidden="true"></span></div>
+                    <div class="textorede"><a href="https://github.com/Gabriel-Groehs" class="git" target="_blank">GIT</a></div>
+                </div>
+                <div id="youtube">
+                    <div class="imagem"><span class="fa fa-youtube" aria-hidden="true"></span></div>
+                    <div class="textorede"><a href="https://www.youtube.com/channel/UCyELJ-wn_62ejLOqFM2x-Yg/featured" class="youtube" target="_blank">YouTube</a></div>
+                </div>
             </div>
-        </div>
-        <div class="informacoes">
-            <center>
-                <h2>Skill's:</h2>
-            </center>
-            <ul>
-                <li>💱FP&A</li>
-                <li>💱ROAE, VPL, TIR, Payback</li>
-                <li>💱Controladoria</li>
-                <li>💱Modelagem Financeira</li>
-                <li>📊DRE P&L</li>
-                <li>📊Planejamento</li>
-                <li>📊Centros de Custos</li>
-                <li>📊Mapas de Despesas</li>
-                <li>📊Excel Avançado📊Power Point</li>
-                <li>📊Apresenações de Board Conselho</li>
-                <li>💻Power BI📊Python🐍SQL🔋DAX⌨HTML📄CSS🎨JavaScript📱</li>
-                <li>📊Dashboard</li>
-                <li>📊Business Intelligence</li>
-            </ul>
-            <center>
-                <h2>Paineis DashBoardS</h2>
-                <h4>Clique no nome</h4>
-            </center>
-            <ul>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMjEyYTM3OTctZjkwMC00MjM3LTkwOWMtNzE3OTk5MmU0ZDkwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+            <div class="informacoes">
+                <center>
+                    <h2>Skill's:</h2>
+                </center>
+                <ul>
+                    <li>💱FP&A</li>
+                    <li>💱ROAE, VPL, TIR, Payback</li>
+                    <li>💱Controladoria</li>
+                    <li>💱Modelagem Financeira</li>
+                    <li>📊DRE P&L</li>
+                    <li>📊Planejamento</li>
+                    <li>📊Centros de Custos</li>
+                    <li>📊Mapas de Despesas</li>
+                    <li>📊Excel Avançado📊Power Point</li>
+                    <li>📊Apresenações de Board Conselho</li>
+                    <li>💻Power BI📊Python🐍SQL🔋DAX⌨HTML📄CSS🎨JavaScript📱</li>
+                    <li>📊Dashboard</li>
+                    <li>📊Business Intelligence</li>
+                </ul>
+                <center>
+                    <h2>Paineis DashBoardS</h2>
+                    <h4>Clique no nome</h4>
+                </center>
+                <ul>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMjEyYTM3OTctZjkwMC00MjM3LTkwOWMtNzE3OTk5MmU0ZDkwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Bank Seguros 📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiOGE4YjY3MjAtNGNhMS00OWRjLWI0MjktNzQ3Nzg1YmJmNTg1IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiOGE4YjY3MjAtNGNhMS00OWRjLWI0MjktNzQ3Nzg1YmJmNTg1IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         DRE Finanças 💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZWUzNDYzYTYtMjc4NS00YmM0LTljMDctOGYxMDQxMzRhZTI5IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZWUzNDYzYTYtMjc4NS00YmM0LTljMDctOGYxMDQxMzRhZTI5IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Cash Flow Tesouraria 📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNzliNzNiODMtNjMzNi00ZTFkLWI2YzYtOWE5MGNlZTVmOTk0IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNzliNzNiODMtNjMzNi00ZTFkLWI2YzYtOWE5MGNlZTVmOTk0IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Dashboard Invictos cliente Militar 💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNTczOGY3NzItY2Y1Ny00MzJmLThhNjgtZDFhZDQxMjUxM2QzIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNTczOGY3NzItY2Y1Ny00MzJmLThhNjgtZDFhZDQxMjUxM2QzIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Custos Cliente Borch 📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNjQ1ODE3NWUtNGQ3Yi00NGM3LWJmNjAtM2U0NjIzZTlkYmUxIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiNjQ1ODE3NWUtNGQ3Yi00NGM3LWJmNjAtM2U0NjIzZTlkYmUxIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Dashboard Workflow 💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMzNkMTJjYjItOGY1NC00YmJhLWJhNjEtNmFiMTYxZTgwN2MwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMzNkMTJjYjItOGY1NC00YmJhLWJhNjEtNmFiMTYxZTgwN2MwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Dashboard desempenho 📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiOTM0YzBjOWQtYTg5Ny00OWVlLWI3ODYtNzFlNmUxNzNlZTllIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiOTM0YzBjOWQtYTg5Ny00OWVlLWI3ODYtNzFlNmUxNzNlZTllIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel embarque 💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiYWMwYjA5MTgtYmRhNi00YmZmLWE5ZTUtN2FjMjM0OTA4N2NhIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiYWMwYjA5MTgtYmRhNi00YmZmLWE5ZTUtN2FjMjM0OTA4N2NhIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Controle Comissões Fornecedores 📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiYzZjZjdmODgtZjE3NC00YzhlLWIwMjUtZTg2NTA3MjBkZmU4IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiYzZjZjdmODgtZjE3NC00YzhlLWIwMjUtZTg2NTA3MjBkZmU4IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Logistica 💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZjYwZWRlOTYtMzc0Ni00M2I2LWE4NWQtMDJmMDg1MjEwMmFhIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZjYwZWRlOTYtMzc0Ni00M2I2LWE4NWQtMDJmMDg1MjEwMmFhIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Dashboard Transit flow📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiODA1ZjE4ODctNDQzYi00NzQ3LWE3NGUtOTU1YTMxOGU2ZjY3IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiODA1ZjE4ODctNDQzYi00NzQ3LWE3NGUtOTU1YTMxOGU2ZjY3IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Entreposto💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMmI5N2JkNzgtY2Q2Mi00ZDFlLTg0NjAtNDdiMTFiNWNhNzMwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMmI5N2JkNzgtY2Q2Mi00ZDFlLTg0NjAtNDdiMTFiNWNhNzMwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Estratégico Origem📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZTdkZjNmN2EtZDVhYS00MjcwLTllMGYtMGQxMWU0MDNkMzk1IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiZTdkZjNmN2EtZDVhYS00MjcwLTllMGYtMGQxMWU0MDNkMzk1IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Logcomex💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMjdmY2FmMGEtMDM3NC00NDEyLThkODktMzJjNDhiY2Q5Zjk4IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://app.powerbi.com/view?r=eyJrIjoiMjdmY2FmMGEtMDM3NC00NDEyLThkODktMzJjNDhiY2Q5Zjk4IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank">
                         Painel Cliente Immac📊</a>
-                </li>
+                    </li>
 
-            </ul>
-            <center>
-                <h2>Videos DashBoardS</h2>
-            </center>
-            <ul>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=qaHaFf8Cq0w" target="_blank">
+                </ul>
+                <center>
+                    <h2>Videos DashBoardS</h2>
+                </center>
+                <ul>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=qaHaFf8Cq0w" target="_blank">
                         DRE X📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=0_x2o4ARNVs" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=0_x2o4ARNVs" target="_blank">
                         DRE Budget💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=QhNGnBJ6Npc" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=QhNGnBJ6Npc" target="_blank">
                         Tesouraria Gestão Financeira📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=teCTuPMeLsg" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=teCTuPMeLsg" target="_blank">
                         WorkFlow Clientes💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=6e2Ljz21IeE" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=6e2Ljz21IeE" target="_blank">
                         Painel Estratégico Militar📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=dblNGLlv0j8" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=dblNGLlv0j8" target="_blank">
                         Comercial Estratégico💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=3I-uca5HQOQ" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=3I-uca5HQOQ" target="_blank">
                         Desempenho📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=7IJqrm3R85w" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=7IJqrm3R85w" target="_blank">
                         Bank Controle Seguros💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=8kS_IkAccvo" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=8kS_IkAccvo" target="_blank">
                         Metas por Serviço📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=dblNGLlv0j8" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=dblNGLlv0j8" target="_blank">
                         Comercial Estratégico💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=dLlirco_uks" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=dLlirco_uks" target="_blank">
                         Estratégico Embarque📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=v_LztrVE4xM" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=v_LztrVE4xM" target="_blank">
                         WorkFlow💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=ysT7PWN6XX0" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=ysT7PWN6XX0" target="_blank">
                         Clone LogComex📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=fGdY3oSdWaQ" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=fGdY3oSdWaQ" target="_blank">
                         Mutuus💱</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=4WJLT-Br7CI" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=4WJLT-Br7CI" target="_blank">
                         Sistema de Embarque Work Flow📊</a>
-                </li>
-                <li>
-                    <a class="dsh" href="https://www.youtube.com/watch?v=joc7egamapM" target="_blank">
+                    </li>
+                    <li>
+                        <a class="dsh" href="https://www.youtube.com/watch?v=joc7egamapM" target="_blank">
                         Portal Cliente📊</a>
-                </li>
+                    </li>
 
-            </ul>
-        </div>
-        <div class="gifs">
-            <img class="dash" src="https://i.gifer.com/3rNn.gif" alt="">
-            <img class="dash" src="https://www.finereport.com/en/wp-content/uploads/2019/07/smart-city.gif" alt="" class="dash">
-            <img class="dash" src="https://cdn.dribbble.com/users/5094323/screenshots/11184058/media/21d762e9bf83e02db2e7c2fab41320e1.gif" alt="">
-            <img class="dash" src="https://oslo-production.s3.amazonaws.com/uploads/medium/asset/46/coding_gif" alt="">
-            <img class="dash" src="https://miro.medium.com/max/1663/0*BQxUm9OGscTcW__a.gif" alt="" class="dash">
-            <img class="dash" src="https://miro.medium.com/max/1776/1*9gXKh54IoiqcX2K47V92eA.gif" alt="" class="dash">
-            <img class="dash" src="https://miro.medium.com/max/2560/1*N4owGiAMBU8aftjalWcoXw.gif" alt="">
-            <img class="dash" src="https://www.finereport.com/en/wp-content/uploads/2019/10/2019051608A.gif" alt="" class="dash">
-            <img class="dash" src="https://s3.amazonaws.com/creativetim_bucket/github/gif/black-dashboard.gif" alt="">
+                </ul>
+            </div>
+            <div class="gifs">
+                <img class="dash" src="https://i.gifer.com/3rNn.gif" alt="">
+                <img class="dash" src="https://www.finereport.com/en/wp-content/uploads/2019/07/smart-city.gif" alt="" class="dash">
+                <img class="dash" src="https://cdn.dribbble.com/users/5094323/screenshots/11184058/media/21d762e9bf83e02db2e7c2fab41320e1.gif" alt="">
+                <img class="dash" src="https://oslo-production.s3.amazonaws.com/uploads/medium/asset/46/coding_gif" alt="">
+                <img class="dash" src="https://miro.medium.com/max/1663/0*BQxUm9OGscTcW__a.gif" alt="" class="dash">
+                <img class="dash" src="https://miro.medium.com/max/1776/1*9gXKh54IoiqcX2K47V92eA.gif" alt="" class="dash">
+                <img class="dash" src="https://miro.medium.com/max/2560/1*N4owGiAMBU8aftjalWcoXw.gif" alt="">
+                <img class="dash" src="https://www.finereport.com/en/wp-content/uploads/2019/10/2019051608A.gif" alt="" class="dash">
+                <img class="dash" src="https://s3.amazonaws.com/creativetim_bucket/github/gif/black-dashboard.gif" alt="">
+            </div>
         </div>
     </div>
-</div>
 </body>
 
 </html>
