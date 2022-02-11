@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<title>
+
+    Portal 3SCorp Paineis
+
+</title>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=9mL8JRNOF_pCJlKSbXBKcu6VPprvzGm56zuXPUj1RvWuhRff3Nyf7nnR73cVnWDkf4F8zMmSpzSB34B352PtkC7bAgIL9JNelzVhsv9l_t0RCcW-sKWmWMCl8pBz-CDLrbztIIlOR8OCXiiIyHV66fBih8BduUy8skAu4vUDaYiubFoVh2yfKh59RrPl5UqCzzw_mnFqlHT8wfYfJrm5p-vL5id29JrJVoc4vz301DuXBxPygR5LjqPkqZqGX0mYuSghWiWmAjcw3YCgMX6SEItiGBFMOVgglD0lHI9fY1qGDDav12Fnihdp3JF2uYfSfo81D45YsEeVy0Xbn1uuo2MEU0BDtLNJP_klXDeSiZZndf8E-YweA2_6lxq4jPmPv_jVcHSn9Idb5TNX6aaDHmkqKKM3a5gcQP3_3lugHyjqCBM7Bxg5VRS1wr3Dk0RSnFHA1SxDVy393xTU8X3XOw" charset="UTF-8"></script><script src="javascript.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            overflow-y: hidden;
+        }
+        
+        header {
+            width: 100%;
+            height: 60px;
+            top: 0;
+            left: 0;
+            background-image: linear-gradient( to top, rgb(255, 174, 0) 50%, rgb(255, 123, 35));
+            position: fixed;
+            box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .5);
+            text-transform: capitalize;
+            text-rendering: auto;
+            color: #ffffff;
+        }
+        
+        #iconeheader {
+            width: 60px;
+            top: 5px;
+            right: 20px;
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #textoheader {
+            font-size: 45px;
+            color: rgb(255, 255, 255);
+        }
+        
+        .menu-icon {
+            position: fixed;
+            font-size: 30px;
+            margin-top: 2px;
+            font-weight: bold;
+            padding: 2px;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            background-color: #ffc400;
+            color: rgb(56, 56, 56);
+            cursor: pointer;
+            transition: all .4s;
+            left: 10px;
+            top: 0;
+            box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .5);
+            border-radius: 4px;
+        }
+        
+        .menu-icon:hover {
+            background-color: white;
+            color: #2d3d32;
+            margin-top: 8px;
+            width: 52px;
+            height: 52px;
+        }
+        
+        #chk {
+            display: none;
+        }
+        
+        .menu {
+            height: 100%;
+            position: fixed;
+            background-image: linear-gradient( to top, rgb(56, 56, 56) 50%, rgb(85, 85, 85));
+            top: 60px;
+            overflow: hidden;
+            transition: all .6s;
+        }
+        
+        #principal {
+            width: 300px;
+            left: -300px;
+            background-image: linear-gradient( to top, rgb(34, 34, 34) 50%, rgb(61, 61, 61));
+            box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .5);
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        ul li a {
+            display: block;
+            font-size: 18px;
+            font-family: 'Arial';
+            padding: 10px;
+            border-bottom: solid 1px #000;
+            color: #ccc;
+            text-decoration: none;
+            transition: all .2s;
+            box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .5);
+        }
+        
+        ul li span {
+            float: right;
+            padding-right: 10px;
+        }
+        
+        ul li a:hover {
+            background-image: linear-gradient(to right, rgb(255, 208, 0), rgb(228, 137, 0));
+            color: rgb(255, 255, 255);
+            font-size: 20px;
+            font-style: italic;
+        }
+        
+        .Voltar {
+            margin-top: 60px;
+            background-color: rgb(0, 0, 0);
+            border-left: solid 5px rgb(255, 255, 255);
+        }
+        
+        .bg {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            position: fixed;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+        }
+        
+        #chk:checked~.bg {}
+        
+        #chk:checked~#principal {
+            transform: translateX(300px);
+        }
+        
+        #chk:checked~.menu nav a ul li a {
+            opacity: 1;
+            margin-top: 0;
+            transition-delay: 0.2s;
+            animation: normal;
+        }
+        
+        #Graficos,
+        #Paineis {
+            width: 250px;
+            left: -250px;
+        }
+        
+        #Graficos:target,
+        #Paineis:target {
+            transform: translateX(250px);
+            box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .5);
+        }
+        
+        [style*="--aspect-ratio"]> :first-child {
+            width: 100%;
+        }
+        
+        [style*="--aspect-ratio"]>img {
+            height: auto;
+        }
+        
+        [style*="--aspect-ratio"]> :first-child {
+            position: relative;
+            top: 60px;
+            left: 0;
+            height: 900px;
+        }
+        
+        #img {
+            position: absolute;
+            width: 48px;
+            left: 100px;
+            top: -10;
+        }
+        
+        #FI {}
+        
+        .Dash {
+            overflow-y: scroll;
+            height: auto;
+        }
+        
+        #letreiro {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            top: 100px;
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            font-family: 'Lato', sans-serif;
+            background-color: #222222;
+        }
+        
+        #letreiro .letra {
+            list-style: none;
+            color: #484848;
+            font-size: 88px;
+            letter-spacing: 15px;
+            animation: lighting 1.4s linear infinite;
+        }
+        
+        @keyframes lighting {
+            0% {
+                color: #484848;
+                text-shadow: none;
+            }
+            90% {
+                color: #484848;
+                text-shadow: none;
+            }
+            100% {
+                color: #c300ff;
+                text-shadow: 0 0 7px #e100ff, 0 0 50px #cc00ff;
+            }
+        }
+        
+        #letreiro #letra1 {
+            animation-delay: 0
+        }
+        
+        #letreiro #letra2 {
+            animation-delay: 0.1s
+        }
+        
+        #letreiro #letra3 {
+            animation-delay: 0.2s
+        }
+        
+        #letreiro #letra4 {
+            animation-delay: 0.3s
+        }
+        
+        #letreiro #letra5 {
+            animation-delay: 0.4s
+        }
+        
+        #letreiro #letra6 {
+            animation-delay: 0.5s
+        }
+        
+        #letreiro #letra7 {
+            animation-delay: 0.6s
+        }
+        
+        #letreiro #letra8 {
+            animation-delay: 0.7s
+        }
+        
+        #letreiro #letra9 {
+            animation-delay: 0.8s
+        }
+        
+        #letreiro #letra10 {
+            animation-delay: 0.9s
+        }
+        
+        #letreiro #letra11 {
+            animation-delay: 1s
+        }
+        
+        .redes {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100px;
+            background-color: #222222;
+            display: flex;
+            justify-content: center;
+            font-family: 'Lato', sans-serif;
+            border-radius: 8px;
+        }
+        
+        .redes .redesocial {
+            position: relative;
+            list-style: none;
+            width: 60px;
+            height: 60px;
+            margin: 0 30px;
+            transform: rotate(-30deg) skew(25deg);
+            background: #ccc;
+            border-radius: 8px;
+        }
+        
+        .redes .redesocial span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: 0.5s;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 30px !important;
+            border-radius: 8px;
+        }
+        
+        .redes .redesocial:hover span {
+            box-shadow: -1px 1px 1px rgba(0, 0, 0, .1);
+            border-radius: 8px;
+        }
+        
+        .redes .redesocial:hover span:nth-child(5) {
+            transform: translate(40px, -40px);
+            opacity: 1;
+        }
+        
+        .redes .redesocial:hover span:nth-child(4) {
+            transform: translate(30px, -30px);
+            opacity: 0.8;
+        }
+        
+        .redes .redesocial:hover span:nth-child(3) {
+            transform: translate(20px, -20px);
+            opacity: 0.6;
+        }
+        
+        .redes .redesocial:hover span:nth-child(2) {
+            transform: translate(10px, -10px);
+            opacity: 0.4;
+        }
+        
+        .redes .redesocial:hover span:nth-child(1) {
+            transform: translate(0, 0);
+            opacity: .8;
+        }
+        
+        .redes .redesocial:nth-child(1) span {
+            background: #3b5999;
+        }
+        
+        .redes .redesocial:nth-child(2) span {
+            background: #55ee76;
+        }
+        
+        .redes .redesocial:nth-child(3) span {
+            background: #dd4b39;
+        }
+        
+        .redes .redesocial:nth-child(4) span {
+            background: #0077b5;
+        }
+        
+        .redes .redesocial:nth-child(5) span {
+            background: #e4405f;
+        }
+        
+        .anima {
+            animation: rotatecenter 6.6s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+        }
+        
+        #logo {
+            background-image: linear-gradient(to top, rgb(90, 2, 173), blueviolet);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            border-radius: 8px;
+            margin-top: 5px;
+            box-shadow: 24px 24px 102px -27px rgba(0, 0, 0, 0.75);
+            animation: rotatecenter 6.6s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+            color: rgb(34, 86, 255);
+            font-weight: bold;
+            text-align: center;
+            justify-items: center;
+            width: 60px;
+            height: 60px;
+            position: initial;
+            top: 5px;
+            right: 20px;
+        }
+        
+        @keyframes rotatecenter {
+            0% {
+                transform: rotatey(0);
+            }
+            10% {
+                transform: scale(1.2)rotatey(360deg);
+            }
+            20% {
+                transform: scale(1) rotateZ(0);
+            }
+            30% {
+                transform: scale(1.2) rotateZ(180deg);
+            }
+            40% {
+                transform: scale(1) rotateZ(360deg);
+            }
+            50% {
+                transform: scale(1) rotateZ(-360deg);
+            }
+            60% {
+                transform: scale(1) rotatex(360deg);
+            }
+            70% {
+                transform: scale(1) rotate3d(1, 1, 0, 0deg);
+            }
+            80% {
+                transform: scale(1) rotate3d(1, 1, 0, -180deg);
+            }
+            90% {
+                transform: scale(1) rotate3d(1, 1, 0, -360deg);
+            }
+            100% {
+                transform: scale(1) rotate3d(1, 1, 0, 0deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+
+
+
+    <div class="geral" id="paineis">
+
+        <div class="Dash" id="home" style="--aspect-ratio: 16/9; background-color: rgb(36, 36, 36); height: 1200px;">
+
+            <ul id="letreiro">
+                <li class="letra" id="letra1">W</li>
+                <li class="letra" id="letra2">e</li>
+                <li class="letra" id="letra3">b</li>
+                <li class="letra" id="letra4">A</li>
+                <li class="letra" id="letra5">r</li>
+                <li class="letra" id="letra6">T</li>
+                <li class="letra" id="letra7">.</li>
+                <li class="letra" id="letra8">T</li>
+                <li class="letra" id="letra9">e</li>
+                <li class="letra" id="letra10">c</li>
+                <li class="letra" id="letra11">h</li>
+            </ul>
+
+            <ul class="redes">
+                <li class="redesocial">
+                    <a href="https://www.facebook.com/3SCorporate/photos/o-3s-corporate-%C3%A9-um-grupo-de-gest%C3%A3o-empresarial-fundado-em-2011-com-unidade-em-h/965501893567963/" target="_blank">
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="fa fa-facebook" aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li class="redesocial">
+                    <a href="https://api.whatsapp.com/send?phone=5551996695777" target="_blank">
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="fa fa-whatsapp" aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li class="redesocial">
+                    <a href="https://www.youtube.com/channel/UC3-691wFb8CHwRcjk3uXhxg" target="_blank">
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="fa fa-youtube" aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li class="redesocial">
+                    <a href="https://br.linkedin.com/company/3s-corp" target="_blank">
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="fa fa-linkedin" aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li class="redesocial">
+                    <a href="https://www.instagram.com/3s_corp/" target="_blank">
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="rdscl"></span>
+                        <span class="fa fa-instagram" aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="Dash" id="comercial" style="--aspect-ratio: 16/9;">
+            <iframe id="comercial" src="https://app.powerbi.com/reportEmbed?reportId=6a4db028-0bae-4db7-9bc0-f598481ff729&autoAuth=true&ctid=cf787a15-e4ed-41ef-8dde-bb7a6b8535e0&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+                frameborder="0">
+            </iframe>
+        </div>
+        </br>
+        </br>
+        </br>
+        </br>
+
+        <div class="Dash" id="FI" style="--aspect-ratio: 16/9;">
+            <iframe src="https://app.powerbi.com/reportEmbed?reportId=ef3b7729-518f-4688-8101-14e3603c1803&autoAuth=true&ctid=cf787a15-e4ed-41ef-8dde-bb7a6b8535e0&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+                frameborder="0">
+        </iframe>
+        </div>
+        </br>
+        </br>
+        </br>
+        </br>
+
+        <div class="Dash" id="workflow" style="--aspect-ratio: 16/9;">
+            <iframe src="https://app.powerbi.com/reportEmbed?reportId=2aa29d32-b0f1-4184-ae14-173bef75ee83&autoAuth=true&ctid=cf787a15-e4ed-41ef-8dde-bb7a6b8535e0&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+                frameborder="0">
+            </iframe>
+        </div>
+        </br>
+        </br>
+        </br>
+        </br>
+
+        <div class="Dash" id="financeiro" style="--aspect-ratio: 16/9;">
+            <iframe src="https://app.powerbi.com/reportEmbed?reportId=981d6307-5de2-4869-bd28-84f52e8a13f0&autoAuth=true&ctid=cf787a15-e4ed-41ef-8dde-bb7a6b8535e0&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+                frameborder="0">
+            </iframe>
+        </div>
+
+        <div class="Dash" id="NCM" style="--aspect-ratio: 16/9;">
+            <iframe src="https://app.powerbi.com/reportEmbed?reportId=981d6307-5de2-4869-bd28-84f52e8a13f0&autoAuth=true&ctid=cf787a15-e4ed-41ef-8dde-bb7a6b8535e0&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+                frameborder="0">
+            </iframe>
+        </div>
+        </br>
+        </br>
+        </br>
+        </br>
+
+    </div>
+
+
+
+    <header>
+        <h1 id="textoheader" style=" text-align: center;"><span class="anima" style="color: rgb(98, 0, 255);">⦿</span> Portal Web.Art <span class="anima" style="color: rgb(98, 0, 255);">⦿</span>
+        </h1>
+        <div>
+            <img class="anima" id="iconeheader" src="https://images.vexels.com/media/users/3/130665/isolated/preview/174f518a6520dc06d1846bfb5a64e989---cone-de-c--rculo-gr--fico-by-vexels.png" alt="">
+        </div>
+        <!--<center>
+            <div id="logo" style="">3S Tech</div>
+        </center>-->
+    </header>
+
+
+
+
+    <input type="checkbox" id="chk">
+    <label for="chk" class="menu-icon">&#9776;</label>
+
+
+
+    <img id="img" src="https://lh3.googleusercontent.com/proxy/2q7wjmAdXfuBrMRwYR0C9qFGW9OKMcYiZO8xITstNBfpZ3YuqeBwRaW9x7GhdF3VkeMGUkUwnpyLssTw8RMPC_V4jgXUecVZByqLLA" alt="">
+
+
+
+
+    <div class="bg"></div>
+
+
+
+
+    <nav class="menu" id="principal">
+        <ul>
+            <li><a href="" class="Voltar">Refresh</a></li>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#Graficos">Dashboard's<span>></span></a></li>
+            <li><a href="#Paineis">Paineis<span>></span></a></li>
+            <li><a href="#">Em Breve</a></li>
+            <li><a href="#">Em Breve</a></li>
+            <li><a href="#">Em Breve</a></li>
+        </ul>
+    </nav>
+    <nav class="menu" id="Graficos">
+        <ul>
+            <li><a href="#" class="Voltar">&#9776;</a></li>
+            <li><a href="#comercial">Comercial</a></li>
+            <li><a href="#workflow">Workflow</a></li>
+            <li><a href="#FI">Fator de Internação</a> </li>
+            <li><a href="#financeiro">Financeiro</a></li>
+            <li><a href="#NCM">NCM</a></li>
+        </ul>
+    </nav>
+    <nav class="menu" id="Paineis">
+        <ul>
+            <li><a href="#" class="Voltar">&#9776;</a></li>
+            <li><a href="#">null</a></li>
+            <li><a href="#">null</a></li>
+            <li><a href="#">null</a></li>
+            <li><a href="#">null</a></li>
+            <li><a href="#">null</a></li>
+        </ul>
+    </nav>
+
+    <script type="text/javascript">
+        $(function() {
+
+            $("div").css("display", "none");
+            $("div#div1").addClass("active");
+
+            $("a").on("click", function(e) {
+                e.preventDefault();
+
+                $("div").removeClass("active");
+                var id = $(this).attr("href");
+                $("#" + id + "").addClass("active");
+
+            });
+        });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+</body>
+
+</html>
