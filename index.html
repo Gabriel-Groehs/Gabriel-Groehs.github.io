@@ -38,14 +38,14 @@
                 display: flex;
                 justify-content: center;
                 background-attachment: fixed;
-                margin: 0rem 2rem 0rem 2rem;
+                margin: 0rem 0rem 0rem 0rem;
                 background-color: black;
                 background-size: cover;
                 background-image: url('https://c.tenor.com/Y7hGVwrQwWEAAAAd/city-florianopolis.gif');
             }
             .container {
                 background-color: rgb(48, 48, 48);
-                margin: 0rem 2rem 0rem 2rem;
+                margin: 0rem 0.4rem 0rem 0.4rem;
                 box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
             }
             .gifs {
@@ -74,7 +74,7 @@
             .nome h1 {
                 font-size: 1.6rem;
             }
-            .nome small {
+            .nome 0.5rem {
                 font-size: 1rem;
             }
             .redes {
@@ -120,6 +120,8 @@
             }
             #minhafoto {
                 /*animation: heartbeat 5s ease-in-out infinite both;*/
+                width: 100px;
+                height: 100px;
             }
             .nome p {
                 padding: 0rem;
@@ -172,8 +174,14 @@
                 border-radius: 30%;
                 animation: rotacao 1s linear both;
             }
+            ul {
+                margin-block-start: 0rem;
+                margin-block-end: 0rem;
+                padding: 0.5rem;
+            }
             li {
                 list-style: none;
+                font-size: 0.7rem;
             }
             #curriculo {
                 box-shadow: 0.625rem 0.625rem 25px -13px rgba(0, 0, 0, 0.75);
@@ -202,7 +210,7 @@
                 border-radius: 0.5rem;
                 width: 100%;
                 font-weight: bold;
-                font-size: 1rem;
+                font-size: 0.7rem;
             }
             .nomefomacao:hover {
                 box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
@@ -286,7 +294,7 @@
                 text-align: left;
             }
             .experiencia ul .nomeexperiencia {
-                font-size: 1rem;
+                font-size: 0.7rem;
                 border-radius: 5px;
                 font-weight: bold;
                 padding: 1px;
@@ -472,7 +480,7 @@
                 box-shadow: 0.625rem 0.625rem 1.375rem -0.25rem rgba(0, 0, 0, 0.75);
                 background-color: white;
             }
-            .nome small {
+            .nome 0.5rem {
                 font-size: 1rem;
             }
             .redes {
@@ -738,7 +746,8 @@
                 <center>
                     <h1 id="curriculo">
                         <span class="flecha" style="color: rgb(109, 109, 109);">◈</span> Gabriel Groehs <span class="flecha" style="color: rgb(109, 109, 109);">◈</span>
-                        <br><small style="color: rgb(255, 255, 255);">Gestão Financeira 4.0 e FP&A Orientada a Dados</small>
+                        <br>
+                        <small style="color: rgb(255, 255, 255);">Profissional de Dados e Finanças</small>
                     </h1>
                 </center>
 
@@ -777,36 +786,37 @@
                     <div>
 
                         <ul>
-                            <li>Profissional de FP&A Finanças 4.0 & Tech, Dados, Banking (desde 2010).</li>
+                            <li>Profissional de Dados e Finanças (desde 2012). <br/>Formado em Gestão Financeira, Técnologo Ciência de Dados, Ciências Contábeis e Ciências Econômicas. Cursando Estatística, Engenharia de Software, MBA USP Data Science.</li>
 
-                            
-                            <li> 📊 BI&A, Dados e Ciência:</li>
+
+                            <li> 📊 BI&A, Dados e Ciência de Dados:</li>
                             <details>
-                                <summary style="font-size: small;">Abrir detalhes....
+                                <summary style="font-size:  0.5rem;">....
                                 </summary>
                                 <li>
-                                    Business Intelligence Power BI, SQL, Data Warehouse, ETL, Dashboard
+                                    Business Intelligence Power BI, SQL, Data Warehouse, ETL, Dashboard, Python, Redes Neurais, Estatística, Modelos
                                 </li>
                             </details>
-                            
+
                             <li> 💻 Tech Skill's (Frameworks, Linguagens e Ferramentas):</li>
                             <details>
-                                <summary style="font-size: small;">Abrir detalhes....
+                                <summary style="font-size:  0.5rem;">....
                                 </summary>
                                 <li>
                                     DAX, M, SQL, Power BI, HTML, CSS, JavaScript, Python, Spark, Pentaho PDI, PySpark, Algebra, Cálculo, Azure Data Fatory, DataBricks
                                 </li>
-                            </li>
-                                
+                                </li>
+
                             </details>
                             <li> 💱FP&A (Planejamento Financeiro):
                                 <details>
-                                    <summary style="font-size: small;"><a style="">Abrir detalhes....</a>
+                                    <summary style="font-size:  0.5rem;">....
+                                        <a style=""></a>
                                     </summary>
                                     P&L(DRE), Budget(Orçamento), GMD GMR, Pricing, EBITDA, Tesouraria, Banking e C´redito, Cash Flow, ROAE, VPL, TIR, NOPAT, ROIC, Wacc, Capm, EVA, MVA, firm Value, Modelagem Financeira
                             </li>
                             </details>
-                            
+
                         </ul>
 
 
@@ -814,7 +824,7 @@
                 </div>
             </div>
             <div class="foto">
-                <img id="minhafoto" src="https://media.licdn.com/dms/image/D4D03AQEuulDLbYm9uA/profile-displayphoto-shrink_800_800/0/1688154947847?e=1696464000&v=beta&t=V08iYpCGn44EWwf26KiR1bot6WuLA5a3EJI0g-Dnk90">
+                <img id="minhafoto" src="https://avatars.githubusercontent.com/u/60850164?s=400&u=c33b2e67abcbb899d10291549700bba5aae4b42c&v=4">
             </div>
             <div class="formacao">
 
@@ -824,33 +834,34 @@
                     <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:346503475/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1545496271460)&section=education%3A346503475&treasuryCount=2"
                             target="_blank" title="Bankink, Tesouraria, Risco e Crédito, Finanças, FP&A e Controladoria">Graduação Gestão Financeira</a><span class="universidade"> Uninter 2017🎓
                                 <details> 
-                                    <summary style="font-size: small;"><a style="">....</a>
+                                    <summary style="font-size:  0.5rem;"><a style="">....</a>
                                     </summary>
-                                    <li>Bankink, Tesouraria, Risco e Crédito, Finanças, FP&A e Controladoria</li>
+                                    <li>Banking, Tesouraria, Risco e Crédito, Finanças, FP&A e Controladoria</li>
                                 </details></span></li>
 
                     <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:569283702/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1618266866177)&section=education%3A569283702&treasuryCount=2"
                             target="_blank">Graduação Ciências de Dados</a><span class="universidade"> Unicsul 2020🎓
                                 <details> 
-                                    <summary style="font-size: small;"><a style="">....</a>
+                                    <summary style="font-size:  0.5rem;"><a style="">....</a>
                                     </summary>
                                     <li>Estatística, BI, SQL, ETL, DW, Machine learning, Python R</li>
                                 </details></span></li>
                     </span>
                     </li>
-                    <li class="nomefomacao"><a href=""
-                            target="_blank">Graduação Ciências Contábeis<span class="universidade"> UnifCV 2022🎓
+                    <li class="nomefomacao"><a href="" target="_blank">Bacharel Ciências Contábeis<span class="universidade"> UnifCV 2022🎓
                         <details> 
-                            <summary style="font-size: small;"><a style="">....</a>
-                            </summary>
-                            <li>Contabilidade Financeira, Industrial, Tributária e Fiscal</li>
-                        </details></span></li>
+                            <summary style="font-size:  0.5rem;"><a style="">....</a>
+                        </summary>
+                        <li>Contabilidade Financeira, Industrial, Tributária e Fiscal</li>
+                        </details>
+                        </span>
+                    </li>
                     </span>
                     </li>
 
-                    <li class="nomefomacao">Graduação Ciências Econômicas<span class="universidade"> Anhanguera 2023🎓
+                    <li class="nomefomacao">Bacharel Ciências Econômicas<span class="universidade"> Anhanguera 2023🎓
                         <details> 
-                            <summary style="font-size: small;"><a style="">....</a>
+                            <summary style="font-size:  0.5rem;"><a style="">....</a>
                             </summary>
                             <li>Econometria, Macroeconomia, Microeconomia e Políticas Monetária e Fiscal</li>
                         </details></span></li>
@@ -859,7 +870,7 @@
                     <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:497755687/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1580314158744)&section=education%3A497755687&treasuryCount=3"
                             target="_blank">Pós-Graduação Engenharia de Produção</a><span class="universidade"> Unisselvi 2019🎓
                                 <details> 
-                                    <summary style="font-size: small;"><a style="">....</a>
+                                    <summary style="font-size:  0.5rem;"><a style="">....</a>
                                     </summary>
                                     <li>Pesquisa Operacional, Gestão de Processos</li>
                                 </details></span></li>
@@ -868,7 +879,7 @@
                     <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:548343599/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1635475867462)&section=education%3A548343599&treasuryCount=4"
                             target="_blank">Pós-Graduação Big Data Ciência de Dados<span class="universidade"> Unyleya 2020🎓
                                 <details> 
-                                    <summary style="font-size: small;"><a style="">....</a>
+                                    <summary style="font-size:  0.5rem;"><a style="">....</a>
                         </summary>
                         <li>Big Data, BI, SQL, ETL, DW, Machine learning, Python R</li>
                         </details>
@@ -880,7 +891,7 @@
                             target="_blank">MBA Gestão de Projetos</a>
                         <span class="universidade"> Unisselvi 2019🎓
                             <details> 
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size: 0.5rem;"><a style="">....</a>
                                 </summary>
                                 <li>Viabilidade Economica, Gerenciamento de Projetos, Administração Financeira</li>
                             </details></span></li>
@@ -889,7 +900,7 @@
                     <li class="nomefomacao"><a href="https://www.linkedin.com/in/gabrielgroehs/detail/treasury/education:580507476/?entityUrn=urn%3Ali%3Afsd_profileTreasuryMedia%3A(ACoAAA9Cy4kBGE8DFN3OOHXdb--TU1_gMCe0dK0%2C1635451598710)&section=education%3A580507476&treasuryCount=2"
                             target="_blank">MBA Gestão Contabilidade Finanças Empresariais</a><span class="universidade"> UCAM 2020🎓
                                 <details> 
-                                    <summary style="font-size: small;"><a style="">....</a>
+                                    <summary style="font-size:  0.5rem;"><a style="">....</a>
                                     </summary>
                                     <li>Fluxo de Caixa, VPL, DFC, TIR, Gerenciamento de Ativos e Passivos, Demonstrações Financeiras</li>
                                 </details></span></li>
@@ -897,47 +908,12 @@
                     </li>
                     <li class="nomefomacao">MBA Gestão Bancária Financeira<span class="universidade"> ESPG 2020🎓
                     <details> 
-                        <summary style="font-size: small;"><a style="">....</a>
+                        <summary style="font-size:  0.5rem;"><a style="">....</a>
                         </summary>
                         <li>Banking, Tesouraria, Risco e Crédito, Carteira, FP&A</li>
                     </details>
                 </span></li>
                     <li class="nomefomacao">MBA Economia Financeira<span class="universidade">  2023
-                        </span></li>
-                    <li class="nomefomacao">Bootcamp Ciência de Dados 148 horas<span class="universidade"> IGTI🎓
-
-                    </span>
-                    </li>
-                    <li class="nomefomacao">Bootcamp Engenharia Econômica<span class="universidade"> USP🎓
-
-                    </span>
-                    </li>
-                </ul>
-                <ul>
-                    <a style="font-weight: bold;">Cursando::</a>
-                    <li class="nomefomacao">Graduação Matemática<span class="universidade"> Estácio 2022⌛ 50%
-                        </span></li>
-                    </span>
-                    </li>
-                    <li class="nomefomacao">Graduação Estatística<span class="universidade"> Anhembi 2024⌛ 60%
-                        <details> 
-                            <summary style="font-size: small;"><a style="">....</a>
-                            </summary>
-                            <li>Big Data, Data Science, Bayseana, Analise Multivariada e Séries Temporais</li>
-                        </details></span></li>
-                    </span>
-                    </li>
-                    <li class="nomefomacao">Graduação Engenharia de Software<span class="universidade"> UNINTER 2024⌛ 70%
-                        <details> 
-                            <summary style="font-size: small;"><a style="">....</a>
-                            </summary>
-                            <li>Fronte End, Back End, Python, Java, Java script, Scrum, Arquitetura</li>
-                        </details></span></li>
-                    </span>
-                    </li>
-                    <li class="nomefomacao">Graduação Engenharia da Computação<span class="universidade">  2025⌛ 60%
-                        </span></li>
-                    <li class="nomefomacao">MBA Data Science e Analytics USP /ESALQ<span class="universidade">  2024⌛ 60%
                         </span></li>
                     <li class="nomefomacao">MBA Engenharia Econômica<span class="universidade">  2023⌛
                         </span></li>
@@ -945,6 +921,46 @@
                         </span></li>
                     <li class="nomefomacao">Pós Estatística Aplicada<span class="universidade">  2023⌛
                         </span></li>
+                    <a style="font-weight: bold;font-size:0.8rem;">Cursos::</a>
+                    <li class="nomefomacao">Bootcamp Ciência de Dados 148 horas<span class="universidade"> XP Edu🎓
+
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Engenharia Econômica<span class="universidade"> USP🎓</span>
+                    </li>
+                </ul>
+                <ul>
+                    <a style="font-weight: bold;font-size:0.8rem;">Cursando::</a>
+                    <li class="nomefomacao">MBA Data Science e Analytics USP /ESALQ<span class="universidade">  2024⌛ 60%
+                        <details> 
+                            <summary style="font-size:  0.5rem;"><a style="">....</a>
+                            </summary>
+                            <li>Big Data, Data Science, Bayesiana, Analise Multivariada e Séries Temporais</li>
+                        </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Graduação Estatística<span class="universidade"> Anhembi 2024⌛ 60%
+                        <details> 
+                            <summary style="font-size:  0.5rem;"><a style="">....</a>
+                            </summary>
+                            <li>Big Data, Data Science, Bayeieana, Analise Multivariada e Séries Temporais</li>
+                        </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Graduação Engenharia de Software<span class="universidade"> UNINTER 2024⌛ 70%
+                        <details> 
+                            <summary style="font-size:  0.5rem;"><a style="">....</a>
+                            </summary>
+                            <li>Fronte End, Back End, Python, Java, Java script, Scrum, Arquitetura</li>
+                        </details></span></li>
+                    </span>
+                    </li>
+                    <li class="nomefomacao">Graduação Engenharia da Computação<span class="universidade">  2025⌛ 60%
+                        </span></li>
+                    <li class="nomefomacao">Graduação Matemática<span class="universidade"> Estácio 2022⌛ 50%
+                        </span></li>
+                    </span>
+                    </li>
                     </span>
                     </li>
                 </ul>
@@ -952,14 +968,14 @@
             <div class="experiencia">
                 <h1 class="titulosdois">&nbsp&nbsp Carreira Profissional &nbsp&nbsp</h1>
                 <ul id="listaexperiencia">
-                    <li class="nomeexperiencia">BI Partner Sr Crédito Risco  - UNICRED 2022-atual
+                    <li class="nomeexperiencia">BI Partner Sr Crédito Risco - UNICRED 2022-atual
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
-                                    <li>ETL, Engenharia de 
-Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
+                                    <li>ETL, Engenharia de Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power
+                                        BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
                                 </p>
                             </details>
                         </ul>
@@ -967,7 +983,7 @@ Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, B
                     <li class="nomeexperiencia">Especialista CDC Crédito FP&A Power BI SQL - Dufrio 2021-2022
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
                                     <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
@@ -978,7 +994,7 @@ Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, B
                     <li class="nomeexperiencia">Analista FP&A Senior Power BI SQL - Serviçoes Financeiros Calcard 2021
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
                                     <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
@@ -989,7 +1005,7 @@ Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, B
                     <li class="nomeexperiencia">Analista FP&A Senior Power BI - Banking CredSIS 2020-2021
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
                                     <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
@@ -1000,7 +1016,7 @@ Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, B
                     <li class="nomeexperiencia">Supervisor FP&A e Inteligencia Power BI 3SCORP 2019-2020
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
                                     <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
@@ -1011,7 +1027,7 @@ Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, B
                     <li class="nomeexperiencia">Analista FP&A Senior Power BI -DUFRIO 2018-2019
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
                                     <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
@@ -1022,7 +1038,7 @@ Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, B
                     <li class="nomeexperiencia">Analista FP&A Senior Power BI - WEST COAST 2016-2018
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
                                     <li>Budget, Modelagem Financeira, DRE, DFC, Balanço, VPL, TIR, PTesouraria Banking, ayback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, Apresentação Board</li>
@@ -1033,7 +1049,7 @@ Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, B
                     <li class="nomeexperiencia">Head Financeiro FP&A - Brazilian Way 2013-2015
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
                                     <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Balanço, Tesouraria Banking, VPL, TIR, Payback, Tesouraria, Dashboars, Carteira, EFFIC, Pricing, Controladoria, Power BI, SQL, Apresentação Board, GMD GMR, ROAE, ROIC</li>
@@ -1044,7 +1060,7 @@ Dados, Power BI, Dashboard, Budget, Modelagem Financeira e de Dados, DRE, DFC, B
                     <li class="nomeexperiencia">Analista FP&A Pleno - WEST COAST 2012-2013
                         <ul>
                             <details>
-                                <summary style="font-size: small;"><a style="">....</a>
+                                <summary style="font-size:  0.5rem;"><a style="">....</a>
                                 </summary>
                                 <p>
                                     <li>Budget, Modelagem Financeira e de Dados, DRE, DFC, Power BI, Tesouraria Banking, SQL, Apresentação Board</li>
