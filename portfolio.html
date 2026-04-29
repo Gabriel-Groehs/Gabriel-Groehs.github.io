@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portfólio acadêmico e técnico de Gabriel Groehs: artigos, revisão sistemática, previsão de carga elétrica, séries temporais e modelos IFRS 9." />
+  <title>Gabriel Groehs | Portfólio Acadêmico</title>
+
+  <style>
+    :root {
+      --bg-0: #050914;
+      --bg-1: #071426;
+      --bg-2: #0b1f36;
+      --card: rgba(255, 255, 255, 0.075);
+      --card-strong: rgba(255, 255, 255, 0.115);
+      --line: rgba(125, 211, 252, 0.28);
+      --line-strong: rgba(45, 212, 191, 0.62);
+      --text: #e8f3ff;
+      --muted: #9bb3c8;
+      --cyan: #38bdf8;
+      --teal: #2dd4bf;
+      --blue: #2563eb;
+      --violet: #8b5cf6;
+      --gold: #fbbf24;
+      --green: #22c55e;
+      --red: #ef4444;
+      --shadow: 0 24px 90px rgba(0, 0, 0, 0.48);
+      --radius: 26px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 16% 18%, rgba(56, 189, 248, 0.22), transparent 30%),
+        radial-gradient(circle at 86% 12%, rgba(139, 92, 246, 0.20), transparent 31%),
+        radial-gradient(circle at 60% 86%, rgba(45, 212, 191, 0.18), transparent 35%),
+        linear-gradient(135deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.055) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.18));
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.045), transparent);
+      transform: translateX(-130%);
+      animation: lightSweep 9s ease-in-out infinite;
+    }
+
+    @keyframes lightSweep {
+      0%, 55% { transform: translateX(-130%); }
+      82%, 100% { transform: translateX(130%); }
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 34px));
+      margin: 0 auto;
+      padding: 34px 0 48px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 15px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      background: rgba(5, 12, 24, 0.62);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 14px 46px rgba(0, 0, 0, 0.28);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #03131d;
+      background: linear-gradient(135deg, var(--teal), var(--cyan));
+      box-shadow: 0 0 32px rgba(45, 212, 191, 0.42);
+      flex: 0 0 auto;
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-text span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-pills {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-pills a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.045);
+      transition: 180ms ease;
+    }
+
+    .nav-pills a:hover {
+      color: var(--text);
+      border-color: var(--line-strong);
+      background: rgba(45, 212, 191, 0.10);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      min-height: calc(100vh - 120px);
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 28px;
+      align-items: center;
+      padding: 54px 0 40px;
+    }
+
+    .hero-panel {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.045));
+      backdrop-filter: blur(18px);
+      border-radius: calc(var(--radius) + 10px);
+      padding: 38px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      top: -90px;
+      right: -110px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.32), transparent 68%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      border: 1px solid rgba(45, 212, 191, 0.35);
+      background: rgba(45, 212, 191, 0.075);
+      border-radius: 999px;
+      padding: 8px 12px;
+      margin-bottom: 20px;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.70);
+      animation: pulse 1.9s infinite;
+    }
+
+    @keyframes pulse {
+      70% { box-shadow: 0 0 0 11px rgba(45, 212, 191, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(38px, 6vw, 72px);
+      line-height: 0.96;
+      letter-spacing: -2.6px;
+      margin-bottom: 18px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff, #bfefff 42%, var(--teal));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      color: #c6d8e6;
+      font-size: clamp(15px, 1.7vw, 18px);
+      line-height: 1.75;
+      margin-bottom: 26px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .tag {
+      font-size: 12px;
+      font-weight: 800;
+      color: #dff9ff;
+      padding: 9px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .primary-action,
+    .secondary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 48px;
+      padding: 0 17px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 13px;
+      transition: 180ms ease;
+    }
+
+    .primary-action {
+      color: #04111f;
+      background: linear-gradient(135deg, var(--teal), var(--cyan));
+      box-shadow: 0 16px 38px rgba(45, 212, 191, 0.24);
+    }
+
+    .secondary-action {
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.065);
+    }
+
+    .primary-action:hover,
+    .secondary-action:hover {
+      transform: translateY(-2px);
+    }
+
+    .orbit-card {
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      background: rgba(4, 11, 24, 0.60);
+      backdrop-filter: blur(18px);
+      border-radius: calc(var(--radius) + 10px);
+      padding: 26px;
+      box-shadow: var(--shadow);
+      min-height: 520px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .orbit-card::before {
+      content: "";
+      position: absolute;
+      inset: 26px;
+      border-radius: 50%;
+      border: 1px dashed rgba(56, 189, 248, 0.25);
+      animation: spin 36s linear infinite;
+    }
+
+    .orbit-card::after {
+      content: "";
+      position: absolute;
+      inset: 82px;
+      border-radius: 50%;
+      border: 1px dashed rgba(45, 212, 191, 0.24);
+      animation: spin 25s linear infinite reverse;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .center-core {
+      position: absolute;
+      inset: 50%;
+      transform: translate(-50%, -50%);
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at 35% 28%, rgba(255,255,255,0.26), transparent 24%),
+        linear-gradient(145deg, rgba(37, 99, 235, 0.34), rgba(45, 212, 191, 0.16));
+      border: 1px solid rgba(125, 211, 252, 0.30);
+      box-shadow: inset 0 0 50px rgba(56, 189, 248, 0.14), 0 0 80px rgba(45, 212, 191, 0.18);
+      z-index: 2;
+      padding: 24px;
+    }
+
+    .center-core strong {
+      display: block;
+      font-size: 18px;
+      letter-spacing: 0.4px;
+      margin-bottom: 8px;
+    }
+
+    .center-core span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .mini-stat {
+      position: absolute;
+      z-index: 3;
+      width: 154px;
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 22px;
+      padding: 14px;
+      background: rgba(255,255,255,0.075);
+      backdrop-filter: blur(18px);
+    }
+
+    .mini-stat .value {
+      font-size: 28px;
+      font-weight: 950;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .mini-stat .label {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .mini-stat:nth-child(1) { top: 34px; left: 30px; }
+    .mini-stat:nth-child(2) { top: 62px; right: 22px; }
+    .mini-stat:nth-child(3) { bottom: 54px; left: 36px; }
+    .mini-stat:nth-child(4) { bottom: 34px; right: 32px; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin: 18px 0 20px;
+    }
+
+    .section-head h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.4vw, 44px);
+      letter-spacing: -1.2px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .article-card {
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.13);
+      background: linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.045));
+      box-shadow: 0 18px 58px rgba(0, 0, 0, 0.30);
+      position: relative;
+      overflow: hidden;
+      transition: 190ms ease;
+    }
+
+    .article-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at top right, var(--glow), transparent 44%);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .article-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 20px;
+      right: 20px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.50), transparent);
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border);
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+    }
+
+    .article-card > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .article-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 23px;
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .year {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .article-card h3 {
+      font-family: var(--serif);
+      font-size: 20px;
+      line-height: 1.18;
+      letter-spacing: -0.3px;
+      margin-bottom: 10px;
+    }
+
+    .article-card p {
+      color: #bdd0df;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .meta-chip {
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: #dffaff;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.075);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .open-link {
+      width: 100%;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #04111f;
+      font-weight: 950;
+      font-size: 13px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--btn-1), var(--btn-2));
+      box-shadow: 0 14px 32px rgba(0,0,0,0.18);
+      transition: 180ms ease;
+    }
+
+    .open-link:hover {
+      transform: translateY(-2px);
+      filter: saturate(1.14) brightness(1.04);
+    }
+
+    .footer {
+      margin-top: 34px;
+      padding: 22px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .footer strong {
+      color: var(--text);
+    }
+
+    .article-card.sepoc {
+      --glow: rgba(45, 212, 191, 0.38);
+      --border: rgba(45, 212, 191, 0.70);
+      --btn-1: #2dd4bf;
+      --btn-2: #67e8f9;
+    }
+
+    .article-card.computer {
+      --glow: rgba(56, 189, 248, 0.38);
+      --border: rgba(56, 189, 248, 0.70);
+      --btn-1: #38bdf8;
+      --btn-2: #93c5fd;
+    }
+
+    .article-card.lstm {
+      --glow: rgba(34, 197, 94, 0.34);
+      --border: rgba(34, 197, 94, 0.70);
+      --btn-1: #22c55e;
+      --btn-2: #86efac;
+    }
+
+    .article-card.tcc {
+      --glow: rgba(251, 191, 36, 0.32);
+      --border: rgba(251, 191, 36, 0.75);
+      --btn-1: #fbbf24;
+      --btn-2: #fde68a;
+    }
+
+    .article-card.anpec {
+      --glow: rgba(239, 68, 68, 0.30);
+      --border: rgba(239, 68, 68, 0.72);
+      --btn-1: #fb7185;
+      --btn-2: #fca5a5;
+    }
+
+    .article-card.curriculo {
+      --glow: rgba(139, 92, 246, 0.36);
+      --border: rgba(139, 92, 246, 0.78);
+      --btn-1: #a78bfa;
+      --btn-2: #c4b5fd;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-top: 34px;
+      }
+
+      .orbit-card {
+        min-height: 390px;
+      }
+
+      .center-core {
+        width: 188px;
+        height: 188px;
+      }
+
+      .mini-stat {
+        width: 132px;
+      }
+
+      .article-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .topbar {
+        border-radius: 24px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-pills {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(100% - 22px, 1180px);
+        padding-top: 14px;
+      }
+
+      .hero-panel,
+      .orbit-card {
+        padding: 22px;
+        border-radius: 24px;
+      }
+
+      h1 {
+        letter-spacing: -1.5px;
+      }
+
+      .article-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 10px;
+      }
+
+      .orbit-card {
+        min-height: auto;
+        display: grid;
+        gap: 12px;
+      }
+
+      .orbit-card::before,
+      .orbit-card::after,
+      .center-core {
+        display: none;
+      }
+
+      .mini-stat {
+        position: static;
+        width: 100%;
+      }
+
+      .footer {
+        display: block;
+      }
+
+      .footer div + div {
+        margin-top: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="topbar" aria-label="Cabeçalho do portfólio">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">GG</div>
+        <div class="brand-text">
+          <strong>Gabriel Groehs</strong>
+          <span>Portfólio acadêmico, risco, econometria, séries temporais e deep learning</span>
+        </div>
+      </div>
+
+      <nav class="nav-pills" aria-label="Navegação principal">
+        <a href="#artigos">Artigos</a>
+        <a href="https://gabriel-groehs.github.io" target="_blank" rel="noopener noreferrer">Currículo</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-label="Apresentação do portfólio">
+      <div class="hero-panel">
+        <div class="eyebrow"><span class="pulse" aria-hidden="true"></span> Academic Research Portfolio</div>
+        <h1><span class="gradient-text">Gabriel Groehs</span><br>Portfólio</h1>
+        <p class="subtitle">
+          Página de entrada para artigos, revisões sistemáticas e estudos aplicados em previsão de carga elétrica, séries temporais financeiras, deep learning, econometria e modelos de risco de crédito sob IFRS 9.
+        </p>
+
+        <div class="tags" aria-label="Áreas de pesquisa">
+          <span class="tag">Risk Science</span>
+          <span class="tag">IFRS 9 & ECL</span>
+          <span class="tag">Time Series</span>
+          <span class="tag">Deep Learning</span>
+          <span class="tag">Econometrics</span>
+          <span class="tag">Energy Forecasting</span>
+        </div>
+
+        <div class="hero-actions">
+          <a class="primary-action" href="#artigos">Ver artigos →</a>
+          <a class="secondary-action" href="https://gabriel-groehs.github.io" target="_blank" rel="noopener noreferrer">Abrir currículo</a>
+        </div>
+      </div>
+
+      <aside class="orbit-card" aria-label="Síntese do portfólio">
+        <div class="mini-stat">
+          <div class="value">05</div>
+          <div class="label">artigos e dashboards técnicos</div>
+        </div>
+        <div class="mini-stat">
+          <div class="value">01</div>
+          <div class="label">currículo e página pessoal</div>
+        </div>
+        <div class="mini-stat">
+          <div class="value">IFRS</div>
+          <div class="label">risco de crédito, PD lifetime e ECL</div>
+        </div>
+        <div class="mini-stat">
+          <div class="value">AI</div>
+          <div class="label">modelos estatísticos, ML e deep learning</div>
+        </div>
+
+        <div class="center-core">
+          <div>
+            <strong>Research Hub</strong>
+            <span>Uma vitrine técnica para artigos, métodos, resultados e produção acadêmica.</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="artigos" aria-label="Menu de artigos">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow" style="margin-bottom: 12px;"><span class="pulse" aria-hidden="true"></span> Menu principal</div>
+          <h2>Artigos e currículo</h2>
+        </div>
+        <p>
+          Seis acessos diretos em formato de cards responsivos. Cada botão abre a respectiva página no GitHub Pages em uma nova aba.
+        </p>
+      </div>
+
+      <div class="article-grid">
+        <article class="article-card sepoc">
+          <div>
+            <div class="article-top">
+              <div class="icon" aria-hidden="true">⚡</div>
+              <span class="year">SEPOC 2025</span>
+            </div>
+            <h3>Electricity Load Forecasting: Systematic Literature Mapping</h3>
+            <p>Revisão sistemática sobre previsão de carga elétrica com modelos estatísticos, machine learning, deep learning e híbridos.</p>
+            <div class="meta-row">
+              <span class="meta-chip">RSL</span>
+              <span class="meta-chip">Load Forecasting</span>
+              <span class="meta-chip">Deep Learning</span>
+            </div>
+          </div>
+          <a class="open-link" href="https://gabriel-groehs.github.io/rsl_sepoc25.html" target="_blank" rel="noopener noreferrer">Abrir artigo →</a>
+        </article>
+
+        <article class="article-card computer">
+          <div>
+            <div class="article-top">
+              <div class="icon" aria-hidden="true">📈</div>
+              <span class="year">Computer 2026</span>
+            </div>
+            <h3>Previsão de carga elétrica de curto prazo</h3>
+            <p>Comparação entre métodos estatísticos tradicionais e aprendizado profundo para previsão de consumo industrial horário.</p>
+            <div class="meta-row">
+              <span class="meta-chip">SARIMAX</span>
+              <span class="meta-chip">LSTM</span>
+              <span class="meta-chip">K-Means</span>
+            </div>
+          </div>
+          <a class="open-link" href="https://gabriel-groehs.github.io/forecast_computer2026.html" target="_blank" rel="noopener noreferrer">Abrir artigo →</a>
+        </article>
+
+        <article class="article-card lstm">
+          <div>
+            <div class="article-top">
+              <div class="icon" aria-hidden="true">🧠</div>
+              <span class="year">2025</span>
+            </div>
+            <h3>Previsão com LSTM e variáveis exógenas</h3>
+            <p>Estudo aplicado de previsão de séries temporais de consumo de energia com variáveis macroeconômicas e redes recorrentes.</p>
+            <div class="meta-row">
+              <span class="meta-chip">LSTM</span>
+              <span class="meta-chip">Energia</span>
+              <span class="meta-chip">Exógenas</span>
+            </div>
+          </div>
+          <a class="open-link" href="https://gabriel-groehs.github.io/previsao_lstm2025.html" target="_blank" rel="noopener noreferrer">Abrir artigo →</a>
+        </article>
+
+        <article class="article-card tcc">
+          <div>
+            <div class="article-top">
+              <div class="icon" aria-hidden="true">🏦</div>
+              <span class="year">USP 2024</span>
+            </div>
+            <h3>TCC USP: séries temporais dos maiores bancos da B3</h3>
+            <p>Comparação de ARIMA, SARIMA, GARCH, LSTM e outros modelos para previsão de ações bancárias brasileiras.</p>
+            <div class="meta-row">
+              <span class="meta-chip">ARIMA</span>
+              <span class="meta-chip">GARCH</span>
+              <span class="meta-chip">B3</span>
+            </div>
+          </div>
+          <a class="open-link" href="https://gabriel-groehs.github.io/tcc_usp_series2024.html" target="_blank" rel="noopener noreferrer">Abrir artigo →</a>
+        </article>
+
+        <article class="article-card anpec">
+          <div>
+            <div class="article-top">
+              <div class="icon" aria-hidden="true">📚</div>
+              <span class="year">ANPEC 2026</span>
+            </div>
+            <h3>PD Lifetime e Expected Credit Loss sob IFRS 9</h3>
+            <p>Revisão sistemática sobre modelos preditivos para Probabilidade de Default e ECL no contexto IFRS 9 e regulação brasileira.</p>
+            <div class="meta-row">
+              <span class="meta-chip">IFRS 9</span>
+              <span class="meta-chip">PD</span>
+              <span class="meta-chip">ECL</span>
+            </div>
+          </div>
+          <a class="open-link" href="https://gabriel-groehs.github.io/rsl_pd_lifetime.html" target="_blank" rel="noopener noreferrer">Abrir artigo →</a>
+        </article>
+
+        <article class="article-card curriculo">
+          <div>
+            <div class="article-top">
+              <div class="icon" aria-hidden="true">👤</div>
+              <span class="year">CV</span>
+            </div>
+            <h3>Currículo e perfil profissional</h3>
+            <p>Formação, experiência, publicações, competências técnicas e trajetória profissional em dados, risco, BI e modelagem quantitativa.</p>
+            <div class="meta-row">
+              <span class="meta-chip">Currículo</span>
+              <span class="meta-chip">Risk Scientist</span>
+              <span class="meta-chip">Portfólio</span>
+            </div>
+          </div>
+          <a class="open-link" href="https://gabriel-groehs.github.io" target="_blank" rel="noopener noreferrer">Abrir currículo →</a>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <strong>Gabriel Groehs</strong><br>
+        Portfólio acadêmico e técnico em econometria, risco, séries temporais e inteligência artificial aplicada.
+      </div>
+      <div>
+        GitHub Pages · HTML/CSS responsivo · atualização livre para novos artigos.
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
