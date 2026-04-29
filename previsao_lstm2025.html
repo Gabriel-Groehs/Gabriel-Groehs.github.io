@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Previsão de Séries Temporais de Consumo Industrial — SARIMAX vs LSTM vs Bi-GRU</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,700;1,400&family=Nunito:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0D7377;--green2:#14A085;--green3:#45D4A8;--green-bg:#F0FAFA;
+  --dark:#0A1F1C;--dark2:#112A27;--gray:#4A6362;--gray2:#8AAAA8;--gray3:#E4EEEE;
+  --bg:#F4FAF9;--white:#FFFFFF;--red:#C0392B;--gold:#D4A00A;--purple:#6B21A8;
+  --radius:14px;--shadow:0 3px 20px rgba(10,31,28,.09);
+  --font-serif:'Libre Baskerville',serif;--font-body:'Nunito',sans-serif;--font-mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--font-body);color:var(--dark);min-height:100vh}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--dark);
+    display:flex;align-items:center;overflow-x:auto;height:54px;
+    border-bottom:3px solid var(--green)}
+nav button{background:none;border:none;color:#8AAAA8;font-size:11px;font-weight:600;
+           padding:0 15px;height:54px;cursor:pointer;white-space:nowrap;
+           letter-spacing:.5px;transition:all .2s;text-transform:uppercase;font-family:var(--font-body)}
+nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+nav button.active{background:var(--green);color:#fff}
+nav .nav-logo{padding:0 20px;font-family:var(--font-serif);font-size:12.5px;font-style:italic;
+              color:var(--green3);white-space:nowrap;border-right:1px solid rgba(255,255,255,.1);min-width:fit-content}
+
+.page{display:none;padding:78px 0 64px;min-height:100vh;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1120px;margin:0 auto;padding:0 28px}
+
+.hero{background:linear-gradient(140deg,var(--dark) 0%,#0A2B28 55%,#0A1F1C 100%);
+      padding:60px 0 48px;margin-bottom:44px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-80px;top:-80px;
+             width:480px;height:480px;border-radius:50%;
+             background:radial-gradient(circle,rgba(13,115,119,.18) 0%,transparent 70%)}
+.hero .container{display:grid;grid-template-columns:1fr 360px;gap:44px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(13,115,119,.2);
+            border:1px solid rgba(69,212,168,.3);color:var(--green3);
+            font-size:10px;letter-spacing:2px;text-transform:uppercase;
+            padding:5px 12px;border-radius:20px;margin-bottom:16px;font-weight:600}
+.hero h1{font-family:var(--font-serif);font-size:27px;color:#fff;line-height:1.35;margin-bottom:16px}
+.hero h1 em{color:var(--green3);font-style:italic}
+.hero p{color:#8AAAA8;font-size:13px;line-height:1.75}
+.hero-meta{display:flex;flex-direction:column;gap:11px}
+.mc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+    border-radius:var(--radius);padding:15px 19px}
+.mc .l{font-size:9.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--green3);margin-bottom:4px}
+.mc .v{font-size:12.5px;color:#E0EEEC;font-weight:400;line-height:1.4}
+
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:44px}
+.kpi{background:var(--white);border-radius:var(--radius);padding:22px 16px;
+     box-shadow:var(--shadow);border-top:3px solid var(--green);text-align:center;
+     transition:transform .2s}
+.kpi:hover{transform:translateY(-4px)}
+.kpi .num{font-size:28px;font-weight:700;color:var(--green);font-family:var(--font-serif)}
+.kpi .lbl{font-size:10.5px;color:var(--gray2);margin-top:5px;line-height:1.4}
+.kpi.gold{border-top-color:var(--gold)}.kpi.gold .num{color:var(--gold)}
+.kpi.red{border-top-color:var(--red)}.kpi.red .num{color:var(--red)}
+.kpi.purple{border-top-color:var(--purple)}.kpi.purple .num{color:var(--purple)}
+
+.sec-title{font-family:var(--font-serif);font-size:23px;color:var(--dark2);margin-bottom:6px}
+.sec-line{width:44px;height:3px;background:var(--green);border-radius:2px;margin-bottom:10px}
+.sec-sub{font-size:13px;color:var(--gray2);margin-bottom:30px;line-height:1.65;max-width:700px}
+
+.text-card{background:var(--white);border-radius:var(--radius);padding:30px 34px;
+           box-shadow:var(--shadow);margin-bottom:22px;line-height:1.8;font-size:14px}
+.text-card h3{font-family:var(--font-serif);color:var(--dark2);font-size:18px;margin-bottom:12px}
+.text-card p{margin-bottom:12px;color:#0C2220;line-height:1.8}
+.text-card p:last-child{margin-bottom:0}
+
+.highlight{background:var(--green-bg);border-left:4px solid var(--green);
+           padding:14px 20px;border-radius:0 10px 10px 0;margin:14px 0;font-size:13.5px}
+.formula{background:var(--dark);color:var(--green3);font-family:var(--font-mono);
+         font-size:13px;padding:18px 26px;border-radius:10px;margin:16px 0;
+         text-align:center;letter-spacing:.2px;line-height:1.9}
+.formula .cmt{color:#4A6362;font-size:11px}
+
+.chart-card{background:var(--white);border-radius:var(--radius);padding:28px 30px;
+            box-shadow:var(--shadow);margin-bottom:22px}
+.chart-card h3{font-family:var(--font-serif);color:var(--dark2);font-size:17px;margin-bottom:5px}
+.chart-card .sub{font-size:12px;color:var(--gray2);margin-bottom:18px}
+.chart-wrap{position:relative;height:300px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+
+.tbl-wrap{overflow-x:auto;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--white)}
+thead tr{background:var(--dark);color:var(--green3)}
+thead th{padding:12px 16px;text-align:left;font-weight:600;letter-spacing:.3px}
+tbody tr{border-bottom:1px solid var(--gray3)}
+tbody tr:hover{background:var(--green-bg)}
+tbody td{padding:10px 16px;color:var(--dark);font-variant-numeric:tabular-nums}
+td.best{color:var(--green);font-weight:700}
+td.worst{color:var(--red)}
+td.rank1{color:var(--gold);font-weight:700}
+
+.exo-card{background:var(--white);border-radius:var(--radius);padding:18px 22px;
+          box-shadow:var(--shadow);border-left:4px solid var(--green)}
+.exo-card h4{font-size:13px;font-weight:700;color:var(--dark2);margin-bottom:5px}
+.exo-card p{font-size:12.5px;color:var(--gray);line-height:1.5}
+
+.insight{background:linear-gradient(135deg,var(--green-bg),#CCFAF4);border:1px solid #99E9D8;
+         border-radius:var(--radius);padding:22px 28px;margin-bottom:22px}
+.insight h4{font-family:var(--font-serif);font-size:17px;color:var(--dark2);margin-bottom:7px}
+.insight p{font-size:13.5px;color:#0A2B1F;line-height:1.7}
+
+.ref-list{font-size:12.5px;color:var(--gray);line-height:2;padding-left:18px}
+.ref-list li{margin-bottom:4px}
+
+@media(max-width:768px){
+  .hero .container{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:repeat(3,1fr)}
+  .grid2,.grid3{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">⚡ Energia Industrial</span>
+  <button class="active" onclick="show('intro')">Introdução</button>
+  <button onclick="show('dados')">Dados & Exógenas</button>
+  <button onclick="show('modelos')">Modelos</button>
+  <button onclick="show('resultados')">Resultados</button>
+  <button onclick="show('conclusao')">Conclusão</button>
+  <button onclick="show('refs')">Referências</button>
+</nav>
+
+<!-- INTRO -->
+<div class="page active" id="intro">
+<div class="hero">
+  <div class="container">
+    <div>
+      <div class="hero-badge">UNIVALI 2025 · Computação Aplicada</div>
+      <h1>Previsão de Séries Temporais de Consumo de Energia Industrial usando <em>Variáveis Exógenas Macroeconômicas</em></h1>
+      <p>Análise comparativa entre SARIMAX, LSTM, Bi-GRU e Regressão Polinomial para previsão do consumo mensal de energia elétrica industrial no Brasil, com variáveis selecionadas via PCA e SHAP.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="mc"><div class="l">Autor</div><div class="v">Gabriel Alberto Groehs · UNIVALI</div></div>
+      <div class="mc"><div class="l">Dados</div><div class="v">EPE — Consumo Mensal Industrial por UF · Jan/2006–Abr/2024</div></div>
+      <div class="mc"><div class="l">Modelos</div><div class="v">SARIMAX · LSTM · Bi-GRU · Regressão Polinomial</div></div>
+      <div class="mc"><div class="l">Exógenas</div><div class="v">SELIC, IPCA, Crédito Direcionado, Inadimplência, Produção Industrial</div></div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="kpi-row">
+    <div class="kpi"><div class="num">18</div><div class="lbl">Anos de dados mensais (2006–2024)</div></div>
+    <div class="kpi gold"><div class="num">SARIMAX</div><div class="lbl">Melhor modelo — MAPE 1,02%</div></div>
+    <div class="kpi purple"><div class="num">5</div><div class="lbl">Variáveis exógenas macro selecionadas (SHAP)</div></div>
+    <div class="kpi"><div class="num">STL</div><div class="lbl">Decomposição: tendência, sazonal, resíduo</div></div>
+    <div class="kpi red"><div class="num">Pior</div><div class="lbl">Regressão Polinomial — MAPE 2,94%</div></div>
+  </div>
+
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Contextualização</h2>
+  <p class="sec-sub">A crescente demanda industrial por energia elétrica impõe desafios à gestão dos sistemas elétricos. Variáveis macroeconômicas — taxa SELIC, inadimplência, crédito direcionado — podem aprimorar modelos preditivos ao capturar dinâmicas externas que afetam a carga.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Hipótese Central</h3>
+      <p>O consumo industrial de energia está diretamente correlacionado com o ciclo econômico: SELIC alta reduz atividade industrial e, consequentemente, consumo energético; crédito direcionado e produção industrial refletem a intensidade da atividade produtiva.</p>
+      <p>A hipótese é que variáveis macro selecionadas por SHAP como preditores explícitos possam melhorar a acurácia de modelos de previsão mensal de consumo industrial.</p>
+      <div class="highlight">A série revelou <strong>queda pronunciada em 2015-2017</strong> (recessão) e <strong>crescimento acelerado pós-2021</strong> (recuperação pós-pandemia) — padrões capturados pelas variáveis macroeconômicas.</div>
+    </div>
+    <div class="text-card">
+      <h3>Contribuição Metodológica</h3>
+      <p>Este trabalho avança em relação à literatura ao:</p>
+      <p>→ Aplicar <strong>SHAP (SHapley Additive exPlanations)</strong> via XGBoost para seleção e interpretação de variáveis exógenas</p>
+      <p>→ Usar <strong>PCA</strong> como método complementar de redução dimensional</p>
+      <p>→ Comparar explicitamente modelos estatísticos e deep learning com a <strong>mesma base de exógenas</strong></p>
+      <p>→ Aplicar <strong>decomposição STL</strong> para análise estrutural prévia e separação de componentes</p>
+      <p>→ Usar <strong>Keras Tuner</strong> para ajuste automático de hiperparâmetros das redes neurais</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- DADOS -->
+<div class="page" id="dados">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Dados e Variáveis Exógenas</h2>
+  <p class="sec-sub">Séries mensais da EPE (Empresa de Pesquisa Energética) — consumo industrial por UF, agregado por região e somado para consumo total nacional.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Fonte e Tratamento</h3>
+      <p>Dados extraídos do portal de Dados Abertos da EPE: <em>Dados_abertos_Consumo_Mensal.xlsx</em>, aba "Setor Industrial por UF".</p>
+      <p>Pré-processamento:</p>
+      <p>→ <strong>Imputação:</strong> forward fill para valores ausentes<br>
+      → <strong>Normalização:</strong> MinMaxScaler<br>
+      → <strong>Decomposição STL:</strong> extração de tendência, sazonalidade e resíduos<br>
+      → <strong>Janela deslizante:</strong> 24 meses de entrada → previsão 12 meses</p>
+      <p>Divisão: treino até Jan/2023; teste Fev/2023–Abr/2024 (24 meses).</p>
+    </div>
+    <div class="text-card">
+      <h3>Teste de Estacionariedade</h3>
+      <p>Testes ADF + KPSS confirmaram não-estacionariedade:</p>
+      <div class="formula">
+        ADF: estatística = −2,83 · p-valor = 0,056 <span class="cmt">(não rejeita H₀)</span><br>
+        KPSS: estatística = 0,760 · p-valor &lt; 0,05 <span class="cmt">(rejeita H₀ estac.)</span><br>
+        Conclusão: série não estacionária → diferenciação necessária
+      </div>
+      <p>O modelo ARIMA(0,1,0)(0,0,0)[12] foi selecionado com menor AIC — modelo mais parcimonioso para a série após diferenciação.</p>
+    </div>
+  </div>
+
+  <div class="text-card">
+    <h3>Seleção de Variáveis via SHAP (XGBoost)</h3>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px">
+      <div class="exo-card"><h4>SELIC 12m</h4><p>Taxa SELIC acumulada em 12 meses. Maior importância SHAP (+211k). Relação negativa: SELIC alta → atividade industrial reduzida.</p></div>
+      <div class="exo-card"><h4>Exp. IPCA 12m</h4><p>Expectativa de inflação em 12 meses. Segunda maior importância (+165k). Captura incerteza inflacionária futura.</p></div>
+      <div class="exo-card"><h4>Crédito Direcionado</h4><p>Volume de crédito direcionado (R$ bi). Terceira mais importante (+144k). Proxy de investimento industrial.</p></div>
+      <div class="exo-card"><h4>Inadimplência NE</h4><p>Taxa média de inadimplência no Nordeste (+134k). Indicador de stress financeiro que afeta demanda industrial.</p></div>
+      <div class="exo-card" style="grid-column:span 2"><h4>Produção Industrial</h4><p>Índice de produção industrial mensal (+73k). Correlação direta com consumo energético industrial.</p></div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Importância das Variáveis Exógenas — SHAP (XGBoost)</h3>
+    <div class="sub">Média dos valores SHAP absolutos; maior = mais impacto no modelo preditivo</div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartShap"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Série Temporal do Consumo Industrial (2006–2024)</h3>
+    <div class="sub">Oscilações cíclicas com queda 2015-2017, impacto COVID em 2020 e crescimento pós-2021</div>
+    <div class="chart-wrap">
+      <canvas id="chartSerie"></canvas>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MODELOS -->
+<div class="page" id="modelos">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Arquiteturas dos Modelos</h2>
+  <p class="sec-sub">Quatro abordagens comparadas com a mesma base de dados e mesmo conjunto de variáveis exógenas.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>SARIMAX</h3>
+      <p>Seleção automática via <em>auto_arima</em> (pmdarima) por AIC. Modelo final: <strong>ARIMA(0,1,0)(0,0,0)[12]</strong>.</p>
+      <div class="formula">
+        Φ<sub>P</sub>(B<sup>s</sup>)φ<sub>p</sub>(B)(1−B)<sup>d</sup>(1−B<sup>s</sup>)<sup>D</sup>y<sub>t</sub><br>= Θ<sub>Q</sub>(B<sup>s</sup>)θ<sub>q</sub>(B)ε<sub>t</sub> + β(B)X<sub>t</sub>
+      </div>
+      <p>Previsão obtida via <em>get_forecast()</em> do statsmodels. Variáveis exógenas alinhadas temporalmente.</p>
+    </div>
+    <div class="text-card">
+      <h3>LSTM</h3>
+      <p>Rede neural recorrente com três camadas. Hiperparâmetros via Keras Tuner.</p>
+      <div class="formula">
+        Camada 1: LSTM(64, return_seq=True, tanh)<br>
+        Camada 2: LSTM(32, relu)<br>
+        Camada 3: Dense(1)<br>
+        <span class="cmt">Batch=25 · Épocas=250 · EarlyStopping(patience=10)</span>
+      </div>
+      <p>Janela deslizante de 24 meses + exógenas concatenadas como atributos adicionais.</p>
+    </div>
+    <div class="text-card">
+      <h3>Bi-GRU</h3>
+      <p>GRU bidirecional — processa a série tanto para frente quanto para trás, capturando contexto passado e futuro simultaneamente.</p>
+      <div class="formula">
+        Camada 1: Bidirectional(GRU(64, return_seq=True, tanh))<br>
+        Camada 2: GRU(32, relu)<br>
+        Camada 3: Dense(1)
+      </div>
+      <p>Mesma configuração de treino do LSTM. Permite que a rede aprenda padrões temporais em ambas as direções.</p>
+    </div>
+    <div class="text-card">
+      <h3>Regressão Polinomial (Grau 2)</h3>
+      <p>Modelo não-temporal usado como baseline. Expansão das variáveis com PolynomialFeatures(degree=2).</p>
+      <div class="formula">
+        ŷ<sub>t</sub> = β₀ + β₁x<sub>t</sub> + β₂x²<sub>t</sub> + ε<sub>t</sub>
+      </div>
+      <p>Ajustado com LinearRegression() do sklearn. Previsto mostrar os limites de modelos não-temporais para séries com dinâmica sazonal complexa.</p>
+    </div>
+  </div>
+
+  <div class="insight">
+    <h4>Por que Bi-GRU e não LSTM puro?</h4>
+    <p>O Bi-GRU captura dependências em <em>ambas</em> as direções da sequência temporal, sendo mais sensível a contextos onde padrões futuros influenciam a interpretação de padrões passados. Com menor custo computacional que LSTM completo, é indicado quando alta dependência contextual está presente — como em séries industriais com sazonalidade e ciclos econômicos complexos.</p>
+  </div>
+</div>
+</div>
+
+<!-- RESULTADOS -->
+<div class="page" id="resultados">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Resultados</h2>
+  <p class="sec-sub">SARIMAX com exógenas apresentou o melhor desempenho, seguido de Bi-GRU e LSTM. Regressão Polinomial foi o pior modelo.</p>
+
+  <div class="text-card">
+    <h3>Tabela de Métricas — Conjunto de Teste (24 meses)</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Modelo</th><th>MAE</th><th>MSE</th><th>RMSE</th><th>MAPE (%)</th><th>Rank</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="best">SARIMAX + Exógenas</td><td class="best">164.114</td><td class="best">4,32e+10</td><td class="best">207.764</td><td class="best">1,02%</td><td class="rank1">🥇 1</td></tr>
+          <tr><td>Bi-GRU + Exógenas</td><td>265.130</td><td>1,17e+11</td><td>342.274</td><td>1,62%</td><td>🥈 2</td></tr>
+          <tr><td>LSTM + Exógenas</td><td>267.026</td><td>1,15e+11</td><td>339.267</td><td>1,64%</td><td>🥉 3</td></tr>
+          <tr><td class="worst">Reg. Polinomial</td><td class="worst">476.535</td><td class="worst">4,47e+11</td><td class="worst">668.283</td><td class="worst">2,94%</td><td>4</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Comparação MAPE — Todos os Modelos</h3>
+    <div class="sub">Menor MAPE = melhor. SARIMAX surpreende ao superar as redes neurais com exógenas adequadas</div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="chartMape"></canvas>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="chart-card">
+      <h3>MAE — Erro Absoluto Médio (MWh)</h3>
+      <div class="sub">Erro absoluto em unidades de consumo mensal</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="chartMae"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Previsão vs. Real — SARIMAX (2023–2024)</h3>
+      <div class="sub">Alta aderência do SARIMAX à série real no conjunto de teste</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="chartPrevisao"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <h4>Por que o SARIMAX ganhou aqui — e não nas séries horárias?</h4>
+    <p>Em séries <strong>mensais</strong> de consumo industrial, os componentes sazonais e de tendência são predominantemente lineares e bem estruturados. As variáveis macroeconômicas (SELIC, crédito) têm a <strong>mesma periodicidade mensal</strong> das séries-alvo, eliminando o mismatch de frequência que degradou o SARIMAX nas séries horárias. Com exógenas de mesma granularidade, o SARIMAX explora toda sua capacidade de modelagem explícita de sazonalidade e componentes externos — superando redes neurais que precisam de mais dados e são mais sujeitas a overfitting com séries curtas.</p>
+  </div>
+
+  <div class="chart-card">
+    <h3>Radar — Comparação Multidimensional dos Modelos</h3>
+    <div class="sub">Avaliação em 6 dimensões (0–10; maior = melhor)</div>
+    <div class="chart-wrap" style="height:360px">
+      <canvas id="chartRadar"></canvas>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CONCLUSÃO -->
+<div class="page" id="conclusao">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Conclusão</h2>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Principais Achados</h3>
+      <p><strong>SARIMAX com exógenas foi o vencedor</strong> (MAPE=1,02%), demonstrando que modelos estatísticos bem parametrizados com variáveis explicativas relevantes podem superar deep learning em séries mensais com boa estrutura sazonal.</p>
+      <p><strong>Bi-GRU e LSTM apresentaram desempenho competitivo</strong> (MAPE ≈ 1,6%), capturando não-linearidades e interações complexas entre série e exógenas — adequados para contextos de alta complexidade.</p>
+      <p><strong>Regressão Polinomial confirmou inadequação</strong> para séries com dinâmica sazonal e estrutural complexa.</p>
+      <div class="highlight">A análise SHAP evidenciou que <strong>SELIC 12m, Exp. IPCA 12m e Crédito Direcionado</strong> são os fatores macroeconômicos com maior poder explicativo sobre o consumo industrial de energia.</div>
+    </div>
+    <div class="text-card">
+      <h3>Comparação com Resultados Horários</h3>
+      <p>Este trabalho, em conjunto com o estudo de previsão horária (SARIMAX vs. LSTM intradiário), aponta uma <strong>conclusão importante sobre escala temporal</strong>:</p>
+      <p>→ <strong>Escala mensal + exógenas mensais:</strong> SARIMAX ganha — frequência compatível</p>
+      <p>→ <strong>Escala horária + exógenas mensais:</strong> LSTM ganha — mismatch de frequência<br>&nbsp;&nbsp;&nbsp;penaliza o SARIMAX</p>
+      <div class="highlight">A escolha do modelo de previsão deve considerar o <strong>par (granularidade da série, granularidade das exógenas)</strong> como fator determinante — não apenas a complexidade do algoritmo.</div>
+      <p><strong>Para pesquisa futura:</strong> abordagens híbridas ensemble (SARIMAX + LSTM), Transformers, N-BEATSx e consideração de granularidades regionais e setoriais.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- REFS -->
+<div class="page" id="refs">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Referências</h2>
+  <div class="text-card">
+    <ol class="ref-list">
+      <li>Box, G. E. P. & Jenkins, G. M. (2015). <em>Time Series Analysis: Forecasting and Control.</em> 5th ed. Wiley.</li>
+      <li>Hochreiter, S. & Schmidhuber, J. (1997). Long short-term memory. <em>Neural Computation</em>, 9(8), 1735–1780.</li>
+      <li>Cho, K. et al. (2014). Learning phrase representations using RNN encoder-decoder. <em>arXiv:1406.1078</em>.</li>
+      <li>Schuster, M. & Paliwal, K. K. (1997). Bidirectional recurrent neural networks. <em>IEEE Trans. Signal Processing</em>, 45(11).</li>
+      <li>Gasparin, A. et al. (2022). Deep learning for time series forecasting: the electric load case. <em>Energy and AI</em>, 9.</li>
+      <li>Inglesi-Lotz, R. (2011). The impact of economic factors on electricity consumption. <em>Energy Policy</em>, 39(6).</li>
+      <li>Lima, L. M. et al. (2013). A macroeconomic approach to electricity demand forecasting in Brazil. <em>Energy Policy</em>, 59.</li>
+      <li>Kingma, D. P. & Ba, J. (2014). Adam: A method for stochastic optimization. <em>arXiv:1412.6980</em>.</li>
+      <li>Groehs, G. A. & Teive, R. C. G. (2025). Previsão de carga elétrica de curto prazo. <em>Computer 2026.</em></li>
+    </ol>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map={intro:0,dados:1,modelos:2,resultados:3,conclusao:4,refs:5};
+  document.querySelectorAll('nav button')[map[id]].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const G='#0D7377';const GOLD='#D4A00A';const RED='#C0392B';const P='#6B21A8';const GRAY='#8AAAA8';
+
+// SHAP
+const ctx1=document.getElementById('chartShap').getContext('2d');
+new Chart(ctx1,{type:'bar',data:{labels:['selic_12m','exp_ipca_12m','credito_direcionado','media_inad_ne','producao_industrial','selic_mensal','credito_livre','ipca_mensal','igpm'],datasets:[{label:'Mean |SHAP value|',data:[211598,165266,144636,134436,73378,42196,40474,28627,27692],backgroundColor:G+'CC',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#E4EEEE'}},y:{grid:{display:false}}}}});
+
+// Série
+const ctx2=document.getElementById('chartSerie').getContext('2d');
+const years=['2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'];
+const consumo=[1.28,1.32,1.38,1.30,1.42,1.47,1.50,1.53,1.51,1.43,1.35,1.33,1.38,1.40,1.30,1.42,1.55,1.62,1.65];
+new Chart(ctx2,{type:'line',data:{labels:years,datasets:[{label:'Consumo Total Industrial (10⁷ MWh)',data:consumo,borderColor:G,backgroundColor:'rgba(13,115,119,.10)',borderWidth:2.5,fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:G}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#E4EEEE'},ticks:{callback:v=>(v*10).toFixed(1)+'×10⁶'}},x:{grid:{color:'#E4EEEE'}}}}});
+
+// MAPE
+const ctx3=document.getElementById('chartMape').getContext('2d');
+new Chart(ctx3,{type:'bar',data:{labels:['SARIMAX','Bi-GRU','LSTM','Reg. Polinomial'],datasets:[{label:'MAPE (%)',data:[1.02,1.62,1.64,2.94],backgroundColor:[G,P,'#0891B2',RED].map(c=>c+'CC'),borderRadius:8,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:3.5,grid:{color:'#E4EEEE'},ticks:{callback:v=>v.toFixed(1)+'%'}}}}});
+
+// MAE
+const ctx4=document.getElementById('chartMae').getContext('2d');
+new Chart(ctx4,{type:'bar',data:{labels:['SARIMAX','Bi-GRU','LSTM','Reg. Polinomial'],datasets:[{label:'MAE',data:[164114,265130,267026,476535],backgroundColor:[G,P,'#0891B2',RED].map(c=>c+'CC'),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E4EEEE'}}}}});
+
+// Previsão vs real
+const ctx5=document.getElementById('chartPrevisao').getContext('2d');
+const testMonths=['Fev/23','Abr/23','Jun/23','Ago/23','Out/23','Dez/23','Fev/24','Abr/24'];
+const real=[1.620,1.640,1.625,1.650,1.635,1.660,1.648,1.670];
+const sarimax=[1.615,1.638,1.627,1.645,1.638,1.655,1.651,1.672];
+const bigru=[1.608,1.628,1.640,1.638,1.645,1.650,1.655,1.668];
+new Chart(ctx5,{type:'line',data:{labels:testMonths,datasets:[{label:'Real',data:real,borderColor:'#1E293B',borderWidth:2.5,pointRadius:3,tension:0.3},{label:'SARIMAX',data:sarimax,borderColor:GOLD,borderWidth:2,borderDash:[0],pointRadius:0,tension:0.4},{label:'Bi-GRU',data:bigru,borderColor:P,borderWidth:2,borderDash:[4,3],pointRadius:0,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{grid:{color:'#E4EEEE'}},x:{grid:{display:false}}}}});
+
+// Radar
+const ctx6=document.getElementById('chartRadar').getContext('2d');
+new Chart(ctx6,{type:'radar',data:{labels:['Acurácia','Dados Mensais','Interpretabilidade','Sazonalidade','Exógenas','Generalização'],datasets:[{label:'SARIMAX',data:[9.5,9,9,9,8,7],backgroundColor:'rgba(13,115,119,.15)',borderColor:G,borderWidth:2,pointBackgroundColor:G},{label:'Bi-GRU',data:[8,7,4,6,7,8],backgroundColor:'rgba(107,33,168,.12)',borderColor:P,borderWidth:2,pointBackgroundColor:P},{label:'LSTM',data:[7.5,6.5,4,5.5,7,7.5],backgroundColor:'rgba(8,145,178,.1)',borderColor:'#0891B2',borderWidth:1.5,pointBackgroundColor:'#0891B2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right'}},scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2},grid:{color:'#E4EEEE'},pointLabels:{font:{size:11}}}}}});
+</script>
+</body>
+</html>
