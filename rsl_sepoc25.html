@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Electricity Load Forecasting — Systematic Literature Mapping | SEPOC 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;1,300&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#0F766E;--teal2:#14B8A6;--teal3:#5EEAD4;--teal-bg:#F0FDFA;
+  --slate:#0F172A;--slate2:#1E293B;--gray:#475569;--gray2:#94A3B8;--gray3:#E2E8F0;
+  --bg:#F8FAFC;--white:#FFFFFF;--orange:#EA580C;--purple:#7C3AED;
+  --radius:14px;--shadow:0 3px 20px rgba(15,23,42,.08);
+  --font-serif:'Merriweather',serif;--font-body:'Inter',sans-serif;--font-mono:'Fira Code',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--font-body);color:var(--slate);min-height:100vh}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--slate);
+    display:flex;align-items:center;overflow-x:auto;height:52px;
+    border-bottom:3px solid var(--teal)}
+nav button{background:none;border:none;color:#94A3B8;font-size:10.5px;font-weight:500;
+           padding:0 14px;height:52px;cursor:pointer;white-space:nowrap;
+           letter-spacing:.6px;transition:all .2s;text-transform:uppercase;font-family:var(--font-body)}
+nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+nav button.active{background:var(--teal);color:#fff}
+nav .nav-logo{padding:0 18px;font-family:var(--font-serif);font-size:12px;
+              color:var(--teal2);white-space:nowrap;border-right:1px solid rgba(255,255,255,.1);min-width:fit-content}
+
+.page{display:none;padding:74px 0 60px;min-height:100vh;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1100px;margin:0 auto;padding:0 26px}
+
+.hero{background:linear-gradient(140deg,var(--slate) 0%,#0C2340 50%,#0F172A 100%);
+      padding:58px 0 46px;margin-bottom:42px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;left:-100px;bottom:-100px;
+              width:450px;height:450px;border-radius:50%;
+              background:radial-gradient(circle,rgba(15,118,110,.2) 0%,transparent 70%)}
+.hero .container{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(15,118,110,.2);
+            border:1px solid rgba(20,184,166,.3);color:var(--teal2);
+            font-size:10px;letter-spacing:2px;text-transform:uppercase;
+            padding:5px 12px;border-radius:20px;margin-bottom:16px;font-weight:600}
+.hero h1{font-family:var(--font-serif);font-size:26px;color:#fff;line-height:1.35;margin-bottom:14px}
+.hero h1 em{color:var(--teal3);font-style:italic}
+.hero p{color:#94A3B8;font-size:13px;line-height:1.75}
+.hero-meta{display:flex;flex-direction:column;gap:11px}
+.mc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+    border-radius:var(--radius);padding:14px 18px}
+.mc .l{font-size:9.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--teal2);margin-bottom:4px}
+.mc .v{font-size:12.5px;color:#E2E8F0;font-weight:400;line-height:1.4}
+
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;margin-bottom:42px}
+.kpi{background:var(--white);border-radius:var(--radius);padding:20px 16px;
+     box-shadow:var(--shadow);border-top:3px solid var(--teal);text-align:center;
+     transition:transform .2s}
+.kpi:hover{transform:translateY(-3px)}
+.kpi .num{font-size:28px;font-weight:700;color:var(--teal);font-family:var(--font-serif)}
+.kpi .lbl{font-size:10.5px;color:var(--gray2);margin-top:5px;line-height:1.4}
+.kpi.orange{border-top-color:var(--orange)}.kpi.orange .num{color:var(--orange)}
+.kpi.purple{border-top-color:var(--purple)}.kpi.purple .num{color:var(--purple)}
+.kpi.slate{border-top-color:var(--gray)}.kpi.slate .num{color:var(--gray)}
+
+.sec-title{font-family:var(--font-serif);font-size:22px;color:var(--slate2);margin-bottom:6px}
+.sec-line{width:44px;height:3px;background:var(--teal);border-radius:2px;margin-bottom:10px}
+.sec-sub{font-size:13px;color:var(--gray2);margin-bottom:28px;line-height:1.65;max-width:680px}
+
+.text-card{background:var(--white);border-radius:var(--radius);padding:28px 32px;
+           box-shadow:var(--shadow);margin-bottom:22px;line-height:1.8;font-size:13.5px}
+.text-card h3{font-family:var(--font-serif);color:var(--slate2);font-size:17px;margin-bottom:10px}
+.text-card p{margin-bottom:10px;color:#1E293B;line-height:1.8}
+.text-card p:last-child{margin-bottom:0}
+
+.highlight{background:var(--teal-bg);border-left:4px solid var(--teal);
+           padding:12px 18px;border-radius:0 10px 10px 0;margin:14px 0;font-size:13px}
+
+.chart-card{background:var(--white);border-radius:var(--radius);padding:26px 28px;
+            box-shadow:var(--shadow);margin-bottom:22px}
+.chart-card h3{font-family:var(--font-serif);color:var(--slate2);font-size:16px;margin-bottom:5px}
+.chart-card .sub{font-size:11.5px;color:var(--gray2);margin-bottom:18px}
+.chart-wrap{position:relative;height:300px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+
+.tbl-wrap{overflow-x:auto;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--white)}
+thead tr{background:var(--slate);color:var(--teal3)}
+thead th{padding:11px 15px;text-align:left;font-weight:600;letter-spacing:.3px;font-family:var(--font-body)}
+tbody tr{border-bottom:1px solid var(--gray3)}
+tbody tr:hover{background:var(--teal-bg)}
+tbody td{padding:10px 15px;color:var(--slate);font-variant-numeric:tabular-nums}
+td.hi{color:var(--teal);font-weight:700}
+
+.gap-card{background:var(--white);border-radius:var(--radius);padding:20px 22px;
+          box-shadow:var(--shadow);border-left:4px solid var(--orange);margin-bottom:14px}
+.gap-card h4{font-size:13px;font-weight:600;color:var(--slate2);margin-bottom:6px}
+.gap-card p{font-size:12.5px;color:var(--gray);line-height:1.5}
+
+.q-card{background:var(--white);border-radius:var(--radius);padding:18px 20px;
+        box-shadow:var(--shadow);border-top:3px solid var(--teal)}
+.q-card .qnum{font-family:var(--font-mono);font-size:10px;color:var(--teal);
+              text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-card p{font-size:12.5px;color:var(--gray)}
+
+.insight{background:linear-gradient(135deg,var(--teal-bg),#CCFBF1);border:1px solid #99F6E4;
+         border-radius:var(--radius);padding:20px 26px;margin-bottom:22px}
+.insight h4{font-family:var(--font-serif);font-size:16px;color:var(--slate2);margin-bottom:7px}
+.insight p{font-size:13px;color:#134E4A;line-height:1.7}
+
+.ref-list{font-size:12px;color:var(--gray);line-height:2;padding-left:18px}
+.ref-list li{margin-bottom:3px}
+
+@media(max-width:768px){
+  .hero .container{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:repeat(3,1fr)}
+  .grid2,.grid3{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">🔌 Load Forecasting SLM</span>
+  <button class="active" onclick="show('intro')">Overview</button>
+  <button onclick="show('metodo')">Methodology</button>
+  <button onclick="show('q1q4')">Q1–Q4 Results</button>
+  <button onclick="show('q5q8')">Q5–Q8 Results</button>
+  <button onclick="show('q9q12')">Q9–Q12 Results</button>
+  <button onclick="show('conclusao')">Conclusions</button>
+  <button onclick="show('refs')">References</button>
+</nav>
+
+<!-- INTRO -->
+<div class="page active" id="intro">
+<div class="hero">
+  <div class="container">
+    <div>
+      <div class="hero-badge">SEPOC 2025 · UNIVALI</div>
+      <h1>Electricity Load Forecasting: A <em>Systematic Literature Mapping</em></h1>
+      <p>Comprehensive review of 49 peer-reviewed articles (2015–2025) covering statistical models, machine learning, deep learning, and hybrid techniques. Structured search across 5 major databases with 12 research questions answered.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="mc"><div class="l">Authors</div><div class="v">Gabriel A. Groehs · Raimundo C. G. Teive</div></div>
+      <div class="mc"><div class="l">Institution</div><div class="v">UNIVALI — Applied AI Laboratory</div></div>
+      <div class="mc"><div class="l">Databases</div><div class="v">IEEE Xplore, ScienceDirect, Springer, Scopus, IET</div></div>
+      <div class="mc"><div class="l">Period</div><div class="v">January 2015 – April 2025</div></div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="kpi-row">
+    <div class="kpi"><div class="num">2.704</div><div class="lbl">Artigos identificados nas 5 bases</div></div>
+    <div class="kpi orange"><div class="num">49</div><div class="lbl">Artigos selecionados (corpus final)</div></div>
+    <div class="kpi purple"><div class="num">LSTM</div><div class="lbl">Técnica dominante (67,35% dos estudos)</div></div>
+    <div class="kpi slate"><div class="num">12</div><div class="lbl">Research questions analisadas</div></div>
+    <div class="kpi"><div class="num">0</div><div class="lbl">Estudos brasileiros — lacuna crítica</div></div>
+  </div>
+
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Contexto e Objetivos</h2>
+  <p class="sec-sub">A previsão de carga elétrica é fundamental para planejamento e operação de sistemas de potência modernos, especialmente em cenários de crescente variabilidade de demanda e penetração de fontes renováveis.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Motivação</h3>
+      <p>A combinação de maior variabilidade na demanda, integração de geração renovável intermitente e necessidade de decisões eficientes de despacho torna a previsão precisa de demanda cada vez mais crítica para a estabilidade e custo-efetividade das redes modernas.</p>
+      <p>Este mapeamento sistemático preenche a lacuna de uma revisão abrangente que cubra simultaneamente modelos estatísticos, ML, deep learning e abordagens híbridas com taxonomia estruturada.</p>
+      <div class="highlight">O Brasil está <strong>completamente ausente</strong> como país de origem nos 49 estudos — lacuna significativa para um dos maiores sistemas elétricos do mundo.</div>
+    </div>
+    <div class="text-card">
+      <h3>Perguntas de Pesquisa (Q1–Q12)</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+        <div class="q-card"><div class="qnum">Q1</div><p>Técnicas mais frequentes?</p></div>
+        <div class="q-card"><div class="qnum">Q2</div><p>Tipos de consumidores?</p></div>
+        <div class="q-card"><div class="qnum">Q3</div><p>Algoritmos ML/DL aplicados?</p></div>
+        <div class="q-card"><div class="qnum">Q4</div><p>Métricas de avaliação?</p></div>
+        <div class="q-card"><div class="qnum">Q5</div><p>Limitações e gaps?</p></div>
+        <div class="q-card"><div class="qnum">Q6</div><p>Tipos de datasets?</p></div>
+        <div class="q-card"><div class="qnum">Q7</div><p>Distribuição de citações?</p></div>
+        <div class="q-card"><div class="qnum">Q8</div><p>Horizontes de previsão?</p></div>
+        <div class="q-card"><div class="qnum">Q9</div><p>Periódicos principais?</p></div>
+        <div class="q-card"><div class="qnum">Q10</div><p>Países de origem?</p></div>
+        <div class="q-card"><div class="qnum">Q11</div><p>Evolução temporal?</p></div>
+        <div class="q-card"><div class="qnum">Q12</div><p>Variáveis de entrada?</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- METODOLOGIA -->
+<div class="page" id="metodo">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Protocolo de Busca e Seleção</h2>
+  <p class="sec-sub">Mapeamento sistemático seguindo protocolo rigoroso de inclusão/exclusão com busca booleana estruturada em 5 bases.</p>
+
+  <div class="text-card">
+    <h3>String de Busca Booleana</h3>
+    <div style="background:var(--slate);color:var(--teal3);font-family:var(--font-mono);font-size:13px;padding:20px 24px;border-radius:10px;margin:12px 0;line-height:1.9">
+      ("electric load forecasting" OR "energy demand prediction"<br>
+      OR "electricity demand prediction")<br>
+      AND ("time series" OR "short-term forecast" OR "long-term forecast")
+    </div>
+    <p>Busca restrita a artigos peer-reviewed full-text entre Jan/2015 e Abr/2025, em inglês ou português.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Critérios de Inclusão</h3>
+      <p>IC1 — Artigos publicados entre 2015 e 2025<br>
+      IC2 — Escritos em inglês ou português<br>
+      IC3 — Texto completo disponível para download<br>
+      IC4 — Aplicação de modelos estatísticos, ML, DL ou híbridos à previsão de carga elétrica</p>
+    </div>
+    <div class="text-card">
+      <h3>Critérios de Exclusão</h3>
+      <p>EC1 — Trabalhos não peer-reviewed, extended abstracts<br>
+      EC2 — Artigos duplicados entre bases<br>
+      EC3 — Sem foco direto em previsão de carga elétrica<br>
+      EC4 — Artigos puramente teóricos sem validação empírica<br>
+      EC5 — Foco exclusivo em precificação ou geração</p>
+    </div>
+  </div>
+
+  <div class="text-card">
+    <h3>Distribuição por Base de Dados</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Base de Dados</th><th>Artigos Encontrados</th><th>Artigos Selecionados</th><th>Taxa de Seleção</th></tr></thead>
+        <tbody>
+          <tr><td>IEEE Xplore</td><td>228</td><td class="hi">11</td><td>4,8%</td></tr>
+          <tr><td>Springer</td><td>320</td><td>3</td><td>0,9%</td></tr>
+          <tr><td>Scopus</td><td>747</td><td class="hi">29</td><td>3,9%</td></tr>
+          <tr><td>ScienceDirect</td><td>1.383</td><td>4</td><td>0,3%</td></tr>
+          <tr><td>IET Digital Library</td><td>26</td><td class="hi">2</td><td>7,7%</td></tr>
+          <tr><td><strong>TOTAL</strong></td><td><strong>2.704</strong></td><td class="hi"><strong>49</strong></td><td><strong>1,8%</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Q1-Q4 -->
+<div class="page" id="q1q4">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Q1–Q4: Técnicas, Consumidores, Algoritmos e Métricas</h2>
+
+  <div class="chart-card">
+    <h3>Q1 — Técnicas Mais Frequentes</h3>
+    <div class="sub">Deep Learning domina; LSTM presente em 67,35% dos estudos (n=33/49)</div>
+    <div class="chart-wrap">
+      <canvas id="chartQ1"></canvas>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="chart-card">
+      <h3>Q2 — Tipo de Consumidor</h3>
+      <div class="sub">Residencial lidera; industrial sub-representado</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="chartQ2"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Q4 — Métricas de Avaliação</h3>
+      <div class="sub">RMSE, MAE e MAPE dominam; R² em 30,6%</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="chartQ4"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-card">
+    <h3>Q3 — Algoritmos ML/DL Aplicados</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Algoritmo/Família</th><th>Ocorrências</th><th>% do corpus</th><th>Categoria</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">LSTM (puro ou híbrido)</td><td class="hi">33</td><td class="hi">67,35%</td><td>Deep Learning</td></tr>
+          <tr><td>CNN</td><td>17</td><td>34,69%</td><td>Deep Learning</td></tr>
+          <tr><td>GRU / Bi-GRU</td><td>13</td><td>26,53%</td><td>Deep Learning</td></tr>
+          <tr><td>SVM / SVR</td><td>11</td><td>22,45%</td><td>Machine Learning</td></tr>
+          <tr><td>Random Forest</td><td>9</td><td>18,37%</td><td>Machine Learning</td></tr>
+          <tr><td>ARIMA / SARIMA</td><td>10</td><td>20,40%</td><td>Estatístico</td></tr>
+          <tr><td>XGBoost / LightGBM</td><td>6</td><td>12,24%</td><td>Machine Learning</td></tr>
+          <tr><td>Transformers</td><td>4</td><td>8,16%</td><td>Deep Learning</td></tr>
+          <tr><td>MLP / ANN</td><td>11</td><td>22,45%</td><td>Deep Learning</td></tr>
+          <tr><td>Echo State Networks</td><td>3</td><td>6,12%</td><td>Deep Learning</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Q5-Q8 -->
+<div class="page" id="q5q8">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Q5–Q8: Gaps, Datasets, Citações e Horizontes</h2>
+
+  <div class="chart-card">
+    <h3>Q5 — Principais Limitações e Gaps Identificados</h3>
+    <div class="sub">Disponibilidade de dados é o principal desafio (42,86% dos estudos)</div>
+    <div class="chart-wrap">
+      <canvas id="chartQ5"></canvas>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="chart-card">
+      <h3>Q6 — Tipos de Dataset</h3>
+      <div class="sub">85,7% usam dados reais de distribuidoras</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="chartQ6"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Q8 — Horizontes de Previsão</h3>
+      <div class="sub">Curto prazo (1 semana–1 ano) domina com 53%</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="chartQ8"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
+    <div class="gap-card"><h4>🔴 Dados proprietários e fechados</h4><p>42,86% dos estudos reportam limitações de disponibilidade. Poucos datasets públicos padronizados existem para benchmarking.</p></div>
+    <div class="gap-card"><h4>🔴 Overfitting e validação cruzada</h4><p>34,69% citam overfitting como limitação. Cross-validation temporal robusta é raramente implementada.</p></div>
+    <div class="gap-card"><h4>🔴 Variáveis exógenas limitadas</h4><p>30,61% apontam uso insuficiente de exógenas econômicas e industriais. Foco excessivo em variáveis meteorológicas.</p></div>
+    <div class="gap-card"><h4>🔴 Baixa interpretabilidade</h4><p>26,53% citam dificuldade de explicar modelos de caixa-preta. XAI (Explainable AI) ainda raramente aplicado.</p></div>
+  </div>
+</div>
+</div>
+
+<!-- Q9-Q12 -->
+<div class="page" id="q9q12">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Q9–Q12: Periódicos, Países, Evolução e Variáveis</h2>
+
+  <div class="grid2">
+    <div class="chart-card">
+      <h3>Q9 — Periódicos com Maior Concentração</h3>
+      <div class="sub">IEEE lidera com 28,57% dos artigos</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="chartQ9"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Q10 — Países de Origem</h3>
+      <div class="sub">57,14% colaborações multinacionais; China lidera individualmente</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="chartQ10"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Q11 — Evolução Temporal das Publicações (2015–2025)</h3>
+    <div class="sub">Aceleração pós-2020; pico em 2024 com 9 artigos</div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="chartQ11"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Q12 — Variáveis de Entrada Utilizadas</h3>
+    <div class="sub">Histórico de carga (100%), variáveis temporais (79,6%) e meteorológicas (67,4%) dominam</div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartQ12"></canvas>
+    </div>
+  </div>
+
+  <div class="insight">
+    <h4>Brasil: A Grande Lacuna</h4>
+    <p>Brasil está completamente ausente dos 49 estudos de previsão de carga elétrica — país com um dos maiores sistemas elétricos do mundo, alta dependência de hidroelétricas e crescente penetração solar/eólica. A ausência implica que modelos validados em outros contextos podem não se adaptar adequadamente às características sazonais, climáticas e institucionais do sistema elétrico brasileiro.</p>
+  </div>
+</div>
+</div>
+
+<!-- CONCLUSÃO -->
+<div class="page" id="conclusao">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Final Remarks</h2>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Achados Centrais</h3>
+      <p><strong>Deep Learning domina:</strong> LSTM presente em 67% dos estudos, frequentemente em configurações híbridas com CNN (CNN-LSTM). Transformers emergem com adoção ainda incipiente (8,2%).</p>
+      <p><strong>Curto prazo prevalece:</strong> 53% dos artigos focam em horizontes de 1 semana–1 ano; horizontes de médio e longo prazo são sub-explorados.</p>
+      <p><strong>Dados reais predominam:</strong> 85,7% usam séries reais de distribuidoras, com dependência temporal e meteorológica. Variáveis econômicas (14,3%) e industriais (8,2%) são sub-utilizadas.</p>
+      <div class="highlight">O campo está em <strong>maturação acelerada</strong>: 49% dos artigos publicados entre 2022-2024, reflexo da explosão do deep learning aplicado a energia.</div>
+    </div>
+    <div class="text-card">
+      <h3>Recomendações para Pesquisa Futura</h3>
+      <p>→ <strong>Variáveis econômicas e setoriais</strong> como entradas exógenas — especialmente para carga industrial (correlação com ciclo econômico)</p>
+      <p>→ <strong>Datasets padronizados e abertos</strong> para benchmarking comparável entre estudos</p>
+      <p>→ <strong>Interpretabilidade via XAI</strong> (SHAP, LIME) para modelos de caixa-preta</p>
+      <p>→ <strong>Segmentação CNAE</strong> para carga industrial brasileira com K-Means tipológico</p>
+      <p>→ <strong>Cross-validation temporal robusta</strong> (walk-forward) em vez de partições únicas fixas</p>
+      <p>→ <strong>Reproducibilidade</strong>: compartilhamento de código e dados</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- REFS -->
+<div class="page" id="refs">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Key References</h2>
+  <div class="text-card">
+    <ol class="ref-list">
+      <li>Box, G. E. P. & Jenkins, G. M. (1976). <em>Time Series Analysis: Forecasting and Control.</em> Holden-Day.</li>
+      <li>Hochreiter, S. & Schmidhuber, J. (1997). Long short-term memory. <em>Neural Computation</em>, 9(8).</li>
+      <li>Gasparin, H. L. et al. (2022). Deep learning for time series forecasting: the electric load case. <em>Applied Energy</em>, 304.</li>
+      <li>Lara-Benítez, J. et al. (2020). Temporal convolutional networks applied to energy forecasting. <em>Applied Energy</em>, 262.</li>
+      <li>Dudek, G. et al. (2022). Hybrid Residual Dilated LSTM for midterm electric load forecasting. <em>IEEE TNNLS</em>, 33(7).</li>
+      <li>Hong, T. & Fan, S. (2016). Probabilistic electric load forecasting. <em>IEEE Transactions on Smart Grid</em>, 7(5).</li>
+      <li>Wu, J. et al. (2022). Spatial-temporal load forecasting via K-shape clustering. <em>Applied Energy</em>, 318.</li>
+      <li>ANEEL (2021). PRODIST Módulo 8 — Qualidade da Energia Elétrica. Brasília.</li>
+      <li>Groehs, G. A. & Teive, R. C. G. (2025). Previsão de carga elétrica de curto prazo... <em>Computer 2026.</em></li>
+    </ol>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map={intro:0,metodo:1,q1q4:2,q5q8:3,q9q12:4,conclusao:5,refs:6};
+  document.querySelectorAll('nav button')[map[id]].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const TEAL='#0F766E';const ORANGE='#EA580C';const PURPLE='#7C3AED';
+const SLATE='#0F172A';const GRAY='#94A3B8';const GREEN='#15803D';
+
+// Q1
+const ctx1=document.getElementById('chartQ1').getContext('2d');
+const q1Labels=['LSTM','CNN','GRU/BiGRU','SVM/SVR','ARIMA/SARIMA','Random Forest','MLP/ANN','XGBoost','Wavelet+TS','Transformers','GARCH','ESN','Outros'];
+const q1Data=[33,17,13,11,10,9,11,6,5,4,2,3,4];
+new Chart(ctx1,{type:'bar',data:{labels:q1Labels,datasets:[{label:'Nº de artigos',data:q1Data,backgroundColor:[TEAL,'#0891B2','#7C3AED','#EA580C','#CA8A04','#15803D','#0369A1','#DC2626','#9D174D','#5B21B6','#374151','#065F46','#1E3A5F'].map(c=>c+'DD'),borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#E2E8F0'}},y:{grid:{display:false}}}}});
+
+// Q2
+const ctx2=document.getElementById('chartQ2').getContext('2d');
+new Chart(ctx2,{type:'doughnut',data:{labels:['Residencial','Industrial','Comercial','Misto','Não especif.','Outros'],datasets:[{data:[18,11,6,5,4,5],backgroundColor:[TEAL,ORANGE,PURPLE,'#0891B2','#CA8A04',GRAY]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+
+// Q4
+const ctx4=document.getElementById('chartQ4').getContext('2d');
+new Chart(ctx4,{type:'bar',data:{labels:['RMSE','MAE','MAPE','R²','MSE','sMAPE','NMAE'],datasets:[{label:'Nº de artigos',data:[39,34,31,15,11,4,3],backgroundColor:TEAL+'CC',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#E2E8F0'}},y:{grid:{display:false}}}}});
+
+// Q5
+const ctx5=document.getElementById('chartQ5').getContext('2d');
+new Chart(ctx5,{type:'bar',data:{labels:['Disponibilidade dados','Overfitting','Exógenas limitadas','Baixa interpretabilidade','Validação cruzada fraca','Foco curto prazo','Métricas não padronizadas','Benchmarks fracos'],datasets:[{label:'Nº de artigos',data:[21,17,15,13,11,9,7,6],backgroundColor:ORANGE+'CC',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#F1F5F9'}},y:{grid:{display:false}}}}});
+
+// Q6
+const ctx6=document.getElementById('chartQ6').getContext('2d');
+new Chart(ctx6,{type:'pie',data:{labels:['Real','Simulado','Misto','Sintético'],datasets:[{data:[42,4,2,1],backgroundColor:[TEAL,ORANGE,PURPLE,GRAY]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+
+// Q8
+const ctx8=document.getElementById('chartQ8').getContext('2d');
+new Chart(ctx8,{type:'doughnut',data:{labels:['Curto prazo (1sem–1ano)','Curtíssimo (min–7d)','Médio (1–5 anos)','Longo (>5 anos)','N/E'],datasets:[{data:[26,18,3,1,1],backgroundColor:[TEAL,ORANGE,PURPLE,GRAY,'#CBD5E1']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+
+// Q9
+const ctx9=document.getElementById('chartQ9').getContext('2d');
+new Chart(ctx9,{type:'bar',data:{labels:['IEEE','Elsevier','Springer','MDPI','Wiley','Hindawi','Taylor & Francis','Conf.'],datasets:[{label:'Artigos',data:[14,11,6,5,3,2,2,3],backgroundColor:TEAL+'CC',borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E2E8F0'}}}}});
+
+// Q10
+const ctx10=document.getElementById('chartQ10').getContext('2d');
+new Chart(ctx10,{type:'bar',data:{labels:['Multinacional','China','Espanha','Índia','Brasil','UK','Outros'],datasets:[{label:'Artigos',data:[28,11,3,2,0,1,4],backgroundColor:['#0891B2','#EA580C','#7C3AED','#CA8A04',GRAY+'66','#15803D','#94A3B8'].map(c=>c+'CC'),borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const v=ctx.raw;const label=ctx.label;if(label==='Brasil')return '0 artigos — Lacuna crítica!';return v+' artigos'}}}},scales:{y:{beginAtZero:true,grid:{color:'#E2E8F0'}}}}});
+
+// Q11
+const ctx11=document.getElementById('chartQ11').getContext('2d');
+new Chart(ctx11,{type:'line',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Artigos publicados',data:[3,3,2,3,1,5,7,8,7,9,1],borderColor:TEAL,backgroundColor:'rgba(15,118,110,.12)',borderWidth:2.5,fill:true,tension:0.4,pointRadius:5,pointBackgroundColor:TEAL}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E2E8F0'}},x:{grid:{color:'#E2E8F0'}}}}});
+
+// Q12
+const ctx12=document.getElementById('chartQ12').getContext('2d');
+new Chart(ctx12,{type:'bar',data:{labels:['Histórico carga','Variáveis temporais','Clima/meteorol.','Calendário','Categ. consumidor','Variáveis econ.','Espacial/geog.','Univariado'],datasets:[{label:'Artigos',data:[49,39,33,21,10,7,5,6],backgroundColor:[TEAL,TEAL+'CC',TEAL+'99',TEAL+'77',ORANGE+'BB',ORANGE+'88',PURPLE+'BB',GRAY+'99'].map(c=>c),borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E2E8F0'}},x:{grid:{display:false}}}}});
+</script>
+</body>
+</html>
