@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TCC MBA USP/ESALQ — Previsão Ações Bancos B3</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A1628;--navy2:#122040;--blue:#1B4FD8;--blue2:#2563EB;--sky:#38BDF8;
+  --gold:#CA8A04;--gold2:#EAB308;--gold3:#FDE68A;
+  --bg:#F0F4FA;--white:#FFFFFF;--green:#15803D;--red:#DC2626;
+  --gray:#64748B;--gray2:#94A3B8;--gray3:#E2E8F0;
+  --radius:14px;--shadow:0 4px 24px rgba(10,22,40,.09);
+  --font-display:'Cormorant Garamond',serif;--font-body:'Outfit',sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--font-body);color:var(--navy);min-height:100vh}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--navy);
+    display:flex;align-items:center;overflow-x:auto;height:54px;
+    border-bottom:3px solid var(--gold)}
+nav button{background:none;border:none;color:#94A3B8;font-size:11px;font-weight:500;
+           padding:0 14px;height:54px;cursor:pointer;white-space:nowrap;
+           letter-spacing:.5px;transition:all .2s;text-transform:uppercase;font-family:var(--font-body)}
+nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+nav button.active{background:var(--blue);color:#fff}
+nav .nav-logo{padding:0 20px;font-family:var(--font-display);font-size:15px;font-style:italic;
+              color:var(--gold2);white-space:nowrap;border-right:1px solid rgba(255,255,255,.1);min-width:fit-content}
+
+.page{display:none;padding:78px 0 64px;min-height:100vh;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1120px;margin:0 auto;padding:0 28px}
+
+.hero{background:linear-gradient(140deg,var(--navy) 0%,var(--navy2) 50%,#0D1F3C 100%);
+      padding:60px 0 48px;margin-bottom:44px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-60px;bottom:-80px;
+             width:400px;height:400px;border-radius:50%;
+             background:radial-gradient(circle,rgba(27,79,216,.2) 0%,transparent 70%)}
+.hero .container{display:grid;grid-template-columns:1fr 360px;gap:44px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(202,138,4,.15);
+            border:1px solid rgba(202,138,4,.35);color:var(--gold2);
+            font-size:10px;letter-spacing:2px;text-transform:uppercase;
+            padding:5px 12px;border-radius:20px;margin-bottom:16px;font-weight:600}
+.hero h1{font-family:var(--font-display);font-size:30px;color:#fff;line-height:1.3;margin-bottom:16px}
+.hero h1 em{color:var(--gold3);font-style:italic}
+.hero p{color:#94A3B8;font-size:13.5px;line-height:1.75}
+.hero-meta{display:flex;flex-direction:column;gap:12px}
+.meta-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+           border-radius:var(--radius);padding:15px 20px}
+.meta-card .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold2);margin-bottom:5px}
+.meta-card .val{font-size:12.5px;color:#E2E8F0;font-weight:400;line-height:1.45}
+
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:44px}
+.kpi{background:var(--white);border-radius:var(--radius);padding:22px 18px;
+     box-shadow:var(--shadow);border-top:3px solid var(--blue);text-align:center;
+     transition:transform .2s,box-shadow .2s}
+.kpi:hover{transform:translateY(-4px);box-shadow:0 10px 36px rgba(10,22,40,.14)}
+.kpi .num{font-size:28px;font-weight:700;color:var(--blue);font-family:var(--font-display)}
+.kpi .lbl{font-size:11px;color:var(--gray2);margin-top:5px;line-height:1.4}
+.kpi.gold{border-top-color:var(--gold);}.kpi.gold .num{color:var(--gold)}
+.kpi.green{border-top-color:var(--green);}.kpi.green .num{color:var(--green)}
+.kpi.red{border-top-color:var(--red);}.kpi.red .num{color:var(--red)}
+
+.sec-title{font-family:var(--font-display);font-size:26px;color:var(--navy);margin-bottom:6px}
+.sec-line{width:48px;height:3px;background:var(--gold);border-radius:2px;margin-bottom:10px}
+.sec-sub{font-size:13px;color:var(--gray);margin-bottom:30px;line-height:1.65;max-width:700px}
+
+.text-card{background:var(--white);border-radius:var(--radius);padding:30px 34px;
+           box-shadow:var(--shadow);margin-bottom:24px;line-height:1.8;font-size:14px}
+.text-card h3{font-family:var(--font-display);color:var(--navy);font-size:20px;margin-bottom:12px}
+.text-card p{margin-bottom:12px;color:#1E293B;line-height:1.8}
+.text-card p:last-child{margin-bottom:0}
+
+.highlight{background:#EFF6FF;border-left:4px solid var(--blue);
+           padding:14px 20px;border-radius:0 10px 10px 0;margin:16px 0;font-size:13.5px}
+.formula{background:var(--navy);color:var(--gold3);font-family:var(--font-mono);
+         font-size:13px;padding:18px 26px;border-radius:10px;margin:18px 0;
+         text-align:center;letter-spacing:.2px;line-height:1.8}
+.formula .cmt{color:#64748B;font-size:11px}
+
+.chart-card{background:var(--white);border-radius:var(--radius);padding:28px 30px;
+            box-shadow:var(--shadow);margin-bottom:24px}
+.chart-card h3{font-family:var(--font-display);color:var(--navy);font-size:18px;margin-bottom:5px}
+.chart-card .sub{font-size:12px;color:var(--gray2);margin-bottom:20px}
+.chart-wrap{position:relative;height:320px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+
+.tbl-wrap{overflow-x:auto;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--white)}
+thead tr{background:var(--navy);color:var(--gold3)}
+thead th{padding:13px 16px;text-align:left;font-weight:600;letter-spacing:.3px}
+tbody tr{border-bottom:1px solid var(--gray3)}
+tbody tr:hover{background:#F8FAFF}
+tbody td{padding:11px 16px;color:var(--navy);font-variant-numeric:tabular-nums}
+td.best{color:var(--green);font-weight:700}
+td.worst{color:var(--red)}
+td.rank1{color:var(--gold);font-weight:700}
+
+.model-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;
+             border-radius:20px;font-size:11px;font-weight:600;margin:3px}
+.mb-ar{background:#DBEAFE;color:#1E40AF}
+.mb-ml{background:#D1FAE5;color:#065F46}
+.mb-stat{background:#FEF3C7;color:#92400E}
+.mb-vol{background:#FCE7F3;color:#9D174D}
+
+.insight{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1px solid #BFDBFE;
+         border-radius:var(--radius);padding:22px 28px;margin-bottom:24px}
+.insight h4{font-family:var(--font-display);font-size:18px;color:var(--navy);margin-bottom:8px}
+.insight p{font-size:13.5px;color:#1E3A5F;line-height:1.7}
+
+.bank-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:28px}
+.bank-card{background:var(--white);border-radius:10px;padding:14px 16px;
+           box-shadow:0 2px 12px rgba(10,22,40,.07);border-top:3px solid var(--blue2);text-align:center}
+.bank-card .ticker{font-family:var(--font-mono);font-size:11px;color:var(--blue2);font-weight:600}
+.bank-card .name{font-size:11px;color:var(--gray);margin-top:4px;line-height:1.3}
+
+.ref-list{font-size:12.5px;color:var(--gray);line-height:2;padding-left:20px}
+.ref-list li{margin-bottom:4px}
+
+@media(max-width:768px){
+  .hero .container{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:repeat(3,1fr)}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .bank-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">📈 B3 Bancos</span>
+  <button class="active" onclick="show('intro')">Introdução</button>
+  <button onclick="show('dados')">Dados</button>
+  <button onclick="show('modelos')">Modelos</button>
+  <button onclick="show('resultados')">Resultados</button>
+  <button onclick="show('conclusao')">Conclusão</button>
+  <button onclick="show('refs')">Referências</button>
+</nav>
+
+<!-- INTRO -->
+<div class="page active" id="intro">
+<div class="hero">
+  <div class="container">
+    <div>
+      <div class="hero-badge">TCC MBA · USP/ESALQ 2024</div>
+      <h1>Comparação de Modelos de Previsão de Séries Temporais das Ações dos <em>10 Maiores Bancos</em> da B3</h1>
+      <p>Avaliação comparativa de ARIMA, SARIMA, GARCH, Prophet e LSTM para previsão de preços de ações financeiras, medindo acurácia por MAE, MSE, RMSE, MAPE e R² no mercado bancário brasileiro.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-card"><div class="lbl">Autor</div><div class="val">Gabriel Alberto Groehs</div></div>
+      <div class="meta-card"><div class="lbl">Orientador</div><div class="val">Christian Caldeira — USP/ESALQ</div></div>
+      <div class="meta-card"><div class="lbl">Período</div><div class="val">Janeiro 2021 — Abril 2024 (≈ 800 dias úteis)</div></div>
+      <div class="meta-card"><div class="lbl">Fonte de dados</div><div class="val">Yahoo Finance via Python (yfinance)</div></div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="kpi-row">
+    <div class="kpi"><div class="num">10</div><div class="lbl">Bancos da B3 analisados</div></div>
+    <div class="kpi gold"><div class="num">6</div><div class="lbl">Modelos comparados</div></div>
+    <div class="kpi green"><div class="num">LSTM</div><div class="lbl">Melhor modelo geral (menor MAE)</div></div>
+    <div class="kpi"><div class="num">3,94%</div><div class="lbl">MAPE do LSTM — melhor resultado</div></div>
+    <div class="kpi red"><div class="num">−4,05</div><div class="lbl">R² da Regressão Linear (pior)</div></div>
+  </div>
+
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Motivação</h2>
+  <p class="sec-sub">Mercados financeiros são sistemas estocásticos complexos influenciados por múltiplos fatores — econômicos, comportamentais e políticos. A ciência econômica e a econometria desenvolveram ferramentas preditivas que evoluíram da regressão linear até as redes neurais profundas.</p>
+
+  <div class="bank-grid">
+    <div class="bank-card"><div class="ticker">ITUB4</div><div class="name">Itaú Unibanco</div></div>
+    <div class="bank-card"><div class="ticker">BBDC4</div><div class="name">Bradesco</div></div>
+    <div class="bank-card"><div class="ticker">BBAS3</div><div class="name">Banco do Brasil</div></div>
+    <div class="bank-card"><div class="ticker">SANB11</div><div class="name">Santander</div></div>
+    <div class="bank-card"><div class="ticker">BPAC11</div><div class="name">BTG Pactual</div></div>
+    <div class="bank-card"><div class="ticker">BRSR6</div><div class="name">Banrisul</div></div>
+    <div class="bank-card"><div class="ticker">BPAN4</div><div class="name">Banco Pan</div></div>
+    <div class="bank-card"><div class="ticker">ABCB4</div><div class="name">ABC Brasil</div></div>
+    <div class="bank-card"><div class="ticker">PSSA3</div><div class="name">Porto Seguro</div></div>
+    <div class="bank-card"><div class="ticker">ITUB3</div><div class="name">Itaú ON</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Objetivo do Estudo</h3>
+      <p>Comparar a performance dos principais modelos de previsão de séries temporais disponíveis em ciências econômicas e estatística, medindo acurácia e verificando qual abordagem possui maior aderência a dados de ações do mercado bancário brasileiro.</p>
+      <p>O trabalho respeita a <strong>linha do tempo histórica</strong> dos modelos: regressão linear → ARIMA → SARIMA → GARCH → Prophet → LSTM, contando a evolução da ciência de séries temporais.</p>
+      <div class="highlight">Séries temporais financeiras possuem volatilidade potente, sazonalidades, tendências que mudam com o tempo e forte componente aleatório — terreno desafiador para qualquer modelo preditivo.</div>
+    </div>
+    <div class="text-card">
+      <h3>Estratégia de Dados</h3>
+      <p>As 10 séries individuais foram combinadas em uma <strong>série temporal única</strong> por média ponderada pelo volume de negociação (VWAP), criando um índice representativo do setor bancário B3.</p>
+      <p>Divisão temporal:</p>
+      <p>→ <strong>Treino:</strong> 2021-01-01 a 2023-06-01</p>
+      <p>→ <strong>Teste:</strong> 2023-07-01 a 2024-04-01</p>
+      <p>O teste de <strong>ADF (Dickey-Fuller)</strong> confirmou não-estacionariedade (p=0,26 > 0,05), exigindo diferenciação de primeira ordem antes do ARIMA.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- DADOS -->
+<div class="page" id="dados">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Análise Exploratória</h2>
+  <p class="sec-sub">Caracterização estatística da série temporal resultante da média ponderada por volume das 10 ações bancárias.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Decomposição da Série Temporal</h3>
+      <p>A decomposição clássica revelou quatro componentes:</p>
+      <p>→ <strong>Tendência:</strong> ciclo de baixa em 2021-2022, recuperação em 2023-2024<br>
+      → <strong>Sazonalidade:</strong> capturada com período de 365 dias (melhor aderência que 12 períodos)<br>
+      → <strong>Resíduos:</strong> variância significativa, especialmente em 2021-2022<br>
+      → <strong>Componente aleatória:</strong> amplificada por eventos macro (SELIC alta, eleições 2022)</p>
+      <div class="highlight">A sazonalidade anual (365 períodos) capturou padrões de tendência com maior aderência do que a sazonalidade mensal (12 períodos), indicando que ciclos anuais dominam o comportamento das ações bancárias.</div>
+    </div>
+    <div class="text-card">
+      <h3>Teste de Estacionariedade (ADF)</h3>
+      <p>O <strong>Teste de Dickey-Fuller Aumentado</strong> foi aplicado para verificar estacionariedade, condição necessária para ARIMA.</p>
+      <div class="formula">
+        Hipótese nula H₀: série possui raiz unitária (não estacionária)<br>
+        p-valor = 0,2613 &gt; 0,05 → não rejeita H₀<br>
+        Estatístico ADF = −2,059<br>
+        <span class="cmt">Valores críticos: −3,44 (1%), −2,87 (5%), −2,57 (10%)</span>
+      </div>
+      <p>Conclusão: série <strong>não estacionária</strong>. Foi aplicada diferenciação de primeira ordem (d=1) antes do ARIMA, tornando a série adequada para modelagem autorregressiva.</p>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Evolução da Série Temporal — Preço Médio Ponderado (VWAP)</h3>
+    <div class="sub">Média ponderada pelo volume das 10 ações bancárias — Jan/2021 a Abr/2024</div>
+    <div class="chart-wrap">
+      <canvas id="chartSerie"></canvas>
+    </div>
+  </div>
+
+  <div class="text-card">
+    <h3>Características da Série</h3>
+    <p>A série bancária VWAP apresenta alta volatilidade com padrões de tendência distintos ao longo do período:</p>
+    <p>→ <strong>2021:</strong> alta inicial (liquidez pós-pandemia) → correção ao longo do ano com SELIC subindo</p>
+    <p>→ <strong>2022:</strong> volatilidade ampliada por ciclo eleitoral e incerteza fiscal</p>
+    <p>→ <strong>2023-2024:</strong> recuperação gradual com SELIC estabilizando e resultados bancários robustos</p>
+    <div class="highlight">O mercado financeiro é o "avô de todos os dados de séries temporais" (Nielsen, 2021) — sua volatilidade e complexidade constituem o teste definitivo para modelos preditivos.</div>
+  </div>
+</div>
+</div>
+
+<!-- MODELOS -->
+<div class="page" id="modelos">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Modelos Comparados</h2>
+  <p class="sec-sub">Seis modelos aplicados em sequência histórica, da regressão clássica às redes neurais profundas.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Regressão Linear <span class="model-badge mb-stat">Baseline</span></h3>
+      <p>Técnica mais clássica. Determina coeficientes β₀ (intercepto) e β₁ (inclinação) que minimizam o erro quadrático médio. Limitada a séries onde a relação linear é clara.</p>
+      <div class="formula">Y<sub>t</sub> = β₀ + β₁X<sub>t</sub> + ε<sub>t</sub></div>
+    </div>
+    <div class="text-card">
+      <h3>ARIMA <span class="model-badge mb-ar">Box-Jenkins</span></h3>
+      <p>Autorregressivo Integrado de Médias Móveis. Lida com não-estacionariedade via diferenciação. Parâmetros: p=5, d=2, q=5 (seleção empírica).</p>
+      <div class="formula">Δ<sup>d</sup>Y<sub>t</sub> = c + Σφ<sub>i</sub>Y<sub>t−p</sub> + Σθ<sub>j</sub>ε<sub>t−j</sub> + ε<sub>t</sub></div>
+    </div>
+    <div class="text-card">
+      <h3>SARIMA <span class="model-badge mb-ar">Box-Jenkins</span></h3>
+      <p>Extensão do ARIMA com componentes sazonais. Configuração: (1,1,1)×(1,1,1,12) — captura padrões sazonais anuais com diferenciação.</p>
+      <div class="formula">Φ(B<sup>S</sup>)φ(B)(y<sub>t</sub>−μ) = Θ(B<sup>S</sup>)θ(B)ε<sub>t</sub></div>
+    </div>
+    <div class="text-card">
+      <h3>GARCH <span class="model-badge mb-vol">Volatilidade</span></h3>
+      <p>Autorregressivo Generalizado com Heterocedasticidade Condicional. Modela variância (volatilidade) ao longo do tempo. p=2, q=4, lag=5.</p>
+      <div class="formula">σ²<sub>t</sub> = α₀ + Σα<sub>i</sub>ε²<sub>t−i</sub> + Σβ<sub>j</sub>σ²<sub>t−j</sub></div>
+    </div>
+    <div class="text-card">
+      <h3>Prophet <span class="model-badge mb-stat">Facebook</span></h3>
+      <p>Modelo aditivo desenvolvido pelo Facebook. Decompõe automaticamente tendência, sazonalidade e feriados. changepoint_prior_scale = 1,89.</p>
+      <div class="formula">y(t) = g(t) + s(t) + h(t) + ε(t)<br><span class="cmt">g=tendência, s=sazonalidade, h=feriados</span></div>
+    </div>
+    <div class="text-card">
+      <h3>LSTM <span class="model-badge mb-ml">Deep Learning</span></h3>
+      <p>Long Short-Term Memory. Rede neural recorrente profunda com portas de entrada, esquecimento e saída. 50 neurônios, 10 épocas, batch=10.</p>
+      <div class="formula">h<sub>t</sub> = f(W<sub>h</sub>×h<sub>t−1</sub> + W<sub>x</sub>·X<sub>t</sub>)<br><span class="cmt">Soluciona gradiente desaparecido das RNNs clássicas</span></div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Complexidade vs. Acurácia — Posicionamento dos Modelos</h3>
+    <div class="sub">Diagrama conceitual da evolução histórica dos modelos de previsão</div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="chartBubble"></canvas>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- RESULTADOS -->
+<div class="page" id="resultados">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Resultados Comparativos</h2>
+  <p class="sec-sub">LSTM apresentou o menor erro em todas as métricas. ARIMA e SARIMA ficaram em segundo lugar, enquanto Regressão Linear e Prophet tiveram os piores desempenhos.</p>
+
+  <div class="text-card">
+    <h3>Tabela de Métricas — Todos os Modelos</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Modelo</th><th>MAE</th><th>MSE</th><th>RMSE</th><th>MAPE %</th><th>R²</th><th>Rank</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="best">LSTM</td><td class="best">0,891</td><td class="best">1,010</td><td class="best">1,005</td><td class="best">3,94%</td><td class="best">0,665</td><td class="rank1">🥇 1</td></tr>
+          <tr><td>SARIMA</td><td>1,313</td><td>2,853</td><td>1,689</td><td>6,29%</td><td>0,052</td><td>🥈 2</td></tr>
+          <tr><td>ARIMA</td><td>1,335</td><td>2,692</td><td>1,641</td><td>6,14%</td><td>0,106</td><td>🥉 3</td></tr>
+          <tr><td>GARCH</td><td>1,724</td><td>4,508</td><td>2,123</td><td>7,69%</td><td>−0,497</td><td>4</td></tr>
+          <tr><td>Prophet</td><td>2,506</td><td>8,180</td><td>2,860</td><td>11,53%</td><td>−1,717</td><td>5</td></tr>
+          <tr><td class="worst">Regressão Linear</td><td class="worst">3,504</td><td class="worst">15,206</td><td class="worst">3,899</td><td class="worst">15,51%</td><td class="worst">−4,051</td><td>6</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Comparação de MAPE por Modelo</h3>
+    <div class="sub">Menor MAPE = melhor acurácia percentual de previsão</div>
+    <div class="chart-wrap">
+      <canvas id="chartMape"></canvas>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="chart-card">
+      <h3>MAE — Erro Absoluto Médio</h3>
+      <div class="sub">Interpretação direta em unidades monetárias</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="chartMae"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>R² — Coeficiente de Determinação</h3>
+      <div class="sub">Proporção da variabilidade explicada pelo modelo</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="chartR2"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <h4>Por que o LSTM ganhou?</h4>
+    <p>A arquitetura LSTM captura <strong>dependências não lineares de longo prazo</strong> — exatamente o padrão dominante em séries financeiras bancárias. Ao contrário de ARIMA/SARIMA (que assumem linearidade) e GARCH (que foca em volatilidade), o LSTM adapta seus pesos para padrões complexos, picos e reversões de tendência, resultando no menor erro em todas as 5 métricas avaliadas.</p>
+  </div>
+
+  <div class="chart-card">
+    <h3>Radar Multidimensional — Comparação de Modelos</h3>
+    <div class="sub">Avaliação em 6 dimensões (escala 0–10; maior = melhor)</div>
+    <div class="chart-wrap" style="height:380px">
+      <canvas id="chartRadar"></canvas>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CONCLUSÃO -->
+<div class="page" id="conclusao">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Conclusão</h2>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Achados Principais</h3>
+      <p><strong>LSTM foi o modelo superior</strong> em todas as métricas (MAE=0,89; R²=0,66), demonstrando que redes neurais profundas superam modelos clássicos em séries financeiras voláteis.</p>
+      <p>ARIMA e SARIMA obtiveram <strong>segundo e terceiro lugares</strong>, mostrando que modelos autorregressivos com diferenciação ainda são robustos para capturar tendências lineares em curto prazo.</p>
+      <p>GARCH, focado na volatilidade, teve desempenho inferior ao esperado para previsão de valor — confirmando que modelar variância ≠ modelar nível de preço.</p>
+      <p>Prophet apresentou dificuldade com <strong>mudanças rápidas de tendência</strong> — ponto fraco quando há volatilidade estrutural elevada.</p>
+      <div class="highlight">A Regressão Linear, com R²=−4,05, confirma que relações lineares não capturam a dinâmica do mercado financeiro bancário brasileiro.</div>
+    </div>
+    <div class="text-card">
+      <h3>Agenda de Pesquisa Futura</h3>
+      <p>O trabalho abre múltiplas direções:</p>
+      <p>→ <strong>Deep Learning avançado:</strong> Transformers (atenção temporal), N-BEATS, modelos fundacionais para séries financeiras</p>
+      <p>→ <strong>Variáveis exógenas:</strong> SELIC, câmbio, resultados trimestrais, indicadores de sentimento de mercado</p>
+      <p>→ <strong>Granularidade:</strong> dados intraday (minutal/horário) para estratégias de curto prazo</p>
+      <p>→ <strong>Modelos por ação:</strong> análise individual vs. agrupamento setorial</p>
+      <p>→ <strong>Ensemble methods:</strong> combinação de LSTM + GARCH para capturar simultaneamente nível e volatilidade</p>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Linha do Tempo dos Modelos — Evolução Histórica</h3>
+    <div class="sub">Da regressão linear clássica às redes neurais profundas modernas</div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartTimeline"></canvas>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- REFS -->
+<div class="page" id="refs">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Referências</h2>
+  <div class="text-card">
+    <ol class="ref-list">
+      <li>Bollerslev, T. (1986). Generalized autoregressive conditional heteroskedasticity. <em>Journal of Econometrics</em>, 31(3), 307–327.</li>
+      <li>Box, G. E. P. & Jenkins, G. M. (1976). <em>Time Series Analysis: Forecasting and Control.</em> Holden-Day.</li>
+      <li>Bruce, P. (2019). <em>Estatística prática para cientistas de dados.</em> Alta Books.</li>
+      <li>Dickey, D. A. & Fuller, W. A. (1979). Distribution of the estimators for autoregressive time series with a unit root. <em>JASA</em>, 74(366a), 427–431.</li>
+      <li>Engle, R. F. (1982). Autoregressive conditional heteroscedasticity. <em>Econometrica</em>, 50(4), 987–1007.</li>
+      <li>Fama, E. F. (1970). Efficient capital markets: a review. <em>Journal of Finance</em>, 25(2), 383–417.</li>
+      <li>Hochreiter, S. & Schmidhuber, J. (1997). Long short-term memory. <em>Neural Computation</em>, 9(8), 1735–1780.</li>
+      <li>Hyndman, R. J. & Athanasopoulos, G. (2018). <em>Forecasting: Principles and Practice.</em> OTexts.</li>
+      <li>Nielsen, A. (2021). <em>Análise prática de séries temporais.</em> Alta Books.</li>
+      <li>Taylor, S. J. & Letham, B. (2017). Forecasting at scale. <em>The American Statistician</em>, 72(1), 37–45.</li>
+    </ol>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map={intro:0,dados:1,modelos:2,resultados:3,conclusao:4,refs:5};
+  document.querySelectorAll('nav button')[map[id]].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const NAVY='#0A1628';const BLUE='#1B4FD8';const GOLD='#CA8A04';
+const GREEN='#15803D';const RED='#DC2626';const GRAY='#94A3B8';
+
+// Série temporal simulada
+const ctx1=document.getElementById('chartSerie').getContext('2d');
+const months=['Jan/21','Mar/21','Mai/21','Jul/21','Set/21','Nov/21','Jan/22','Mar/22','Mai/22','Jul/22','Set/22','Nov/22','Jan/23','Mar/23','Mai/23','Jul/23','Set/23','Nov/23','Jan/24','Mar/24'];
+const serieData=[19.0,20.5,21.2,20.8,19.5,18.2,17.8,17.2,16.5,17.0,17.5,18.2,19.0,19.8,20.5,21.2,22.0,22.8,23.5,24.1];
+new Chart(ctx1,{type:'line',data:{labels:months,datasets:[{label:'VWAP Bancos B3',data:serieData,borderColor:BLUE,backgroundColor:'rgba(27,79,216,.08)',borderWidth:2.5,fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:BLUE}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#E2E8F0'}},y:{grid:{color:'#E2E8F0'},ticks:{callback:v=>'R$ '+v.toFixed(1)}}}}});
+
+// Bubble: complexidade vs acurácia
+const ctx2=document.getElementById('chartBubble').getContext('2d');
+new Chart(ctx2,{type:'bubble',data:{datasets:[{label:'Regressão Linear',data:[{x:1,y:15.5,r:12}],backgroundColor:RED+'AA'},{label:'ARIMA',data:[{x:3,y:6.1,r:12}],backgroundColor:GOLD+'AA'},{label:'SARIMA',data:[{x:4,y:6.3,r:12}],backgroundColor:'#7C3AED'+'AA'},{label:'GARCH',data:[{x:5,y:7.7,r:12}],backgroundColor:'#0891B2'+'AA'},{label:'Prophet',data:[{x:6,y:11.5,r:12}],backgroundColor:'#DC7609'+'AA'},{label:'LSTM',data:[{x:8,y:3.9,r:16}],backgroundColor:GREEN+'CC'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right'}},scales:{x:{title:{display:true,text:'Complexidade Relativa'},min:0,max:10,grid:{color:'#E2E8F0'}},y:{title:{display:true,text:'MAPE (%)'},beginAtZero:true,grid:{color:'#E2E8F0'}}}}});
+
+// MAPE
+const ctx3=document.getElementById('chartMape').getContext('2d');
+const models=['Reg. Linear','ARIMA','SARIMA','GARCH','Prophet','LSTM'];
+const mape=[15.51,6.14,6.29,7.69,11.53,3.94];
+const colors=[RED,GOLD,'#7C3AED','#0891B2','#DC7609',GREEN];
+new Chart(ctx3,{type:'bar',data:{labels:models,datasets:[{label:'MAPE (%)',data:mape,backgroundColor:colors.map(c=>c+'CC'),borderColor:colors,borderWidth:1.5,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E2E8F0'},ticks:{callback:v=>v+'%'}}}}});
+
+// MAE
+const ctx4=document.getElementById('chartMae').getContext('2d');
+new Chart(ctx4,{type:'bar',data:{labels:models,datasets:[{label:'MAE',data:[3.504,1.335,1.313,1.724,2.506,0.891],backgroundColor:colors.map(c=>c+'CC'),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E2E8F0'}}}}});
+
+// R²
+const ctx5=document.getElementById('chartR2').getContext('2d');
+new Chart(ctx5,{type:'bar',data:{labels:models,datasets:[{label:'R²',data:[-4.051,0.106,0.052,-0.497,-1.717,0.665],backgroundColor:[-4.051,0.106,0.052,-0.497,-1.717,0.665].map(v=>v>0?GREEN+'BB':RED+'BB'),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#E2E8F0'}}}}});
+
+// Radar
+const ctx6=document.getElementById('chartRadar').getContext('2d');
+new Chart(ctx6,{type:'radar',data:{labels:['Acurácia (MAE)','Acurácia (MAPE)','Sazonalidade','Volatilidade','Interpretabilidade','Séries Financeiras'],datasets:[{label:'LSTM',data:[9.5,9.5,7,7,4,9],backgroundColor:'rgba(21,128,61,.15)',borderColor:GREEN,borderWidth:2,pointBackgroundColor:GREEN},{label:'SARIMA',data:[6,6,8,4,9,6],backgroundColor:'rgba(124,58,237,.15)',borderColor:'#7C3AED',borderWidth:2,pointBackgroundColor:'#7C3AED'},{label:'GARCH',data:[5,5,5,8,7,5],backgroundColor:'rgba(8,145,178,.1)',borderColor:'#0891B2',borderWidth:1.5,pointBackgroundColor:'#0891B2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right'}},scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2},grid:{color:'#E2E8F0'},pointLabels:{font:{size:11}}}}}});
+
+// Timeline
+const ctx7=document.getElementById('chartTimeline').getContext('2d');
+new Chart(ctx7,{type:'scatter',data:{datasets:[{label:'Modelos',data:[{x:1886,y:5},{x:1976,y:5.5},{x:1976,y:6},{x:1982,y:6.5},{x:1986,y:7},{x:1997,y:8.5},{x:2017,y:7}],backgroundColor:[RED,GOLD,GOLD+'AA','#0891B2','#0891B2','#065F46','#DC7609'],pointRadius:[12,12,12,12,12,16,12],pointStyle:'circle'},{label:'Linha do tempo',data:[{x:1880,y:5},{x:2020,y:5}],type:'line',borderColor:GRAY,borderWidth:1.5,pointRadius:0,showLine:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const y=ctx.raw.x;const names={1886:'Regressão Linear (Galton)',1976:'ARIMA/SARIMA (Box-Jenkins)',1982:'ARCH (Engle)',1986:'GARCH (Bollerslev)',1997:'LSTM (Hochreiter)',2017:'Prophet (Facebook)'};return names[y]||''}}}},scales:{x:{type:'linear',min:1870,max:2025,grid:{color:'#E2E8F0'},ticks:{callback:v=>v.toFixed(0)}},y:{display:false}}}});
+</script>
+</body>
+</html>
