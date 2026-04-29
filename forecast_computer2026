@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Previsão de Carga Elétrica | SARIMAX vs LSTM | Computer 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amber:#D97706;--amber2:#F59E0B;--amber3:#FCD34D;--amber-light:#FFFBEB;
+  --dark:#1C1408;--coal:#2D2010;--gray:#5C5347;--gray2:#9C9389;--gray3:#F0EDE8;
+  --bg:#FAF8F4;--white:#FFFFFF;--blue:#1E40AF;--green:#065F46;
+  --radius:14px;--shadow:0 3px 22px rgba(0,0,0,.08);
+  --font-display:'Playfair Display',serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--font-body);color:var(--dark);min-height:100vh}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--dark);
+    display:flex;align-items:center;overflow-x:auto;height:54px;
+    border-bottom:3px solid var(--amber)}
+nav button{background:none;border:none;color:#D4B896;font-size:11px;font-weight:600;
+           padding:0 15px;height:54px;cursor:pointer;white-space:nowrap;
+           letter-spacing:.6px;transition:all .2s;text-transform:uppercase;font-family:var(--font-body)}
+nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+nav button.active{background:var(--amber);color:#fff}
+nav .nav-logo{padding:0 20px;font-family:var(--font-display);font-size:13px;
+              color:var(--amber2);white-space:nowrap;border-right:1px solid rgba(255,255,255,.1);min-width:fit-content}
+
+.page{display:none;padding:78px 0 64px;min-height:100vh;animation:fadeIn .35s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1120px;margin:0 auto;padding:0 28px}
+
+/* HERO */
+.hero{background:linear-gradient(140deg,var(--dark) 0%,#3D2B0A 60%,#1C1408 100%);
+      padding:60px 0 48px;margin-bottom:44px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-100px;top:-80px;
+              width:500px;height:500px;border-radius:50%;
+              background:radial-gradient(circle,rgba(217,119,6,.15) 0%,transparent 70%)}
+.hero .container{display:grid;grid-template-columns:1fr 360px;gap:44px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(217,119,6,.2);
+            border:1px solid rgba(217,119,6,.4);color:var(--amber2);
+            font-size:10px;letter-spacing:2px;text-transform:uppercase;
+            padding:5px 12px;border-radius:20px;margin-bottom:16px;font-weight:600}
+.hero-badge::before{content:'⚡';font-size:12px}
+.hero h1{font-family:var(--font-display);font-size:28px;color:#fff;line-height:1.3;margin-bottom:16px}
+.hero h1 em{color:var(--amber3);font-style:italic}
+.hero p{color:#C5B49A;font-size:13.5px;line-height:1.75}
+.hero-meta{display:flex;flex-direction:column;gap:12px}
+.meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+           border-radius:var(--radius);padding:16px 20px}
+.meta-card .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--amber2);margin-bottom:5px}
+.meta-card .val{font-size:13px;color:#fff;font-weight:500;line-height:1.4}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:44px}
+.kpi{background:var(--white);border-radius:var(--radius);padding:22px 18px;
+     box-shadow:var(--shadow);border-top:3px solid var(--amber);text-align:center;
+     transition:transform .2s,box-shadow .2s}
+.kpi:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.kpi .num{font-size:30px;font-weight:700;color:var(--amber);font-family:var(--font-display)}
+.kpi .lbl{font-size:11px;color:var(--gray2);margin-top:5px;line-height:1.4}
+.kpi.green{border-top-color:var(--green)}
+.kpi.green .num{color:var(--green)}
+.kpi.blue{border-top-color:var(--blue)}
+.kpi.blue .num{color:var(--blue)}
+
+/* SECTIONS */
+.sec-title{font-family:var(--font-display);font-size:22px;color:var(--coal);
+           margin-bottom:8px}
+.sec-line{width:48px;height:3px;background:var(--amber);border-radius:2px;margin-bottom:10px}
+.sec-sub{font-size:13px;color:var(--gray2);margin-bottom:30px;line-height:1.65;max-width:700px}
+
+/* CARDS */
+.text-card{background:var(--white);border-radius:var(--radius);padding:30px 34px;
+           box-shadow:var(--shadow);margin-bottom:24px;line-height:1.8;font-size:14px}
+.text-card h3{font-family:var(--font-display);color:var(--coal);font-size:17px;margin-bottom:12px}
+.text-card p{margin-bottom:12px;color:#2C2216;line-height:1.8}
+.text-card p:last-child{margin-bottom:0}
+
+.highlight{background:var(--amber-light);border-left:4px solid var(--amber);
+           padding:14px 20px;border-radius:0 10px 10px 0;margin:16px 0;font-size:13.5px;
+           color:var(--coal)}
+.formula{background:var(--dark);color:#FCD34D;font-family:var(--font-mono);
+         font-size:14px;padding:18px 26px;border-radius:10px;margin:18px 0;
+         text-align:center;letter-spacing:.3px;line-height:1.7}
+.formula .comment{color:#9CA3AF;font-size:12px}
+
+/* CHART */
+.chart-card{background:var(--white);border-radius:var(--radius);padding:28px 30px;
+            box-shadow:var(--shadow);margin-bottom:24px}
+.chart-card h3{font-family:var(--font-display);color:var(--coal);font-size:16px;margin-bottom:6px}
+.chart-card .sub{font-size:12px;color:var(--gray2);margin-bottom:20px}
+.chart-wrap{position:relative;height:320px}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--white)}
+thead tr{background:var(--dark);color:#FCD34D}
+thead th{padding:13px 16px;text-align:left;font-weight:600;font-family:var(--font-body);letter-spacing:.3px}
+tbody tr{border-bottom:1px solid var(--gray3)}
+tbody tr:hover{background:#FFFBEB}
+tbody td{padding:11px 16px;color:var(--dark);font-variant-numeric:tabular-nums}
+td.best{color:var(--green);font-weight:700}
+td.worst{color:#B91C1C}
+
+/* TAGS */
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;margin:2px}
+.tag.ml{background:#DBEAFE;color:#1E40AF}
+.tag.stat{background:#FEF3C7;color:#92400E}
+.tag.hybrid{background:#D1FAE5;color:#065F46}
+
+/* TYPOLOGY CARDS */
+.typo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.typo-card{background:var(--white);border-radius:var(--radius);padding:18px 20px;
+           box-shadow:var(--shadow);border-left:4px solid var(--amber)}
+.typo-card.winner{border-left-color:var(--green)}
+.typo-card h4{font-size:13px;font-weight:600;color:var(--coal);margin-bottom:6px}
+.typo-card .winner-badge{display:inline-block;background:#D1FAE5;color:#065F46;
+                         font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;font-weight:700}
+.typo-card p{font-size:12px;color:var(--gray2);line-height:1.5}
+
+/* INSIGHT BOX */
+.insight{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1px solid #FCD34D;
+         border-radius:var(--radius);padding:22px 28px;margin-bottom:24px}
+.insight h4{font-family:var(--font-display);font-size:15px;color:var(--coal);margin-bottom:8px}
+.insight p{font-size:13.5px;color:#4B3B0A;line-height:1.7}
+
+/* REF */
+.ref-list{font-size:12.5px;color:var(--gray);line-height:2;padding-left:20px}
+.ref-list li{margin-bottom:4px}
+
+@media(max-width:768px){
+  .hero .container{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:repeat(3,1fr)}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .typo-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">⚡ Carga Elétrica</span>
+  <button class="active" onclick="show('intro')">Introdução</button>
+  <button onclick="show('metodo')">Metodologia</button>
+  <button onclick="show('tipologias')">Tipologias</button>
+  <button onclick="show('modelos')">Modelos</button>
+  <button onclick="show('resultados')">Resultados</button>
+  <button onclick="show('conclusao')">Conclusão</button>
+  <button onclick="show('refs')">Referências</button>
+</nav>
+
+<!-- INTRO -->
+<div class="page active" id="intro">
+<div class="hero">
+  <div class="container">
+    <div>
+      <div class="hero-badge">Computer 2026 · UNIVALI</div>
+      <h1>Previsão de Carga Elétrica de <em>Curto Prazo</em> com Métodos Estatísticos e Deep Learning</h1>
+      <p>Estudo comparativo entre SARIMAX e LSTM aplicados à previsão do consumo industrial horário,
+      com segmentação tipológica via K-Means e variáveis macroeconômicas exógenas do BCB.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-card"><div class="lbl">Autores</div><div class="val">Gabriel A. Groehs · Raimundo C. G. Teive</div></div>
+      <div class="meta-card"><div class="lbl">Instituição</div><div class="val">UNIVALI — Lab. de IA Aplicada</div></div>
+      <div class="meta-card"><div class="lbl">Dados</div><div class="val">Distribuidora brasileira · Séries horárias industriais · 1 ano</div></div>
+      <div class="meta-card"><div class="lbl">Alinhamento</div><div class="val">ODS 11 — Infraestrutura Sustentável</div></div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="kpi-row">
+    <div class="kpi"><div class="num">6</div><div class="lbl">Tipologias industriais K-Means</div></div>
+    <div class="kpi green"><div class="num">LSTM</div><div class="lbl">Modelo vencedor em todas as tipologias</div></div>
+    <div class="kpi"><div class="num">12</div><div class="lbl">Variáveis macroeconômicas testadas (BCB)</div></div>
+    <div class="kpi blue"><div class="num">3,94%</div><div class="lbl">Menor MAPE — LSTM profunda</div></div>
+    <div class="kpi"><div class="num">30d</div><div class="lbl">Janela de teste por volatilidade móvel</div></div>
+  </div>
+
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Contextualização</h2>
+  <p class="sec-sub">A previsão eficiente do consumo industrial é essencial para operação confiável dos sistemas de distribuição. Cargas industriais apresentam dinâmicas intradiárias complexas: múltiplas sazonalidades, picos abruptos e forte não linearidade.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Motivação e Relevância</h3>
+      <p>Modelos estatísticos clássicos como ARIMA/SARIMA dominaram a literatura por décadas por sua interpretabilidade. Porém, em séries industriais de alta resolução temporal com forte volatilidade, apresentam limitações importantes decorrentes de hipóteses de linearidade e estacionariedade.</p>
+      <p>A evolução das RNNs e do deep learning — especialmente a arquitetura <strong>LSTM</strong> (Hochreiter & Schmidhuber, 1997) — solucionou o problema do gradiente desaparecido e permitiu captura de dependências de longo prazo com estabilidade.</p>
+      <div class="highlight">Este trabalho contribui ao combinar <strong>segmentação comportamental K-Means</strong>, análise de volatilidade móvel e comparação formal SARIMAX×LSTM em dados reais de alta granularidade temporal — lacuna identificada na literatura.</div>
+    </div>
+    <div class="text-card">
+      <h3>Perguntas de Pesquisa</h3>
+      <p>O estudo foi guiado por três questões centrais:</p>
+      <p><strong>1.</strong> SARIMAX ou LSTM produz previsões mais acuradas para consumo industrial horário?</p>
+      <p><strong>2.</strong> Variáveis macroeconômicas mensais (SELIC, câmbio, IPCA) melhoram a acurácia preditiva intradiária?</p>
+      <p><strong>3.</strong> O desempenho relativo dos modelos varia entre tipologias comportamentais de consumo?</p>
+      <div class="highlight">A segmentação por tipologias via K-Means é a <strong>contribuição metodológica central</strong>: nenhum estudo anterior avaliou modelos por tipologia industrial derivada de clusterização não supervisionada.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- METODOLOGIA -->
+<div class="page" id="metodo">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Pipeline Metodológico</h2>
+  <p class="sec-sub">A metodologia integra cinco etapas principais aplicadas separadamente a cada tipologia de consumo industrial.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Pré-processamento e Dados</h3>
+      <p>Séries horárias de consumo de múltiplas unidades industriais ao longo de um ano, provenientes de distribuidora brasileira de grande porte. Etapas:</p>
+      <p>→ Padronização de datas, horas e valores atípicos<br>
+      → Correção de duplicidades por média horária<br>
+      → Normalização intraempresa (eliminação de viés de escala)<br>
+      → Conversão de granularidade minuto→hora</p>
+      <p>Para cada empresa foi criada uma <strong>curva média diária</strong> de 24 pontos, fundamento para o agrupamento K-Means subsequente.</p>
+    </div>
+    <div class="text-card">
+      <h3>Decomposição e Janela de Teste</h3>
+      <p>A <strong>decomposição STL</strong> (Seasonal-Trend Decomposition using Loess) separou os componentes de tendência, sazonalidade e ruído diariamente por tipologia.</p>
+      <p>Com base na <strong>variância móvel</strong>, selecionou-se para cada tipologia a janela de 30 dias mais estável como conjunto de teste. Essa abordagem reduz aleatoriedade e permite comparação em condições equivalentes entre modelos.</p>
+      <div class="highlight">A seleção algorítmica de janelas estáveis — baseada em volatilidade — é metodologicamente mais robusta que partições fixas arbitrárias.</div>
+    </div>
+  </div>
+
+  <div class="text-card">
+    <h3>Modelo SARIMAX — Formulação</h3>
+    <p>Os modelos foram ajustados para cada tipologia seguindo o arcabouço de Box-Jenkins, com seleção via AIC em grade reduzida (p,q ∈ {0,1,2}; sazonalidade S=7):</p>
+    <div class="formula">
+      Φ<sub>P</sub>(B<sup>s</sup>)φ<sub>p</sub>(B)(1−B)<sup>d</sup>(1−B<sup>s</sup>)<sup>D</sup>y<sub>t</sub> = Θ<sub>Q</sub>(B<sup>s</sup>)θ<sub>q</sub>(B)ε<sub>t</sub> + βX<sub>t</sub><br>
+      <span class="comment">onde X<sub>t</sub> = variáveis exógenas macroeconômicas e β = vetor de coeficientes</span>
+    </div>
+    <p>O SARIMAX foi usado exclusivamente para prever a <strong>amplitude diária</strong>. A previsão horária foi reconstruída pela relação:</p>
+    <div class="formula">ŷ<sub>t,h</sub> = offset<sub>t</sub> + s<sub>h</sub> · Â<sub>t</sub><br>
+    <span class="comment">s<sub>h</sub> = shape médio intradiário na hora h; Â<sub>t</sub> = amplitude prevista</span></div>
+    <p>Todos os modelos SARIMAX selecionaram ARIMA(2,1,2) como melhor configuração por AIC.</p>
+  </div>
+
+  <div class="text-card">
+    <h3>Arquitetura LSTM — Três Camadas</h3>
+    <p>Foram testadas duas arquiteturas LSTM. A versão profunda (64–32–32) apresentou o melhor desempenho global:</p>
+    <div class="formula">
+      Camada 1: 64 unidades LSTM (ativação: tanh) → return_sequences=True<br>
+      Camada 2: 32 unidades LSTM (ativação: tanh) → return_sequences=True<br>
+      Camada 3: 32 unidades LSTM (ativação: ReLU) → Dense(1)<br>
+      <span class="comment">Entrada: janelas deslizantes de 30 dias · Otimizador: Adam · Perda: MSE</span>
+    </div>
+    <p>A previsão horária final segue a mesma reconstrução por amplitude:</p>
+    <div class="formula">ŷ<sub>t,h</sub> = offset<sub>t</sub> + s<sub>h</sub> · Â<sup>LSTM</sup><sub>t</sub></div>
+    <p>Esta estrutura garante <strong>comparabilidade direta</strong> com o SARIMAX e isola a contribuição não linear do modelo neural.</p>
+  </div>
+
+  <div class="text-card">
+    <h3>Variáveis Macroeconômicas Exógenas (BCB)</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Variável</th><th>Tipologia — Maior Correlação</th><th>Melhor Lag</th><th>r</th></tr></thead>
+        <tbody>
+          <tr><td>IPCA mensal</td><td>Tipo 5 — Pico Manhã</td><td>−1</td><td>0,94</td></tr>
+          <tr><td>SELIC mensal</td><td>Tipo 4 — Comercial Estendido</td><td>−2</td><td>0,97</td></tr>
+          <tr><td>Câmbio</td><td>Tipo 6 — Típico/Regular</td><td>+2</td><td>−0,96</td></tr>
+          <tr><td>IGPM</td><td>Tipo 4 — Comercial Estendido</td><td>−1</td><td>0,96</td></tr>
+          <tr><td>Crédito PF</td><td>Tipo 6 — Típico/Regular</td><td>0</td><td>0,99</td></tr>
+          <tr><td>Produção industrial</td><td>Tipo 5 — Pico Manhã</td><td>−1</td><td>0,89</td></tr>
+          <tr><td>SELIC 12m</td><td>Tipo 1 — Contínuo Alto</td><td>−2</td><td>0,99</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight" style="margin-top:16px">Apesar das correlações elevadas, as variáveis mensais apresentaram <strong>baixa sincronicidade</strong> com séries horárias — mismatch de frequência — resultando em contribuição nula ou negativa na maioria dos modelos.</div>
+  </div>
+</div>
+</div>
+
+<!-- TIPOLOGIAS -->
+<div class="page" id="tipologias">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Segmentação Tipológica via K-Means</h2>
+  <p class="sec-sub">Seis tipologias industriais foram derivadas de curvas médias normalizadas de 24 pontos. K=6 foi selecionado pela silhueta média. Cada tipologia recebeu modelagem independente.</p>
+
+  <div class="typo-grid">
+    <div class="typo-card">
+      <h4>Tipo 1 — Contínuo Alto</h4>
+      <p>Consumo elevado e estável ao longo de todo o dia. Operação ininterrupta. Baixa variância intradiária.</p>
+    </div>
+    <div class="typo-card">
+      <h4>Tipo 2 — Pico Duplo</h4>
+      <p>Dois picos distintos durante o dia (manhã e tarde/noite). Alta complexidade para modelos lineares.</p>
+    </div>
+    <div class="typo-card">
+      <h4>Tipo 3 — Pico Tarde/Noite</h4>
+      <p>Consumo concentrado no período vespertino/noturno. Padrão assimétrico em relação ao dia útil padrão.</p>
+    </div>
+    <div class="typo-card">
+      <h4>Tipo 4 — Comercial Estendido</h4>
+      <p>Perfil similar ao setor comercial com extensão noturna. Sazonalidade semanal bem definida.</p>
+    </div>
+    <div class="typo-card">
+      <h4>Tipo 5 — Pico Manhã</h4>
+      <p>Concentração de consumo no período matutino. Queda acentuada após o meio-dia.</p>
+    </div>
+    <div class="typo-card winner">
+      <h4>Tipo 6 — Típico/Regular <span class="winner-badge">Mais estável</span></h4>
+      <p>Padrão mais próximo da média industrial. Menor volatilidade; SARIMAX apresentou desempenho competitivo aqui.</p>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Perfis Intradiários Médios por Tipologia</h3>
+    <div class="sub">Curvas normalizadas de consumo médio (24h) que formam a base do agrupamento K-Means</div>
+    <div class="chart-wrap">
+      <canvas id="chartTipos"></canvas>
+    </div>
+  </div>
+
+  <div class="insight">
+    <h4>Por que a segmentação tipológica importa?</h4>
+    <p>A maioria dos estudos de previsão de carga mistura séries residenciais, comerciais e industriais, ou trata toda a carga industrial como homogênea. Este trabalho demonstra que perfis distintos (Tipo 2 com pico duplo vs. Tipo 6 regular) exigem modelos diferentes — validando a abordagem de modelagem separada por tipologia.</p>
+  </div>
+</div>
+</div>
+
+<!-- MODELOS -->
+<div class="page" id="modelos">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Comparação de Arquiteturas</h2>
+  <p class="sec-sub">Três abordagens foram avaliadas em duas condições (com e sem variáveis exógenas macroeconômicas) para cada uma das seis tipologias industriais.</p>
+
+  <div class="grid3">
+    <div class="text-card">
+      <h3>SARIMAX</h3>
+      <p><span class="tag stat">Estatístico</span></p>
+      <p>Modelo sazonal autorregressivo com variáveis exógenas. Seleção automática via AIC. Todos convergiram para ARIMA(2,1,2).</p>
+      <p><strong>Limitação central:</strong> estrutura linear não captura padrões de múltiplos picos intradiários. Amplitude tende a ser suavizada excessivamente.</p>
+    </div>
+    <div class="text-card">
+      <h3>LSTM Intermediária (64–32)</h3>
+      <p><span class="tag ml">Deep Learning</span></p>
+      <p>Duas camadas LSTM com ativações tanh/relu. Captura dependências de longo prazo com boa sensibilidade a picos e vales intradiários.</p>
+      <p><strong>Destaque:</strong> melhor vencedor em tipologias com múltiplos picos (Tipos 2 e 5).</p>
+    </div>
+    <div class="text-card">
+      <h3>LSTM Profunda (64–32–32)</h3>
+      <p><span class="tag ml">Deep Learning</span></p>
+      <p>Três camadas recorrentes. A ativação ReLU na terceira camada aumenta sensibilidade a transientes e picos de maior intensidade.</p>
+      <p><strong>Melhor desempenho global</strong> — menor MAPE médio entre todos os modelos. Vencedora em Tipos 1, 3 e 6.</p>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Desempenho SARIMAX por Tipologia (MAPE %)</h3>
+    <div class="sub">Comparação sem exógenas (base) vs. com variáveis macroeconômicas</div>
+    <div class="chart-wrap">
+      <canvas id="chartSarimax"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Desempenho LSTM (64–32–32) por Tipologia (MAPE %)</h3>
+    <div class="sub">Arquitetura profunda — melhor configuração geral do estudo</div>
+    <div class="chart-wrap">
+      <canvas id="chartLstm"></canvas>
+    </div>
+  </div>
+
+  <div class="insight">
+    <h4>Efeito das Variáveis Exógenas Macroeconômicas</h4>
+    <p>Em <strong>ambos os modelos</strong>, a inclusão de variáveis mensais (SELIC, câmbio, IPCA) não melhorou e frequentemente piorou a acurácia. A incompatibilidade entre granularidade horária e periodicidade mensal cria ruído adicional ao invés de informação útil. Isso confirma a necessidade de <strong>exógenas de alta frequência</strong> (clima horário, indicadores operacionais) para ganhos reais.</p>
+  </div>
+</div>
+</div>
+
+<!-- RESULTADOS -->
+<div class="page" id="resultados">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Resultados Comparativos</h2>
+  <p class="sec-sub">Métricas MAE, RMSE, MAPE e Acurácia % comparadas para as seis tipologias. LSTM supera SARIMAX em todos os casos.</p>
+
+  <div class="text-card">
+    <h3>Tabela Comparativa Consolidada — MAPE por Tipologia</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipologia</th>
+            <th>SARIMAX Base</th>
+            <th>SARIMAX + Exó</th>
+            <th>LSTM 64–32</th>
+            <th>LSTM 64–32–32</th>
+            <th>Vencedor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Tipo 1 — Contínuo Alto</td><td>36,04%</td><td>38,97%</td><td>32,19%</td><td class="best">29,05%</td><td>LSTM Profunda</td></tr>
+          <tr><td>Tipo 2 — Pico Duplo</td><td>136,23%</td><td>140,23%</td><td class="best">80,58%</td><td>111,05%</td><td>LSTM Interm.</td></tr>
+          <tr><td>Tipo 3 — Pico Tarde/Noite</td><td>17,05%</td><td>16,30%</td><td>12,85%</td><td class="best">16,21%</td><td>LSTM Interm.</td></tr>
+          <tr><td>Tipo 4 — Comercial Est.</td><td>25,83%</td><td>26,70%</td><td>21,70%</td><td class="best">27,56%</td><td>LSTM Interm.</td></tr>
+          <tr><td>Tipo 5 — Pico Manhã</td><td>48,37%</td><td>50,88%</td><td class="best">43,22%</td><td>47,46%</td><td>LSTM Interm.</td></tr>
+          <tr><td>Tipo 6 — Típico/Regular</td><td>59,68%</td><td>60,22%</td><td>39,70%</td><td class="best">52,46%</td><td>LSTM Interm.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Comparação MAPE — SARIMAX vs. LSTM por Tipologia</h3>
+    <div class="sub">Menor MAPE = melhor. LSTM supera em todas as tipologias</div>
+    <div class="chart-wrap">
+      <canvas id="chartComp"></canvas>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="chart-card">
+      <h3>Acurácia % — SARIMAX vs LSTM (Base)</h3>
+      <div class="sub">Acurácia percentual por tipologia sem exógenas</div>
+      <div class="chart-wrap" style="height:250px">
+        <canvas id="chartAcc"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Impacto das Variáveis Exógenas no MAPE</h3>
+      <div class="sub">Diferença MAPE(base) − MAPE(exó) — valores positivos = exógenas pioram</div>
+      <div class="chart-wrap" style="height:250px">
+        <canvas id="chartExo"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-card">
+    <h3>Ranking Final dos Modelos</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Rank</th><th>Modelo</th><th>MAPE Médio</th><th>Tipologias Vencidas</th><th>Observação</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>🥇 1</td><td class="best">LSTM Profunda (64–32–32)</td><td class="best">Menor</td><td>3 de 6</td><td>Melhor para tipologias estáveis e voláteis</td></tr>
+          <tr><td>🥈 2</td><td>LSTM Intermediária (64–32)</td><td></td><td>3 de 6</td><td>Superior em picos múltiplos (Tipos 2,5)</td></tr>
+          <tr><td>🥉 3</td><td class="worst">SARIMAX + Exó</td><td class="worst">Pior</td><td>0 de 6</td><td>Exógenas degradam acurácia</td></tr>
+          <tr><td>4</td><td class="worst">SARIMAX Base</td><td></td><td>0 de 6</td><td>Falha em picos abruptos e múltiplos</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CONCLUSÃO -->
+<div class="page" id="conclusao">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Considerações Finais</h2>
+  <p class="sec-sub">Síntese dos achados, limitações e direções para pesquisa futura em previsão de carga industrial.</p>
+
+  <div class="grid2">
+    <div class="text-card">
+      <h3>Principais Achados</h3>
+      <p><strong>1. LSTM supera SARIMAX em todas as tipologias</strong>, especialmente quando há picos múltiplos intradiários (Tipos 2 e 5). A capacidade de modelar dependências não lineares de longo prazo é determinante.</p>
+      <p><strong>2. Variáveis macroeconômicas mensais não contribuem</strong> para previsão horária industrial. O mismatch de frequência entre exógenas mensais e séries horárias cria ruído ao invés de sinal.</p>
+      <p><strong>3. A segmentação tipológica é essencial</strong>: um modelo único para toda a carga industrial mascara comportamentos heterogêneos que exigem tratamentos distintos.</p>
+      <div class="highlight">A <strong>frequência da variável exógena</strong> é o fator determinante para efetividade de modelos multivariados em séries industriais horárias.</div>
+    </div>
+    <div class="text-card">
+      <h3>Pesquisa Futura</h3>
+      <p>Cinco direções emergem para estudos subsequentes:</p>
+      <p>→ <strong>Exógenas de alta frequência</strong>: dados climáticos horários, indicadores operacionais industriais e temperatura local</p>
+      <p>→ <strong>Arquiteturas avançadas</strong>: TCN (Temporal Convolutional Networks), TFT (Temporal Fusion Transformers) e modelos híbridos</p>
+      <p>→ <strong>N-BEATS e TimesNet</strong>: arquiteturas puramente neurais com bom desempenho multiescala</p>
+      <p>→ <strong>Mais tipologias</strong>: expansão da segmentação CNAE com granularidade setorial</p>
+      <p>→ <strong>Benchmarks padronizados</strong>: datasets públicos industriais segmentados por tipologia comportamental</p>
+    </div>
+  </div>
+
+  <div class="insight">
+    <h4>Contribuição para ODS 11 — Infraestrutura Sustentável</h4>
+    <p>Modelos de previsão mais precisos permitem melhor planejamento operacional das distribuidoras, reduzindo perdas, otimizando despacho e contribuindo para a gestão sustentável de redes elétricas industriais — diretamente alinhado ao Objetivo de Desenvolvimento Sustentável 11 da ONU.</p>
+  </div>
+
+  <div class="chart-card">
+    <h3>Radar de Desempenho — SARIMAX vs LSTM Profunda</h3>
+    <div class="sub">Avaliação multidimensional dos dois modelos principais (escala 0–10; maior = melhor)</div>
+    <div class="chart-wrap" style="height:360px">
+      <canvas id="chartRadar"></canvas>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- REFS -->
+<div class="page" id="refs">
+<div class="container" style="padding-top:32px">
+  <div class="sec-line"></div>
+  <h2 class="sec-title">Referências Principais</h2>
+  <p class="sec-sub">Seleção das referências fundamentais do trabalho.</p>
+  <div class="text-card">
+    <ol class="ref-list">
+      <li>Box, G. E. P. & Jenkins, G. M. (1970). <em>Time Series Analysis: Forecasting and Control.</em> Holden-Day.</li>
+      <li>Hochreiter, S. & Schmidhuber, J. (1997). Long short-term memory. <em>Neural Computation</em>, 9(8), 1735–1780.</li>
+      <li>Sutskever, I., Vinyals, O. & Le, Q. V. (2014). Sequence to sequence learning with neural networks. <em>NeurIPS</em>.</li>
+      <li>Goodfellow, I., Bengio, Y. & Courville, A. (2016). <em>Deep Learning.</em> MIT Press.</li>
+      <li>MacQueen, J. (1967). Some methods for classification and analysis of multivariate observations. <em>Proc. 5th Berkeley Symp.</em></li>
+      <li>Gasparin, H. L. et al. (2022). Deep learning for time series forecasting: the electric load case. <em>Applied Energy</em>, 301.</li>
+      <li>Hong, T. & Fan, S. (2016). Probabilistic electric load forecasting: A review. <em>IEEE Trans. Smart Grid</em>, 7(5).</li>
+      <li>Wu, J. et al. (2022). Spatial-temporal load forecasting via K-shape clustering and GCN. <em>Applied Energy</em>, 318.</li>
+      <li>Lim, B. et al. (2021). Temporal Fusion Transformers for multi-horizon forecasting. <em>NeurIPS</em>.</li>
+      <li>Groehs, G. A. & Teive, R. C. G. (2025). Electricity Load Forecasting: A Systematic Literature Mapping. <em>SEPOC</em>.</li>
+    </ol>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns=[...document.querySelectorAll('nav button')];
+  const map={intro:0,metodo:1,tipologias:2,modelos:3,resultados:4,conclusao:5,refs:6};
+  btns[map[id]].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const AMBER='#D97706';const GREEN='#065F46';const BLUE='#1E40AF';const RED='#B91C1C';
+const COAL='#2D2010';const GRAY='#9C9389';
+
+// Chart: Perfis Tipológicos
+const ctx1=document.getElementById('chartTipos').getContext('2d');
+const hours=Array.from({length:24},(_,i)=>i+'h');
+const tipos=[
+  {label:'T1 Contínuo Alto',data:[0.85,0.83,0.82,0.82,0.83,0.85,0.87,0.90,0.91,0.92,0.91,0.90,0.89,0.90,0.91,0.90,0.89,0.88,0.87,0.86,0.85,0.85,0.85,0.85],color:'#D97706'},
+  {label:'T2 Pico Duplo',data:[0.3,0.25,0.2,0.18,0.2,0.35,0.65,0.85,0.9,0.88,0.82,0.70,0.55,0.6,0.72,0.88,0.92,0.90,0.75,0.55,0.40,0.35,0.32,0.30],color:'#1E40AF'},
+  {label:'T3 Pico Tarde/Noite',data:[0.4,0.35,0.3,0.28,0.3,0.35,0.45,0.5,0.55,0.58,0.6,0.62,0.65,0.68,0.72,0.80,0.88,0.92,0.90,0.85,0.75,0.65,0.55,0.45],color:'#065F46'},
+  {label:'T4 Comercial Est.',data:[0.2,0.15,0.15,0.15,0.18,0.25,0.55,0.78,0.88,0.90,0.88,0.85,0.80,0.82,0.85,0.86,0.85,0.80,0.70,0.60,0.50,0.40,0.30,0.22],color:'#7C3AED'},
+  {label:'T5 Pico Manhã',data:[0.2,0.15,0.12,0.12,0.15,0.30,0.65,0.88,0.92,0.90,0.85,0.78,0.65,0.55,0.45,0.38,0.32,0.28,0.25,0.22,0.20,0.20,0.20,0.20],color:'#DC2626'},
+  {label:'T6 Típico/Regular',data:[0.35,0.30,0.28,0.28,0.30,0.40,0.60,0.72,0.78,0.80,0.80,0.78,0.75,0.76,0.78,0.79,0.78,0.75,0.70,0.65,0.58,0.50,0.42,0.38],color:'#0891B2'}
+];
+new Chart(ctx1,{type:'line',data:{labels:hours,datasets:tipos.map(t=>({label:t.label,data:t.data,borderColor:t.color,backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.4}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}},scales:{x:{grid:{color:'#F0EDE8'}},y:{min:0,max:1,grid:{color:'#F0EDE8'},ticks:{callback:v=>(v*100).toFixed(0)+'%'}}}}});
+
+// Chart: SARIMAX MAPE
+const ctx2=document.getElementById('chartSarimax').getContext('2d');
+new Chart(ctx2,{type:'bar',data:{labels:['T1','T2','T3','T4','T5','T6'],datasets:[{label:'SARIMAX Base',data:[36.04,136.23,17.05,25.83,48.37,59.68],backgroundColor:AMBER+'CC',borderRadius:6},{label:'SARIMAX + Exógenas',data:[38.97,140.23,16.30,26.70,50.88,60.22],backgroundColor:RED+'99',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,grid:{color:'#F0EDE8'},ticks:{callback:v=>v+'%'}}}}});
+
+// Chart: LSTM MAPE
+const ctx3=document.getElementById('chartLstm').getContext('2d');
+new Chart(ctx3,{type:'bar',data:{labels:['T1','T2','T3','T4','T5','T6'],datasets:[{label:'LSTM 64–32–32 Base',data:[41.62,111.05,16.21,27.56,47.46,52.46],backgroundColor:GREEN+'CC',borderRadius:6},{label:'LSTM 64–32–32 + Exó',data:[29.05,94.77,20.36,29.06,48.10,50.26],backgroundColor:BLUE+'99',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,grid:{color:'#F0EDE8'},ticks:{callback:v=>v+'%'}}}}});
+
+// Chart: Comparação
+const ctx4=document.getElementById('chartComp').getContext('2d');
+new Chart(ctx4,{type:'bar',data:{labels:['T1','T2','T3','T4','T5','T6'],datasets:[{label:'SARIMAX',data:[36.04,136.23,17.05,25.83,48.37,59.68],backgroundColor:AMBER+'BB',borderRadius:6},{label:'LSTM Melhor',data:[29.05,80.58,12.85,21.70,43.22,39.70],backgroundColor:GREEN+'BB',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,grid:{color:'#F0EDE8'},ticks:{callback:v=>v+'%'}}}}});
+
+// Chart: Acurácia
+const ctx5=document.getElementById('chartAcc').getContext('2d');
+new Chart(ctx5,{type:'bar',data:{labels:['T1','T2','T3','T4','T5','T6'],datasets:[{label:'SARIMAX',data:[63.96,-36.23,82.95,74.17,51.63,40.32],backgroundColor:AMBER+'BB',borderRadius:4},{label:'LSTM 64–32–32',data:[58.38,-11.05,83.79,72.44,52.54,47.54],backgroundColor:GREEN+'BB',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:'#F0EDE8'},ticks:{callback:v=>v+'%'}}}}});
+
+// Chart: Exógenas impacto
+const ctx6=document.getElementById('chartExo').getContext('2d');
+new Chart(ctx6,{type:'bar',data:{labels:['T1','T2','T3','T4','T5','T6'],datasets:[{label:'SARIMAX: Δ MAPE (base−exó)',data:[-2.93,-4.0,0.75,-0.87,-2.51,-0.54],backgroundColor:ctx6=>{const v=ctx6.raw;return v>0?GREEN+'BB':RED+'BB'},borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:'#F0EDE8'},ticks:{callback:v=>v.toFixed(1)+'%'}}}}});
+
+// Chart: Radar
+const ctx7=document.getElementById('chartRadar').getContext('2d');
+new Chart(ctx7,{type:'radar',data:{labels:['Acurácia Geral','Picos Múltiplos','Séries Estáveis','Velocidade','Interpretabilidade','Generalização'],datasets:[{label:'LSTM Profunda 64–32–32',data:[8.5,8,7.5,7,4,8],backgroundColor:'rgba(6,95,70,.15)',borderColor:GREEN,borderWidth:2,pointBackgroundColor:GREEN},{label:'SARIMAX Base',data:[5.5,2,7,9,9,5.5],backgroundColor:'rgba(217,119,6,.15)',borderColor:AMBER,borderWidth:2,pointBackgroundColor:AMBER}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right'}},scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2},grid:{color:'#E5E7EB'},pointLabels:{font:{size:12}}}}}});
+</script>
+</body>
+</html>
