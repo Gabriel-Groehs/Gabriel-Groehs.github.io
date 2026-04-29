@@ -708,6 +708,186 @@
       color: var(--text);
     }
 
+
+    .accordion-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .edu-accordion {
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.055);
+      overflow: hidden;
+      box-shadow: 0 16px 46px rgba(0,0,0,0.20);
+    }
+
+    .edu-accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid transparent;
+      user-select: none;
+    }
+
+    .edu-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .edu-accordion summary strong {
+      display: block;
+      font-size: 16px;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .edu-accordion summary span.desc {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .edu-accordion summary::after {
+      content: "+";
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: #04111f;
+      font-weight: 950;
+      background: linear-gradient(135deg, var(--teal), var(--cyan));
+      transition: transform 180ms ease;
+    }
+
+    .edu-accordion[open] summary {
+      border-bottom-color: rgba(255,255,255,0.10);
+      background: rgba(45, 212, 191, 0.06);
+    }
+
+    .edu-accordion[open] summary::after {
+      content: "−";
+      transform: rotate(180deg);
+    }
+
+    .edu-accordion-body {
+      padding: 16px;
+    }
+
+
+    .edu-category-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 18px 0 10px;
+      padding: 10px 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .edu-category-title:first-child {
+      margin-top: 0;
+    }
+
+    .edu-category-title h3 {
+      font-family: var(--serif);
+      font-size: 22px;
+      letter-spacing: -0.4px;
+      color: #fff;
+    }
+
+    .edu-category-title p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      max-width: 620px;
+    }
+
+    .formation-intro {
+      color: #dbeaf6;
+      font-size: 13px;
+      line-height: 1.70;
+      margin-bottom: 12px;
+    }
+
+    .strength-list {
+      display: grid;
+      gap: 8px;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.55;
+      margin-bottom: 13px;
+    }
+
+    .strength-list li::marker {
+      color: var(--teal);
+    }
+
+    .mini-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mini-tags span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.070);
+      color: #dffaff;
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .panel-link {
+      min-height: 88px;
+      padding: 15px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.11);
+      background: rgba(255,255,255,0.055);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      transition: 180ms ease;
+    }
+
+    .panel-link:hover {
+      transform: translateY(-3px);
+      border-color: var(--line2);
+      background: rgba(45, 212, 191, 0.09);
+    }
+
+    .panel-link strong {
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .panel-link span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
     @media (max-width: 980px) {
       .topbar {
         border-radius: 24px;
@@ -731,12 +911,21 @@
 
       .edu-grid,
       .skills-grid,
-      .article-grid {
+      .article-grid,
+      .panel-grid {
         grid-template-columns: 1fr;
       }
 
       .timeline-card {
         grid-template-columns: 1fr;
+      }
+
+      .edu-category-title {
+        display: block;
+      }
+
+      .edu-category-title p {
+        margin-top: 6px;
       }
 
       .section-header {
@@ -856,6 +1045,7 @@
         <a href="#formacao">Formação</a>
         <a href="#competencias">Competências</a>
         <a href="#artigos">Artigos</a>
+        <a href="#paineis">Painéis</a>
         <a href="https://gabriel-groehs.github.io/portfolio.html" target="_blank" rel="noopener noreferrer">Portfólio</a>
       </nav>
     </header>
@@ -865,7 +1055,7 @@
         <div class="eyebrow"><span class="pulse"></span> Currículo acadêmico e profissional</div>
         <h1><span class="gradient-text">Gabriel Groehs</span><br>Risk Scientist</h1>
         <p class="subtitle">
-          Profissional de Dados, Finanças e Risco com experiência desde 2012 em BI, FP&A, crédito, modelagem de dados, indicadores executivos e analytics. Atuação atual em <strong>Modelagem de Riscos</strong>, com foco em <strong>MLOps para modelos de risco de crédito</strong>, IFRS 9, CMN 4.966, PD, LGD, EAD, séries temporais, econometria aplicada e deep learning.
+          Economista, estatístico, contador e financista, <strong>Mestrando em Computação Aplicada</strong> com foco em <strong>Deep Learning para Séries Temporais</strong> e <strong>MSc Economics Candidate</strong>. Trajetória integrada em dados, BI, FP&A, crédito, modelagem de riscos e analytics desde 2012, com atuação atual em <strong>Modelagem de Riscos</strong>, <strong>MLOps para modelos de risco de crédito</strong>, IFRS 9, CMN 4.966, PD, LGD, EAD, econometria aplicada e deep learning.
         </p>
 
         <div class="hero-focus">
@@ -877,6 +1067,8 @@
           <span class="chip">Power BI</span>
           <span class="chip">PySpark / SQL</span>
           <span class="chip">Econometria</span>
+          <span class="chip">Mestrando Deep Learning</span>
+          <span class="chip">MSc Economics Candidate</span>
         </div>
 
         <div class="actions">
@@ -887,9 +1079,9 @@
 
         <div class="metrics">
           <div class="metric"><strong>2012</strong><span>início em dados, BI, finanças e modelagem</span></div>
-          <div class="metric"><strong>5</strong><span>graduações concluídas entre bacharelados e tecnólogos</span></div>
+          <div class="metric"><strong>4</strong><span>identidades técnicas centrais: economista, estatístico, contador e financista</span></div>
           <div class="metric"><strong>9</strong><span>MBAs e pós-graduações concluídas</span></div>
-          <div class="metric"><strong>2026</strong><span>mestrado em Computação Aplicada e Engenharia de Software em andamento</span></div>
+          <div class="metric"><strong>MSc</strong><span>Mestrando em Computação Aplicada, MSc Economics Candidate e Engenharia de Software em conclusão</span></div>
         </div>
       </article>
 
@@ -908,7 +1100,7 @@
         </div>
 
         <div class="side-note">
-          Posicionamento atual: unir domínio bancário, modelagem de risco, engenharia analítica, MLOps e pesquisa aplicada para construir modelos robustos, auditáveis e úteis para decisão de crédito.
+          Posicionamento atual: unir domínio bancário, economia, estatística, contabilidade, finanças, modelagem de risco, engenharia analítica, MLOps e pesquisa aplicada para construir modelos robustos, auditáveis e úteis para decisão de crédito.
         </div>
       </aside>
     </section>
@@ -922,7 +1114,7 @@
       <div class="profile-grid">
         <div class="text-box">
           <p>
-            Sou um profissional com trajetória híbrida em <strong>Finanças, Dados, Business Intelligence, Crédito e Modelagem de Riscos</strong>. Minha base combina formação em Economia, Estatística, Contabilidade, Gestão Financeira e Ciência de Dados, com atuação prática em instituições financeiras, varejo, indústria e serviços.
+            Sou <strong>economista, estatístico, contador e financista</strong>, <strong>Mestrando em Computação Aplicada</strong> na linha de <strong>Deep Learning para Séries Temporais</strong> e <strong>MSc Economics Candidate</strong>. Minha base combina Economia, Estatística, Ciências Contábeis, Gestão Financeira e Ciência de Dados, permitindo analisar risco de crédito de forma quantitativa, contábil, econômica, financeira, regulatória e computacional.
           </p>
           <br>
           <p>
@@ -1040,52 +1232,196 @@
     <section id="formacao" class="section">
       <div class="section-header">
         <h2>Formação acadêmica e especializações</h2>
-        <p>Atualizada para separar corretamente formações concluídas e formações em andamento.</p>
+        <p>Cada formação abaixo é um menu retrátil individual. Ao abrir, aparecem as forças técnicas, estratégicas e profissionais que cada eixo agrega à atuação em risco, dados, economia, finanças e MLOps.</p>
       </div>
 
-      <div class="edu-grid">
-        <article class="edu-card">
-          <h3>Bacharelados e Tecnólogos <span class="status">Formado</span></h3>
-          <div class="edu-list">
-            <div class="edu-item"><strong>B.Sc. Ciências Econômicas</strong><span>Bacharelado de 4 anos · Economia, econometria, macroeconomia, microeconomia e política monetária.</span></div>
-            <div class="edu-item"><strong>B.Sc. Estatística</strong><span>Bacharelado de 4 anos · Estatística, inferência, modelagem, séries temporais e análise quantitativa.</span></div>
-            <div class="edu-item"><strong>B.Sc. Ciências Contábeis</strong><span>Bacharelado de 4 anos · Contabilidade financeira, societária, custos, fiscal e demonstrações financeiras.</span></div>
-            <div class="edu-item"><strong>Tecnólogo em Gestão Financeira</strong><span>Graduação tecnológica de 2 anos · Finanças, tesouraria, controladoria, crédito e planejamento.</span></div>
-            <div class="edu-item"><strong>Tecnólogo em Ciência de Dados</strong><span>Graduação tecnológica de 2 anos · BI, SQL, ETL, estatística, machine learning, Python e dados.</span></div>
-          </div>
-        </article>
+      <div class="accordion-grid">
 
-        <article class="edu-card">
-          <h3>MBA e Pós-graduação <span class="status">Formado</span></h3>
-          <div class="edu-list">
-            <div class="edu-item"><strong>MBA USP Data Science e Analytics</strong><span>USP/ESALQ · 2024 · Ênfase em séries temporais e modelagem preditiva.</span></div>
-            <div class="edu-item"><strong>MBA em Economia Financeira</strong><span>Finanças, economia aplicada, mercado financeiro e análise econômica.</span></div>
-            <div class="edu-item"><strong>Pós-graduação em Engenharia de Produção</strong><span>Processos, pesquisa operacional, eficiência e gestão produtiva.</span></div>
-            <div class="edu-item"><strong>MBA em Gestão da Contabilidade e Finanças</strong><span>Fluxo de caixa, demonstrações financeiras, valuation e gestão financeira.</span></div>
-            <div class="edu-item"><strong>MBA em Gestão Bancária</strong><span>Banking, crédito, tesouraria, risco e produtos financeiros.</span></div>
-            <div class="edu-item"><strong>MBA em Engenharia Econômica</strong><span>2023 · Viabilidade, VPL, TIR, CAPM, WACC, valuation e análise de investimentos.</span></div>
-            <div class="edu-item"><strong>Pós-graduação em Big Data e Ciência de Dados</strong><span>Big Data, BI, SQL, ETL, DW, machine learning, Python e R.</span></div>
-            <div class="edu-item"><strong>MBA em Gestão de Projetos</strong><span>Gerenciamento de projetos, viabilidade econômica, custos e planejamento.</span></div>
-            <div class="edu-item"><strong>MBA em Machine Learning e Inteligência Artificial</strong><span>Modelos preditivos, ML, IA, aprendizado supervisionado, não supervisionado e redes neurais.</span></div>
-          </div>
-        </article>
+        <div class="edu-category-title">
+          <h3>Mestrados</h3>
+          <p>Formação stricto sensu que sustenta a pesquisa aplicada em inteligência artificial, séries temporais, econometria e modelos quantitativos de risco.</p>
+        </div>
 
-        <article class="edu-card">
-          <h3>Em andamento <span class="status study">Cursando</span></h3>
-          <div class="edu-list">
-            <div class="edu-item"><strong>Mestrado em Computação Aplicada</strong><span>2026 · Linha de pesquisa em Deep Learning aplicado a séries temporais.</span></div>
-            <div class="edu-item"><strong>Engenharia de Software</strong><span>2026 · Projeto aplicado em MLOps para modelos de risco de crédito.</span></div>
-          </div>
-        </article>
 
-        <article class="edu-card">
-          <h3>Integração da formação <span class="status">Síntese</span></h3>
-          <div class="edu-list">
-            <div class="edu-item"><strong>Economia + Estatística</strong><span>Base para econometria, séries temporais, risco sistêmico, política monetária e modelagem quantitativa.</span></div>
-            <div class="edu-item"><strong>Contabilidade + Finanças</strong><span>Base para IFRS 9, ECL, provisão, demonstrações financeiras, valuation e gestão bancária.</span></div>
-            <div class="edu-item"><strong>Ciência de Dados + Engenharia de Software</strong><span>Base para pipelines, MLOps, Databricks, machine learning, deep learning, governança e operacionalização.</span></div>
+        <details class="edu-accordion" open>
+          <summary><div><strong>Mestrado em Computação Aplicada</strong><span class="desc">2026 · Linha de pesquisa em Deep Learning aplicado a séries temporais.</span></div><span class="status study">Cursando</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> aprofunda pesquisa aplicada em modelos avançados para previsão, séries temporais e inteligência artificial.</p><ul class="strength-list"><li>Base acadêmica para LSTM, GRU, Transformers, TFT, modelos híbridos e previsão de carga/risco.</li><li>Fortalece produção científica, revisão sistemática, metodologia experimental e avaliação de modelos.</li><li>Conecta deep learning com problemas reais de energia, risco, crédito e economia aplicada.</li></ul><div class="mini-tags"><span>Deep Learning</span><span>Time Series</span><span>Forecasting</span><span>Pesquisa Aplicada</span></div></div>
+        </details>
+
+        <div class="edu-category-title">
+          <h3>Bacharelados e Tecnólogos concluídos</h3>
+          <p>Base multidisciplinar que sustenta a leitura econômica, estatística, contábil, financeira e computacional dos modelos de risco.</p>
+        </div>
+
+        <details class="edu-accordion" open>
+          <summary>
+            <div>
+              <strong>B.Sc. Ciências Econômicas</strong>
+              <span class="desc">Bacharelado de 4 anos · Econometria, macroeconomia, microeconomia e política monetária.</span>
+            </div>
+            <span class="status">Formado</span>
+          </summary>
+          <div class="edu-accordion-body">
+            <p class="formation-intro"><strong>Força central:</strong> dá a estrutura econômica para interpretar crédito, inadimplência, ciclos, juros, inflação, renda, política monetária e risco sistêmico.</p>
+            <ul class="strength-list">
+              <li>Conecta modelos de PD, ECL e inadimplência ao ciclo econômico e às variáveis macroeconômicas.</li>
+              <li>Fortalece a leitura de transmissão de juros, spread, liquidez, atividade econômica e comportamento de crédito.</li>
+              <li>Ajuda a transformar modelos estatísticos em análise econômica útil para decisão bancária.</li>
+            </ul>
+            <div class="mini-tags"><span>Econometria</span><span>Macroeconomia</span><span>Política Monetária</span><span>Risco Sistêmico</span></div>
           </div>
-        </article>
+        </details>
+
+        <details class="edu-accordion">
+          <summary>
+            <div>
+              <strong>B.Sc. Estatística</strong>
+              <span class="desc">Bacharelado de 4 anos · Inferência, modelagem, probabilidade, séries temporais e análise quantitativa.</span>
+            </div>
+            <span class="status">Formado</span>
+          </summary>
+          <div class="edu-accordion-body">
+            <p class="formation-intro"><strong>Força central:</strong> sustenta tecnicamente a construção, validação e interpretação de modelos preditivos e inferenciais.</p>
+            <ul class="strength-list">
+              <li>Base para modelagem de PD, calibração, validação, backtesting, amostragem e mensuração de incerteza.</li>
+              <li>Fortalece análise de séries temporais, regressão, distribuição de perdas, métricas e testes estatísticos.</li>
+              <li>Ajuda a separar correlação, causalidade, ruído, viés, variância e estabilidade dos modelos.</li>
+            </ul>
+            <div class="mini-tags"><span>Inferência</span><span>Probabilidade</span><span>Modelagem</span><span>Séries Temporais</span></div>
+          </div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary>
+            <div>
+              <strong>B.Sc. Ciências Contábeis</strong>
+              <span class="desc">Bacharelado de 4 anos · Contabilidade financeira, custos, fiscal, societária e demonstrações financeiras.</span>
+            </div>
+            <span class="status">Formado</span>
+          </summary>
+          <div class="edu-accordion-body">
+            <p class="formation-intro"><strong>Força central:</strong> conecta risco de crédito, provisão, perdas esperadas e demonstrações financeiras com a linguagem contábil e regulatória.</p>
+            <ul class="strength-list">
+              <li>Base para compreender IFRS 9, CMN 4.966, provisões, impairment, resultado e efeitos no balanço.</li>
+              <li>Fortalece a leitura de demonstrações financeiras, capital, perdas, receitas e impacto contábil do risco.</li>
+              <li>Ajuda a traduzir modelos de ECL em números auditáveis, rastreáveis e defensáveis.</li>
+            </ul>
+            <div class="mini-tags"><span>IFRS 9</span><span>Provisão</span><span>Demonstrações</span><span>Auditoria</span></div>
+          </div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary>
+            <div>
+              <strong>Tecnólogo em Gestão Financeira</strong>
+              <span class="desc">Graduação tecnológica de 2 anos · Finanças, tesouraria, controladoria, crédito e planejamento.</span>
+            </div>
+            <span class="status">Formado</span>
+          </summary>
+          <div class="edu-accordion-body">
+            <p class="formation-intro"><strong>Força central:</strong> dá visão prática de finanças corporativas, crédito, tesouraria, orçamento e tomada de decisão.</p>
+            <ul class="strength-list">
+              <li>Base para analisar spread, rentabilidade, RAROC, custo de capital, margem e retorno ajustado ao risco.</li>
+              <li>Fortalece a conexão entre risco de crédito, carteira, resultado financeiro e estratégia de negócios.</li>
+              <li>Ajuda a interpretar modelos como instrumentos de gestão, não apenas como algoritmos.</li>
+            </ul>
+            <div class="mini-tags"><span>Finanças</span><span>Tesouraria</span><span>Crédito</span><span>FP&A</span></div>
+          </div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary>
+            <div>
+              <strong>Tecnólogo em Ciência de Dados</strong>
+              <span class="desc">Graduação tecnológica de 2 anos · BI, SQL, ETL, estatística aplicada, machine learning, Python e dados.</span>
+            </div>
+            <span class="status">Formado</span>
+          </summary>
+          <div class="edu-accordion-body">
+            <p class="formation-intro"><strong>Força central:</strong> transforma conhecimento quantitativo e de negócio em pipelines, bases analíticas, modelos e produtos de dados.</p>
+            <ul class="strength-list">
+              <li>Base para ETL, ABT, engenharia de variáveis, dashboards, machine learning e modelagem preditiva.</li>
+              <li>Fortalece a ponte entre área de negócio, engenharia de dados, ciência de dados e visualização executiva.</li>
+              <li>Ajuda a operacionalizar modelos em ambientes como Databricks, SQL, Python e Power BI.</li>
+            </ul>
+            <div class="mini-tags"><span>Python</span><span>SQL</span><span>ETL</span><span>Machine Learning</span><span>Power BI</span></div>
+          </div>
+        </details>
+
+
+        <details class="edu-accordion">
+          <summary><div><strong>Engenharia de Software</strong><span class="desc">Graduação em conclusão · 2026 · Projeto aplicado em MLOps para modelos de risco de crédito.</span></div><span class="status study">Concluindo</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> transforma modelagem estatística e ciência de dados em arquitetura, software, rastreabilidade e operação.</p><ul class="strength-list"><li>Base para Clean Architecture, orientação a objetos, versionamento, testes e manutenção de pipelines.</li><li>Fortalece MLOps, governança, reprodutibilidade e monitoramento de modelos em produção.</li><li>Ajuda a tornar modelos de risco auditáveis, escaláveis e sustentáveis no ciclo de vida.</li></ul><div class="mini-tags"><span>MLOps</span><span>Arquitetura</span><span>Python OOP</span><span>Governança</span></div></div>
+        </details>
+
+        <div class="edu-category-title">
+          <h3>MBAs e Pós-graduações concluídas</h3>
+          <p>Especializações que aprofundam ciência de dados, economia financeira, IA, engenharia econômica, gestão bancária, produção e projetos.</p>
+        </div>
+
+        <details class="edu-accordion">
+          <summary><div><strong>MBA USP Data Science e Analytics</strong><span class="desc">USP/ESALQ · 2024 · Ênfase em séries temporais e modelagem preditiva.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> consolida a aplicação acadêmica e prática de ciência de dados em previsão, validação e análise quantitativa.</p><ul class="strength-list"><li>Base direta para séries temporais, machine learning, métricas e comparação de modelos.</li><li>Fortalece portfólio acadêmico com pesquisa aplicada em previsão de séries financeiras.</li><li>Amplia rigor metodológico em experimentos, treino, teste e interpretação de resultados.</li></ul><div class="mini-tags"><span>Data Science</span><span>Séries Temporais</span><span>Forecasting</span><span>Modelos Preditivos</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>MBA em Economia Financeira</strong><span class="desc">Finanças, economia aplicada, mercado financeiro e análise econômica.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> reforça a leitura financeira e macroeconômica de risco, crédito, capital e mercado.</p><ul class="strength-list"><li>Conecta juros, inflação, câmbio, atividade econômica e risco bancário.</li><li>Apoia modelagem de cenários forward-looking em IFRS 9 e ECL.</li><li>Fortalece análise de política monetária, spread, valuation e ciclo financeiro.</li></ul><div class="mini-tags"><span>Mercado Financeiro</span><span>Macroeconomia</span><span>Cenários</span><span>Crédito</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>Pós-graduação em Engenharia de Produção</strong><span class="desc">Processos, pesquisa operacional, eficiência e gestão produtiva.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> adiciona visão de processos, otimização, produtividade e desenho operacional.</p><ul class="strength-list"><li>Ajuda a estruturar pipelines, processos analíticos e fluxos de decisão.</li><li>Fortalece raciocínio de eficiência, gargalos, padronização e melhoria contínua.</li><li>Apoia construção de arquitetura de dados e modelos com visão de processo ponta a ponta.</li></ul><div class="mini-tags"><span>Processos</span><span>Otimização</span><span>Pesquisa Operacional</span><span>Eficiência</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>MBA em Gestão da Contabilidade e Finanças</strong><span class="desc">Fluxo de caixa, demonstrações financeiras, valuation e gestão financeira.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> integra visão contábil, financeira e gerencial para interpretar resultado e risco.</p><ul class="strength-list"><li>Fortalece análise de DRE, DFC, balanço, margem, rentabilidade e capital.</li><li>Apoia leitura do impacto financeiro das provisões e perdas esperadas.</li><li>Conecta indicadores de risco a resultado, planejamento e gestão executiva.</li></ul><div class="mini-tags"><span>DRE</span><span>DFC</span><span>Valuation</span><span>Gestão Financeira</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>MBA em Gestão Bancária</strong><span class="desc">Banking, crédito, tesouraria, risco e produtos financeiros.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> direciona a formação financeira para o contexto bancário, de crédito e de risco.</p><ul class="strength-list"><li>Base para entender carteira de crédito, produtos bancários, garantias, spread e risco.</li><li>Apoia leitura de indicadores sistêmicos, concentração, limites e gestão de carteira.</li><li>Fortalece alinhamento entre modelagem e necessidade regulatória/bancária.</li></ul><div class="mini-tags"><span>Banking</span><span>Crédito</span><span>Carteira</span><span>Risco Bancário</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>MBA em Engenharia Econômica</strong><span class="desc">2023 · Viabilidade, VPL, TIR, CAPM, WACC, valuation e análise de investimentos.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> fortalece análise quantitativa de valor, retorno, custo de capital e decisão sob incerteza.</p><ul class="strength-list"><li>Base para avaliar rentabilidade ajustada ao risco e retorno econômico de carteiras.</li><li>Conecta crédito, capital, precificação, spread e decisão financeira.</li><li>Ajuda a traduzir risco em valor econômico e decisão de investimento.</li></ul><div class="mini-tags"><span>VPL</span><span>TIR</span><span>WACC</span><span>CAPM</span><span>Valuation</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>Pós-graduação em Big Data e Ciência de Dados</strong><span class="desc">Big Data, BI, SQL, ETL, DW, machine learning, Python e R.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> aprofunda infraestrutura analítica, dados em escala e modelagem aplicada.</p><ul class="strength-list"><li>Base para bases analíticas, data warehouse, ingestão, transformação e modelagem de dados.</li><li>Fortalece uso de Python, SQL, ETL e machine learning em problemas reais.</li><li>Apoia a construção de pipelines robustos para risco e inteligência de negócios.</li></ul><div class="mini-tags"><span>Big Data</span><span>DW</span><span>ETL</span><span>Python</span><span>ML</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>MBA em Gestão de Projetos</strong><span class="desc">Gerenciamento de projetos, viabilidade econômica, custos e planejamento.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> dá capacidade de estruturar entregas, priorizar escopo, gerir dependências e comunicar valor.</p><ul class="strength-list"><li>Ajuda na condução de projetos de dados, risco, BI e modelagem com governança.</li><li>Fortalece comunicação com stakeholders, escopo, cronograma e gestão de entregas.</li><li>Apoia implantação de MLOps com visão de produto e ciclo de vida.</li></ul><div class="mini-tags"><span>Projetos</span><span>Governança</span><span>Escopo</span><span>Entrega</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>MBA em Machine Learning e Inteligência Artificial</strong><span class="desc">Modelos preditivos, IA, aprendizado supervisionado e não supervisionado, redes neurais.</span></div><span class="status">Formado</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro"><strong>Força central:</strong> aprofunda a capacidade de desenvolver, comparar e explicar modelos avançados.</p><ul class="strength-list"><li>Base para classificação, regressão, clustering, redes neurais e modelagem preditiva.</li><li>Fortalece aplicação de IA em risco de crédito, previsão, segmentação e monitoramento.</li><li>Conecta ciência de dados com validação, interpretabilidade e governança de modelos.</li></ul><div class="mini-tags"><span>Machine Learning</span><span>IA</span><span>Deep Learning</span><span>Modelagem</span></div></div>
+        </details>
+<div class="edu-category-title">
+          <h3>Síntese estratégica da formação</h3>
+          <p>Como os eixos acadêmicos se conectam diretamente ao posicionamento de Risk Scientist.</p>
+        </div>
+
+        <details class="edu-accordion" open>
+          <summary><div><strong>Economia + Estatística</strong><span class="desc">Base para econometria, séries temporais, risco sistêmico, inferência e modelagem quantitativa.</span></div><span class="status">Síntese</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro">A Economia explica o mecanismo; a Estatística mede a evidência. Juntas, sustentam modelos de risco que não são apenas preditivos, mas interpretáveis e economicamente coerentes.</p><div class="mini-tags"><span>Econometria</span><span>Inferência</span><span>Séries Temporais</span><span>Risco</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>Contabilidade + Finanças</strong><span class="desc">Base para IFRS 9, ECL, provisão, demonstrações financeiras, valuation, banking e gestão de carteira.</span></div><span class="status">Síntese</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro">A Contabilidade torna o risco auditável; as Finanças tornam o risco decisório. Juntas, conectam PD, LGD, EAD e ECL com resultado, capital, spread e rentabilidade.</p><div class="mini-tags"><span>IFRS 9</span><span>ECL</span><span>Banking</span><span>Valuation</span></div></div>
+        </details>
+
+        <details class="edu-accordion">
+          <summary><div><strong>Ciência de Dados + Engenharia de Software</strong><span class="desc">Base para pipelines, MLOps, Databricks, machine learning, deep learning, governança e operação de modelos.</span></div><span class="status">Síntese</span></summary>
+          <div class="edu-accordion-body"><p class="formation-intro">A Ciência de Dados cria o modelo; a Engenharia de Software cria o sistema. Juntas, permitem que modelos de risco sejam reproduzíveis, monitoráveis, versionados e sustentáveis.</p><div class="mini-tags"><span>MLOps</span><span>Databricks</span><span>ML</span><span>Governança</span></div></div>
+        </details>
       </div>
     </section>
 
@@ -1120,6 +1456,32 @@
         <article class="article-card"><div><h3>Portfólio acadêmico</h3><p>Menu consolidado de artigos, currículo e produção técnica.</p></div><a href="https://gabriel-groehs.github.io/portfolio.html" target="_blank" rel="noopener noreferrer">Abrir</a></article>
       </div>
     </section>
+
+    <section id="paineis" class="section">
+      <div class="section-header">
+        <h2>Painéis antigos em Power BI</h2>
+        <p>Seção final recuperando os nomes e links dos dashboards públicos que estavam na versão anterior do currículo.</p>
+      </div>
+
+      <div class="panel-grid">
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiMjEyYTM3OTctZjkwMC00MjM3LTkwOWMtNzE3OTk5MmU0ZDkwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Bank Seguros</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiOGE4YjY3MjAtNGNhMS00OWRjLWI0MjktNzQ3Nzg1YmJmNTg1IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>DRE Finanças</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiZWUzNDYzYTYtMjc4NS00YmM0LTljMDctOGYxMDQxMzRhZTI5IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Cash Flow Tesouraria</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiNzliNzNiODMtNjMzNi00ZTFkLWI2YzYtOWE5MGNlZTVmOTk0IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Dashboard Invictos Cliente Militar</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiNTczOGY3NzItY2Y1Ny00MzJmLThhNjgtZDFhZDQxMjUxM2QzIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Custos Cliente Borch</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiNjQ1ODE3NWUtNGQ3Yi00NGM3LWJmNjAtM2U0NjIzZTlkYmUxIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Dashboard Workflow</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiMzNkMTJjYjItOGY1NC00YmJhLWJhNjEtNmFiMTYxZTgwN2MwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Dashboard Desempenho</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiOTM0YzBjOWQtYTg5Ny00OWVlLWI3ODYtNzFlNmUxNzNlZTllIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Embarque</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiYWMwYjA5MTgtYmRhNi00YmZmLWE5ZTUtN2FjMjM0OTA4N2NhIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Controle Comissões Fornecedores</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiYzZjZjdmODgtZjE3NC00YzhlLWIwMjUtZTg2NTA3MjBkZmU4IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Logística</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiZjYwZWRlOTYtMzc0Ni00M2I2LWE4NWQtMDJmMDg1MjEwMmFhIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Dashboard Transit Flow</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiODA1ZjE4ODctNDQzYi00NzQ3LWE3NGUtOTU1YTMxOGU2ZjY3IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Entreposto</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiMmI5N2JkNzgtY2Q2Mi00ZDFlLTg0NjAtNDdiMTFiNWNhNzMwIiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Estratégico Origem</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiZTdkZjNmN2EtZDVhYS00MjcwLTllMGYtMGQxMWU0MDNkMzk1IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Logcomex</strong><span>Power BI</span></a>
+        <a class="panel-link" href="https://app.powerbi.com/view?r=eyJrIjoiMjdmY2FmMGEtMDM3NC00NDEyLThkODktMzJjNDhiY2Q5Zjk4IiwidCI6ImI1MmNlMWNkLTMzYzAtNDNiZi1iZDQ4LThiM2Y4MzJjYTY2NSJ9" target="_blank" rel="noopener noreferrer"><strong>Painel Cliente Immac</strong><span>Power BI</span></a>
+      </div>
+    </section>
+
 
     <footer class="footer">
       <div><strong>Gabriel Groehs</strong><br>Risk Scientist · Modelagem de Riscos · MLOps · Econometria · Séries Temporais · BI · Finanças.</div>
