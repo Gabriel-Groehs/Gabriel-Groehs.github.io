@@ -7,6 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
 <style>
   :root{
     --bg:#0b1118; --bg2:#0e151e; --panel:#121b26; --panel2:#0f1722;
@@ -20,6 +24,7 @@
     --ctr:#e9f0f7;      /* ponto i      */
     --right:#ff9e64;    /* vizinho i+1  */
     --line:rgba(255,255,255,.08);
+    --uni:#00a868;     /* verde Unicred */
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:
@@ -106,6 +111,51 @@
   .foot{margin-top:26px;font-size:12.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace;line-height:1.7}
   .foot b{color:var(--ink2)}
 
+  /* topbar / brand */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+     padding-bottom:18px;margin-bottom:24px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .mark{width:36px;height:36px;flex:0 0 36px}
+  .brand .wm{display:flex;flex-direction:column;line-height:1}
+  .brand .wm b{font-size:22px;font-weight:700;letter-spacing:-.02em;color:#fff}
+  .brand .wm small{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.24em;
+     text-transform:uppercase;color:var(--ink3);margin-top:4px}
+  .byline{text-align:right;font-family:"IBM Plex Mono",monospace;font-size:10.5px;line-height:1.5;color:var(--ink3)}
+  .byline b{display:block;color:var(--ink);font-size:13px;letter-spacing:.02em;font-weight:500}
+  .subhead{font-size:clamp(18px,3vw,25px);font-weight:600;letter-spacing:-.01em;margin:30px 0 10px;color:var(--ink)}
+  .subhead::before{content:"";display:inline-block;width:22px;height:2px;background:var(--elbow);
+     vertical-align:middle;margin-right:13px;border-radius:2px}
+
+  /* math section */
+  .mathsec{margin-top:40px}
+  .mcard{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+     border-radius:14px;padding:16px 18px}
+  .mcard .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+     color:var(--ink3);margin-bottom:6px}
+  .mcard .lbl .tag{color:var(--d2)}
+  .mcard .eq{overflow-x:auto;overflow-y:hidden;padding:6px 2px 2px}
+  .mcard .gloss{font-size:12.5px;line-height:1.5;color:var(--ink2);margin-top:8px}
+  .mcard .gloss b{color:var(--ink)}
+  .katex{color:var(--ink)!important;font-size:1.04em}
+  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:760px){.mgrid{grid-template-columns:1fr}}
+
+  /* references / link */
+  .refs{margin-top:38px;padding-top:24px;border-top:1px solid var(--line)}
+  .refs .rh{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px}
+  .doclink{display:inline-flex;align-items:center;gap:9px;font-family:"IBM Plex Mono",monospace;font-size:13px;
+     color:var(--d2);text-decoration:none;background:rgba(199,125,255,.08);border:1px solid rgba(199,125,255,.25);
+     padding:10px 14px;border-radius:9px;margin-bottom:20px;transition:.16s ease;word-break:break-all}
+  .doclink:hover{background:rgba(199,125,255,.15);border-color:rgba(199,125,255,.5)}
+  .doclink svg{flex:0 0 15px}
+  ol.reflist{list-style:none;counter-reset:r;padding:0;margin:0;display:grid;gap:12px}
+  ol.reflist li{counter-increment:r;display:grid;grid-template-columns:30px 1fr;gap:12px;
+     font-size:13px;line-height:1.55;color:var(--ink2)}
+  ol.reflist li::before{content:"[" counter(r) "]";font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--d2);font-weight:500}
+  ol.reflist li i{color:var(--ink);font-style:italic}
+  ol.reflist a{color:var(--d1);text-decoration:none;border-bottom:1px solid rgba(255,179,71,.35)}
+  ol.reflist a:hover{border-color:var(--d1)}
+
   .pulse{animation:pulse 1.5s ease-out}
   @keyframes pulse{0%{transform:scale(.2);opacity:0}45%{opacity:1}100%{transform:scale(1);opacity:1}}
   .feed{stroke-dasharray:4 5;animation:dash 1.1s linear infinite}
@@ -115,9 +165,25 @@
 </head>
 <body>
 <div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-label="Unicred">
+        <defs><linearGradient id="ug" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#00c47a"/><stop offset="1" stop-color="#008f57"/></linearGradient></defs>
+        <rect x="2" y="2" width="36" height="36" rx="11" fill="url(#ug)"/>
+        <path d="M13 11 v9 a7 7 0 0 0 14 0 v-9" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+        <circle cx="27" cy="12.5" r="2.6" fill="#fff"/>
+      </svg>
+      <div class="wm"><b>unicred</b><small>Área de Riscos</small></div>
+    </div>
+    <div class="byline">visualização técnica por<b>Gabriel Groehs</b></div>
+  </div>
+
   <div class="eyebrow"><span class="dot"></span> Segunda derivada numérica <span>·</span> <b>np.gradient²</b></div>
-  <h1>Como o <em>cotovelo</em> emerge da curvatura</h1>
-  <p class="lede">A curva de inadimplência <code>bad_rate</code> cai e depois achata. O ponto onde ela mais “dobra” é o cotovelo — e ele aparece sozinho quando derivamos numericamente <b>duas vezes</b> e procuramos o maior <code>|f″|</code>. Avance etapa por etapa: cada ponto é construído a partir dos vizinhos, pesando pelos passos desiguais da grade.</p>
+  <h1>Segunda derivada pelo <em>numpy Gradient</em></h1>
+
+  <div class="subhead">Como o cotovelo emerge da curvatura</div>
+  <p class="lede">A curva de default <code>bad_rate</code> cai e depois achata. O ponto onde ela mais “dobra” é o cotovelo — e ele aparece sozinho quando derivamos numericamente <b>duas vezes</b> e procuramos o maior <code>|f″|</code>. Avance etapa por etapa: cada ponto é construído a partir dos vizinhos, pesando pelos passos desiguais da grade.</p>
 
   <div class="transport">
     <button class="ctl" id="prev">◀ Anterior</button>
@@ -194,8 +260,66 @@
       </div>
     </div>
     <div class="foot">
-      <b>Para o estatístico:</b> |f″| é um <i>proxy</i> de curvatura — coincide com a curvatura geométrica κ=|f″|/(1+f′²)^{3/2} só quando f′ varia pouco na região. O interior é O(h²); as bordas são O(h) e a 2ª aplicação de D amplifica esse erro — desconfie de argmax nas extremidades. E como ‖D²‖~O(h⁻²), ruído em f é amplificado quadraticamente; com dados empíricos, considere suavizar antes.
+      <b>Para o estatístico:</b> |f″| é um <i>proxy</i> de curvatura — coincide com a curvatura geométrica $\kappa=|f''|/(1+f'^2)^{3/2}$ só quando f′ varia pouco na região. O interior é $\mathcal{O}(h^2)$; as bordas são $\mathcal{O}(h)$ e a 2ª aplicação de D amplifica esse erro — desconfie de argmax nas extremidades. E como $\lVert D^2\rVert\sim\mathcal{O}(h^{-2})$, ruído em f é amplificado quadraticamente; com dados empíricos, considere suavizar antes.
     </div>
+  </div>
+
+  <!-- FORMULAÇÃO MATEMÁTICA -->
+  <div class="mathsec">
+    <div class="decomp-h">Formulação matemática · o que o np.gradient calcula</div>
+    <h2 style="font-size:23px;font-weight:700;letter-spacing:-.01em;margin:0 0 18px">A fórmula, formalmente</h2>
+
+    <div class="mcard">
+      <div class="lbl"><span class="tag">00</span> · amostragem &amp; passos da grade</div>
+      <div class="eq">$$x_0 &lt; x_1 &lt; \cdots &lt; x_{n-1},\qquad f_i = g(x_i),\qquad h_d = x_i - x_{i-1},\quad h_s = x_{i+1}-x_i$$</div>
+      <div class="gloss">Pontos discretos com passos <b>desiguais</b>. <code style="font-family:'IBM Plex Mono';color:var(--left)">hd</code> é o passo à esquerda; <code style="font-family:'IBM Plex Mono';color:var(--right)">hs</code> o passo à direita.</div>
+    </div>
+
+    <div class="mgrid">
+      <div class="mcard">
+        <div class="lbl"><span class="tag">01</span> · 1ª derivada — interior</div>
+        <div class="eq">$$\widehat{f'}(x_i)=\frac{h_d^{2}\,f_{i+1}+(h_s^{2}-h_d^{2})\,f_i-h_s^{2}\,f_{i-1}}{h_s\,h_d\,(h_d+h_s)}$$</div>
+        <div class="gloss">Diferença central de <b>2ª ordem</b>, ponderada pelos passos. É a “resulting approximation” que a doc cita. Erro $\mathcal{O}(h_s h_d)$.</div>
+      </div>
+      <div class="mcard">
+        <div class="lbl"><span class="tag">02</span> · 1ª derivada — bordas</div>
+        <div class="eq">$$\widehat{f'}(x_0)=\frac{f_1-f_0}{x_1-x_0},\qquad \widehat{f'}(x_{n-1})=\frac{f_{n-1}-f_{n-2}}{x_{n-1}-x_{n-2}}$$</div>
+        <div class="gloss">Sem vizinho dos dois lados: diferença de <b>um lado só</b> (<code>edge_order=1</code>). Erro $\mathcal{O}(h)$.</div>
+      </div>
+    </div>
+
+    <div class="mgrid">
+      <div class="mcard">
+        <div class="lbl"><span class="tag">03</span> · caso uniforme (colapsa)</div>
+        <div class="eq">$$h_d=h_s=h\;\;\Rightarrow\;\;\widehat{f'}(x_i)=\frac{f_{i+1}-f_{i-1}}{2h}$$</div>
+        <div class="gloss">Quando os passos são iguais, a fórmula vira a diferença central clássica de livro-texto.</div>
+      </div>
+      <div class="mcard">
+        <div class="lbl"><span class="tag">04</span> · 2ª derivada = operador²</div>
+        <div class="eq">$$\widehat{f''}=\nabla\!\big(\nabla f\big)=D^{2}f$$</div>
+        <div class="gloss">O <b>mesmo</b> operador linear $D$ aplicado duas vezes. <code>np.gradient(np.gradient(f,x),x)</code>.</div>
+      </div>
+    </div>
+
+    <div class="mcard" style="margin-top:14px;border-color:rgba(255,77,109,.4)">
+      <div class="lbl" style="color:var(--elbow)"><span class="tag" style="color:var(--elbow)">05</span> · critério do cotovelo</div>
+      <div class="eq">$$i^\star=\operatorname*{arg\,max}_{0\le i\le n-1}\bigl|\widehat{f''}(x_i)\bigr|,\qquad x^\star=x_{i^\star}=0{,}10$$</div>
+      <div class="gloss">A maior curvatura absoluta localiza a dobra mais acentuada da curva — o limiar do cotovelo.</div>
+    </div>
+  </div>
+
+  <!-- REFERÊNCIAS -->
+  <div class="refs">
+    <div class="rh">Fonte &amp; referências</div>
+    <a class="doclink" href="https://numpy.org/doc/stable/reference/generated/numpy.gradient.html" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+      numpy.org · documentação de numpy.gradient
+    </a>
+    <ol class="reflist">
+      <li>Quarteroni A., Sacco R., Saleri F. (2007) <i>Numerical Mathematics</i> (Texts in Applied Mathematics). New York: Springer.</li>
+      <li>Durran D. R. (1999) <i>Numerical Methods for Wave Equations in Geophysical Fluid Dynamics</i>. New York: Springer.</li>
+      <li>Fornberg B. (1988) <i>Generation of Finite Difference Formulas on Arbitrarily Spaced Grids</i>, Mathematics of Computation 51, no. 184: 699–706. <a href="https://www.ams.org/journals/mcom/1988-51-184/S0025-5718-1988-0935077-0/S0025-5718-1988-0935077-0.pdf" target="_blank" rel="noopener">PDF</a>.</li>
+    </ol>
   </div>
 </div>
 
