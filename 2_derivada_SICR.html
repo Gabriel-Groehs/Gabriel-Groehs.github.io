@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velocidade e aceleração do risco · explicação para negócios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#f6f8fc; --card:#ffffff;
+    --ink:#15202e; --ink2:#56677e; --ink3:#8d9cb1; --line:#e7ecf4;
+    --level:#4263eb;   /* nível de risco - indigo */
+    --vel:#f08c00;     /* velocidade - amber */
+    --acc:#9c36b5;     /* aceleração - violet */
+    --alert:#e8430c;   /* aumento significativo / inflexão - red-orange */
+    --calm:#3aa0ff;    /* perdendo força - cool blue */
+    --shadow:0 1px 2px rgba(20,40,80,.04),0 8px 24px rgba(20,40,80,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:1060px;margin:0 auto;padding:30px 22px 70px}
+
+  /* header */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:30px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand .mark{width:34px;height:34px}
+  .brand b{font-family:"Bricolage Grotesque";font-size:20px;font-weight:700;letter-spacing:-.02em}
+  .brand b span{color:var(--level)}
+  .byline{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink3);text-align:right;line-height:1.5}
+  .byline b{display:block;color:var(--ink2);font-size:12px}
+
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--alert);font-weight:500;margin-bottom:14px}
+  h1{font-family:"Bricolage Grotesque";font-size:clamp(30px,5.4vw,52px);line-height:1.02;font-weight:700;letter-spacing:-.025em;margin:0 0 16px;max-width:16ch}
+  h1 .u1{color:var(--vel)} h1 .u2{color:var(--acc)}
+  .lede{font-size:clamp(16px,2vw,19px);line-height:1.55;color:var(--ink2);max-width:60ch;margin:0}
+  .lede b{color:var(--ink)}
+
+  section{margin-top:54px}
+  .seclabel{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .seclabel::before{content:"";width:18px;height:2px;background:var(--ink3);border-radius:2px}
+  h2{font-family:"Bricolage Grotesque";font-size:clamp(22px,3.2vw,30px);font-weight:700;letter-spacing:-.02em;margin:0 0 8px}
+  .sublede{font-size:15.5px;line-height:1.55;color:var(--ink2);max-width:64ch;margin:0 0 22px}
+
+  /* car analogy strip */
+  .analogy{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:740px){.analogy{grid-template-columns:1fr}}
+  .acard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .acard .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:14px}
+  .acard h3{font-family:"Bricolage Grotesque";font-size:18px;font-weight:600;margin:0 0 3px}
+  .acard .tag{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;margin-bottom:11px;font-weight:500}
+  .acard p{font-size:14px;line-height:1.55;color:var(--ink2);margin:0 0 10px}
+  .acard .credit{font-size:13px;line-height:1.5;color:var(--ink);background:var(--bg2);border-radius:10px;padding:10px 12px}
+  .acard .credit b{color:var(--level)}
+  .a-lvl .ic{background:rgba(66,99,235,.1)} .a-lvl .tag{color:var(--level)}
+  .a-vel .ic{background:rgba(240,140,0,.12)} .a-vel .tag{color:var(--vel)}
+  .a-acc .ic{background:rgba(156,54,181,.12)} .a-acc .tag{color:var(--acc)}
+
+  /* interactive */
+  .demo{display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:start}
+  @media(max-width:880px){.demo{grid-template-columns:1fr}}
+  .scopecard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px 12px 8px;box-shadow:var(--shadow)}
+  svg{display:block;width:100%;height:auto}
+  .controls{display:flex;align-items:center;gap:12px;padding:8px 10px 4px;flex-wrap:wrap}
+  .playbtn{font-family:"Inter";font-weight:600;font-size:14px;background:var(--ink);color:#fff;border:0;border-radius:11px;padding:10px 18px;cursor:pointer;transition:.16s;display:inline-flex;gap:8px;align-items:center}
+  .playbtn:hover{background:#2a3a50}
+  .playbtn:focus-visible{outline:2px solid var(--level);outline-offset:2px}
+  .tslider{flex:1;min-width:150px;display:flex;align-items:center;gap:10px}
+  input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:var(--line);cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.18);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid var(--ink);cursor:pointer}
+  .tlabel{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink2);white-space:nowrap}
+  .tlabel b{color:var(--ink)}
+
+  /* readout */
+  .readcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+  .readcard .rh{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:16px}
+  .metric{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .metric:last-of-type{border-bottom:0}
+  .metric .ml{display:flex;flex-direction:column;gap:3px}
+  .metric .ml .name{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;font-weight:500}
+  .metric .ml .desc{font-size:13.5px;font-weight:600;line-height:1.3}
+  .metric .mv{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:500;white-space:nowrap}
+  .m-lvl .name,.m-lvl .mv{color:var(--level)}
+  .m-vel .name,.m-vel .mv{color:var(--vel)}
+  .m-acc .name,.m-acc .mv{color:var(--acc)}
+  .interp{margin-top:16px;padding:14px 15px;border-radius:13px;font-size:14px;line-height:1.5;background:var(--bg2);border:1px solid var(--line)}
+  .interp .badge{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;padding:4px 9px;border-radius:20px;margin-bottom:9px}
+  .interp b{color:var(--ink)}
+
+  /* credit bridge */
+  .bridge{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:740px){.bridge{grid-template-columns:1fr}}
+  .bcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+  .bcard .n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--alert);font-weight:500;margin-bottom:10px}
+  .bcard h3{font-family:"Bricolage Grotesque";font-size:18px;font-weight:600;margin:0 0 9px}
+  .bcard p{font-size:14px;line-height:1.58;color:var(--ink2);margin:0}
+  .bcard p b{color:var(--ink)}
+
+  /* summary */
+  .summary{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:740px){.summary{grid-template-columns:1fr}}
+  .scard{border-radius:20px;padding:24px;position:relative;overflow:hidden;color:#fff}
+  .scard.vel{background:linear-gradient(135deg,#f59f00,#e8590c)}
+  .scard.acc{background:linear-gradient(135deg,#ae3ec9,#7048e8)}
+  .scard .deriv{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;margin-bottom:8px}
+  .scard h3{font-family:"Bricolage Grotesque";font-size:26px;font-weight:700;margin:0 0 12px;letter-spacing:-.01em}
+  .scard p{font-size:15px;line-height:1.55;margin:0;opacity:.96}
+  .punch{margin-top:18px;text-align:center;font-family:"Bricolage Grotesque";font-size:clamp(18px,2.6vw,24px);font-weight:600;line-height:1.35;color:var(--ink);max-width:34ch;margin-left:auto;margin-right:auto}
+  .punch .v{color:var(--vel)} .punch .a{color:var(--acc)}
+
+  .foot{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink3);line-height:1.7}
+  .foot b{color:var(--ink2)}
+  .feed{stroke-dasharray:4 5;animation:dash 1s linear infinite}
+  @keyframes dash{to{stroke-dashoffset:-18}}
+  @media(prefers-reduced-motion:reduce){.feed{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-label="Unicred">
+        <defs><linearGradient id="ug" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00c47a"/><stop offset="1" stop-color="#008f57"/></linearGradient></defs>
+        <rect x="2" y="2" width="36" height="36" rx="11" fill="url(#ug)"/>
+        <path d="M13 11 v9 a7 7 0 0 0 14 0 v-9" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+        <circle cx="27" cy="12.5" r="2.6" fill="#fff"/>
+      </svg>
+      <b><span>uni</span>cred · Riscos</b>
+    </div>
+    <div class="byline">explicação para negócios<b>por Gabriel Groehs</b></div>
+  </div>
+
+  <div class="eyebrow">Risco de crédito · leitura de tendência</div>
+  <h1>O risco não é só <em>o quanto</em> subiu. É se está <span class="u2">ganhando força</span>.</h1>
+  <p class="lede">A primeira derivada mostra para onde a variável está indo e <b>quão rápido</b> — é a <b style="color:var(--vel)">velocidade</b>. A segunda mostra se esse movimento está <b>ganhando ou perdendo força</b> — é a <b style="color:var(--acc)">aceleração</b>. No crédito, é isso que separa um susto pontual de uma deterioração de verdade.</p>
+
+  <!-- ANALOGIA DO CARRO -->
+  <section>
+    <div class="seclabel">A intuição</div>
+    <h2>Pense num carro na estrada</h2>
+    <p class="sublede">Três perguntas diferentes sobre o mesmo carro. Cada uma é uma “camada” a mais de informação — e cada uma tem um equivalente direto no risco de um cliente.</p>
+    <div class="analogy">
+      <div class="acard a-lvl">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4263eb" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/></svg></div>
+        <h3>Onde ele está</h3>
+        <div class="tag">o nível</div>
+        <p>A posição do carro na estrada. Um retrato do momento — não diz nada sobre o que vem a seguir.</p>
+        <div class="credit"><b>No crédito:</b> o nível de risco do cliente hoje.</div>
+      </div>
+      <div class="acard a-vel">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-4"/><path d="M3.5 18a9 9 0 1 1 17 0"/><circle cx="12" cy="14" r="1.4" fill="#f08c00"/></svg></div>
+        <h3>Quão rápido anda</h3>
+        <div class="tag">1ª derivada · velocidade</div>
+        <p>A velocidade no velocímetro. Mostra a direção e o ritmo: está indo para frente, e com que pressa.</p>
+        <div class="credit"><b>No crédito:</b> quão rápido o risco está mudando.</div>
+      </div>
+      <div class="acard a-acc">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9c36b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/><path d="M5 6v12"/></svg></div>
+        <h3>Acelerando ou freando</h3>
+        <div class="tag">2ª derivada · aceleração</div>
+        <p>O pé no acelerador ou no freio. Mostra se a velocidade está <b>aumentando</b> (ganhando força) ou diminuindo.</p>
+        <div class="credit"><b>No crédito:</b> a deterioração está ganhando ou perdendo força?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO INTERATIVA -->
+  <section>
+    <div class="seclabel">Veja acontecer</div>
+    <h2>Acompanhe o risco de um cliente, mês a mês</h2>
+    <p class="sublede">Arraste a linha do tempo (ou aperte reproduzir). Em cima, o nível de risco. No meio, a <b style="color:var(--vel)">velocidade</b>. Embaixo, a <b style="color:var(--acc)">aceleração</b>. A linha vertical liga os três no mesmo instante.</p>
+    <div class="demo">
+      <div class="scopecard">
+        <svg id="scope" viewBox="0 0 720 540" role="img" aria-label="Nível de risco, velocidade e aceleração ao longo do tempo"></svg>
+        <div class="controls">
+          <button class="playbtn" id="play">▶ Reproduzir</button>
+          <div class="tslider">
+            <input type="range" id="range" min="0" max="12" step="0.1" value="0" aria-label="tempo em meses">
+            <span class="tlabel">mês <b id="tnow">0,0</b></span>
+          </div>
+        </div>
+      </div>
+      <div class="readcard">
+        <div class="rh">Leitura do momento</div>
+        <div class="metric m-lvl"><div class="ml"><span class="name">NÍVEL DE RISCO</span><span class="desc" id="d-lvl">—</span></div><span class="mv" id="v-lvl">—</span></div>
+        <div class="metric m-vel"><div class="ml"><span class="name">VELOCIDADE · 1ª deriv.</span><span class="desc" id="d-vel">—</span></div><span class="mv" id="v-vel">—</span></div>
+        <div class="metric m-acc"><div class="ml"><span class="name">ACELERAÇÃO · 2ª deriv.</span><span class="desc" id="d-acc">—</span></div><span class="mv" id="v-acc">—</span></div>
+        <div class="interp" id="interp"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PONTE COM O CRÉDITO -->
+  <section>
+    <div class="seclabel">Por que isso importa no crédito</div>
+    <h2>Aumento significativo &amp; ponto de inflexão</h2>
+    <p class="sublede">Esperar o risco ficar <i>alto</i> para agir é reagir tarde. A velocidade e a aceleração avisam antes — e dão nome a dois conceitos que usamos no dia a dia.</p>
+    <div class="bridge">
+      <div class="bcard">
+        <div class="n">▲ aceleração positiva</div>
+        <h3>Aumento significativo</h3>
+        <p>O alerta não dispara porque o risco está alto — dispara porque ele está <b>ganhando força</b>. Quando a velocidade cresce e a aceleração confirma o impulso, é sinal de um <b>aumento significativo</b> da deterioração, mesmo com o nível ainda moderado.</p>
+      </div>
+      <div class="bcard">
+        <div class="n">● aceleração = zero</div>
+        <h3>Ponto de inflexão</h3>
+        <p>O instante em que o movimento <b>muda de caráter</b>: a deterioração para de ganhar força e passa a perder (ou o contrário). É a virada da curva — o ponto onde a aceleração cruza o zero e a velocidade está no seu auge.</p>
+      </div>
+      <div class="bcard">
+        <div class="n">⏱ agir antes</div>
+        <h3>Por que olhar a tendência</h3>
+        <p>O nível, sozinho, reage tarde. A tendência permite <b>antecipar</b>: reforçar acompanhamento, repactuar, provisionar mais cedo. É a diferença entre apagar incêndio e prevenir.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMO -->
+  <section>
+    <div class="seclabel">O resumo de bolso</div>
+    <h2>As duas derivadas, em uma frase cada</h2>
+    <div class="summary">
+      <div class="scard vel">
+        <div class="deriv">1ª derivada</div>
+        <h3>Velocidade</h3>
+        <p>Mede a velocidade da mudança. Mostra <b>para onde</b> a variável está indo e <b>quão rápido</b>.</p>
+      </div>
+      <div class="scard acc">
+        <div class="deriv">2ª derivada</div>
+        <h3>Aceleração</h3>
+        <p>Mede a aceleração da mudança. Mostra se esse movimento está <b>ganhando ou perdendo força</b>.</p>
+      </div>
+    </div>
+    <p class="punch">A <span class="v">velocidade</span> diz a direção e o ritmo.<br>A <span class="a">aceleração</span> diz se dá pra confiar que vai continuar.</p>
+  </section>
+
+  <div class="foot">
+    <b>Nota técnica:</b> na prática, velocidade e aceleração são calculadas numericamente sobre os dados reais (ex.: <span style="color:var(--acc)">np.gradient</span> aplicado uma e duas vezes). · Material didático por Gabriel Groehs · Unicred — Área de Riscos.
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const SVGNS="http://www.w3.org/2000/svg";
+  const L=100,k=0.9,t0=6,Tmax=12;
+  const rf=t=>L/(1+Math.exp(-k*(t-t0)));
+  const S=t=>1/(1+Math.exp(-k*(t-t0)));
+  const vf=t=>{const s=S(t);return L*k*s*(1-s);};
+  const af=t=>{const s=S(t);return L*k*k*s*(1-s)*(1-2*s);};
+  const VMAX=22.5, AMAX=7.79;
+
+  const svg=document.getElementById("scope");
+  const css=getComputedStyle(document.documentElement),C=v=>css.getPropertyValue(v).trim();
+  function E(t,a,p){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;}
+
+  // geometry
+  const W=720,mL=50,mR=18,mT=12,ph=150,pg=34,plotW=W-mL-mR;
+  const xS=t=>mL+(t/Tmax)*plotW;
+  const panY=k=>mT+k*(ph+pg);
+  function mkY(k,dmin,dmax){const y0=panY(k);return v=>y0+ph-(v-dmin)/(dmax-dmin)*ph;}
+  const yR=mkY(0,0,104), yV=mkY(1,0,24), yA=mkY(2,-9,9);
+  const PAN=[
+    {k:0,col:'--level',yS:yR,fn:rf,title:"NÍVEL DE RISCO",ticks:[0,50,100],unit:""},
+    {k:1,col:'--vel',yS:yV,fn:vf,title:"VELOCIDADE — 1ª derivada",ticks:[0,22.5],unit:""},
+    {k:2,col:'--acc',yS:yA,fn:af,title:"ACELERAÇÃO — 2ª derivada",ticks:[-7.5,0,7.5],unit:""}
+  ];
+
+  const stat=E("g",{}),dyn=E("g",{});
+  function path(fn,yS,col,w,op){
+    let d="";for(let i=0;i<=240;i++){const t=i/240*Tmax;d+=(i?"L":"M")+xS(t).toFixed(2)+" "+yS(fn(t)).toFixed(2);}
+    return E("path",{d,fill:"none",stroke:col,"stroke-width":w,"stroke-opacity":op||1,"stroke-linejoin":"round","stroke-linecap":"round"},stat);
+  }
+  function buildStatic(){
+    // inflection vertical guide across all panels
+    const topY=panY(0)-2, botY=panY(2)+ph+2;
+    // alert band (gaining force, rising) t in [3.4,6] on top panel
+    E("rect",{x:xS(3.4),y:panY(0),width:xS(6)-xS(3.4),height:ph,fill:C('--alert'),"fill-opacity":.06},stat);
+    PAN.forEach(p=>{
+      const y0=panY(p.k);
+      E("rect",{x:mL,y:y0,width:plotW,height:ph,fill:"#fbfcfe",stroke:C('--line'),"stroke-width":1,rx:8},stat);
+      // gentle gridlines at months
+      for(let m=0;m<=12;m+=2){E("line",{x1:xS(m),y1:y0,x2:xS(m),y2:y0+ph,stroke:"#eef2f8","stroke-width":1},stat);}
+      // zero line for accel
+      if(p.k===2){const yz=p.yS(0);E("line",{x1:mL,y1:yz,x2:mL+plotW,y2:yz,stroke:"#c9d3e0","stroke-width":1,"stroke-dasharray":"2 4"},stat);
+        // sign shading: gaining (t<6) light red, losing (t>6) light blue
+        E("rect",{x:xS(0),y:y0,width:xS(6)-xS(0),height:ph,fill:C('--alert'),"fill-opacity":.045},stat);
+        E("rect",{x:xS(6),y:y0,width:xS(12)-xS(6),height:ph,fill:C('--calm'),"fill-opacity":.05},stat);
+      }
+      // y ticks
+      p.ticks.forEach(v=>{const yy=p.yS(v);E("text",{x:mL-8,y:yy+3.5,fill:C('--ink3'),"font-size":9.5,"text-anchor":"end","font-family":"IBM Plex Mono"},stat).textContent=(v%1?v.toFixed(1):v.toFixed(0));});
+      // title
+      E("text",{x:mL+9,y:y0+17,fill:C(p.col),"font-size":11.5,"font-weight":600,"font-family":"IBM Plex Mono","letter-spacing":".5"},stat).textContent=p.title;
+    });
+    // curves
+    path(rf,yR,C('--level'),2.6,.95);
+    path(vf,yV,C('--vel'),2.4,.9);
+    path(af,yA,C('--acc'),2.4,.9);
+    // inflection guide + label
+    E("line",{x1:xS(6),y1:topY,x2:xS(6),y2:botY,stroke:C('--alert'),"stroke-width":1.5,"stroke-dasharray":"5 4","stroke-opacity":.55},stat);
+    const tg=E("g",{},stat);
+    E("text",{x:xS(6),y:panY(0)-4,fill:C('--alert'),"font-size":10,"font-weight":600,"text-anchor":"middle","font-family":"IBM Plex Mono"},tg).textContent="PONTO DE INFLEXÃO";
+    // alert label on band
+    E("text",{x:(xS(3.4)+xS(6))/2,y:panY(0)+ph-9,fill:C('--alert'),"font-size":9.5,"font-weight":600,"text-anchor":"middle","font-family":"IBM Plex Mono","fill-opacity":.85},stat).textContent="↑ ganhando força";
+    // x axis
+    const axY=panY(2)+ph+18;
+    for(let m=0;m<=12;m+=2){E("text",{x:xS(m),y:axY,fill:C('--ink2'),"font-size":10,"text-anchor":"middle","font-family":"IBM Plex Mono"},stat).textContent=m;}
+    E("text",{x:mL+plotW/2,y:axY+18,fill:C('--ink3'),"font-size":10,"text-anchor":"middle","font-family":"IBM Plex Mono","letter-spacing":"1"},stat).textContent="tempo · meses desde a originação";
+  }
+  buildStatic();
+
+  const elTnow=document.getElementById('tnow'),elRange=document.getElementById('range');
+  const dl=document.getElementById('d-lvl'),vl=document.getElementById('v-lvl');
+  const dv=document.getElementById('d-vel'),vv=document.getElementById('v-vel');
+  const da=document.getElementById('d-acc'),va=document.getElementById('v-acc');
+  const interp=document.getElementById('interp');
+  const br=n=>n.toFixed(1).replace('.',',');
+
+  function velWord(v){const r=v/VMAX; if(r<0.07)return"praticamente estável"; if(r<0.45)return"subindo devagar"; if(r<0.85)return"subindo rápido"; return"no ritmo máximo";}
+  function accState(a){const r=a/AMAX; if(r>0.06)return"gain"; if(r<-0.06)return"lose"; return"flip";}
+  function accWord(s){return s==="gain"?"ganhando força":s==="lose"?"perdendo força":"ponto de virada";}
+
+  function render(t){
+    while(dyn.firstChild)dyn.removeChild(dyn.firstChild);
+    const r=rf(t),v=vf(t),a=af(t),as=accState(a);
+
+    // vertical marker across panels
+    E("line",{x1:xS(t),y1:panY(0)-2,x2:xS(t),y2:panY(2)+ph+2,stroke:C('--ink'),"stroke-width":1.4,"stroke-opacity":.35,"stroke-dasharray":"3 4"},dyn);
+
+    // tangent line on risk panel (slope = velocity)  -> shows "speed" visually
+    const dT=1.6;
+    const tanPt=tau=>[xS(tau), yR(r+v*(tau-t))];
+    const p1=tanPt(Math.max(0,t-dT)),p2=tanPt(Math.min(Tmax,t+dT));
+    E("line",{x1:p1[0],y1:p1[1],x2:p2[0],y2:p2[1],stroke:C('--vel'),"stroke-width":2.4,"stroke-opacity":.9,"stroke-linecap":"round"},dyn);
+
+    // dots
+    E("circle",{cx:xS(t),cy:yR(r),r:6,fill:"#fff",stroke:C('--level'),"stroke-width":3},dyn);
+    E("circle",{cx:xS(t),cy:yV(v),r:5.5,fill:C('--vel'),stroke:"#fff","stroke-width":2},dyn);
+    E("circle",{cx:xS(t),cy:yA(a),r:5.5,fill:C('--acc'),stroke:"#fff","stroke-width":2},dyn);
+
+    // readouts
+    elTnow.textContent=br(t); elRange.value=t;
+    dl.textContent=(r<8?"baixo":r<40?"subindo":r<75?"elevado":"alto")+" ("+Math.round(r)+"/100)"; vl.textContent=Math.round(r);
+    dv.textContent=velWord(v); vv.textContent=br(v);
+    const ws=accWord(as); da.textContent=ws; va.textContent=(a>=0?"+":"")+br(a);
+
+    // interpretation block
+    let col,label,txt;
+    if(t<2 && v<2){col=C('--ink3');label="calmo";txt="Risco <b>baixo</b> e praticamente parado. Nada a sinalizar.";}
+    else if(as==="gain"){col=C('--alert');label="aumento significativo";txt="A deterioração está <b>ganhando força</b>: velocidade subindo e aceleração positiva. É aqui que se antecipa o <b>aumento significativo</b> — antes do nível assustar.";}
+    else if(as==="flip"){col=C('--alert');label="ponto de inflexão";txt="<b>Ponto de inflexão</b>: a deterioração está no auge da velocidade e a aceleração cruza o zero. O movimento muda de caráter a partir daqui.";}
+    else{col=C('--calm');label="perdendo força";txt="O risco ainda sobe, mas o impulso <b>diminui</b>: aceleração negativa. A curva caminha para <b>estabilizar</b>.";}
+    interp.innerHTML='<span class="badge" style="background:'+col+'22;color:'+col+'">'+label+'</span><div>'+txt+'</div>';
+  }
+
+  // controls
+  let playing=false,raf=null,last=null;
+  function step(ts){
+    if(last==null)last=ts; const dt=(ts-last)/1000; last=ts;
+    let t=parseFloat(elRange.value)+dt*2.2; // ~2.2 meses/s
+    if(t>=Tmax){t=Tmax;render(t);pause();return;}
+    render(t); raf=requestAnimationFrame(step);
+  }
+  function play(){playing=true;document.getElementById('play').innerHTML="❚❚ Pausar";
+    if(parseFloat(elRange.value)>=Tmax)render(0); last=null; raf=requestAnimationFrame(step);}
+  function pause(){playing=false;document.getElementById('play').innerHTML="▶ Reproduzir";cancelAnimationFrame(raf);}
+  document.getElementById('play').onclick=()=>playing?pause():play();
+  elRange.oninput=e=>{pause();render(parseFloat(e.target.value));};
+
+  render(0);
+})();
+</script>
+</body>
+</html>
