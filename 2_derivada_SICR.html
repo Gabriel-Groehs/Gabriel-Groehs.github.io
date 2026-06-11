@@ -11,11 +11,11 @@
   :root{
     --bg:#ffffff; --bg2:#f6f8fc; --card:#ffffff;
     --ink:#15202e; --ink2:#56677e; --ink3:#8d9cb1; --line:#e7ecf4;
-    --level:#4263eb;   /* nível de risco - indigo */
-    --vel:#f08c00;     /* velocidade - amber */
-    --acc:#9c36b5;     /* aceleração - violet */
-    --alert:#e8430c;   /* aumento significativo / inflexão - red-orange */
-    --calm:#3aa0ff;    /* perdendo força - cool blue */
+    --level:#0a9d63;   /* nível de risco - verde */
+    --vel:#c79520;     /* velocidade - dourado */
+    --acc:#5c6b82;     /* aceleração - cinza vivo (aço) */
+    --alert:#e8430c;   /* aumento significativo / inflexão - vermelho */
+    --calm:#2bb673;    /* perdendo força / estabilizar - verde */
     --shadow:0 1px 2px rgba(20,40,80,.04),0 8px 24px rgba(20,40,80,.06);
   }
   *{box-sizing:border-box}
@@ -26,15 +26,14 @@
   /* header */
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:30px}
   .brand{display:flex;align-items:center;gap:11px}
-  .brand .mark{width:34px;height:34px}
-  .brand b{font-family:"Bricolage Grotesque";font-size:20px;font-weight:700;letter-spacing:-.02em}
-  .brand b span{color:var(--level)}
+  .brand .logo{height:38px;width:auto;display:block}
+  .brand .wm-fallback{font-family:"Bricolage Grotesque";font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
   .byline{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink3);text-align:right;line-height:1.5}
   .byline b{display:block;color:var(--ink2);font-size:12px}
 
   .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--alert);font-weight:500;margin-bottom:14px}
   h1{font-family:"Bricolage Grotesque";font-size:clamp(30px,5.4vw,52px);line-height:1.02;font-weight:700;letter-spacing:-.025em;margin:0 0 16px;max-width:16ch}
-  h1 .u1{color:var(--vel)} h1 .u2{color:var(--acc)}
+  h1 .u1{color:var(--vel)} h1 .u2{color:var(--alert)}
   .lede{font-size:clamp(16px,2vw,19px);line-height:1.55;color:var(--ink2);max-width:60ch;margin:0}
   .lede b{color:var(--ink)}
 
@@ -54,9 +53,9 @@
   .acard p{font-size:14px;line-height:1.55;color:var(--ink2);margin:0 0 10px}
   .acard .credit{font-size:13px;line-height:1.5;color:var(--ink);background:var(--bg2);border-radius:10px;padding:10px 12px}
   .acard .credit b{color:var(--level)}
-  .a-lvl .ic{background:rgba(66,99,235,.1)} .a-lvl .tag{color:var(--level)}
-  .a-vel .ic{background:rgba(240,140,0,.12)} .a-vel .tag{color:var(--vel)}
-  .a-acc .ic{background:rgba(156,54,181,.12)} .a-acc .tag{color:var(--acc)}
+  .a-lvl .ic{background:rgba(10,157,99,.12)} .a-lvl .tag{color:var(--level)}
+  .a-vel .ic{background:rgba(199,149,32,.15)} .a-vel .tag{color:var(--vel)}
+  .a-acc .ic{background:rgba(92,107,130,.15)} .a-acc .tag{color:var(--acc)}
 
   /* interactive */
   .demo{display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:start}
@@ -103,8 +102,8 @@
   .summary{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:740px){.summary{grid-template-columns:1fr}}
   .scard{border-radius:20px;padding:24px;position:relative;overflow:hidden;color:#fff}
-  .scard.vel{background:linear-gradient(135deg,#f59f00,#e8590c)}
-  .scard.acc{background:linear-gradient(135deg,#ae3ec9,#7048e8)}
+  .scard.vel{background:linear-gradient(135deg,#d8aa2e,#a9790f)}
+  .scard.acc{background:linear-gradient(135deg,#6b7a93,#3f4a5c)}
   .scard .deriv{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;margin-bottom:8px}
   .scard h3{font-family:"Bricolage Grotesque";font-size:26px;font-weight:700;margin:0 0 12px;letter-spacing:-.01em}
   .scard p{font-size:15px;line-height:1.55;margin:0;opacity:.96}
@@ -122,13 +121,7 @@
 <div class="wrap">
   <div class="topbar">
     <div class="brand">
-      <svg class="mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-label="Unicred">
-        <defs><linearGradient id="ug" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00c47a"/><stop offset="1" stop-color="#008f57"/></linearGradient></defs>
-        <rect x="2" y="2" width="36" height="36" rx="11" fill="url(#ug)"/>
-        <path d="M13 11 v9 a7 7 0 0 0 14 0 v-9" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
-        <circle cx="27" cy="12.5" r="2.6" fill="#fff"/>
-      </svg>
-      <b><span>uni</span>cred · Riscos</b>
+      <img class="logo" src="https://d3rwujusajfqlr.cloudfront.net/uploads/cb_93fbd1a88191b7cdce2ffc30534d7790/milhas-unicred/images/unicred-logo-latam-pass.png" alt="Unicred LATAM Pass" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'wm-fallback',textContent:'unicred'}))">
     </div>
     <div class="byline">explicação para negócios<b>por Gabriel Groehs</b></div>
   </div>
@@ -144,21 +137,21 @@
     <p class="sublede">Três perguntas diferentes sobre o mesmo carro. Cada uma é uma “camada” a mais de informação — e cada uma tem um equivalente direto no risco de um cliente.</p>
     <div class="analogy">
       <div class="acard a-lvl">
-        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4263eb" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/></svg></div>
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--level)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/></svg></div>
         <h3>Onde ele está</h3>
         <div class="tag">o nível</div>
         <p>A posição do carro na estrada. Um retrato do momento — não diz nada sobre o que vem a seguir.</p>
         <div class="credit"><b>No crédito:</b> o nível de risco do cliente hoje.</div>
       </div>
       <div class="acard a-vel">
-        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f08c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-4"/><path d="M3.5 18a9 9 0 1 1 17 0"/><circle cx="12" cy="14" r="1.4" fill="#f08c00"/></svg></div>
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--vel)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-4"/><path d="M3.5 18a9 9 0 1 1 17 0"/><circle cx="12" cy="14" r="1.4" fill="var(--vel)"/></svg></div>
         <h3>Quão rápido anda</h3>
         <div class="tag">1ª derivada · velocidade</div>
         <p>A velocidade no velocímetro. Mostra a direção e o ritmo: está indo para frente, e com que pressa.</p>
         <div class="credit"><b>No crédito:</b> quão rápido o risco está mudando.</div>
       </div>
       <div class="acard a-acc">
-        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9c36b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/><path d="M5 6v12"/></svg></div>
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/><path d="M5 6v12"/></svg></div>
         <h3>Acelerando ou freando</h3>
         <div class="tag">2ª derivada · aceleração</div>
         <p>O pé no acelerador ou no freio. Mostra se a velocidade está <b>aumentando</b> (ganhando força) ou diminuindo.</p>
@@ -202,7 +195,7 @@
       <div class="bcard">
         <div class="n">▲ aceleração positiva</div>
         <h3>Aumento significativo</h3>
-        <p>O alerta não dispara porque o risco está alto — dispara porque ele está <b>ganhando força</b>. Quando a velocidade cresce e a aceleração confirma o impulso, é sinal de um <b>aumento significativo</b> da deterioração, mesmo com o nível ainda moderado.</p>
+        <p>O alerta não dispara porque o risco está <i>alto</i> — dispara porque ele está <b>ganhando força</b>. No crédito esse é o gatilho do <b>aumento significativo de risco</b> (em inglês, <i>SICR</i>): a comparação não é com um patamar fixo, e sim com o risco que o cliente tinha <b>na concessão</b>. Se a deterioração acelerou de forma relevante desde a originação, o ativo passa a ser tratado de forma mais conservadora — mesmo sem estar inadimplente.</p>
       </div>
       <div class="bcard">
         <div class="n">● aceleração = zero</div>
@@ -215,9 +208,11 @@
         <p>O nível, sozinho, reage tarde. A tendência permite <b>antecipar</b>: reforçar acompanhamento, repactuar, provisionar mais cedo. É a diferença entre apagar incêndio e prevenir.</p>
       </div>
     </div>
+    <div style="margin-top:16px;background:var(--bg2);border:1px solid var(--line);border-left:4px solid var(--level);border-radius:14px;padding:18px 20px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--level);font-weight:500;margin-bottom:9px">O que muda na prática</div>
+      <p style="margin:0;font-size:14.5px;line-height:1.6;color:var(--ink2)">Sob o <b style="color:var(--ink)">IFRS 9</b> (e a <b style="color:var(--ink)">CMN 4.966/2021</b> no Brasil), reconhecer um aumento significativo move o ativo do <b style="color:var(--ink)">estágio 1</b> para o <b style="color:var(--ink)">estágio 2</b>. O efeito direto é na provisão: ela deixa de cobrir a perda esperada de <b style="color:var(--ink)">12 meses</b> e passa a cobrir a perda esperada de <b style="color:var(--ink)">toda a vida</b> do contrato <i>(lifetime ECL)</i>. Ler a tendência cedo é o que coloca esse reforço de provisão <b style="color:var(--ink)">no momento certo</b> — nem antes, nem tarde demais.</p>
+    </div>
   </section>
-
-  <!-- RESUMO -->
   <section>
     <div class="seclabel">O resumo de bolso</div>
     <h2>As duas derivadas, em uma frase cada</h2>
@@ -356,18 +351,19 @@
   }
 
   // controls
-  let playing=false,raf=null,last=null;
+  let cur=0, playing=false, raf=null, last=null;
   function step(ts){
-    if(last==null)last=ts; const dt=(ts-last)/1000; last=ts;
-    let t=parseFloat(elRange.value)+dt*2.2; // ~2.2 meses/s
-    if(t>=Tmax){t=Tmax;render(t);pause();return;}
-    render(t); raf=requestAnimationFrame(step);
+    if(last==null)last=ts;
+    const dt=Math.min((ts-last)/1000,0.05); last=ts;
+    cur+=dt*2.2; // ~2.2 meses/s
+    if(cur>=Tmax){cur=Tmax;render(cur);pause();return;}
+    render(cur); raf=requestAnimationFrame(step);
   }
   function play(){playing=true;document.getElementById('play').innerHTML="❚❚ Pausar";
-    if(parseFloat(elRange.value)>=Tmax)render(0); last=null; raf=requestAnimationFrame(step);}
-  function pause(){playing=false;document.getElementById('play').innerHTML="▶ Reproduzir";cancelAnimationFrame(raf);}
+    if(cur>=Tmax)cur=0; last=null; raf=requestAnimationFrame(step);}
+  function pause(){playing=false;document.getElementById('play').innerHTML="▶ Reproduzir";if(raf)cancelAnimationFrame(raf);}
   document.getElementById('play').onclick=()=>playing?pause():play();
-  elRange.oninput=e=>{pause();render(parseFloat(e.target.value));};
+  elRange.oninput=e=>{pause();cur=parseFloat(e.target.value);render(cur);};
 
   render(0);
 })();
