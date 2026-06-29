@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ecossistema LLM para Risco de Crédito</title>
+<style>
+/* =========================================================
+   MAPA LLM PARA RISCO DE CRÉDITO — CSS
+   Arquivo único, sem bibliotecas externas.
+   ========================================================= */
+:root{
+  --bg:#071615;
+  --bg2:#0a2220;
+  --panel:#0d2a27;
+  --panel-soft:#10332f;
+  --green:#55b98a;
+  --green2:#2f8d69;
+  --mint:#bfe8d3;
+  --petrol:#1d5e61;
+  --amber:#d6a951;
+  --danger:#ca7d68;
+  --text:#eef7f1;
+  --muted:#a8bcb3;
+  --line:rgba(146,216,181,.35);
+  --grid:rgba(174,231,202,.05);
+  --shadow:0 16px 36px rgba(0,0,0,.34);
+  --header-h:74px;
+  --toolbar-h:64px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{
+  background:
+    radial-gradient(circle at 18% 20%, rgba(55,151,106,.16), transparent 24%),
+    radial-gradient(circle at 80% 70%, rgba(38,110,113,.14), transparent 27%),
+    linear-gradient(135deg,#061312 0%,#091d1c 48%,#071716 100%);
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.7;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+  mask-image:radial-gradient(ellipse at center,black 25%,transparent 85%);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{height:100%;display:grid;grid-template-rows:var(--header-h) var(--toolbar-h) 1fr}
+.topbar{
+  position:relative;z-index:30;display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;border-bottom:1px solid rgba(171,226,194,.16);
+  background:rgba(5,19,18,.80);backdrop-filter:blur(16px);
+}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.brand-mark{
+  width:40px;height:40px;border:1px solid rgba(121,221,167,.6);border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(145deg,rgba(75,184,134,.32),rgba(18,81,75,.24));box-shadow:0 0 28px rgba(78,188,138,.15)
+}
+.brand-mark svg{width:24px;height:24px;stroke:var(--mint)}
+.title-wrap{min-width:0}
+.title-wrap h1{font-size:16px;letter-spacing:.02em;margin:0;font-weight:700}
+.title-wrap p{font-size:11px;color:var(--muted);margin:3px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mode-indicator{
+  display:flex;gap:8px;align-items:center;font-size:11px;color:var(--mint);padding:8px 11px;border-radius:999px;
+  border:1px solid rgba(96,191,143,.3);background:rgba(41,127,90,.12)
+}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 13px var(--green);animation:blink 1.8s ease-in-out infinite}
+.toolbar{
+  position:relative;z-index:25;display:flex;align-items:center;gap:10px;padding:10px 18px;
+  overflow-x:auto;overflow-y:hidden;border-bottom:1px solid rgba(171,226,194,.13);background:rgba(7,25,23,.84);backdrop-filter:blur(13px)
+}
+.layer-filters{display:flex;gap:7px;white-space:nowrap}
+.filter-btn,.action-btn,.compact-btn{
+  border:1px solid rgba(162,227,190,.18);color:#d7ebe0;background:rgba(26,82,66,.2);border-radius:10px;
+  transition:.2s ease;padding:8px 11px;font-size:11px;line-height:1;
+}
+.filter-btn:hover,.action-btn:hover,.compact-btn:hover{border-color:rgba(114,225,164,.58);background:rgba(58,147,105,.25);transform:translateY(-1px)}
+.filter-btn.active{background:linear-gradient(135deg,rgba(75,184,134,.33),rgba(26,110,85,.36));border-color:rgba(112,231,166,.8);color:#fff;box-shadow:0 0 16px rgba(69,195,133,.14)}
+.toolbar-spacer{flex:1;min-width:20px}
+.search-box{
+  min-width:215px;position:relative;display:flex;align-items:center;border:1px solid rgba(162,227,190,.18);border-radius:10px;background:rgba(0,0,0,.15)
+}
+.search-box span{position:absolute;left:10px;color:var(--muted);font-size:13px;pointer-events:none}
+.search-box input{width:100%;border:0;outline:0;padding:8px 10px 8px 30px;background:transparent;color:var(--text);font-size:11px}
+.workspace{position:relative;overflow:hidden}
+.map-viewport{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none}
+.map-viewport.dragging{cursor:grabbing}
+.map-world{
+  position:absolute;left:0;top:0;width:2440px;height:1580px;transform-origin:0 0;will-change:transform;
+}
+.graph-svg{position:absolute;inset:0;width:2440px;height:1580px;overflow:visible;pointer-events:none}
+.edge{
+  stroke:var(--line);stroke-width:1.5;fill:none;transition:.25s ease;stroke-linecap:round;
+  stroke-dasharray:4 7;animation:dash 18s linear infinite;
+}
+.edge.secondary{stroke:rgba(126,167,155,.17);stroke-width:1}
+.edge.flow{stroke:rgba(131,238,185,.72);stroke-width:2.4;filter:drop-shadow(0 0 5px rgba(91,219,149,.6))}
+.edge.dim{opacity:.06}
+.edge.hot{stroke:var(--mint);stroke-width:3;opacity:1;filter:drop-shadow(0 0 6px rgba(118,232,173,.75))}
+.node-layer{position:absolute;inset:0}
+.node{
+  position:absolute;width:196px;min-height:88px;padding:10px 11px 9px;border-radius:14px;user-select:none;
+  border:1px solid rgba(171,228,195,.22);background:linear-gradient(145deg,rgba(19,55,50,.93),rgba(10,35,32,.92));
+  box-shadow:0 12px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04);
+  transition:opacity .25s ease,filter .25s ease,box-shadow .25s ease,border-color .25s ease,transform .16s ease;
+  cursor:pointer;backdrop-filter:blur(9px)
+}
+.node:hover{border-color:rgba(141,239,189,.75);transform:translateY(-3px) scale(1.018);z-index:8;box-shadow:0 17px 34px rgba(0,0,0,.4),0 0 21px rgba(72,204,134,.12)}
+.node.selected{border-color:var(--green);box-shadow:0 0 0 1px rgba(125,242,174,.4),0 0 28px rgba(68,207,132,.33),var(--shadow);z-index:12}
+.node.dim{opacity:.12;filter:grayscale(.75);pointer-events:none}
+.node.search-hit{border-color:var(--amber);box-shadow:0 0 0 1px rgba(232,188,91,.46),0 0 23px rgba(214,169,81,.2)}
+.node.critical{border-color:rgba(214,169,81,.45)}
+.node.central{
+  width:278px;min-height:132px;border:2px solid rgba(91,223,146,.95);
+  background:radial-gradient(circle at 22% 25%,rgba(89,210,139,.25),transparent 43%),linear-gradient(145deg,#15533e,#0c342b);
+  box-shadow:0 0 38px rgba(67,215,132,.25),inset 0 1px 0 rgba(255,255,255,.1);
+  animation:pulse 3.2s ease-in-out infinite;
+}
+.node.central .node-title{font-size:15px}
+.node.central .node-desc{font-size:10.5px}
+.node.dragging{opacity:.88;transform:scale(1.04)!important;z-index:20!important}
+.node-header{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.node-icon{font-size:15px;width:22px;height:22px;display:grid;place-items:center;border-radius:7px;background:rgba(98,201,148,.12);border:1px solid rgba(126,222,171,.12)}
+.node-title{font-size:11.5px;font-weight:700;line-height:1.14;letter-spacing:.005em}
+.node-desc{font-size:9.2px;color:var(--muted);line-height:1.31;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.node-tag{position:absolute;top:-9px;right:9px;padding:2px 6px;border-radius:7px;background:#153e35;border:1px solid rgba(130,225,169,.18);font-size:8px;color:var(--mint);letter-spacing:.04em;text-transform:uppercase}
+.node[data-cat="Governança"] .node-icon,.node[data-cat="Qualidade"] .node-icon{background:rgba(214,169,81,.12)}
+.node[data-cat="Casos de Uso"]{border-color:rgba(91,167,214,.31);background:linear-gradient(145deg,rgba(18,55,61,.96),rgba(8,37,41,.93))}
+.group-label{
+  position:absolute;border:1px dashed rgba(143,223,177,.17);border-radius:24px;padding:9px 13px;color:rgba(197,237,213,.72);
+  font-size:11px;letter-spacing:.09em;text-transform:uppercase;background:rgba(17,56,47,.10);pointer-events:none
+}
+.group-label .group-sub{font-size:9px;text-transform:none;letter-spacing:0;color:rgba(178,210,191,.55);margin-top:3px}
+.group-label .collapse-group{
+  position:absolute;right:8px;top:8px;padding:2px 5px;font-size:11px;border-radius:5px;background:rgba(87,181,132,.12);border:1px solid rgba(140,223,177,.12);color:#d8eee2;pointer-events:auto
+}
+.group-label.collapsed{height:36px;overflow:hidden;background:rgba(23,71,58,.48)}
+.group-label.collapsed~.node[data-group]{transition:opacity .2s ease}
+.legend{
+  position:absolute;left:16px;bottom:16px;z-index:12;max-width:268px;padding:11px 12px;border:1px solid rgba(156,222,185,.17);
+  border-radius:13px;background:rgba(7,26,24,.84);backdrop-filter:blur(13px);box-shadow:var(--shadow);font-size:10px;color:var(--muted)
+}
+.legend strong{font-size:10px;color:var(--text);display:block;margin-bottom:7px}
+.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px}
+.legend-key{display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--green)}
+.dot.amber{background:var(--amber)}.dot.blue{background:#5eaeb0}.dot.mint{background:var(--mint)}
+.map-controls{
+  position:absolute;right:17px;bottom:16px;z-index:13;display:flex;flex-direction:column;gap:6px
+}
+.compact-btn{width:38px;height:34px;padding:0;font-size:17px;background:rgba(8,36,31,.88);box-shadow:0 8px 18px rgba(0,0,0,.16)}
+.mini-map{
+  position:absolute;right:67px;bottom:16px;width:174px;height:110px;border-radius:12px;border:1px solid rgba(159,227,188,.19);
+  background:rgba(7,30,28,.88);overflow:hidden;z-index:12;box-shadow:var(--shadow)
+}
+.mini-map svg{width:100%;height:100%}.mini-node{fill:rgba(100,205,148,.52)}.mini-edge{stroke:rgba(159,225,187,.18);stroke-width:1}.mini-viewport{fill:rgba(158,236,191,.08);stroke:rgba(160,241,197,.82);stroke-width:1.5}
+.side-panel{
+  position:absolute;right:0;top:0;bottom:0;width:min(420px,92vw);z-index:40;transform:translateX(101%);
+  transition:transform .32s cubic-bezier(.2,.85,.2,1);background:linear-gradient(160deg,rgba(8,31,28,.98),rgba(9,43,37,.98));
+  border-left:1px solid rgba(160,230,190,.23);box-shadow:-18px 0 45px rgba(0,0,0,.38);overflow:auto;backdrop-filter:blur(18px)
+}
+.side-panel.open{transform:translateX(0)}
+.panel-head{position:sticky;top:0;z-index:2;padding:20px 22px 17px;background:rgba(9,40,35,.94);border-bottom:1px solid rgba(160,230,190,.15);backdrop-filter:blur(14px)}
+.panel-close{position:absolute;right:16px;top:15px;width:30px;height:30px;border-radius:9px;border:1px solid rgba(162,228,191,.2);background:rgba(108,201,150,.1);color:var(--text)}
+.panel-category{font-size:9px;text-transform:uppercase;letter-spacing:.13em;color:var(--mint);margin-bottom:7px}
+.panel-title{font-size:21px;line-height:1.12;margin:0 35px 7px 0}.panel-summary{font-size:12px;color:var(--muted);margin:0;line-height:1.48}
+.panel-body{padding:19px 22px 29px}
+.detail-section{margin:0 0 17px}.detail-section h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mint);margin:0 0 7px}.detail-section p{font-size:12px;line-height:1.55;color:#d1e0d6;margin:0}
+.pills{display:flex;flex-wrap:wrap;gap:6px}.pill{font-size:10px;padding:5px 7px;border-radius:999px;color:#d9eee1;border:1px solid rgba(164,227,190,.18);background:rgba(72,169,116,.1)}
+.panel-actions{display:flex;gap:8px;margin:20px 0 4px}.panel-actions button{flex:1;padding:10px;font-size:10px}
+.empty-panel{padding:32px 24px;color:var(--muted);font-size:13px;line-height:1.55}
+.empty-panel b{color:var(--mint)}
+.case-dock{
+  position:absolute;right:16px;top:16px;width:304px;z-index:10;border-radius:15px;overflow:hidden;background:rgba(8,35,32,.89);
+  border:1px solid rgba(143,223,177,.21);box-shadow:var(--shadow);backdrop-filter:blur(14px)
+}
+.case-dock-head{padding:12px 13px 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(146,218,179,.13)}
+.case-dock-head strong{font-size:11px}.case-dock-head span{font-size:9px;color:var(--mint)}
+.case-list{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(147,223,178,.1)}
+.case-card{padding:9px 10px;background:rgba(10,42,38,.93);border:0;text-align:left;color:var(--text);min-height:54px}
+.case-card:hover{background:rgba(40,102,81,.54)}.case-card b{display:block;font-size:9.7px;margin-bottom:3px}.case-card small{display:block;color:var(--muted);font-size:8.6px;line-height:1.25}
+.flow-bar{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:11;width:min(920px,74vw);padding:11px 14px 10px;
+  border-radius:14px 14px 0 0;border:1px solid rgba(158,231,189,.18);border-bottom:0;background:rgba(6,28,25,.92);box-shadow:0 -10px 26px rgba(0,0,0,.17);backdrop-filter:blur(12px)
+}
+.flow-title{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:8px}.flow-title b{font-size:10px}.flow-title span{font-size:9px;color:var(--muted)}
+.flow-steps{display:flex;align-items:center;gap:5px;overflow:hidden}.flow-step{flex:1;min-width:46px;color:var(--muted);font-size:8px;text-align:center;line-height:1.15;position:relative;padding-top:8px}.flow-step:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:rgba(153,220,180,.15)}.flow-step.active{color:var(--mint)}.flow-step.active:before{background:var(--green);box-shadow:0 0 9px var(--green)}
+.maturity{
+  position:absolute;left:50%;top:17px;transform:translateX(-50%);z-index:10;width:min(776px,58vw);
+  border:1px solid rgba(155,225,184,.18);border-radius:14px;background:rgba(7,30,27,.89);box-shadow:var(--shadow);backdrop-filter:blur(13px);overflow:hidden
+}
+.maturity-header{padding:10px 13px 7px;display:flex;justify-content:space-between;align-items:center}.maturity-header b{font-size:10px}.maturity-header span{font-size:9px;color:var(--muted)}
+.maturity-levels{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(154,225,184,.1)}
+.level{padding:9px 9px 10px;min-height:62px;background:rgba(9,41,36,.94);position:relative}.level:hover{background:rgba(40,103,80,.54)}.level strong{display:block;font-size:9px;color:var(--mint);margin-bottom:4px}.level span{display:block;font-size:8px;line-height:1.26;color:var(--muted)}
+.exec-mode .node-desc{display:none}.exec-mode .node{min-height:58px;width:166px}.exec-mode .node.central{width:244px;min-height:92px}.exec-mode .case-dock{display:none}.exec-mode .maturity{width:min(520px,48vw)}.exec-mode .level:not(.current){opacity:.35}.exec-mode .legend{display:none}
+.tech-mode .node{border-radius:8px}.tech-mode .node-title{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.tech-mode .graph-svg{filter:contrast(1.12)}
+.tooltip{
+  position:fixed;z-index:60;max-width:280px;padding:9px 10px;border-radius:10px;pointer-events:none;opacity:0;transform:translateY(4px);
+  background:#061b19;border:1px solid rgba(147,229,182,.23);box-shadow:var(--shadow);font-size:10px;line-height:1.4;color:#d7e9dd;transition:.12s ease
+}.tooltip.visible{opacity:1;transform:translateY(0)}.tooltip b{color:var(--mint)}
+.toast{position:absolute;left:50%;top:14px;transform:translate(-50%,-18px);z-index:70;opacity:0;pointer-events:none;padding:10px 14px;border-radius:10px;background:rgba(13,66,52,.96);border:1px solid rgba(118,231,166,.37);font-size:11px;transition:.25s ease;box-shadow:var(--shadow)}.toast.show{opacity:1;transform:translate(-50%,0)}
+.particle{fill:#d7ffea;filter:drop-shadow(0 0 4px #5acb90)}
+@keyframes pulse{0%,100%{box-shadow:0 0 28px rgba(67,215,132,.19),inset 0 1px 0 rgba(255,255,255,.1)}50%{box-shadow:0 0 47px rgba(67,215,132,.48),inset 0 1px 0 rgba(255,255,255,.13)}}
+@keyframes blink{0%,100%{opacity:.7}50%{opacity:1;box-shadow:0 0 18px var(--green)}}
+@keyframes dash{to{stroke-dashoffset:-120}}
+@media (max-width:950px){
+  :root{--header-h:68px;--toolbar-h:59px}.mode-indicator{display:none}.topbar{padding:0 13px}.title-wrap h1{font-size:14px}.toolbar{padding:8px 11px}.search-box{min-width:160px}.case-dock{display:none}.maturity{width:min(640px,72vw)}.flow-bar{width:86vw}.legend{display:none}
+}
+@media (max-width:640px){
+  .toolbar-spacer,.toolbar .action-btn:not(.flow-trigger){display:none}.search-box{min-width:136px}.maturity{display:none}.flow-bar{width:95vw}.flow-step:nth-child(n+8){display:none}.side-panel{width:100vw}.title-wrap p{max-width:260px}.filter-btn{padding:7px 9px}.node{width:178px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- ======================= CABEÇALHO ======================= -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" stroke-width="2">
+          <path d="M7 22V10m6 12V6m6 16v-9m6 9V8"/><path d="M5 24h23"/>
+          <circle cx="7" cy="10" r="1.7" fill="currentColor"/><circle cx="13" cy="6" r="1.7" fill="currentColor"/><circle cx="19" cy="13" r="1.7" fill="currentColor"/><circle cx="25" cy="8" r="1.7" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="title-wrap">
+        <h1>Ecossistema LLM para Risco de Crédito</h1>
+        <p>Da pergunta humana à decisão governada, rastreável e orientada por dados</p>
+      </div>
+    </div>
+    <div class="mode-indicator"><span class="status-dot"></span>Modo: Arquitetura de IA Corporativa</div>
+  </header>
+
+  <!-- ======================= BARRA DE FILTROS ======================= -->
+  <nav class="toolbar" aria-label="Filtros de arquitetura">
+    <div class="layer-filters" id="filters"></div>
+    <div class="toolbar-spacer"></div>
+    <div class="search-box"><span>⌕</span><input id="searchInput" aria-label="Buscar no mapa" placeholder="Buscar componente ou métrica..." /></div>
+    <button class="action-btn" id="executiveBtn">Modo executivo</button>
+    <button class="action-btn" id="technicalBtn">Modo técnico</button>
+    <button class="action-btn flow-trigger" id="flowBtn">▶ Executar fluxo</button>
+  </nav>
+
+  <!-- ======================= AMBIENTE DE GRAFO ======================= -->
+  <main class="workspace">
+    <section class="map-viewport" id="viewport" aria-label="Mapa interativo de arquitetura">
+      <div class="map-world" id="world">
+        <svg class="graph-svg" id="graphSvg" viewBox="0 0 2440 1580" aria-hidden="true">
+          <g id="edgeLayer"></g>
+          <g id="particleLayer"></g>
+        </svg>
+        <div class="node-layer" id="nodeLayer"></div>
+
+        <!-- Faixas semânticas do mapa -->
+        <div class="group-label" style="left:42px;top:330px;width:360px;height:692px" data-group-label="Entrada e Contexto">
+          Entrada &amp; Contexto Humano
+          <button class="collapse-group" data-collapse="Entrada e Contexto">−</button>
+          <div class="group-sub">Perguntas, instruções, contexto e memória controlada</div>
+        </div>
+        <div class="group-label" style="left:420px;top:258px;width:458px;height:1010px" data-group-label="Dados e RAG">
+          Dados, Documentos &amp; RAG
+          <button class="collapse-group" data-collapse="Dados e RAG">−</button>
+          <div class="group-sub">Conhecimento homologado, recuperação e evidências</div>
+        </div>
+        <div class="group-label" style="left:908px;top:336px;width:450px;height:760px" data-group-label="Orquestração">
+          Raciocínio &amp; Orquestração
+          <button class="collapse-group" data-collapse="Orquestração">−</button>
+          <div class="group-sub">Router, modelo, harness, hooks e plano operacional</div>
+        </div>
+        <div class="group-label" style="left:1382px;top:286px;width:468px;height:968px" data-group-label="Agentes">
+          Agentes, Skills &amp; Ferramentas
+          <button class="collapse-group" data-collapse="Agentes">−</button>
+          <div class="group-sub">Capacidades especializadas e integrações controladas</div>
+        </div>
+        <div class="group-label" style="left:1870px;top:258px;width:510px;height:1030px" data-group-label="Governança">
+          Governança, Qualidade &amp; Operação
+          <button class="collapse-group" data-collapse="Governança">−</button>
+          <div class="group-sub">Segurança, auditoria, avaliações, LLMOps e MLOps</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="case-dock" aria-label="Casos de uso prioritários">
+      <div class="case-dock-head"><strong>Casos de Uso Prioritários</strong><span>clique para explorar</span></div>
+      <div class="case-list" id="caseList"></div>
+    </aside>
+
+    <section class="maturity" aria-label="Jornada de maturidade">
+      <div class="maturity-header"><b>Jornada de Maturidade LLM em Risco de Crédito</b><span>produtividade crescente, decisão sempre humana</span></div>
+      <div class="maturity-levels">
+        <div class="level"><strong>N1 · Assistência</strong><span>Resumo, escrita, explicação e código.</span></div>
+        <div class="level"><strong>N2 · Conhecimento</strong><span>RAG, fontes homologadas e acesso controlado.</span></div>
+        <div class="level"><strong>N3 · Copilotos</strong><span>Skills para SQL, políticas e indicadores.</span></div>
+        <div class="level"><strong>N4 · Integração</strong><span>Databricks, MLflow, BI, Git e aprovações.</span></div>
+        <div class="level current"><strong>N5 · Agentic Governado</strong><span>Multiagentes, evals, trilha e humano no circuito.</span></div>
+      </div>
+    </section>
+
+    <section class="flow-bar" aria-label="Fluxo ponta a ponta">
+      <div class="flow-title"><b>Fluxo end-to-end governado</b><span id="flowStatus">pronto para execução assistida</span></div>
+      <div class="flow-steps" id="flowSteps"></div>
+    </section>
+
+    <section class="legend">
+      <strong>Como explorar</strong>
+      <div class="legend-grid">
+        <span class="legend-key"><i class="dot"></i>Nó ativo</span>
+        <span class="legend-key"><i class="dot mint"></i>Conexão principal</span>
+        <span class="legend-key"><i class="dot amber"></i>Controle crítico</span>
+        <span class="legend-key"><i class="dot blue"></i>Caso de uso</span>
+      </div>
+    </section>
+
+    <div class="mini-map" id="miniMap" aria-label="Minimapa"></div>
+    <div class="map-controls">
+      <button class="compact-btn" id="zoomIn" title="Aproximar">+</button>
+      <button class="compact-btn" id="zoomOut" title="Afastar">−</button>
+      <button class="compact-btn" id="centerMap" title="Centralizar mapa">⌖</button>
+    </div>
+
+    <!-- Painel lateral -->
+    <aside class="side-panel" id="sidePanel" aria-live="polite">
+      <div class="empty-panel" id="emptyPanel"><b>Explore o ecossistema.</b><br><br>Clique em um componente para ver sua função, aplicação em risco, riscos, controles e relações arquiteturais.</div>
+      <div id="detailPanel" hidden></div>
+    </aside>
+    <div class="tooltip" id="tooltip"></div>
+    <div class="toast" id="toast"></div>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   MAPA LLM PARA RISCO DE CRÉDITO — JAVASCRIPT
+   Dados estruturados, grafo SVG, interações e animações.
+   ========================================================= */
+
+/* ---------- Metadados de camadas ---------- */
+const categories = [
+  "Visão Geral","Fundamentos LLM","Dados e RAG","Agentes e Ferramentas",
+  "Governança e Compliance","MLOps e Observabilidade","Casos de Uso em Risco","Fluxo End-to-End"
+];
+const categoryInfo = {
+  "Fundamentos LLM": { maturity:"Nível 1–2", priority:"Alta", controls:"Instruções claras, limites de escopo, contexto e revisão humana." },
+  "Dados e RAG": { maturity:"Nível 2", priority:"Muito alta", controls:"Fontes homologadas, versionamento documental, RBAC e grounding." },
+  "Agentes e Ferramentas": { maturity:"Nível 3–4", priority:"Alta", controls:"Harness, permissões mínimas, aprovações e logs por ação." },
+  "Governança e Compliance": { maturity:"Transversal", priority:"Crítica", controls:"Privacidade, segregação de funções, auditoria, guardrails e retenção de evidências." },
+  "MLOps e Observabilidade": { maturity:"Nível 3–5", priority:"Alta", controls:"Evals contínuos, telemetria, versionamento, rollback e gestão de incidentes." },
+  "Casos de Uso": { maturity:"Incremental", priority:"Priorizar valor e risco", controls:"Pilotos delimitados, humano no circuito e métricas de benefício/risco." }
+};
+
+/* ---------- Nós da arquitetura ---------- */
+const nodes = [
+  // CAMADA 1 — Entrada e contexto humano
+  {id:"user", group:"Entrada e Contexto", cat:"Fundamentos LLM", x:90,y:398, icon:"👤", title:"Usuário / Analista de Risco", desc:"Faz perguntas, pede análises, consulta documentos e solicita código.", use:"Ex.: “Explique o aumento do Over 90” ou “gere SQL para comparar DM e PEC”.", why:"Transforma uma necessidade de negócio em uma solicitação estruturada.", how:"Interage por linguagem natural, dentro de perfil de acesso e contexto de trabalho.", risk:"Perguntas ambíguas, acesso indevido ou expectativa de decisão automatizada.", control:"RBAC, registro de identidade, templates de pergunta e aviso de limites.", example:"Analista pede uma síntese da metodologia da LGD com fontes.", maturity:"Nível 1", priority:"Alta"},
+  {id:"prompt", group:"Entrada e Contexto", cat:"Fundamentos LLM", x:104,y:540, icon:"✎", title:"Prompt", desc:"Instrução explícita: papel, objetivo, contexto, restrições e formato.", use:"Padroniza análise de Over 90 por carteira, safra, segmento e exposição.", why:"Define o contrato operacional entre usuário e solução.", how:"Combina papel esperado, objetivo, critérios de qualidade, exemplos e regras de segurança.", risk:"Prompt incompleto pode induzir resposta irrelevante ou sem escopo.", control:"Biblioteca de templates, validações, versionamento e testes de prompt.", example:"“Você é especialista em risco. Explique a variação do Over 90 com fontes e sem inferir números.”", maturity:"Nível 1", priority:"Muito alta"},
+  {id:"context", group:"Entrada e Contexto", cat:"Fundamentos LLM", x:104,y:686, icon:"⌘", title:"Contextualização", desc:"Data-base, cooperativa, carteira, produto, PF/PJ, metodologia e limites.", use:"Evita analisar uma métrica sem data-base ou sem sua definição oficial.", why:"Reduz ambiguidade e adapta a resposta ao escopo correto.", how:"Acrescenta variáveis de negócio, glossário, período e regras autorizadas ao pedido.", risk:"Contexto errado gera comparação indevida ou conclusão não aplicável.", control:"Campos obrigatórios, validação de parâmetros e origem do contexto rastreável.", example:"Carteira PJ, cooperativa 104, posição 31/05/2026, definição oficial de Over 90.", maturity:"Nível 1", priority:"Alta"},
+  {id:"system", group:"Entrada e Contexto", cat:"Fundamentos LLM", x:104,y:832, icon:"⚙", title:"System Prompt / Instruções de Sistema", desc:"Regras permanentes: não inventar números, citar fontes e não decidir crédito.", use:"Mantém comportamento seguro em consultas de política, dados e modelos.", why:"Estabelece limites não negociáveis para toda conversa.", how:"É aplicado antes do pedido do usuário e combinado com regras de segurança e compliance.", risk:"Sem instruções permanentes, o sistema pode escapar do escopo de uso assistido.", control:"Aprovação formal, controle de versão, testes de regressão e audit trail.", example:"“Não aprovar, recusar, alterar score, limite, rating ou política de crédito.”", maturity:"Nível 1", priority:"Crítica"},
+  {id:"memory", group:"Entrada e Contexto", cat:"Fundamentos LLM", x:104,y:976, icon:"🧠", title:"Memory / Memória", desc:"Sessão temporária e memória institucional controlada para glossários e padrões.", use:"Retém o contexto de uma investigação sem reintroduzir dados a cada pergunta.", why:"Mantém continuidade sem misturar conversas, clientes ou projetos.", how:"Separa memória de sessão de conhecimento institucional autorizado e versionado.", risk:"Retenção indevida de dados sensíveis ou contaminação de contexto.", control:"Política de retenção, classificação, mascaramento, consentimento e isolamento por usuário.", example:"Preservar preferências de relatório, não CPF, renda ou sigilo bancário.", maturity:"Nível 2", priority:"Alta", critical:true},
+
+  // CAMADA 2 — Dados, documentos e RAG
+  {id:"docs", group:"Dados e RAG", cat:"Dados e RAG", x:470,y:328, icon:"▤", title:"Arquivos e Documentos", desc:"Políticas, manuais, normativos, metodologias, atas, dicionários e relatórios.", use:"Base para responder sobre PD, LGD, EAD, CCF, IFRS 9, renegociação e provisionamento.", why:"Concentra conhecimento corporativo recuperável e auditável.", how:"Fontes são catalogadas com área responsável, data, versão e confidencialidade.", risk:"Documento desatualizado, não homologado ou com classificação inadequada.", control:"Catálogo, workflow de aprovação, validade, metadados e controle de acesso.", example:"Manual de política de renegociação aprovado pela área de risco.", maturity:"Nível 2", priority:"Muito alta"},
+  {id:"ingestion", group:"Dados e RAG", cat:"Dados e RAG", x:470,y:458, icon:"⇣", title:"Ingestão e Preparação de Documentos", desc:"Upload, extração, OCR, limpeza, classificação, metadados, versão e indexação.", use:"Prepara políticas e relatórios para busca confiável em linguagem natural.", why:"Converte documentos dispersos em conhecimento consultável.", how:"Extrai texto, identifica estrutura, aplica classificação e encaminha para aprovação/indexação.", risk:"OCR ruim, conteúdo truncado ou ingestão sem metadados compromete a evidência.", control:"Validação de qualidade, revisão humana, checks de completude e reprocessamento.", example:"Extrair uma política PDF, associar versão, vigência e nível de sigilo.", maturity:"Nível 2", priority:"Muito alta"},
+  {id:"chunking", group:"Dados e RAG", cat:"Dados e RAG", x:470,y:593, icon:"▦", title:"Chunking", desc:"Divide documentos em trechos semanticamente coerentes e recuperáveis.", use:"Permite localizar o capítulo correto sobre Stage 2 ou reestruturação.", why:"Documentos longos não devem ser enviados integralmente ao modelo.", how:"Cria blocos com título, capítulo, data, versão, responsável e confidencialidade.", risk:"Trechos muito curtos perdem contexto; muito longos reduzem precisão.", control:"Estratégia por seção, sobreposição controlada, testes de recall e metadados.", example:"Separar “Definição”, “Critérios”, “Exceções” e “Aprovações” de uma política.", maturity:"Nível 2", priority:"Alta"},
+  {id:"embeddings", group:"Dados e RAG", cat:"Dados e RAG", x:470,y:728, icon:"◌", title:"Embeddings", desc:"Vetores que representam o significado de textos, perguntas e documentos.", use:"Aproxima semanticamente “perda esperada” de PD, LGD, EAD e provisão.", why:"Permite busca por significado, não apenas por palavras exatas.", how:"Modelo de embeddings converte texto em coordenadas numéricas no espaço vetorial.", risk:"Modelo inadequado pode recuperar conteúdo sem relação suficiente com a pergunta.", control:"Avaliar recall, testar vocabulário interno, versionar modelo e reindexar quando necessário.", example:"“Cura” encontra trechos sobre retorno de estágio ou regularização, conforme glossário.", maturity:"Nível 2", priority:"Alta"},
+  {id:"vector", group:"Dados e RAG", cat:"Dados e RAG", x:470,y:864, icon:"◫", title:"Vector Database / Base Vetorial", desc:"Armazena embeddings e busca trechos semanticamente similares.", use:"Recupera políticas, metodologias, relatórios e definições técnicas relevantes.", why:"Entrega contexto preciso com baixa latência.", how:"Indexa vetores junto de filtros por área, versão, sigilo, vigência e perfil.", risk:"Recuperação de fonte incompatível com usuário ou período.", control:"RBAC no retrieval, filtros de metadados, logs de consulta e expiração de versões.", example:"Buscar apenas metodologias vigentes e autorizadas para a cooperativa consultada.", maturity:"Nível 2", priority:"Muito alta"},
+  {id:"rag", group:"Dados e RAG", cat:"Dados e RAG", x:590,y:1014, icon:"⟲", title:"RAG — Retrieval-Augmented Generation", desc:"Pergunta → embedding → busca → reranking → contexto → resposta com evidências.", use:"Responde sobre Stage 2, LGD ou política de crédito com documentação homologada.", why:"Reduz dependência de conhecimento geral e aumenta rastreabilidade.", how:"Recupera fontes relevantes antes da geração e anexa citações à resposta.", risk:"RAG sem grounding pode amplificar documento errado ou insuficiente.", control:"Cobertura de fontes, limiar de confiança, citação obrigatória e recusa por ausência de evidência.", example:"Resposta informa o trecho, versão e fonte da definição oficial de Over 90.", maturity:"Nível 2", priority:"Crítica"},
+  {id:"reranking", group:"Dados e RAG", cat:"Dados e RAG", x:684,y:462, icon:"↕", title:"Reranking", desc:"Reordena documentos recuperados segundo relevância real para a pergunta.", use:"Distingue regra de renegociação de uma menção incidental no relatório.", why:"Melhora a precisão do contexto entregue à LLM.", how:"Aplica modelo ou regras adicionais ao conjunto inicial de trechos recuperados.", risk:"Fonte relevante pode ficar fora do contexto por ranking inadequado.", control:"Métricas de precisão, revisão de top-k, testes com golden dataset.", example:"Priorizar capítulo de política vigente acima de atas históricas.", maturity:"Nível 2", priority:"Média"},
+  {id:"grounding", group:"Dados e RAG", cat:"Dados e RAG", x:684,y:606, icon:"⚓", title:"Grounding / Ancoragem em Evidências", desc:"A resposta deve derivar de documentos, dados ou fontes recuperadas.", use:"Evita explicar uma regra IFRS 9 sem suporte na documentação aplicável.", why:"É a principal barreira contra suposição e alucinação factual.", how:"Exige referências, confere cobertura e declara limitação quando não há evidência.", risk:"Narrativa convincente, mas não verificável ou incorreta.", control:"Citações obrigatórias, validação de suporte, score de evidência e fallback de recusa.", example:"“Não encontrei fonte homologada suficiente para afirmar esse critério.”", maturity:"Nível 2", priority:"Crítica", critical:true},
+
+  // CAMADA 3 — Modelo, reasoning e orquestração
+  {id:"llm", group:"Orquestração", cat:"Fundamentos LLM", x:1005,y:418, icon:"✦", title:"LLM / Modelo de Linguagem", desc:"Interpreta linguagem, sintetiza informações, gera texto, código, planos e explicações.", use:"Explica PD lifetime, revisa uma consulta PySpark e cria narrativa de risco.", why:"É o motor de linguagem e raciocínio contextual da solução.", how:"Produz saídas probabilísticas condicionadas por prompt, contexto, ferramentas e regras.", risk:"Não é banco de dados, motor estatístico nem sistema de decisão; pode errar com confiança.", control:"Grounding, guardrails, evals, revisão humana e limites explícitos.", example:"O modelo PD calcula probabilidade; a LLM explica o resultado e suas fontes.", maturity:"Nível 1", priority:"Alta"},
+  {id:"reasoning", group:"Orquestração", cat:"Fundamentos LLM", x:1005,y:568, icon:"◇", title:"Reasoning / Planejamento", desc:"Plano operacional resumido e auditável, sem expor cadeia de pensamento interna.", use:"Consultar política → buscar dados → validar métrica → montar narrativa com fontes.", why:"Organiza tarefas complexas em etapas verificáveis.", how:"Gera um plano de execução de alto nível que o harness e agentes podem cumprir.", risk:"Plano inadequado pode acionar ferramenta errada ou ignorar validações.", control:"Planner limitado, validação de plano, permissões e logs de etapas.", example:"Antes de calcular PSI, confirma data-base, população e definição de bins.", maturity:"Nível 3", priority:"Alta"},
+  {id:"router", group:"Orquestração", cat:"Fundamentos LLM", x:1005,y:716, icon:"⇄", title:"Router / Roteador de Intenções", desc:"Identifica se a solicitação é política, documento, SQL, indicador, gráfico ou modelo.", use:"Encaminha um pedido de PSI ao fluxo de monitoramento, não ao agente de políticas.", why:"Evita usar o mesmo processo para perguntas com necessidades diferentes.", how:"Classifica intenção, complexidade, sensibilidade, ferramentas e necessidade de aprovação.", risk:"Roteamento errado pode recuperar fonte inadequada ou habilitar ferramenta indevida.", control:"Conjunto de intenções, confidence threshold, fallback humano e evals de roteamento.", example:"“Compare DM e PEC” aciona skill SQL, não apenas resposta textual.", maturity:"Nível 2–3", priority:"Muito alta"},
+  {id:"orchestrator", group:"Orquestração", cat:"Agentes e Ferramentas", x:1030,y:885, icon:"◉", title:"Orquestrador", desc:"Coordena LLM, RAG, agentes, ferramentas, memória, regras e validações.", use:"Organiza uma investigação de Stage migration com documentos, SQL e narrativa.", why:"Transforma componentes isolados em um fluxo corporativo consistente.", how:"Recebe intenção, aplica políticas, chama serviços, consolida evidências e devolve resultado.", risk:"Fluxo difícil de auditar ou com etapas executadas fora de ordem.", control:"Estados explícitos, logs, id de correlação, timeouts, aprovação e rollback.", example:"Conecta pergunta, consulta de dados, reviewer e entrega com fontes.", maturity:"Nível 3", priority:"Crítica"},
+  {id:"harness", group:"Orquestração", cat:"Agentes e Ferramentas", x:1030,y:1035, icon:"▣", title:"Harness", desc:"Trilho, cabine de controle e painel de instrumentação do agente.", use:"Carrega contexto, seleciona ferramentas, aplica guardrails, registra logs e limita tentativas.", why:"Controla a execução real — não apenas o texto produzido pela LLM.", how:"Mantém estado, executa hooks, valida resultados, gerencia permissões e recupera tarefas.", risk:"Agente sem harness tende a ser opaco, permissivo e difícil de interromper.", control:"Timeouts, retries limitados, validação de outputs, auditoria e checkpoint.", example:"Bloqueia tentativa de executar SQL destrutivo e registra o evento.", maturity:"Nível 3", priority:"Crítica", critical:true},
+  {id:"hooks", group:"Orquestração", cat:"Agentes e Ferramentas", x:1030,y:1182, icon:"⌁", title:"Hooks", desc:"Pontos programáveis antes/depois de prompt, ferramenta, resposta, auditoria e escalonamento.", use:"Mascarar CPF, validar fonte, registrar evidência e exigir aprovação para relatório oficial.", why:"Permite inserir controles precisos no momento certo do fluxo.", how:"Dispara pre-prompt, pre-tool, post-tool, pre-response, post-response, audit, logging e escalation hooks.", risk:"Controle aplicado tarde demais ou ausência de interceptação em evento crítico.", control:"Hooks obrigatórios por classe de risco, testes automatizados e falha segura.", example:"Pre-tool hook bloqueia acesso a tabela sem perfil autorizado.", maturity:"Nível 3", priority:"Crítica", critical:true},
+
+  // CAMADA 4 — agentes skills ferramentas
+  {id:"agents", group:"Agentes", cat:"Agentes e Ferramentas", x:1440,y:340, icon:"🤖", title:"Agents / Agentes", desc:"Sistemas que usam LLMs para tarefas multi-etapas com memória, ferramentas e regras.", use:"Políticas, SQL, documentação, monitoramento, relatórios, compliance e qualidade.", why:"Especializa a solução por domínio e reduz improviso em tarefas recorrentes.", how:"Software em Python, TypeScript ou frameworks corporativos combina prompts, skills e validações.", risk:"Autonomia excessiva, loops ou ação fora de autorização.", control:"Harness, RBAC, orçamento, human-in-the-loop e reviewer.", example:"Agente de Monitoramento de Modelos investiga PSI, KS, Gini e calibração.", maturity:"Nível 3", priority:"Alta"},
+  {id:"planner", group:"Agentes", cat:"Agentes e Ferramentas", x:1440,y:485, icon:"☷", title:"Planner Agent", desc:"Decompõe solicitações complexas em passos de execução controláveis.", use:"Planeja análise de aumento de Over 90 por safra, produto e segmento.", why:"Separa planejamento de execução e aumenta verificabilidade.", how:"Define objetivo, dados necessários, fontes, ferramentas e checkpoints.", risk:"Plano incorreto, excessivamente longo ou sem verificação de premissas.", control:"Limite de etapas, revisão de plano, templates e escalonamento humano.", example:"“Validar definição → extrair dados → comparar períodos → explicar drivers”.", maturity:"Nível 3", priority:"Média"},
+  {id:"executor", group:"Agentes", cat:"Agentes e Ferramentas", x:1440,y:627, icon:"▶", title:"Executor Agent", desc:"Chama ferramentas autorizadas, realiza consultas e produz artefatos.", use:"Executa SQL no Warehouse, gera notebook ou consolida evidências.", why:"Converte plano em ações verificáveis dentro de permissões.", how:"Usa skills e tools sob o controle do harness, com parâmetros validados.", risk:"Ação indevida, consulta cara, erro operacional ou vazamento de dados.", control:"Dry-run, allowlist, limites de custo, confirmação e logs.", example:"Executar consulta somente leitura para comparar saldos entre DM e PEC.", maturity:"Nível 3", priority:"Alta"},
+  {id:"reviewer", group:"Agentes", cat:"Agentes e Ferramentas", x:1440,y:770, icon:"✓", title:"Reviewer / Critic Agent", desc:"Revisa consistência, fontes, qualidade e aderência às regras antes da entrega.", use:"Confere se narrativa de risco cita fontes e não afirma causalidade sem evidência.", why:"Cria uma segunda linha automatizada de qualidade — sem substituir revisão humana.", how:"Avalia resposta contra checklist, fonte, formato, política e critérios de segurança.", risk:"Resposta não fundamentada chegar ao usuário ou relatório oficial.", control:"Evals, rubricas de revisão, bloqueio por falha e human-in-the-loop.", example:"Identifica SQL sem filtro de data-base ou fonte de política obsoleta.", maturity:"Nível 3", priority:"Alta"},
+  {id:"human", group:"Agentes", cat:"Governança e Compliance", x:1440,y:920, icon:"✋", title:"Human-in-the-Loop", desc:"Especialista revisa, aprova, rejeita ou ajusta ações relevantes.", use:"Decisão de crédito, alteração de política, publicação oficial e uso de dados sensíveis exigem validação.", why:"Preserva responsabilidade, julgamento especializado e instâncias formais de decisão.", how:"Pontos de aprovação são definidos por criticidade, risco, impacto e sensibilidade.", risk:"Delegar decisão crítica ou aceitar sugestão gerativa sem responsabilização.", control:"Workflow de aprovação, dupla checagem, segregação de funções e evidência de aceite.", example:"Gestor valida narrativa que seguirá para comitê de risco.", maturity:"Transversal", priority:"Crítica", critical:true},
+  {id:"skills", group:"Agentes", cat:"Agentes e Ferramentas", x:1594,y:1080, icon:"🧩", title:"Skills", desc:"Capacidades reutilizáveis: SQL, PySpark, PSI, LGD, leitura, gráfico e relatório.", use:"Padroniza geração de consulta, análise de safra, comparação de tabelas e documentação.", why:"Transforma conhecimento de domínio em blocos testáveis e reutilizáveis.", how:"Cada skill possui entrada, saída, regras, permissões, testes e documentação.", risk:"Skill sem teste ou sem escopo pode propagar lógica errada de negócio.", control:"Catálogo, versionamento, test set, code review e aprovação da área responsável.", example:"Skill de PSI calcula e explica nível, tendência e banda de estabilidade.", maturity:"Nível 3", priority:"Muito alta"},
+  {id:"tools", group:"Agentes", cat:"Agentes e Ferramentas", x:1594,y:485, icon:"🛠", title:"Tools / Ferramentas", desc:"Databricks, SQL Warehouse, Data Lake, MLflow, Power BI, GitHub, Azure DevOps e sandbox.", use:"Acessa sistemas corporativos de forma controlada para dados, código, logs e artefatos.", why:"A LLM não acessa sistemas sozinha; o software executa ações autorizadas.", how:"Ferramentas são expostas com schema, permissões, validação de parâmetros e telemetria.", risk:"Acesso excessivo, comando destrutivo, custo inesperado ou exfiltração.", control:"Allowlist, read-only padrão, segredo seguro, RBAC e auditoria.", example:"SQL Warehouse em modo somente leitura para consulta de carteira.", maturity:"Nível 3–4", priority:"Crítica", critical:true},
+  {id:"mcp", group:"Agentes", cat:"Agentes e Ferramentas", x:1594,y:630, icon:"⛓", title:"MCP / Protocolos de Ferramentas", desc:"Integração estruturada e governada entre agentes, contexto e ferramentas.", use:"Permite descobrir e utilizar ferramentas com contratos claros de entrada e saída.", why:"Padroniza integração e reduz acoplamento entre agente e sistemas internos.", how:"Expõe capacidades com schemas, descrições, escopos e autenticação.", risk:"Ferramenta mal descrita ou permissiva ser usada fora do contexto previsto.", control:"Contrato versionado, schema validation, autorização por tool e inventário de integrações.", example:"Servidor interno fornece consulta de catálogo de dados com filtros autorizados.", maturity:"Nível 3–4", priority:"Média"},
+
+  // CAMADA 5 — governança
+  {id:"guardrails", group:"Governança", cat:"Governança e Compliance", x:1900,y:304, icon:"🛡", title:"Guardrails", desc:"Controles de privacidade, segurança, compliance, qualidade, escopo, autonomia, dados e decisão.", use:"Impede expor CPF, inventar políticas, alterar score ou publicar relatório sem revisão.", why:"Limita comportamentos, conteúdos, ações e respostas de acordo com o risco.", how:"Combina regras determinísticas, classificadores, validações e bloqueios em hooks/harness.", risk:"Vazamento, uso indevido, alucinação, violação de política ou automação imprópria.", control:"Defesa em camadas, testes adversariais, logs de bloqueio e revisão periódica.", example:"Recusar solicitação de “aprovar automaticamente este crédito”.", maturity:"Transversal", priority:"Crítica", critical:true},
+  {id:"regs", group:"Governança", cat:"Governança e Compliance", x:1900,y:445, icon:"⚖", title:"Regs / Regulations / Compliance", desc:"Requisitos internos, legais, regulatórios, auditoria e uso responsável de IA.", use:"Alinha políticas internas, privacidade, segregação, retenção e explicabilidade.", why:"Converte obrigações de governança em requisitos operacionais da solução.", how:"Mapeia controles por processo, dado, perfil, ferramenta, modelo e saída.", risk:"Não conformidade, ausência de evidência e uso fora de apetite de risco.", control:"Matriz de requisitos, owners, evidências, revisões e aprovação formal.", example:"Manter trilha de versão de prompt, modelo, fonte e aprovador.", maturity:"Transversal", priority:"Crítica", critical:true},
+  {id:"rbac", group:"Governança", cat:"Governança e Compliance", x:1900,y:587, icon:"🔐", title:"RBAC / Controle de Acesso", desc:"Permissões por perfil: analista, gestor, modelador, auditor, admin ou consultor.", use:"Limita quem consulta carteira, documento confidencial, ferramenta ou relatório.", why:"Garante princípio de menor privilégio.", how:"Associa identidade a papéis, escopos de dados, ferramentas e ações permitidas.", risk:"Usuário ver ou operar informação além de sua necessidade de trabalho.", control:"IAM, revisão de acessos, segregação de funções e logs por identidade.", example:"Auditor pode consultar evidências; não altera fontes ou prompts produtivos.", maturity:"Nível 2", priority:"Crítica", critical:true},
+  {id:"privacy", group:"Governança", cat:"Governança e Compliance", x:1900,y:730, icon:"◐", title:"Data Privacy / Privacidade", desc:"Proteção de dados pessoais, sigilo bancário e informação sensível.", use:"Define quais dados podem entrar em prompt, contexto, memória e logs.", why:"A arquitetura deve minimizar exposição desde o desenho.", how:"Classifica dados, aplica minimização, retenção, segregação e controles de propósito.", risk:"Exposição de PII, dados bancários, credenciais ou informações confidenciais.", control:"Data classification, minimização, criptografia, retenção e DLP.", example:"Resultado agregado por segmento, sem dados individualizados em resposta textual.", maturity:"Transversal", priority:"Crítica", critical:true},
+  {id:"masking", group:"Governança", cat:"Governança e Compliance", x:1900,y:873, icon:"◍", title:"PII Masking / Mascaramento", desc:"Ocultação, tokenização ou anonimização antes do conteúdo entrar no fluxo de IA.", use:"Remove CPF, renda, conta, telefone e identificadores diretos de prompts e logs.", why:"Reduz a superfície de exposição e viabiliza uso seguro de conteúdo.", how:"Hook ou camada de dados identifica padrões e substitui por valores mascarados.", risk:"Mascaramento incompleto ou reidentificação indireta por combinação de atributos.", control:"Detecção multicamada, testes, pseudonimização e regras por campo.", example:"CPF 123.456.789-00 torna-se ***.***.***-** antes de qualquer prompt.", maturity:"Nível 2", priority:"Crítica", critical:true},
+  {id:"audit", group:"Governança", cat:"Governança e Compliance", x:1900,y:1018, icon:"▧", title:"Audit Trail / Trilha de Auditoria", desc:"Registra pergunta, fontes, ferramentas, regras, dados, resposta, aprovador e versões.", use:"Suporta auditoria de análise, relatórios e comportamento do sistema.", why:"Permite reconstruir o que ocorreu e atribuir responsabilidade.", how:"Usa ids de correlação, logs imutáveis e vinculação a versões de artefatos.", risk:"Impossibilidade de explicar, reproduzir ou auditar a resposta gerada.", control:"Retenção adequada, integridade de logs, acesso segregado e evidência completa.", example:"Exibir qual prompt, versão de modelo e política foram usados na resposta.", maturity:"Nível 3–5", priority:"Crítica", critical:true},
+
+  // Camada 6 qualidade/observabilidade
+  {id:"evals", group:"Governança", cat:"MLOps e Observabilidade", x:2070,y:336, icon:"▥", title:"Evals / Avaliações", desc:"Testes de precisão factual, políticas, fontes, SQL, alucinação, recusa, custo e consistência.", use:"Verifica se assistente responde corretamente sobre Stage 2, Over 90 e PSI.", why:"Qualidade de LLM não pode depender apenas de percepção de usuário.", how:"Executa casos de teste, rubricas, comparações e métricas antes e após mudanças.", risk:"Regressões silenciosas em prompt, modelo, RAG ou ferramenta.", control:"Gate de release, baseline, score mínimo, revisão de falhas e monitoramento contínuo.", example:"Taxa de citações válidas e de recusa correta em consultas sensíveis.", maturity:"Nível 3", priority:"Crítica"},
+  {id:"golden", group:"Governança", cat:"MLOps e Observabilidade", x:2070,y:478, icon:"✶", title:"Test Set / Golden Dataset", desc:"Perguntas e respostas esperadas para validar comportamento de referência.", use:"Inclui “O que caracteriza Stage 2?”, “Como calcular PSI?” e “Qual definição de Over 90?”.", why:"Cria uma base repetível de qualidade e regressão.", how:"Curado por especialistas, com respostas, fontes, critérios e casos de recusa.", risk:"Conjunto pobre ou desatualizado cria falsa sensação de qualidade.", control:"Curadoria periódica, cobertura de áreas, versionamento e avaliação cega.", example:"Caso que exige informar que não há evidência suficiente para concluir.", maturity:"Nível 3", priority:"Alta"},
+  {id:"edges", group:"Governança", cat:"MLOps e Observabilidade", x:2070,y:620, icon:"⚠", title:"Edges / Edge Cases", desc:"Casos extremos, ambíguos, adversariais ou raros que exigem teste explícito.", use:"Prompt injection, documento conflitante, métrica sem data-base ou carteira inexistente.", why:"Os maiores riscos costumam aparecer fora do caminho feliz.", how:"Monta catálogo de cenários e mede comportamento de recusa, escalonamento e recuperação.", risk:"Solução parecer correta em demo e falhar em caso real sensível.", control:"Cobertura por criticidade, testes contínuos, red teaming e post-mortems.", example:"Usuário pede uma decisão automática de crédito usando instrução contraditória.", maturity:"Nível 3", priority:"Crítica"},
+  {id:"redteam", group:"Governança", cat:"MLOps e Observabilidade", x:2070,y:762, icon:"⚔", title:"Red Teaming", desc:"Testes intencionais contra vazamento, alucinação, contorno de regras e segurança.", use:"Avalia resistência a tentativa de extrair dado pessoal ou burlar guardrails.", why:"Antecipar abuso é mais seguro do que descobrir por incidente.", how:"Especialistas simulam ataques, ambiguidades, manipulação de contexto e instruções maliciosas.", risk:"Fraquezas permanecerem ocultas até serem exploradas.", control:"Plano de testes adversariais, severidade, correção, reteste e governança de incidentes.", example:"Injetar instrução em documento para testar se RAG obedece conteúdo não confiável.", maturity:"Nível 4", priority:"Alta"},
+  {id:"observability", group:"Governança", cat:"MLOps e Observabilidade", x:2070,y:904, icon:"◔", title:"Observabilidade", desc:"Volume, intenções, latência, custo, tools, fontes, falhas, recusas e aprovações.", use:"Monitora quais agentes geram mais valor ou incidentes para risco de crédito.", why:"Permite operar a solução como sistema corporativo, não como protótipo.", how:"Consolida métricas técnicas, de segurança, de qualidade e de negócio em dashboards.", risk:"Problemas só serem percebidos após impacto ao usuário ou auditoria.", control:"SLOs, alertas, dashboards, owners e processos de resposta.", example:"Alerta quando cresce taxa de respostas sem evidência ou de falhas de tool.", maturity:"Nível 4", priority:"Muito alta"},
+  {id:"logs", group:"Governança", cat:"MLOps e Observabilidade", x:2070,y:1048, icon:"≣", title:"Logs e Telemetria", desc:"Eventos técnicos e de negócio registrados em cada etapa de execução.", use:"Permite investigar quais fontes, prompts, ferramentas e decisões foram usados.", why:"É o insumo operacional de observabilidade, auditoria e melhoria.", how:"Captura eventos estruturados com correlação, duração, status, custo e segurança.", risk:"Logs excessivos podem reter dados sensíveis; logs pobres não suportam investigação.", control:"Schema de evento, mascaramento, retenção, acesso restrito e monitoramento de qualidade.", example:"Evento de retrieval contém ids de documentos, não o conteúdo sensível integral.", maturity:"Nível 3–5", priority:"Alta"},
+  {id:"feedback", group:"Governança", cat:"MLOps e Observabilidade", x:2070,y:1190, icon:"↺", title:"Feedback Loop", desc:"Usuário classifica resposta: útil, parcial, incorreta, incompleta ou risco de compliance.", use:"Prioriza correção de perguntas recorrentes sobre indicadores e políticas.", why:"Conecta experiência real a melhoria contínua sem aprender automaticamente conteúdo não validado.", how:"Coleta feedback, classifica incidentes, abre tickets e alimenta backlog de evals.", risk:"Feedback não curado contaminar prompt, memória ou base de conhecimento.", control:"Triagem humana, classificação de severidade, workflow de correção e versionamento.", example:"Feedback “precisa de nova fonte” cria tarefa para curadoria documental.", maturity:"Nível 3–5", priority:"Alta"},
+
+  // Camada 7 MLOps, LLMOps
+  {id:"promptmgmt", group:"Governança", cat:"MLOps e Observabilidade", x:2185,y:330, icon:"⌁", title:"Prompt Management", desc:"Prompt v1 → teste → aprovação → produção → monitoramento → revisão → v2.", use:"Rastreia instruções de geração de narrativa, SQL ou revisão de política.", why:"Prompts são ativos de produção e devem ter ciclo de vida.", how:"Armazena template, parâmetros, owner, aprovação, testes e ambiente.", risk:"Mudança silenciosa alterar comportamento sem rastreabilidade.", control:"Git, aprovação, eval gate, feature flag e rollback.", example:"Publicar nova instrução de análise de Over 90 apenas após validação.", maturity:"Nível 3", priority:"Alta"},
+  {id:"registry", group:"Governança", cat:"MLOps e Observabilidade", x:2185,y:470, icon:"▤", title:"Model Registry", desc:"Registro de modelos, versões, parâmetros, custos, limites e status de aprovação.", use:"Diferencia modelo de embeddings, LLM e modelo PD/LGD produtivo.", why:"Garante visibilidade sobre o que está em uso e por quê.", how:"Mantém catálogo de artefatos, dependências, stage e histórico de promoção.", risk:"Modelo não aprovado ou incompatível ser usado em produção.", control:"Aprovação por estágio, owner, documentação, tags de risco e rollback.", example:"Modelo de embeddings v3 aprovado para corpus de políticas.", maturity:"Nível 3–4", priority:"Alta"},
+  {id:"llmops", group:"Governança", cat:"MLOps e Observabilidade", x:2185,y:610, icon:"⟳", title:"LLMOps", desc:"Operação de prompts, modelos, RAG, tools, agentes, versões, logs, custos e incidentes.", use:"Mantém o assistente de risco seguro, eficiente e auditável em produção.", why:"Sistemas LLM têm superfície operacional além do modelo base.", how:"Integra desenvolvimento, avaliação, observabilidade, segurança e governança.", risk:"Solução experimental sem controle de mudanças, custo e qualidade.", control:"CI/CD, evals, observabilidade, incident response e gestão de configuração.", example:"Rollback imediato após queda na taxa de grounding.", maturity:"Nível 4–5", priority:"Crítica"},
+  {id:"mlops", group:"Governança", cat:"MLOps e Observabilidade", x:2185,y:750, icon:"∿", title:"MLOps", desc:"Operação de modelos PD, LGD, EAD, CCF, estágio, propensão e monitoramento.", use:"Governa drift, PSI, KS, Gini, calibração, backtesting e Champion vs Challenger.", why:"LLM não substitui modelos de risco; complementa sua operação e explicação.", how:"Gerencia dados, treino, validação, registro, deploy, monitoramento e revisão.", risk:"Confundir narrativa generativa com cálculo/modelo estatístico aprovado.", control:"Model governance, validação independente, monitoring e change management.", example:"LLM explica o PSI; o pipeline estatístico calcula a métrica oficial.", maturity:"Nível 3–5", priority:"Crítica"},
+  {id:"integration", group:"Governança", cat:"MLOps e Observabilidade", x:2185,y:890, icon:"⟷", title:"Integração LLMOps + MLOps", desc:"LLM explica, documenta e investiga; modelo de risco calcula e classifica.", use:"PD calcula default; LLM consulta documentação e explica mudanças de performance.", why:"Une produtividade de linguagem à robustez estatística e à governança de modelos.", how:"Consome métricas e metadados aprovados por APIs, tabelas e ferramentas autorizadas.", risk:"A LLM ser tratada como substituta do modelo de crédito.", control:"Separação de papéis, fontes oficiais, limitações explícitas e revisão humana.", example:"Narrativa do Champion vs Challenger com números vindos de fonte certificada.", maturity:"Nível 4", priority:"Muito alta"},
+  {id:"cicd", group:"Governança", cat:"MLOps e Observabilidade", x:2185,y:1030, icon:"⇢", title:"CI/CD", desc:"Desenvolvimento, testes, aprovação e implantação de código, prompts, skills e agentes.", use:"Promove uma nova skill PySpark de dev para produção com testes.", why:"Evita implantação manual, sem revisão ou sem evidência de qualidade.", how:"Pipelines automatizam lint, testes, evals, security checks, aprovação e deploy.", risk:"Erro ou regressão entrar diretamente em produção.", control:"Pull request, code review, gates, ambientes e rollback.", example:"Skill de comparação DM/PEC só entra após testes em dados sintéticos.", maturity:"Nível 4", priority:"Alta"},
+  {id:"versioning", group:"Governança", cat:"MLOps e Observabilidade", x:2185,y:1170, icon:"⑂", title:"Versionamento & Rollback", desc:"Controla prompts, agentes, skills, documentos, embeddings, políticas, modelos, código e dashboards.", use:"Retorna a uma versão anterior após regressão ou incidente.", why:"Toda resposta precisa ser associada aos artefatos exatos que a produziram.", how:"Usa identificadores, tags, lineage e promoção por ambientes.", risk:"Não conseguir reproduzir um resultado ou reverter mudança crítica.", control:"Git, registry, feature flag, snapshots e plano de rollback testado.", example:"Reverter prompt v2 para v1 após falha de aderência à política.", maturity:"Nível 3–5", priority:"Crítica"}
+];
+
+/* ---------- Casos de uso, apresentados no dock e ligados ao grafo ---------- */
+const useCases = [
+  {id:"uc-policy",title:"Assistente de Políticas",short:"Busca normas, manuais e critérios.", icon:"📚", use:"Recupera políticas, regulamentos e manuais homologados para explicar critérios de concessão, renegociação, reestruturação e cura.", controls:"RAG com fontes vigentes, RBAC, citações obrigatórias e revisão humana.", x:1648,y:1315},
+  {id:"uc-sql",title:"Copiloto de SQL e PySpark",short:"Gera e revisa consultas Databricks.", icon:"⌘", use:"Gera, revisa e explica SQL, Python e PySpark para análises de carteira, DM, PEC e qualidade de dados.", controls:"Sandbox, read-only, lint, testes e revisão de código.", x:1850,y:1315},
+  {id:"uc-docs",title:"Documentação de Modelos",short:"PD, LGD, EAD, CCF e IFRS 9.", icon:"▤", use:"Cria documentação técnica, sumariza metodologia e mantém rastreabilidade de fontes e versões.", controls:"Templates aprovados, citations, reviewer e workflow de aprovação.", x:2050,y:1315},
+  {id:"uc-indicators",title:"Investigação de Indicadores",short:"Over 90, provisão e stage migration.", icon:"▥", use:"Estrutura análise de variação de Over 90, carteira vencida, concentração, renegociação, estágio e provisão.", controls:"Dados certificados, definição oficial, data-base obrigatória e validação analítica.", x:2250,y:1315},
+  {id:"uc-monitoring",title:"Monitoramento de Modelos",short:"PSI, KS, Gini, drift e calibração.", icon:"◔", use:"Explica estabilidade, performance temporal, Champion vs Challenger e indicadores de monitoramento.", controls:"Fonte estatística oficial, thresholds aprovados e ausência de cálculo inventado.", x:1648,y:1450},
+  {id:"uc-exec",title:"Narrativa Executiva",short:"Síntese para comitês e diretoria.", icon:"✦", use:"Converte dados e análises aprovados em narrativa clara para diretoria, comitês e auditoria.", controls:"Fonte, revisão humana, linguagem proporcional à evidência e aprovação de publicação.", x:1850,y:1450},
+  {id:"uc-quality",title:"Qualidade de Dados",short:"Nulos, chaves e divergências.", icon:"✓", use:"Investiga campos nulos, quebras de chave, divergências entre sistemas e alterações de volume.", controls:"Queries parametrizadas, leitura controlada, logs e validação por owner de dados.", x:2050,y:1450},
+  {id:"uc-audit",title:"Apoio à Auditoria",short:"Evidências, versões e trilhas.", icon:"⚖", use:"Recupera fontes, versões, decisões, logs e evidências para revisões e auditorias.", controls:"RBAC, evidência imutável, segregação de funções e retenção adequada.", x:2250,y:1450}
+];
+useCases.forEach(u => nodes.push({
+  id:u.id, group:"Casos de Uso", cat:"Casos de Uso", x:u.x,y:u.y, icon:u.icon, title:u.title, desc:u.short, use:u.use,
+  why:"Demonstra valor prático em uma etapa concreta do ciclo de risco de crédito.", how:"Combina RAG, orquestração, skills, ferramentas, guardrails e revisão humana.", risk:"Aplicar automação generativa sem fonte, validação ou delimitação de escopo.", control:u.controls, example:u.use, maturity:"Nível 1–5, conforme integração", priority:"Priorizar por valor, risco e disponibilidade de dados"
+}));
+
+/* ---------- Conexões da arquitetura ---------- */
+const edges = [
+  ["user","prompt"],["prompt","context"],["context","system"],["system","memory"],["prompt","router"],
+  ["docs","ingestion"],["ingestion","chunking"],["chunking","embeddings"],["embeddings","vector"],["vector","rag"],["rag","reranking"],["reranking","grounding"],
+  ["router","orchestrator"],["llm","reasoning"],["reasoning","orchestrator"],["orchestrator","harness"],["harness","hooks"],["grounding","llm"],["rag","llm"],
+  ["orchestrator","agents"],["agents","planner"],["planner","executor"],["executor","reviewer"],["reviewer","human"],["agents","skills"],["skills","tools"],["tools","mcp"],["harness","tools"],
+  ["guardrails","harness"],["regs","guardrails"],["rbac","tools"],["privacy","masking"],["masking","hooks"],["audit","harness"],["audit","logs"],["human","audit"],
+  ["evals","golden"],["golden","edges"],["edges","redteam"],["redteam","guardrails"],["observability","logs"],["logs","feedback"],["feedback","evals"],
+  ["promptmgmt","llmops"],["registry","llmops"],["llmops","observability"],["mlops","integration"],["llmops","integration"],["integration","cicd"],["cicd","versioning"],["versioning","promptmgmt"],
+  ["rag","uc-policy"],["skills","uc-sql"],["grounding","uc-docs"],["tools","uc-indicators"],["mlops","uc-monitoring"],["reviewer","uc-exec"],["tools","uc-quality"],["audit","uc-audit"],
+  ["orchestrator","guardrails"],["orchestrator","evals"],["llm","guardrails"],["vector","rbac"],["docs","audit"],["human","uc-exec"]
+];
+const flowSequence = ["user","prompt","router","guardrails","rag","planner","skills","tools","reviewer","llm","grounding","audit","feedback","evals"];
+const flowLabels = ["Pergunta","Prompt + contexto","Router","Guardrails","RAG","Plano","Skills","Ferramentas","Reviewer","Resposta","Evidências","Auditoria","Feedback","Evals"];
+
+/* ---------- Estado ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const nodeLayer = $("#nodeLayer"), edgeLayer=$("#edgeLayer"), particleLayer=$("#particleLayer");
+const viewport=$("#viewport"), world=$("#world"), sidePanel=$("#sidePanel"), detailPanel=$("#detailPanel"), emptyPanel=$("#emptyPanel"), tooltip=$("#tooltip");
+const state = {scale:.63, x:-25, y:-84, selected:null, activeFilter:"Visão Geral", execMode:false, techMode:false, drag:null, nodeDrag:null, running:false};
+
+/* ---------- Renderização ---------- */
+function renderFilters(){
+  $("#filters").innerHTML = categories.map(c=>`<button class="filter-btn ${c==="Visão Geral"?"active":""}" data-filter="${c}">${c}</button>`).join("");
+}
+function nodeHTML(n){
+  const tag = n.critical ? `<span class="node-tag">Controle crítico</span>` : "";
+  return `<div class="node ${n.id==="orchestrator"?"central":""} ${n.critical?"critical":""}" id="node-${n.id}" data-id="${n.id}" data-cat="${n.cat}" data-group="${n.group}" tabindex="0" role="button" aria-label="${n.title}">
+    ${tag}<div class="node-header"><div class="node-icon">${n.icon}</div><div class="node-title">${n.title}</div></div><div class="node-desc">${n.desc}</div>
+  </div>`;
+}
+function renderNodes(){
+  nodeLayer.innerHTML = nodes.map(nodeHTML).join("");
+  nodes.forEach(n=>setNodePosition(n));
+  $$(".node").forEach(el=>{
+    el.addEventListener("click",e=>{ if(!state.nodeDrag) selectNode(el.dataset.id); });
+    el.addEventListener("mousemove",e=>showTooltip(e,el.dataset.id));
+    el.addEventListener("mouseleave",hideTooltip);
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectNode(el.dataset.id)}});
+    el.addEventListener("pointerdown",startNodeDrag);
+  });
+}
+function setNodePosition(n){
+  const el=$("#node-"+n.id); if(!el) return;
+  el.style.left=n.x+"px"; el.style.top=n.y+"px";
+}
+function connectionPath(a,b){
+  const aw = a.id==="orchestrator"?278:196, bw=b.id==="orchestrator"?278:196;
+  const ah = a.id==="orchestrator"?132:88, bh=b.id==="orchestrator"?132:88;
+  const ax=a.x+aw/2, ay=a.y+ah/2, bx=b.x+bw/2, by=b.y+bh/2;
+  const dx=bx-ax, dy=by-ay, bend=Math.min(95,Math.max(35,Math.abs(dx)*.23));
+  return `M ${ax} ${ay} C ${ax+Math.sign(dx||1)*bend} ${ay}, ${bx-Math.sign(dx||1)*bend} ${by}, ${bx} ${by}`;
+}
+function renderEdges(){
+  edgeLayer.innerHTML="";
+  edges.forEach((pair,i)=>{
+    const a=nodes.find(n=>n.id===pair[0]),b=nodes.find(n=>n.id===pair[1]);if(!a||!b)return;
+    const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+    path.setAttribute("d",connectionPath(a,b));path.setAttribute("class",`edge ${i%3===0?"":"secondary"}`);path.dataset.a=a.id;path.dataset.b=b.id;path.id=`edge-${a.id}-${b.id}`;edgeLayer.appendChild(path);
+  });
+  renderMiniMap();
+}
+function renderCases(){
+  $("#caseList").innerHTML=useCases.map(u=>`<button class="case-card" data-case="${u.id}"><b>${u.icon} ${u.title}</b><small>${u.short}</small></button>`).join("");
+  $$(".case-card").forEach(el=>el.addEventListener("click",()=>{selectNode(el.dataset.case);focusNode(el.dataset.case,.76)}));
+}
+function renderFlowSteps(){
+  $("#flowSteps").innerHTML=flowLabels.map((x,i)=>`<div class="flow-step" data-step="${i}">${i+1}. ${x}</div>`).join("");
+}
+function renderMiniMap(){
+  const W=2440,H=1580,mW=174,mH=110,s=Math.min(mW/W,mH/H);
+  const lines=edges.map(([a,b])=>{
+    const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);if(!na||!nb)return "";
+    return `<line class="mini-edge" x1="${(na.x+95)*s}" y1="${(na.y+45)*s}" x2="${(nb.x+95)*s}" y2="${(nb.y+45)*s}"/>`;
+  }).join("");
+  const pts=nodes.map(n=>`<rect class="mini-node" x="${n.x*s}" y="${n.y*s}" width="${Math.max(2,196*s)}" height="${Math.max(2,88*s)}" rx="1"/>`).join("");
+  $("#miniMap").innerHTML=`<svg viewBox="0 0 ${mW} ${mH}">${lines}${pts}<rect id="miniViewport" class="mini-viewport" x="0" y="0" width="30" height="20" rx="2"/></svg>`;
+  updateMiniViewport();
+}
+
+/* ---------- Navegação, zoom e arrasto ---------- */
+function applyTransform(){world.style.transform=`translate(${state.x}px,${state.y}px) scale(${state.scale})`;updateMiniViewport()}
+function centerMap(){
+  const r=viewport.getBoundingClientRect();state.scale=Math.min(.68,Math.max(.46,(r.width-38)/2440));state.x=(r.width-2440*state.scale)/2;state.y=(r.height-1580*state.scale)/2+20;applyTransform();toast("Mapa centralizado");
+}
+function zoom(amount,cx,cy){
+  const r=viewport.getBoundingClientRect(), px=cx??r.width/2,py=cy??r.height/2;
+  const old=state.scale, next=Math.max(.28,Math.min(1.34,old+amount));
+  const wx=(px-state.x)/old,wy=(py-state.y)/old;state.scale=next;state.x=px-wx*next;state.y=py-wy*next;applyTransform();
+}
+function focusNode(id, targetScale=.84){
+  const n=nodes.find(x=>x.id===id);if(!n)return;const r=viewport.getBoundingClientRect();
+  state.scale=targetScale;state.x=r.width/2-(n.x+98)*state.scale;state.y=r.height/2-(n.y+44)*state.scale;applyTransform();
+}
+function focusCategory(cat){
+  const list=nodes.filter(n=>n.cat===cat);if(!list.length)return;
+  const minX=Math.min(...list.map(n=>n.x)), maxX=Math.max(...list.map(n=>n.x+196)), minY=Math.min(...list.map(n=>n.y)),maxY=Math.max(...list.map(n=>n.y+90));
+  const r=viewport.getBoundingClientRect(), padding=110; const s=Math.min((r.width-padding)/(maxX-minX),(r.height-padding)/(maxY-minY),.9);
+  state.scale=Math.max(.35,s);state.x=r.width/2-(minX+maxX)/2*state.scale;state.y=r.height/2-(minY+maxY)/2*state.scale;applyTransform();
+}
+viewport.addEventListener("pointerdown",e=>{
+  if(e.target.closest(".node")) return;
+  state.drag={x:e.clientX,y:e.clientY,ox:state.x,oy:state.y};viewport.classList.add("dragging");viewport.setPointerCapture(e.pointerId);
+});
+viewport.addEventListener("pointermove",e=>{if(!state.drag)return;state.x=state.drag.ox+(e.clientX-state.drag.x);state.y=state.drag.oy+(e.clientY-state.drag.y);applyTransform()});
+viewport.addEventListener("pointerup",e=>{state.drag=null;viewport.classList.remove("dragging");try{viewport.releasePointerCapture(e.pointerId)}catch(_){}});
+viewport.addEventListener("wheel",e=>{e.preventDefault();const r=viewport.getBoundingClientRect();zoom(e.deltaY<0?.08:-.08,e.clientX-r.left,e.clientY-r.top)},{passive:false});
+$("#zoomIn").onclick=()=>zoom(.1);$("#zoomOut").onclick=()=>zoom(-.1);$("#centerMap").onclick=centerMap;
+window.addEventListener("resize",()=>{applyTransform();renderMiniMap()});
+
+/* ---------- Arrasto manual de nós ---------- */
+function startNodeDrag(e){
+  if(e.button!==0)return;
+  const el=e.currentTarget, n=nodes.find(x=>x.id===el.dataset.id); if(!n)return;
+  e.stopPropagation();state.nodeDrag={id:n.id,sx:e.clientX,sy:e.clientY,ox:n.x,oy:n.y,moved:false};el.classList.add("dragging");el.setPointerCapture(e.pointerId);
+  const move=ev=>{
+    if(!state.nodeDrag)return;const dx=(ev.clientX-state.nodeDrag.sx)/state.scale,dy=(ev.clientY-state.nodeDrag.sy)/state.scale;
+    if(Math.abs(dx)+Math.abs(dy)>4)state.nodeDrag.moved=true;
+    n.x=Math.max(4,Math.min(2238,state.nodeDrag.ox+dx));n.y=Math.max(40,Math.min(1485,state.nodeDrag.oy+dy));setNodePosition(n);renderEdges();
+  };
+  const up=ev=>{
+    el.removeEventListener("pointermove",move);el.removeEventListener("pointerup",up);el.classList.remove("dragging");
+    const moving=state.nodeDrag?.moved;state.nodeDrag=null;try{el.releasePointerCapture(ev.pointerId)}catch(_){}
+    if(!moving) selectNode(n.id); else toast(`Posição atualizada: ${n.title}`);
+  };
+  el.addEventListener("pointermove",move);el.addEventListener("pointerup",up);
+}
+
+/* ---------- Seleção, painel e tooltip ---------- */
+function selectNode(id){
+  const n=nodes.find(x=>x.id===id);if(!n)return;state.selected=id;
+  $$(".node").forEach(el=>el.classList.toggle("selected",el.dataset.id===id));
+  $$(".edge").forEach(el=>el.classList.toggle("hot",el.dataset.a===id||el.dataset.b===id));
+  sidePanel.classList.add("open");emptyPanel.hidden=true;detailPanel.hidden=false;
+  const related=edges.filter(e=>e.includes(id)).map(e=>nodes.find(n=>n.id===(e[0]===id?e[1]:e[0]))).filter(Boolean);
+  const info=categoryInfo[n.cat]||categoryInfo["Casos de Uso"];
+  detailPanel.innerHTML=`
+    <div class="panel-head">
+      <button class="panel-close" aria-label="Fechar painel" id="closePanel">×</button>
+      <div class="panel-category">${n.cat} · ${n.group}</div>
+      <h2 class="panel-title">${n.icon} ${n.title}</h2>
+      <p class="panel-summary">${n.desc}</p>
+    </div>
+    <div class="panel-body">
+      <div class="detail-section"><h3>Por que existe</h3><p>${n.why||"Amplia a capacidade humana de consultar, interpretar, documentar e operar conhecimento de forma governada."}</p></div>
+      <div class="detail-section"><h3>Como funciona</h3><p>${n.how||"Opera dentro de um fluxo com contexto, validações, registros e limites de acesso."}</p></div>
+      <div class="detail-section"><h3>Aplicação em risco de crédito</h3><p>${n.use||"Apoia análise, documentação, monitoramento e comunicação — sem decidir crédito."}</p></div>
+      <div class="detail-section"><h3>Risco se não for utilizado ou for mal implementado</h3><p>${n.risk||"Perda de rastreabilidade, qualidade ou aderência ao processo de risco."}</p></div>
+      <div class="detail-section"><h3>Controles recomendados</h3><p>${n.control||info.controls}</p></div>
+      <div class="detail-section"><h3>Exemplo prático</h3><p>${n.example||n.use}</p></div>
+      <div class="detail-section"><h3>Maturidade & prioridade</h3><div class="pills"><span class="pill">${n.maturity||info.maturity}</span><span class="pill">${n.priority||info.priority}</span>${n.critical?'<span class="pill">controle crítico</span>':""}</div></div>
+      <div class="detail-section"><h3>Componentes conectados</h3><div class="pills">${related.length?related.map(x=>`<button class="pill related-btn" data-go="${x.id}">${x.icon} ${x.title}</button>`).join(""):"<span class='pill'>Sem ligação direta no mapa</span>"}</div></div>
+      <div class="panel-actions"><button class="action-btn" id="caseBtn">Ver caso de uso</button><button class="action-btn" id="riskBtn">Ver risco e controle</button></div>
+    </div>`;
+  $("#closePanel").onclick=closePanel;
+  $$(".related-btn").forEach(b=>b.onclick=()=>{selectNode(b.dataset.go);focusNode(b.dataset.go)});
+  $("#caseBtn").onclick=()=>showCase(n);
+  $("#riskBtn").onclick=()=>showRisk(n);
+}
+function closePanel(){sidePanel.classList.remove("open");state.selected=null;$$(".node").forEach(x=>x.classList.remove("selected"));$$(".edge").forEach(x=>x.classList.remove("hot"))}
+function showCase(n){toast(`Aplicação: ${n.use||"Apoio humano a processos de risco, sem autonomia decisória."}`)}
+function showRisk(n){toast(`Controle: ${n.control||(categoryInfo[n.cat]||{}).controls||"Validação humana e trilha de auditoria."}`)}
+function showTooltip(e,id){
+  const n=nodes.find(x=>x.id===id);if(!n)return;tooltip.innerHTML=`<b>${n.title}</b><br>${n.desc}<br><span style="color:#95c9ad">Clique para abrir o painel detalhado.</span>`;
+  tooltip.classList.add("visible");tooltip.style.left=Math.min(window.innerWidth-294,e.clientX+15)+"px";tooltip.style.top=Math.min(window.innerHeight-100,e.clientY+15)+"px";
+}
+function hideTooltip(){tooltip.classList.remove("visible")}
+
+/* ---------- Filtros, busca e grupos ---------- */
+function setFilter(cat){
+  state.activeFilter=cat;
+  $$(".filter-btn").forEach(b=>b.classList.toggle("active",b.dataset.filter===cat));
+  const shouldDim=n=>cat!=="Visão Geral" && !(
+    n.cat===cat ||
+    (cat==="Fluxo End-to-End" && flowSequence.includes(n.id)) ||
+    (cat==="Casos de Uso em Risco" && n.cat==="Casos de Uso")
+  );
+  nodes.forEach(n=>$("#node-"+n.id)?.classList.toggle("dim",shouldDim(n)));
+  $$(".edge").forEach(el=>{const a=nodes.find(n=>n.id===el.dataset.a),b=nodes.find(n=>n.id===el.dataset.b);el.classList.toggle("dim",cat!=="Visão Geral" && shouldDim(a)&&shouldDim(b))});
+  if(cat!=="Visão Geral"){
+    const real=cat==="Casos de Uso em Risco"?"Casos de Uso":cat;
+    if(cat==="Fluxo End-to-End") focusNode("orchestrator",.58); else focusCategory(real);
+  } else centerMap();
+}
+$("#filters").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(b)setFilter(b.dataset.filter)});
+$("#searchInput").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  nodes.forEach(n=>$("#node-"+n.id).classList.toggle("search-hit",!!q && `${n.title} ${n.desc} ${n.use||""} ${n.cat}`.toLowerCase().includes(q)));
+});
+$$(".collapse-group").forEach(btn=>btn.addEventListener("click",e=>{
+  e.stopPropagation();const g=btn.dataset.collapse, label=btn.closest(".group-label"), collapsed=label.classList.toggle("collapsed");btn.textContent=collapsed?"+":"−";
+  nodes.filter(n=>n.group===g).forEach(n=>$("#node-"+n.id).style.display=collapsed?"none":"block");
+  renderEdges();
+}));
+$("#executiveBtn").onclick=()=>{
+  state.execMode=!state.execMode;state.techMode=false;$("#app").classList.toggle("exec-mode",state.execMode);$("#app").classList.remove("tech-mode");
+  $("#executiveBtn").classList.toggle("active",state.execMode);$("#technicalBtn").classList.remove("active");toast(state.execMode?"Modo executivo ativado":"Modo executivo desativado");
+};
+$("#technicalBtn").onclick=()=>{
+  state.techMode=!state.techMode;state.execMode=false;$("#app").classList.toggle("tech-mode",state.techMode);$("#app").classList.remove("exec-mode");
+  $("#technicalBtn").classList.toggle("active",state.techMode);$("#executiveBtn").classList.remove("active");toast(state.techMode?"Modo técnico ativado":"Modo técnico desativado");
+};
+
+/* ---------- Animação do fluxo ponta a ponta ---------- */
+function edgeFor(a,b){return $(`#edge-${a}-${b}`)||$(`#edge-${b}-${a}`)}
+async function executeFlow(){
+  if(state.running)return;state.running=true;$("#flowBtn").disabled=true;$("#flowBtn").textContent="◌ Executando...";
+  particleLayer.innerHTML="";$$(".flow-step").forEach(x=>x.classList.remove("active"));
+  setFilter("Fluxo End-to-End");$("#flowStatus").textContent="partículas percorrendo o fluxo governado";
+  for(let i=0;i<flowSequence.length;i++){
+    $(`.flow-step[data-step="${i}"]`)?.classList.add("active");
+    const current=flowSequence[i], next=flowSequence[i+1];$("#node-"+current)?.classList.add("selected");
+    if(next){
+      const edge=edgeFor(current,next);
+      if(edge){
+        edge.classList.add("flow");createParticle(edge.getAttribute("d"),1.15);
+      }
+    }
+    await new Promise(r=>setTimeout(r,430));
+  }
+  setTimeout(()=>{particleLayer.innerHTML="";$$(".edge").forEach(e=>e.classList.remove("flow"));$$(".node").forEach(e=>e.classList.remove("selected"));$("#flowStatus").textContent="fluxo concluído com trilha de auditoria";$("#flowBtn").disabled=false;$("#flowBtn").textContent="▶ Executar fluxo";state.running=false},1200);
+}
+function createParticle(pathData,dur){
+  const ns="http://www.w3.org/2000/svg", circle=document.createElementNS(ns,"circle");circle.setAttribute("r","4");circle.setAttribute("class","particle");
+  const motion=document.createElementNS(ns,"animateMotion");motion.setAttribute("path",pathData);motion.setAttribute("dur",dur+"s");motion.setAttribute("fill","freeze");motion.setAttribute("begin","0s");circle.appendChild(motion);particleLayer.appendChild(circle);
+}
+$("#flowBtn").onclick=executeFlow;
+
+/* ---------- Minimapa ---------- */
+function updateMiniViewport(){
+  const box=$("#miniMap");if(!box)return;const W=2440,H=1580,mW=174,mH=110,s=Math.min(mW/W,mH/H), r=viewport.getBoundingClientRect();
+  const x=Math.max(0,Math.min(mW,(0-state.x/state.scale)*s)),y=Math.max(0,Math.min(mH,(0-state.y/state.scale)*s));
+  const w=Math.min(mW,(r.width/state.scale)*s),h=Math.min(mH,(r.height/state.scale)*s);
+  const v=$("#miniViewport");if(v){v.setAttribute("x",x);v.setAttribute("y",y);v.setAttribute("width",w);v.setAttribute("height",h)}
+}
+$("#miniMap").addEventListener("click",e=>{
+  const rect=e.currentTarget.getBoundingClientRect(), px=(e.clientX-rect.left)/rect.width*2440,py=(e.clientY-rect.top)/rect.height*1580,r=viewport.getBoundingClientRect();
+  state.x=r.width/2-px*state.scale;state.y=r.height/2-py*state.scale;applyTransform();
+});
+
+/* ---------- Acessibilidade e utilitários ---------- */
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){closePanel();hideTooltip()}
+  if(e.key==="/" && document.activeElement!==$("#searchInput")){e.preventDefault();$("#searchInput").focus()}
+  if(e.key==="+"||e.key==="=")zoom(.08);
+  if(e.key==="-")zoom(-.08);
+  if(e.key==="0")centerMap();
+  if(e.key.toLowerCase()==="f")executeFlow();
+});
+let toastTimer;
+function toast(message){
+  const t=$("#toast");t.textContent=message;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),3600);
+}
+
+/* ---------- Inicialização ---------- */
+renderFilters();renderNodes();renderEdges();renderCases();renderFlowSteps();
+setTimeout(centerMap,30);
+</script>
+</body>
+</html>
