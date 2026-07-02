@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Conceitos — by Groehs</title>
+<!-- =========================================================================
+     LLM CONCEITOS · by Groehs
+     Glossário interativo · fundo branco · cards em tons claros
+     Arquivo único (HTML + CSS + JS) · sem dependências externas
+     Ordem pedagógica: do fundamento à operação
+     ========================================================================= -->
+<style>
+/* =========================================================================
+   1) TOKENS · fundo branco, acentos coloridos por categoria (tons claros)
+   ========================================================================= */
+:root{
+  --paper:#ffffff;
+  --paper-2:#f7f8fa;
+  --ink:#1a2230;
+  --ink-soft:#556072;
+  --ink-mute:#8b95a6;
+  --line:#e7eaf0;
+  --line-2:#eef1f6;
+  --shadow:0 1px 2px rgba(20,30,50,.04), 0 8px 24px rgba(20,30,50,.06);
+  --shadow-lg:0 18px 50px rgba(20,30,50,.16);
+  --r-sm:10px; --r-md:16px; --r-lg:22px;
+  --ff:"Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --fm:"Cascadia Code","SF Mono","JetBrains Mono", ui-monospace, Consolas, monospace;
+
+  /* categorias — cor forte (acento) + tint (fundo do card) */
+  --fund:#e07a3e;      --fund-t:#fdf1e9;   --fund-b:#f6d8c4;
+  --context:#7a68d4;   --context-t:#f1eefc; --context-b:#dcd4f4;
+  --spec:#1a9e78;      --spec-t:#e6f7f0;   --spec-b:#c3ead9;
+  --orq:#3577cf;       --orq-t:#e9f1fd;    --orq-b:#c8ddf6;
+  --gov:#c9971b;       --gov-t:#fbf4e2;    --gov-b:#efe0b4;
+  --ops:#12938f;       --ops-t:#e3f4f3;    --ops-b:#bde5e2;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:var(--ff); color:var(--ink); background:var(--paper);
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:#ffe1cc}
+
+/* =========================================================================
+   2) CABEÇALHO
+   ========================================================================= */
+header{
+  text-align:center; padding:46px 22px 26px; position:relative;
+  background:
+    radial-gradient(560px 240px at 50% -40%, rgba(224,122,62,.10), transparent 70%),
+    linear-gradient(180deg,#fff,#fcfdff);
+  border-bottom:1px solid var(--line-2);
+}
+.eyebrow{font-family:var(--fm);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-mute)}
+h1.title{
+  margin:8px 0 4px; font-size:clamp(30px,6vw,58px); font-weight:800; letter-spacing:-1px; line-height:1;
+}
+h1.title .spark{color:var(--fund)}
+h1.title .by{
+  display:block; font-size:clamp(13px,2vw,17px); font-weight:600; letter-spacing:.5px; margin-top:10px; color:var(--ink-soft);
+}
+.subtitle{margin:12px auto 0; max-width:640px; font-size:14.5px; color:var(--ink-soft); line-height:1.55}
+
+/* barra de progresso da trilha */
+.progress-wrap{max-width:520px;margin:20px auto 0}
+.progress-top{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-mute);margin-bottom:6px}
+.progress-bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--fund),var(--spec));transition:width .4s ease}
+
+/* =========================================================================
+   3) TOOLBAR (busca, trilha, filtros)
+   ========================================================================= */
+.toolbar{
+  position:sticky; top:0; z-index:20; background:rgba(255,255,255,.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line); padding:14px 22px;
+}
+.tb-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;max-width:1180px;margin:0 auto}
+.search{position:relative;flex:1;min-width:220px}
+.search input{
+  width:100%;font-family:var(--ff);font-size:14px;color:var(--ink);
+  background:var(--paper-2);border:1px solid var(--line);border-radius:99px;padding:11px 16px 11px 40px;outline:none;
+}
+.search input:focus{border-color:var(--fund);box-shadow:0 0 0 4px rgba(224,122,62,.12);background:#fff}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-mute)}
+.btn{
+  font-family:var(--ff);font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;
+  border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:99px;padding:11px 18px;transition:.16s;
+}
+.btn:hover{border-color:var(--ink-soft)}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.primary:hover{background:#000}
+.btn.ghost{color:var(--ink-soft)}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap;max-width:1180px;margin:12px auto 0}
+.chip{
+  font-family:var(--ff);font-size:12.5px;font-weight:600;cursor:pointer;
+  border:1px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:99px;padding:7px 13px;
+  display:flex;align-items:center;gap:7px;transition:.16s;
+}
+.chip .dot{width:9px;height:9px;border-radius:50%}
+.chip .ct{font-family:var(--fm);font-size:11px;color:var(--ink-mute)}
+.chip:hover{border-color:var(--ink-soft)}
+.chip.active{color:#fff;border-color:transparent}
+.chip.active .ct{color:rgba(255,255,255,.85)}
+.chip.active[data-c="all"]{background:var(--ink)}
+.chip.active[data-c="fund"]{background:var(--fund)}
+.chip.active[data-c="context"]{background:var(--context)}
+.chip.active[data-c="spec"]{background:var(--spec)}
+.chip.active[data-c="orq"]{background:var(--orq)}
+.chip.active[data-c="gov"]{background:var(--gov)}
+.chip.active[data-c="ops"]{background:var(--ops)}
+
+/* =========================================================================
+   4) SEÇÕES + GRID DE CARDS
+   ========================================================================= */
+main{max-width:1180px;margin:0 auto;padding:8px 22px 90px}
+.section{margin-top:34px}
+.section-head{display:flex;align-items:baseline;gap:12px;margin:0 2px 16px;padding-bottom:10px;border-bottom:1px solid var(--line-2)}
+.section-head .idx{font-family:var(--fm);font-size:13px;color:var(--ink-mute)}
+.section-head h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.3px}
+.section-head .bar{width:26px;height:4px;border-radius:2px;margin-left:auto;align-self:center}
+.section-head .count{font-size:12px;color:var(--ink-mute)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:14px}
+
+.card{
+  position:relative; cursor:pointer; border-radius:var(--r-md); padding:16px 16px 14px;
+  background:var(--tint,#fff); border:1px solid var(--bord,var(--line));
+  box-shadow:var(--shadow); transition:transform .14s, box-shadow .18s, border-color .18s;
+  overflow:hidden;
+}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--acc,var(--fund))}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--acc)}
+.card:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.card .num{
+  position:absolute;top:12px;right:12px;font-family:var(--fm);font-size:11px;font-weight:700;
+  color:var(--acc);background:rgba(255,255,255,.7);border:1px solid var(--bord);border-radius:8px;padding:2px 7px;
+}
+.card .chead{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding-right:36px}
+.card .cicon{width:34px;height:34px;flex:0 0 auto;display:grid;place-items:center;font-size:18px;
+  background:#fff;border:1px solid var(--bord);border-radius:10px}
+.card h3{margin:0;font-size:15px;font-weight:750;letter-spacing:-.2px;line-height:1.15}
+.card .cshort{margin:0;font-size:12.8px;line-height:1.5;color:var(--ink-soft)}
+.card .ctag{margin-top:11px;display:inline-flex;align-items:center;gap:6px;font-family:var(--fm);font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--acc)}
+.card .learned-flag{position:absolute;bottom:12px;right:12px;font-size:14px;opacity:0;transition:.16s}
+.card.learned{border-color:var(--acc)}
+.card.learned .learned-flag{opacity:1}
+.card.hidden{display:none}
+
+.empty{display:none;text-align:center;padding:60px 20px;color:var(--ink-mute)}
+.empty.show{display:block}
+
+/* =========================================================================
+   5) MODAL (detalhe do conceito)
+   ========================================================================= */
+.overlay{position:fixed;inset:0;z-index:40;background:rgba(15,22,38,.34);backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;transition:opacity .22s}
+.overlay.open{opacity:1;pointer-events:auto}
+.modal{
+  position:fixed;z-index:41;left:50%;top:50%;transform:translate(-50%,-46%) scale(.97);
+  width:min(620px,94vw);max-height:88vh;overflow:hidden;display:flex;flex-direction:column;
+  background:#fff;border-radius:var(--r-lg);box-shadow:0 30px 80px rgba(10,18,35,.4);
+  opacity:0;pointer-events:none;transition:opacity .22s, transform .22s;
+}
+.modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.m-head{padding:22px 24px 18px;border-bottom:1px solid var(--line-2);position:relative;background:var(--mtint,#fff)}
+.m-head::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--macc)}
+.m-cat{font-family:var(--fm);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--macc);font-weight:700}
+.m-titlerow{display:flex;align-items:center;gap:12px;margin-top:8px}
+.m-icon{width:42px;height:42px;flex:0 0 auto;display:grid;place-items:center;font-size:22px;background:#fff;border:1px solid var(--mbord);border-radius:12px}
+.m-title{margin:0;font-size:22px;font-weight:800;letter-spacing:-.4px}
+.m-num{font-family:var(--fm);font-size:12px;color:var(--macc);border:1px solid var(--mbord);border-radius:8px;padding:3px 9px;background:#fff}
+.m-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:9px;border:1px solid var(--line);
+  background:#fff;color:var(--ink-soft);cursor:pointer;font-size:16px;line-height:1}
+.m-close:hover{color:#000;border-color:var(--ink-soft)}
+.m-body{padding:20px 24px 8px;overflow:auto}
+.m-body::-webkit-scrollbar{width:8px}
+.m-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+.m-sec{margin-bottom:16px}
+.m-sec h4{margin:0 0 5px;font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--macc);
+  display:flex;align-items:center;gap:7px}
+.m-sec h4 .b{width:3px;height:12px;border-radius:2px;background:var(--macc)}
+.m-sec p{margin:0;font-size:14px;line-height:1.6;color:var(--ink)}
+.m-sec.ex p{font-family:var(--fm);font-size:12.5px;background:var(--mtint);border:1px solid var(--mbord);border-radius:10px;padding:11px 13px;color:var(--ink-soft)}
+.rel-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.rel{font-size:12px;font-weight:600;border:1px solid var(--line);border-radius:99px;padding:6px 12px;cursor:pointer;color:var(--ink-soft);background:var(--paper-2)}
+.rel:hover{border-color:var(--macc);color:var(--macc)}
+.m-foot{display:flex;gap:10px;align-items:center;padding:14px 24px;border-top:1px solid var(--line-2);background:#fff}
+.m-nav{display:flex;gap:8px}
+.m-nav button{width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;font-size:16px}
+.m-nav button:hover:not(:disabled){border-color:var(--ink-soft)}
+.m-nav button:disabled{opacity:.35;cursor:default}
+.m-learn{flex:1;font-family:var(--ff);font-size:13.5px;font-weight:600;cursor:pointer;border-radius:11px;padding:11px;border:1px solid var(--macc);background:#fff;color:var(--macc);transition:.16s}
+.m-learn.on{background:var(--macc);color:#fff}
+.m-pos{font-family:var(--fm);font-size:11px;color:var(--ink-mute);white-space:nowrap}
+
+footer{border-top:1px solid var(--line-2);padding:26px 22px 34px;text-align:center;color:var(--ink-mute);font-size:12.5px}
+footer b{color:var(--ink-soft)}
+
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr 1fr}
+  .card h3{font-size:13.5px}
+  .card .cicon{width:30px;height:30px;font-size:16px}
+  .m-title{font-size:19px}
+}
+@media (max-width:390px){ .grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<!-- =========================================================================
+     HTML · CABEÇALHO
+     ========================================================================= -->
+<header>
+  <div class="eyebrow">Glossário interativo</div>
+  <h1 class="title"><span class="spark">✳</span> LLM Conceitos <span class="by">by Groehs</span></h1>
+  <p class="subtitle">Do fundamento à operação — os conceitos essenciais de engenharia de LLMs, agentes e governança, explicados em ordem. Clique em qualquer card para aprofundar.</p>
+  <div class="progress-wrap">
+    <div class="progress-top"><span>Trilha de aprendizado</span><span id="progLabel">0 / 0 aprendidos</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+  </div>
+</header>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="tb-row">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" placeholder="Buscar conceito… (ex.: harness, mcp, agente)" autocomplete="off">
+    </div>
+    <button class="btn primary" id="startTrail">▶ Iniciar trilha</button>
+    <button class="btn ghost" id="resetProg">Zerar progresso</button>
+  </div>
+  <div class="chips" id="chips"></div>
+</div>
+
+<!-- GRID -->
+<main id="main"></main>
+<div class="empty" id="empty">Nenhum conceito encontrado. Tente outro termo.</div>
+
+<footer>
+  <p><b>LLM Conceitos</b> · by Groehs — um mapa de referência para engenharia de LLMs, sistemas agentic e governança.</p>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="m-head" id="mHead">
+    <button class="m-close" id="mClose" aria-label="Fechar">✕</button>
+    <span class="m-cat" id="mCat">Categoria</span>
+    <div class="m-titlerow">
+      <span class="m-icon" id="mIcon">🧠</span>
+      <h3 class="m-title" id="mTitle">Conceito</h3>
+      <span class="m-num" id="mNum">01</span>
+    </div>
+  </div>
+  <div class="m-body" id="mBody"></div>
+  <div class="m-foot">
+    <div class="m-nav">
+      <button id="mPrev" aria-label="Anterior">‹</button>
+      <button id="mNext" aria-label="Próximo">›</button>
+    </div>
+    <button class="m-learn" id="mLearn">Marcar como aprendido</button>
+    <span class="m-pos" id="mPos"></span>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   JAVASCRIPT
+   6) DADOS · categorias + conceitos (em ordem pedagógica)
+      t=título · c=categoria · i=ícone · s=resumo (card)
+      d=definição · h=como funciona · w=por que importa · e=exemplo · r=relacionados
+   ========================================================================= */
+const CATS = {
+  fund:    {label:"Fundamentos",            desc:"Como o modelo funciona por baixo"},
+  context: {label:"Conhecimento & Contexto",desc:"Dar memória e evidência ao modelo"},
+  spec:    {label:"Especificação & Habilidades",desc:"Descrever a tarefa e empacotar competências"},
+  orq:     {label:"Agentes & Orquestração", desc:"Fazer o modelo agir em etapas"},
+  gov:     {label:"Governança & Segurança", desc:"Limites, permissões e rastreabilidade"},
+  ops:     {label:"Qualidade & Operação",   desc:"Avaliar, monitorar e operar em produção"}
+};
+
+const C = [
+/* ---- FUNDAMENTOS ---- */
+{t:"LLM",c:"fund",i:"🧠",s:"Modelo que entende e gera linguagem a partir de probabilidades.",
+ d:"Large Language Model: rede neural treinada em enormes volumes de texto para prever a próxima porção de texto e, com isso, interpretar, resumir, gerar linguagem, código e raciocínio.",
+ h:"Recebe um texto (prompt), converte em tokens e prevê a sequência mais provável de saída, token a token.",
+ w:"É o motor de linguagem sobre o qual todos os outros conceitos — prompt, RAG, agentes — são construídos.",
+ e:"GPT, Claude e Llama são LLMs.",r:["Token","Prompt","Inferência"]},
+{t:"Token",c:"fund",i:"🔡",s:"Menor unidade de texto que o modelo processa.",
+ d:"Pedaço de texto (palavra, subpalavra ou caractere) em que o texto é dividido antes de ser processado pelo modelo.",
+ h:"O texto é tokenizado; o modelo lê e gera em tokens, não em letras ou palavras inteiras.",
+ w:"Custo, limite de contexto e velocidade são todos medidos em tokens.",
+ e:"'crédito' pode virar 1 token; 'reestruturação' pode virar vários.",r:["LLM","Context Window"]},
+{t:"Context Window",c:"fund",i:"🪟",s:"Máximo de tokens que o modelo considera de uma vez.",
+ d:"Janela de contexto: total de tokens (entrada + saída) que o modelo consegue enxergar em uma única interação.",
+ h:"Tudo o que exceder a janela é ignorado ou precisa ser resumido/compactado.",
+ w:"Define quanto documento, histórico e instrução cabem na mesma conversa.",
+ e:"Uma janela de 200k tokens comporta centenas de páginas.",r:["Token","Compaction","Memória"]},
+{t:"Prompt",c:"fund",i:"⌨️",s:"A instrução que você dá ao modelo.",
+ d:"Texto de entrada que descreve a tarefa: papel, objetivo, contexto, restrições, formato de saída e exemplos.",
+ h:"Quanto mais claro e estruturado o prompt, mais previsível e útil é a resposta.",
+ w:"É o principal controle de qualidade da resposta de um LLM.",
+ e:"'Você é um analista de risco. Explique a variação do Over 90 em 5 tópicos.'",r:["System Prompt","Prompt Engineering","Prompt Template"]},
+{t:"System Prompt",c:"fund",i:"📜",s:"Regras permanentes que definem o comportamento do modelo.",
+ d:"Instrução de sistema, com precedência sobre o prompt do usuário, que fixa papel, limites, tom e regras de segurança.",
+ h:"Carregado em toda interação; define o que o modelo sempre deve ou nunca deve fazer.",
+ w:"Garante comportamento consistente e seguro, independentemente do usuário.",
+ e:"'Nunca invente números; sempre cite a fonte interna.'",r:["Prompt","Guardrails","Instruction File"]},
+{t:"Prompt Engineering",c:"fund",i:"🎯",s:"Arte de escrever prompts que produzem boas respostas.",
+ d:"Prática de estruturar instruções (papel, contexto, exemplos, formato, critérios) para maximizar precisão e reduzir ambiguidade.",
+ h:"Usa técnicas como few-shot (exemplos), decomposição em passos e definição explícita do formato de saída.",
+ w:"Pequenas mudanças no prompt geram grandes mudanças na qualidade da saída.",
+ e:"Adicionar 2 exemplos de SQL correto melhora a geração de novas queries.",r:["Prompt","Prompt Template","Spec"]},
+{t:"Embedding",c:"fund",i:"🔢",s:"Representação numérica do significado de um texto.",
+ d:"Vetor que posiciona um texto no espaço semântico: textos com significado parecido ficam próximos.",
+ h:"Cada trecho e cada pergunta viram vetores comparáveis por distância.",
+ w:"É a base da busca semântica e, portanto, do RAG.",
+ e:"'renegociação' e 'repactuação' ficam próximos no espaço vetorial.",r:["Vector Database","RAG"]},
+{t:"Inferência",c:"fund",i:"⚡",s:"O ato de o modelo gerar uma resposta.",
+ d:"Processo de rodar o modelo já treinado sobre uma entrada para produzir a saída.",
+ h:"Diferente do treino: a inferência apenas usa o modelo, não o altera.",
+ w:"É onde o custo e a latência de produção realmente acontecem.",
+ e:"Cada pergunta respondida é uma inferência.",r:["LLM","Temperature","Alucinação"]},
+{t:"Temperature",c:"fund",i:"🌡️",s:"Controle de aleatoriedade da resposta.",
+ d:"Parâmetro de amostragem: valores baixos deixam a saída mais determinística; altos, mais criativa e variada.",
+ h:"Ajusta a probabilidade de escolher tokens menos prováveis na geração.",
+ w:"Tarefas factuais pedem temperatura baixa; brainstorm pede temperatura alta.",
+ e:"temperature=0 para gerar SQL; 0.8 para redigir uma narrativa.",r:["Inferência","LLM"]},
+{t:"Alucinação",c:"fund",i:"🌫️",s:"Quando o modelo responde algo plausível, porém falso.",
+ d:"Saída que parece correta mas não tem base em fato ou fonte — o risco central de LLMs.",
+ h:"Ocorre quando o modelo preenche lacunas sem evidência real.",
+ w:"Em contextos críticos, exige grounding, citação de fontes e validação.",
+ e:"Citar uma política ou número que não existe.",r:["Grounding","RAG","Evals"]},
+
+/* ---- CONHECIMENTO & CONTEXTO ---- */
+{t:"RAG",c:"context",i:"🔎",s:"Recuperar fontes reais antes de o modelo responder.",
+ d:"Retrieval-Augmented Generation: busca trechos relevantes em uma base e os injeta no prompt para ancorar a resposta.",
+ h:"Pergunta → embedding → busca vetorial → trechos → resposta com fontes.",
+ w:"Reduz alucinação e permite responder com base em documentos homologados.",
+ e:"Responder sobre uma política com base na versão vigente, não em conhecimento genérico.",r:["Embedding","Vector Database","Grounding","Chunking"]},
+{t:"Vector Database",c:"context",i:"🧮",s:"Base que busca textos por significado.",
+ d:"Armazena embeddings e retorna os trechos mais semanticamente próximos de uma pergunta.",
+ h:"Recebe o vetor da pergunta e devolve os k trechos mais similares.",
+ w:"É o motor de recuperação do RAG.",
+ e:"Indexar políticas, normas e notas metodológicas.",r:["Embedding","RAG"]},
+{t:"Chunking",c:"context",i:"✂️",s:"Dividir documentos em blocos recuperáveis.",
+ d:"Quebra de um documento longo em trechos menores e coerentes, com metadados (título, versão, data).",
+ h:"Cada chunk é indexado separadamente para permitir busca precisa.",
+ w:"Chunks bem definidos elevam a relevância da recuperação.",
+ e:"Separar cada cláusula de uma política em um chunk próprio.",r:["RAG","Embedding"]},
+{t:"Grounding",c:"context",i:"⚓",s:"Basear a resposta em evidências recuperadas.",
+ d:"Ancoragem: obrigação de fundamentar cada afirmação em fonte ou dado e declarar limitação quando não houver.",
+ h:"A resposta referencia os trechos usados; sem evidência, admite a lacuna.",
+ w:"É o que torna a resposta auditável e confiável.",
+ e:"'Segundo a política v3, o critério é…'",r:["RAG","Alucinação","Audit Trail"]},
+{t:"Memória",c:"context",i:"🗂️",s:"Contexto que persiste entre mensagens ou sessões.",
+ d:"Memória de sessão (efêmera) ou institucional (glossários, preferências, padrões autorizados).",
+ h:"É reinjetada no contexto quando relevante e exige política de retenção.",
+ w:"Dá continuidade sem repetir tudo a cada pergunta.",
+ e:"Lembrar o padrão de relatório usado por uma equipe.",r:["Context Window","Compaction","PII Masking"]},
+{t:"Compaction",c:"context",i:"🗜️",s:"Resumir o histórico para caber na janela.",
+ d:"Compactação de contexto: sumariza conversas ou documentos quando a janela enche, preservando o essencial.",
+ h:"Substitui trechos antigos por resumos mais curtos, liberando tokens.",
+ w:"Permite conversas longas sem estourar o limite de contexto.",
+ e:"Resumir as 50 primeiras mensagens em 3 parágrafos.",r:["Context Window","Memória","Checkpoints"]},
+{t:"Instruction File",c:"context",i:"📄",s:"Arquivo de memória do projeto (ex.: CLAUDE.md).",
+ d:"Arquivo que guarda convenções, contexto e regras que o agente sempre deve conhecer no projeto.",
+ h:"É lido automaticamente no início da sessão de trabalho.",
+ w:"Padroniza o comportamento e evita repetir instruções a cada tarefa.",
+ e:"Definir estilo de código, glossário e caminhos padrão do projeto.",r:["System Prompt","Memória","Spec-Driven Development"]},
+{t:"Checkpoints",c:"context",i:"💾",s:"Snapshots automáticos para voltar atrás.",
+ d:"Pontos de salvamento do estado antes de mudanças, permitindo desfazer (rewind).",
+ h:"Cria uma versão restaurável a cada alteração relevante.",
+ w:"Recuperação segura sem perder o trabalho já feito.",
+ e:"Reverter uma edição de código que quebrou algo.",r:["Compaction"]},
+
+/* ---- ESPECIFICAÇÃO & HABILIDADES ---- */
+{t:"Spec",c:"spec",i:"📐",s:"Especificação clara do que deve ser feito.",
+ d:"Documento que descreve objetivo, requisitos, restrições, entradas, saídas e critérios de aceite de uma tarefa.",
+ h:"Funciona como contrato entre a intenção humana e a execução do agente.",
+ w:"Reduz ambiguidade e retrabalho; torna o resultado verificável.",
+ e:"Spec de um relatório: seções, métricas, formato e fontes exigidas.",r:["Spec-Driven Development","Prompt","Skill"]},
+{t:"Spec-Driven Development",c:"spec",i:"🧭",s:"Desenvolver a partir da especificação, não do improviso.",
+ d:"Abordagem em que a spec é escrita primeiro e guia o agente na implementação, validação e revisão.",
+ h:"Spec → plano → implementação → verificação contra a spec.",
+ w:"Alinha expectativa e entrega; facilita testes e auditoria.",
+ e:"Escrever os critérios de aceite antes de o agente gerar o código.",r:["Spec","Plan Mode","Evals"]},
+{t:"Skill",c:"spec",i:"🧰",s:"Capacidade reutilizável e empacotada que o agente aciona.",
+ d:"Conjunto de instruções, templates e ferramentas especializadas, carregado sob demanda conforme a tarefa.",
+ h:"O agente seleciona a skill certa quando o contexto exige aquela competência.",
+ w:"Padroniza e reaproveita competências com qualidade consistente.",
+ e:"Skill de análise estatística; skill de geração de relatório.",r:["Agent","Tool Use","Spec"]},
+{t:"Slash Commands",c:"spec",i:"⌘",s:"Atalhos de comando para fluxos repetíveis.",
+ d:"Comandos personalizados (ex.: /revisar) que disparam prompts ou rotinas pré-definidas.",
+ h:"Encapsulam um prompt ou rotina complexa em um gatilho curto.",
+ w:"Aceleram tarefas frequentes e padronizam a execução.",
+ e:"/documentar gera a documentação no padrão da equipe.",r:["Skill","Prompt Template"]},
+{t:"Plan Mode",c:"spec",i:"🗺️",s:"O agente propõe um plano antes de agir.",
+ d:"Modo em que o agente apresenta o plano de execução para revisão humana antes de qualquer mudança.",
+ h:"Explora o contexto, planeja e só age após aprovação.",
+ w:"Evita ações precipitadas em tarefas sensíveis.",
+ e:"Revisar o plano antes de refatorar um sistema.",r:["Reasoning","Human-in-the-Loop","Spec-Driven Development"]},
+{t:"Prompt Template",c:"spec",i:"🧩",s:"Prompt parametrizado e reutilizável.",
+ d:"Modelo de prompt com campos variáveis (contexto, métrica, data) preenchidos em tempo de execução.",
+ h:"Garante consistência e permite versionar prompts como artefatos.",
+ w:"Reduz variância e facilita a governança de prompts.",
+ e:"Template com campos {métrica} e {data_base}.",r:["Prompt Engineering","Prompt","Skill"]},
+
+/* ---- AGENTES & ORQUESTRAÇÃO ---- */
+{t:"Agent",c:"orq",i:"🤖",s:"Sistema que usa o LLM para executar tarefas em etapas.",
+ d:"Software que combina LLM + memória + ferramentas + regras para planejar e agir em múltiplos passos.",
+ h:"Recebe a tarefa, planeja, chama ferramentas e skills, e valida o resultado.",
+ w:"Vai além de responder: executa fluxos completos com autonomia controlada.",
+ e:"Agente que investiga um indicador, consulta dados e gera a análise.",r:["Subagent","Harness","Tool Use","Skill"]},
+{t:"Subagent",c:"orq",i:"👥",s:"Agente filho, especializado, com contexto próprio.",
+ d:"Agente delegado por outro para uma subtarefa, com janela de contexto isolada e escopo limitado.",
+ h:"Recebe um recorte da tarefa, executa e devolve o resultado ao agente principal.",
+ w:"Isola contexto, paraleliza trabalho e evita poluir a conversa principal.",
+ e:"Subagente que só lê documentos e retorna um resumo.",r:["Agent","Multi-Agent","Harness"]},
+{t:"Harness",c:"orq",i:"🛤️",s:"A estrutura que envolve e controla a execução do agente.",
+ d:"O trilho e a cabine de controle do agente: inicia/encerra tarefas, carrega contexto, seleciona ferramentas, aplica guardrails, registra logs e mantém estado.",
+ h:"Controla permissões, limita tentativas, dispara hooks e permite auditoria e recuperação de tarefas.",
+ w:"Sem harness, o agente roda sem limites, sem rastro e sem recuperação — risco operacional alto.",
+ e:"O harness bloqueia uma ferramenta não autorizada e registra a tentativa.",r:["Agent","Hook","Guardrails","Tool Use"]},
+{t:"Hook",c:"orq",i:"🪝",s:"Ponto programável para interceptar o fluxo.",
+ d:"Gatilho executado antes ou depois de eventos (prompt, ferramenta, resposta) para validar, mascarar, bloquear ou registrar.",
+ h:"É disparado pelo harness em momentos definidos do ciclo de execução.",
+ w:"Insere controle e observabilidade sem reescrever o agente.",
+ e:"Hook que mascara dados pessoais antes de enviar o conteúdo.",r:["Harness","Guardrails","PII Masking"]},
+{t:"Tool Use",c:"orq",i:"🔌",s:"Ferramenta externa que o agente chama de forma controlada.",
+ d:"Função ou sistema (SQL, API, busca, execução de código) que o modelo solicita para agir sobre o mundo real.",
+ h:"O modelo pede a ação; o software e as permissões executam de fato.",
+ w:"O LLM não acessa sistemas sozinho — ele solicita e é mediado.",
+ e:"Rodar uma query, abrir um PR, buscar um documento.",r:["MCP","Harness","Skill"]},
+{t:"MCP",c:"orq",i:"🧷",s:"Padrão para conectar agentes a ferramentas e dados.",
+ d:"Model Context Protocol: camada padronizada para o agente descobrir, entender e usar ferramentas e serviços externos.",
+ h:"Expõe ferramentas com contratos claros que o agente consome sob governança.",
+ w:"Padroniza integrações e reduz acoplamento entre agente e sistemas.",
+ e:"Conectar o agente ao GitHub, Jira ou a uma base vetorial via MCP.",r:["MCP Server","Tool Use","Agent"]},
+{t:"MCP Server",c:"orq",i:"🖥️",s:"Serviço externo que fornece ferramentas via MCP.",
+ d:"Servidor que publica ferramentas e dados (filesystem, Git, Jira, etc.) para agentes consumirem pelo protocolo MCP.",
+ h:"O agente se conecta ao servidor e descobre as ferramentas disponíveis.",
+ w:"Permite estender as capacidades do agente sem alterar o agente em si.",
+ e:"Um MCP Server de documentos expõe busca e leitura.",r:["MCP","Tool Use"]},
+{t:"Router",c:"orq",i:"🔀",s:"Direciona cada pedido para o fluxo certo.",
+ d:"Componente que identifica a intenção (consulta, código, análise) e escolhe agentes, ferramentas e controles.",
+ h:"Classifica a solicitação e a roteia para a rota adequada.",
+ w:"Cada intenção exige skills, fontes e guardrails distintos.",
+ e:"'gere SQL' é roteado para o copiloto de dados.",r:["Orchestrator","Agent","Reasoning"]},
+{t:"Reasoning",c:"orq",i:"🪜",s:"Estruturar a tarefa em passos antes de agir.",
+ d:"Planejamento: decompor uma solicitação em etapas ordenadas e verificáveis.",
+ h:"Expõe um plano operacional resumido e auditável, não o pensamento interno bruto.",
+ w:"Tarefas complexas exigem uma sequência clara e revisável.",
+ e:"Validar definição → buscar dados → calcular → narrar.",r:["Plan Mode","Agent","Orchestrator"]},
+{t:"Orchestrator",c:"orq",i:"🎛️",s:"Coordena LLM, RAG, agentes, ferramentas e regras.",
+ d:"O maestro do fluxo: encadeia recuperação, planejamento, execução e validação sob as regras vigentes.",
+ h:"Chama cada componente na ordem definida pelo plano.",
+ w:"Sem coordenação central, a lógica vira integrações soltas e não auditáveis.",
+ e:"Conduzir consulta + cálculo + narrativa + citação em uma única tarefa.",r:["Router","Agent","Harness"]},
+{t:"Multi-Agent",c:"orq",i:"🕸️",s:"Vários agentes cooperando em uma tarefa.",
+ d:"Arquitetura com agentes especializados que se comunicam (ex.: planner, executor, reviewer).",
+ h:"Dividem responsabilidades e trocam resultados por mensagens.",
+ w:"Escala tarefas complexas e adiciona verificação cruzada.",
+ e:"Planner cria o plano; executor age; reviewer valida.",r:["Agent","Subagent","Orchestrator"]},
+
+/* ---- GOVERNANÇA & SEGURANÇA ---- */
+{t:"Guardrails",c:"gov",i:"🛡️",s:"Controles que limitam o que o sistema pode fazer.",
+ d:"Regras de privacidade, segurança, escopo, autonomia e decisão que restringem comportamentos e respostas.",
+ h:"Aplicados via hooks, antes e depois de cada ação do agente.",
+ w:"São a primeira linha de defesa contra uso indevido e vazamento.",
+ e:"Nunca executar comandos destrutivos; nunca decidir sozinho o que exige humano.",r:["Hook","Permissions","System Prompt"]},
+{t:"Permissions",c:"gov",i:"🔑",s:"Regras de acesso a ferramentas e ações.",
+ d:"Modelo allow / ask / deny que controla o que o agente pode usar, ler ou alterar.",
+ h:"É avaliado a cada chamada de ferramenta e pode exigir confirmação humana.",
+ w:"Garante o princípio do menor privilégio e a segregação de funções.",
+ e:"Permitir leitura, pedir confirmação para escrita, negar destruição.",r:["Guardrails","Harness","Tool Use"]},
+{t:"Human-in-the-Loop",c:"gov",i:"🧑‍⚖️",s:"Pessoa aprova ou rejeita ações relevantes.",
+ d:"Ponto de controle humano obrigatório para decisões e publicações de alto impacto.",
+ h:"Acionado por hooks de escalonamento antes da ação sensível.",
+ w:"Mantém o julgamento e a responsabilidade fora do sistema generativo.",
+ e:"Aprovar a publicação de um relatório oficial.",r:["Plan Mode","Guardrails","Audit Trail"]},
+{t:"Audit Trail",c:"gov",i:"🧾",s:"Registro rastreável de quem, o quê e com quais fontes.",
+ d:"Trilha verificável: pergunta, fontes, ferramentas, regras, dados, resposta, aprovador e versões usadas.",
+ h:"Logging e audit hooks gravam cada evento do fluxo.",
+ w:"Sustenta rastreabilidade, explicabilidade e prestação de contas.",
+ e:"Reconstituir como uma análise foi gerada e em que se baseou.",r:["Hook","Grounding","Observability"]},
+{t:"PII Masking",c:"gov",i:"🕶️",s:"Ocultar dados pessoais antes de usar no fluxo.",
+ d:"Remoção, ofuscação ou tokenização de identificadores (nome, documento, renda) antes do envio ao modelo.",
+ h:"Aplicado por hooks antes de qualquer saída do dado do perímetro seguro.",
+ w:"Protege a privacidade e reduz a superfície de risco.",
+ e:"Documento 123.***.***-** em vez do número completo.",r:["Hook","Guardrails","Memória"]},
+
+/* ---- QUALIDADE & OPERAÇÃO ---- */
+{t:"Evals",c:"ops",i:"📏",s:"Testes sistemáticos de qualidade e segurança.",
+ d:"Avaliações que medem precisão, aderência, alucinação, custo e robustez das respostas.",
+ h:"Rodam sobre um golden dataset e também em produção, por amostragem.",
+ w:"Sem avaliação contínua, regressões passam despercebidas.",
+ e:"Medir se as respostas citam a fonte correta e não alucinam.",r:["Spec-Driven Development","Observability","LLMOps"]},
+{t:"Observability",c:"ops",i:"📡",s:"Monitorar o comportamento do sistema em produção.",
+ d:"Indicadores de volume, latência, custo, ferramentas chamadas, recusas, incidentes e performance por agente.",
+ h:"Coleta telemetria e a expõe em dashboards e alertas.",
+ w:"Permite operar com segurança e detectar degradação antes do impacto.",
+ e:"Acompanhar custo por interação e respostas sem evidência.",r:["Evals","Audit Trail","LLMOps"]},
+{t:"LLMOps",c:"ops",i:"♻️",s:"Disciplina de operar sistemas baseados em LLM.",
+ d:"Gestão de prompts, modelos, RAG, agentes, versões, avaliações, custos, incidentes e rollback.",
+ h:"Integra CI/CD, evals, observabilidade e registries em um ciclo governado.",
+ w:"LLMs em produção exigem operação tão rigorosa quanto modelos de ML.",
+ e:"Promover um novo prompt só depois de passar nos evals.",r:["Evals","Observability","Agent SDK"]},
+{t:"Agent SDK",c:"ops",i:"🧱",s:"Kit para construir agentes sobre o motor do LLM.",
+ d:"Biblioteca ou toolkit para desenvolver agentes customizados com ferramentas, permissões e sessões.",
+ h:"Fornece APIs para orquestrar prompts, tools e memória em código.",
+ w:"Acelera a construção de agentes corporativos governados.",
+ e:"Criar um agente especializado de documentação.",r:["Agent","Tool Use","MCP"]}
+];
+
+// numeração global (ordem da trilha) + índice por título
+C.forEach((c,i)=>c.n=i+1);
+const byTitle = Object.fromEntries(C.map(c=>[c.t,c]));
+
+/* =========================================================================
+   7) PROGRESSO (localStorage, com degradação segura)
+   ========================================================================= */
+const LS_KEY = "llm_conceitos_groehs_v1";
+let learned = new Set();
+try{ const raw=localStorage.getItem(LS_KEY); if(raw) learned=new Set(JSON.parse(raw)); }catch(e){}
+function saveProgress(){ try{ localStorage.setItem(LS_KEY, JSON.stringify([...learned])); }catch(e){} }
+function updateProgress(){
+  const total=C.length, done=learned.size;
+  document.getElementById("progFill").style.width = (done/total*100)+"%";
+  document.getElementById("progLabel").textContent = done+" / "+total+" aprendidos";
+}
+
+/* =========================================================================
+   8) RENDER · chips de categoria + seções + cards
+   ========================================================================= */
+const main=document.getElementById("main");
+let activeCat="all", query="";
+
+// chips
+const chipsEl=document.getElementById("chips");
+const catCount = k => C.filter(c=>c.c===k).length;
+function chipHTML(k,label,color){
+  return `<button class="chip${k==='all'?' active':''}" data-c="${k}">
+    ${color?`<span class="dot" style="background:${color}"></span>`:''}${label}
+    <span class="ct">${k==='all'?C.length:catCount(k)}</span></button>`;
+}
+chipsEl.innerHTML =
+  chipHTML("all","Todos") +
+  Object.entries(CATS).map(([k,v])=>chipHTML(k,v.label,`var(--${k})`)).join("");
+chipsEl.querySelectorAll(".chip").forEach(ch=>ch.onclick=()=>{
+  activeCat=ch.dataset.c;
+  chipsEl.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));
+  ch.classList.add("active");
+  render();
+});
+
+// monta as seções uma vez; filtragem apenas alterna visibilidade
+function buildSections(){
+  main.innerHTML="";
+  Object.entries(CATS).forEach(([key,meta],ix)=>{
+    const items=C.filter(c=>c.c===key);
+    const sec=document.createElement("section");
+    sec.className="section"; sec.dataset.cat=key;
+    sec.innerHTML =
+      `<div class="section-head">
+        <span class="idx">${String(ix+1).padStart(2,'0')}</span>
+        <h2>${meta.label}</h2>
+        <span class="count">${meta.desc}</span>
+        <span class="bar" style="background:var(--${key})"></span>
+      </div>
+      <div class="grid"></div>`;
+    const grid=sec.querySelector(".grid");
+    items.forEach(c=>grid.appendChild(cardEl(c)));
+    main.appendChild(sec);
+  });
+}
+function cardEl(c){
+  const el=document.createElement("article");
+  el.className="card"+(learned.has(c.t)?" learned":"");
+  el.dataset.title=c.t; el.tabIndex=0;
+  el.style.setProperty("--acc",`var(--${c.c})`);
+  el.style.setProperty("--tint",`var(--${c.c}-t)`);
+  el.style.setProperty("--bord",`var(--${c.c}-b)`);
+  el.innerHTML =
+    `<span class="num">${String(c.n).padStart(2,'0')}</span>
+     <div class="chead"><span class="cicon">${c.i}</span><h3>${c.t}</h3></div>
+     <p class="cshort">${c.s}</p>
+     <span class="ctag">● ${CATS[c.c].label}</span>
+     <span class="learned-flag">✓</span>`;
+  el.addEventListener("click",()=>openModal(c.t));
+  el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();openModal(c.t);} });
+  return el;
+}
+buildSections();
+
+function render(){
+  const q=query.trim().toLowerCase();
+  let visible=0;
+  document.querySelectorAll(".section").forEach(sec=>{
+    const catOk = activeCat==="all" || sec.dataset.cat===activeCat;
+    let secVisible=0;
+    sec.querySelectorAll(".card").forEach(card=>{
+      const c=byTitle[card.dataset.title];
+      const match = !q || (c.t+" "+c.s+" "+c.d+" "+c.c).toLowerCase().includes(q);
+      const show = catOk && match;
+      card.classList.toggle("hidden",!show);
+      if(show){secVisible++;visible++;}
+    });
+    sec.style.display = secVisible? "" : "none";
+  });
+  document.getElementById("empty").classList.toggle("show", visible===0);
+}
+
+// busca
+const searchEl=document.getElementById("search");
+searchEl.addEventListener("input",()=>{ query=searchEl.value; render(); });
+
+/* =========================================================================
+   9) MODAL · detalhe + navegação (trilha) + marcar aprendido
+   ========================================================================= */
+const overlay=document.getElementById("overlay");
+const modal=document.getElementById("modal");
+let current=null; // índice em C (0-based)
+
+function openModal(title){
+  current = C.findIndex(c=>c.t===title);
+  paintModal();
+  overlay.classList.add("open"); modal.classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function closeModal(){
+  overlay.classList.remove("open"); modal.classList.remove("open");
+  document.body.style.overflow="";
+  current=null;
+}
+function paintModal(){
+  const c=C[current];
+  const set=(id,v)=>document.getElementById(id).textContent=v;
+  const head=document.getElementById("mHead");
+  head.style.setProperty("--macc",`var(--${c.c})`);
+  head.style.setProperty("--mtint",`var(--${c.c}-t)`);
+  head.style.setProperty("--mbord",`var(--${c.c}-b)`);
+  document.querySelectorAll(".m-sec, .m-icon, .m-num, .m-title").forEach(()=>{});
+  set("mCat",CATS[c.c].label);
+  set("mIcon",c.i); set("mTitle",c.t); set("mNum",String(c.n).padStart(2,'0'));
+  const rels = c.r.filter(t=>byTitle[t]).map(t=>`<span class="rel" data-go="${t}">${byTitle[t].i} ${t}</span>`).join("");
+  document.getElementById("mBody").innerHTML =
+    `<div class="m-sec"><h4><span class="b"></span>Definição</h4><p>${c.d}</p></div>
+     <div class="m-sec"><h4><span class="b"></span>Como funciona</h4><p>${c.h}</p></div>
+     <div class="m-sec"><h4><span class="b"></span>Por que importa</h4><p>${c.w}</p></div>
+     <div class="m-sec ex"><h4><span class="b"></span>Exemplo</h4><p>${c.e}</p></div>
+     <div class="m-sec"><h4><span class="b"></span>Conceitos relacionados</h4><div class="rel-list">${rels||'—'}</div></div>`;
+  document.getElementById("mBody").querySelectorAll("[data-go]").forEach(r=>{
+    r.onclick=()=>{ current=C.findIndex(x=>x.t===r.dataset.go); document.getElementById("mBody").scrollTop=0; paintModal(); };
+  });
+  // navegação
+  document.getElementById("mPrev").disabled = current===0;
+  document.getElementById("mNext").disabled = current===C.length-1;
+  document.getElementById("mPos").textContent = c.n+" de "+C.length;
+  // aprendido
+  const learn=document.getElementById("mLearn");
+  const on=learned.has(c.t);
+  learn.classList.toggle("on",on);
+  learn.style.setProperty("--macc",`var(--${c.c})`);
+  learn.textContent = on ? "✓ Aprendido" : "Marcar como aprendido";
+}
+function toggleLearned(){
+  const c=C[current];
+  if(learned.has(c.t)) learned.delete(c.t); else learned.add(c.t);
+  saveProgress(); updateProgress(); paintModal();
+  const card=document.querySelector(`.card[data-title="${CSS.escape(c.t)}"]`);
+  if(card) card.classList.toggle("learned",learned.has(c.t));
+}
+
+document.getElementById("mClose").onclick=closeModal;
+overlay.onclick=closeModal;
+document.getElementById("mPrev").onclick=()=>{ if(current>0){current--;document.getElementById("mBody").scrollTop=0;paintModal();} };
+document.getElementById("mNext").onclick=()=>{ if(current<C.length-1){current++;document.getElementById("mBody").scrollTop=0;paintModal();} };
+document.getElementById("mLearn").onclick=toggleLearned;
+
+// trilha: abre no conceito 1 e segue com ›
+document.getElementById("startTrail").onclick=()=>openModal(C[0].t);
+
+// zerar progresso
+document.getElementById("resetProg").onclick=()=>{
+  learned.clear(); saveProgress(); updateProgress();
+  document.querySelectorAll(".card.learned").forEach(c=>c.classList.remove("learned"));
+  if(current!=null) paintModal();
+};
+
+/* =========================================================================
+   10) TECLADO
+   ========================================================================= */
+document.addEventListener("keydown",e=>{
+  if(e.key==="/" && document.activeElement!==searchEl){ e.preventDefault(); searchEl.focus(); return; }
+  if(current==null) return;
+  if(e.key==="Escape") closeModal();
+  else if(e.key==="ArrowRight" && current<C.length-1){current++;paintModal();}
+  else if(e.key==="ArrowLeft" && current>0){current--;paintModal();}
+  else if(e.key==="Enter") toggleLearned();
+});
+
+/* =========================================================================
+   11) INIT
+   ========================================================================= */
+updateProgress();
+render();
+</script>
+</body>
+</html>
