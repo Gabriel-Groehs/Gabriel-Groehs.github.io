@@ -353,4 +353,2238 @@ kbd{font-family:var(--f-mono);font-size:11px;border:1px solid var(--line2);borde
   filter:drop-shadow(0 0 7px rgba(45,212,238,.45))
 }
 .blk.active text{fill:var(--text)}
-.blk.done rect,.blk.done circle,.blk.done ellipse,.blk.done polygon{stroke:var(--gr
+.blk.done rect,.blk.done circle,.blk.done ellipse,.blk.done polygon{stroke:var(--green);fill:rgba(55,217,155,.07)}
+.blk.done text{fill:var(--text)}
+.wire{stroke:var(--line2);stroke-width:1.6;fill:none;transition:stroke .3s;marker-end:url(#arrw)}
+.wire.active{
+  stroke:var(--ac,var(--cyan));stroke-width:2.2;stroke-dasharray:5 9;
+  animation:flow var(--flowdur) linear infinite
+}
+.wire.done{stroke:var(--green);opacity:.7}
+@keyframes flow{to{stroke-dashoffset:-28}}
+.svlbl{fill:var(--faint);font-size:10px;font-family:var(--f-mono);letter-spacing:.5px}
+.svlbl.big{font-size:11.5px;fill:var(--muted)}
+
+/* Tooltip global */
+#tip{
+  position:fixed;z-index:300;display:none;max-width:280px;pointer-events:none;
+  background:rgba(7,16,34,.97);border:1px solid var(--line2);border-radius:9px;
+  padding:8px 11px;font-size:11.8px;color:var(--muted);box-shadow:var(--shadow)
+}
+#tip b{color:var(--text);display:block;font-size:12px;margin-bottom:2px}
+
+/* ---------- Métricas ---------- */
+.metric-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px}
+.metric-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-s);padding:12px 14px}
+.metric-card h4{font-size:13px;color:var(--cyan);margin-bottom:5px;font-family:var(--f-mono)}
+.metric-card .fx{font-size:11px;padding:5px 9px;width:100%;margin:4px 0 6px}
+.metric-card p{font-size:11.5px;color:var(--muted)}
+.anat-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(230px,1fr);gap:14px}
+.anat-read{display:flex;flex-direction:column;gap:8px}
+.anat-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dashed var(--line);padding:4px 2px;font-size:12px;color:var(--muted)}
+.anat-row b{font-family:var(--f-mono);color:var(--text);font-weight:500;font-size:12.5px}
+.anat-row.hl b{color:var(--cyan)}
+
+/* ---------- Scoreboard ---------- */
+.score-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.score-table th,.score-table td{padding:9px 11px;text-align:right;border-bottom:1px solid var(--line);font-family:var(--f-mono)}
+.score-table th{font-family:var(--f-body);color:var(--faint);font-size:10.5px;text-transform:uppercase;letter-spacing:1px}
+.score-table th:first-child,.score-table td:first-child{text-align:left;font-family:var(--f-body)}
+.score-table tr.champ td{background:linear-gradient(90deg,rgba(55,217,155,.1),transparent);color:var(--text)}
+.score-table td .mdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:baseline}
+.score-table .best{color:var(--green);font-weight:600}
+.rank-tabs{display:flex;gap:6px;margin:14px 0 10px;flex-wrap:wrap}
+.rank-tab{border:1px solid var(--line2);background:var(--panel2);color:var(--muted);border-radius:999px;padding:5px 13px;font-size:12px;cursor:pointer}
+.rank-tab.on{border-color:var(--cyan);color:var(--cyan);background:rgba(45,212,238,.08)}
+.rank-bars{display:flex;flex-direction:column;gap:9px}
+.rbar{display:grid;grid-template-columns:88px 1fr 88px;gap:10px;align-items:center;font-size:12px}
+.rbar .rn{color:var(--muted);text-align:right}
+.rbar .rt{height:14px;background:var(--panel2);border-radius:7px;overflow:hidden}
+.rbar .rt i{display:block;height:100%;width:0%;border-radius:7px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.rbar .rv{font-family:var(--f-mono);font-size:11.5px;color:var(--faint)}
+.champ-banner{
+  display:none;margin-top:14px;padding:13px 17px;border-radius:var(--radius-s);
+  border:1px solid rgba(55,217,155,.4);background:linear-gradient(90deg,rgba(55,217,155,.12),rgba(45,212,238,.05));
+  font-size:13px;align-items:center;gap:12px
+}
+.champ-banner.show{display:flex}
+.champ-banner .cup{font-size:22px}
+.champ-banner b{color:var(--green)}
+
+/* ---------- Toast / diversos ---------- */
+#toast{
+  position:fixed;bottom:22px;right:22px;z-index:400;display:none;gap:12px;align-items:center;
+  background:var(--panel3);border:1px solid var(--line2);border-radius:12px;padding:13px 16px;
+  box-shadow:var(--shadow);font-size:13px;max-width:340px
+}
+#toast.show{display:flex}
+.refs li{margin:9px 0;color:var(--muted);font-size:13px}
+.refs li b{color:var(--text);font-weight:600}
+footer{margin-top:46px;border-top:1px solid var(--line);padding-top:18px;color:var(--faint);font-size:12px}
+
+/* ---------- Modo apresentação ---------- */
+body.present{--sidebar-w:0px;font-size:17.5px}
+body.present .sidenav,body.present .topbar,body.present .stepper{display:none}
+body.present main{max-width:1500px}
+body.present section{min-height:100vh;padding-top:8vh;scroll-margin-top:0}
+body.present h1{font-size:clamp(34px,4vw,54px)}
+body.present h2{font-size:clamp(26px,3vw,38px)}
+.present-hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:400;display:none;background:var(--panel3);border:1px solid var(--line2);border-radius:999px;padding:7px 16px;font-size:12px;color:var(--muted)}
+body.present .present-hint{display:block}
+
+/* ---------- Responsividade ---------- */
+@media (max-width:1080px){
+  .km-layout,.lab-body,.anat-layout{grid-template-columns:1fr}
+  .lab-stage{border-right:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .sidenav{position:fixed;left:0;right:0;top:auto;bottom:0;height:auto;z-index:80;
+    flex-direction:row;align-items:center;padding:8px 10px;gap:8px;overflow-x:auto;
+    border-right:0;border-top:1px solid var(--line)}
+  .sidenav .brand small,.globals .glabel{display:none}
+  .sidenav nav{flex-direction:row}
+  .navlink{white-space:nowrap;padding:6px 9px}
+  .navlink .n{display:none}
+  .globals{margin:0;border:0;padding:0;flex-direction:row}
+  main{padding-bottom:150px}
+  .dv-cells{grid-template-columns:repeat(12,1fr)}
+  .status-pill{margin-left:0}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= NAVEGAÇÃO LATERAL ================= -->
+  <aside class="sidenav" aria-label="Navegação principal">
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      <div><strong>TS·Lab</strong><small>Séries temporais · benchmark visual</small></div>
+    </div>
+    <nav aria-label="Seções">
+      <a class="navlink" href="#visao"><span class="n">00</span>Visão geral</a>
+      <a class="navlink" href="#serie"><span class="n">01</span>Série temporal</a>
+      <a class="navlink" href="#kmeans"><span class="n">02</span>Cluster K-Means</a>
+      <a class="navlink" href="#modelos"><span class="n">03</span>Modelos e previsões</a>
+      <a class="navlink" href="#lab"><span class="n">04</span>Laboratório visual</a>
+      <a class="navlink" href="#metricas"><span class="n">05</span>Métricas e ranking</a>
+      <a class="navlink" href="#referencias"><span class="n">06</span>Referências</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <!-- ================= PAINEL DE CONTROLES ================= -->
+    <header class="topbar" aria-label="Painel de controles">
+      <div class="topbar-actions" aria-label="Execução global">
+        <button class="btn primary" id="btn-pipeline" aria-label="Rodar pipeline completo">▶ Rodar pipeline completo</button>
+        <button class="btn" id="btn-run-models" aria-label="Rodar os cinco modelos juntos">≡ Rodar os 5 modelos juntos</button>
+        <button class="btn" id="btn-run-lab" aria-label="Rodar laboratório visual">✦ Rodar laboratório visual</button>
+        <button class="btn ghost" id="btn-pause" aria-label="Pausar ou continuar animações">⏸ Pausar</button>
+        <button class="btn ghost" id="btn-reset" aria-label="Reiniciar tudo">↺ Reiniciar tudo</button>
+        <button class="btn ghost" id="btn-present" aria-label="Modo apresentação em tela cheia">⛶ Modo apresentação</button>
+      </div>
+      <div class="ctrl">
+        <label for="sel-tip">Tipologia</label>
+        <select id="sel-tip" aria-label="Tipologia selecionada"></select>
+      </div>
+      <div class="ctrl">
+        <label for="sel-hor">Horizonte</label>
+        <select id="sel-hor" aria-label="Horizonte de previsão">
+          <option value="24">24 horas</option>
+          <option value="48" selected>48 horas</option>
+          <option value="72">72 horas</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label for="rng-noise">Intensidade de ruído</label>
+        <div class="rngline">
+          <input type="range" id="rng-noise" min="0" max="100" value="35" aria-label="Intensidade de ruído">
+          <output id="out-noise">35%</output>
+        </div>
+      </div>
+      <div class="ctrl">
+        <label for="sel-diff">Dificuldade da série</label>
+        <select id="sel-diff" aria-label="Dificuldade da série">
+          <option value="baixa">Baixa</option>
+          <option value="media" selected>Média</option>
+          <option value="alta">Alta</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label for="sel-speed">Velocidade</label>
+        <select id="sel-speed" aria-label="Velocidade das animações">
+          <option value="0.5">0,5×</option>
+          <option value="1" selected>1×</option>
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label for="sel-focus">Modelo em foco</label>
+        <select id="sel-focus" aria-label="Modelo em foco"></select>
+      </div>
+      <div class="ctrl chk">
+        <input type="checkbox" id="chk-sync" checked aria-label="Sincronizar detalhe com a execução">
+        <label for="chk-sync">Sincronizar detalhe<br>com a execução</label>
+      </div>
+      <div class="status-pill" id="status" role="status" aria-live="polite">
+        <span class="dot"></span><span id="status-txt">Pronto</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- ================= INDICADOR DE ETAPAS ================= -->
+      <div class="stepper" id="stepper" aria-label="Progresso do pipeline">
+        <div class="step" data-step="1"><span class="sn">1</span><span class="st"><b>Série temporal</b><span>168 h históricas + horizonte</span></span></div>
+        <div class="step" data-step="2"><span class="sn">2</span><span class="st"><b>Cluster K-Means</b><span>K = 6 tipologias diárias</span></span></div>
+        <div class="step" data-step="3"><span class="sn">3</span><span class="st"><b>Modelos e previsões</b><span>5 arquiteturas em paralelo</span></span></div>
+        <div class="step" data-step="4"><span class="sn">4</span><span class="st"><b>Métricas e ranking</b><span>RMSE como critério primário</span></span></div>
+      </div>
+
+      <!-- ================= 00 · VISÃO GERAL ================= -->
+      <section id="visao" aria-labelledby="h-visao">
+        <div class="eyebrow">Visão geral</div>
+        <h1 id="h-visao">Da carga horária industrial ao ranking de modelos, em um único fluxo visual</h1>
+        <p class="lead">
+          Esta plataforma percorre, de ponta a ponta, o pipeline de previsão de carga elétrica horária:
+          uma <b>série temporal sintética</b> de sete dias é decomposta em vetores diários, agrupada por
+          <b>K-Means</b> em seis tipologias industriais e, então, prevista por <b>cinco arquiteturas</b> —
+          SARIMAX, XGBoost, LSTM, Temporal Fusion Transformer e TimesFM — comparadas por
+          <b>MAE, MSE, RMSE, MAPE e R²</b> calculados de verdade no navegador.
+        </p>
+        <div class="grid mt" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
+          <div class="card"><h3 style="color:var(--cyan)">1 · Série</h3><p class="plain">168 observações horárias com sazonalidade de 24 h, tendência local, ruído controlável e mudança de regime moderada.</p></div>
+          <div class="card"><h3 style="color:var(--violet)">2 · Cluster</h3><p class="plain">Cada dia vira um vetor de 24 posições, normalizado e agrupado por K-Means com K = 6, animado iteração por iteração.</p></div>
+          <div class="card"><h3 style="color:var(--orange)">3 · Modelos</h3><p class="plain">Cinco arquiteturas rodam em paralelo, desenhando suas previsões progressivamente sobre o horizonte futuro.</p></div>
+          <div class="card"><h3 style="color:var(--green)">4 · Métricas</h3><p class="plain">Erros calculados ponto a ponto, com anatomia visual de cada métrica e scoreboard final ordenado por RMSE.</p></div>
+        </div>
+        <p class="plain mts">Use os botões globais na barra lateral — <b>Rodar pipeline completo</b> executa as quatro etapas em sequência com rolagem automática. No modo apresentação, navegue com <kbd>←</kbd> <kbd>→</kbd> e saia com <kbd>Esc</kbd>.</p>
+      </section>
+
+      <!-- ================= 01 · SÉRIE TEMPORAL ================= -->
+      <section id="serie" aria-labelledby="h-serie">
+        <div class="eyebrow">Etapa 1 · Série temporal</div>
+        <h2 id="h-serie">Série horária industrial — 7 dias de histórico</h2>
+        <p class="lead">Série sintética determinística (gerador pseudoaleatório com semente): sazonalidade diária de 24 h, tendência local suave, ruído autocorrelacionado controlável, picos, vales e uma alteração moderada de regime a partir do 5º dia. A faixa sombreada delimita a janela histórica; a linha vertical marca o início do horizonte futuro.</p>
+        <div class="chart-wrap chart-tall mt">
+          <canvas id="chart-serie" role="img" aria-label="Gráfico da série temporal horária com tendência e divisões de dias"></canvas>
+          <div class="legend" id="legend-serie"></div>
+        </div>
+
+        <h3 class="mt" style="font-size:16px">Seis tipologias horárias industriais</h3>
+        <p class="plain">Selecione um perfil para regenerar toda a plataforma com aquela curva típica de 24 h.</p>
+        <div class="tip-grid mts" id="tip-grid" role="radiogroup" aria-label="Seleção de tipologia"></div>
+
+        <div class="card mt dv-wrap" id="dv-block">
+          <div>
+            <h3>O dia como vetor — <span class="fx" style="padding:2px 9px">x_dia = [y₀, y₁, …, y₂₃]</span></h3>
+            <p class="plain mts">Antes do agrupamento, a série é fatiada em dias e cada dia vira um vetor de 24 posições. A <b>normalização z-score</b> remove o nível absoluto (kW médios) e preserva a <b>forma do perfil</b> — assim, o K-Means agrupa fábricas pelo <i>formato</i> do consumo, e não pelo tamanho da planta.</p>
+          </div>
+          <svg id="dv-strip" viewBox="0 0 900 90" role="img" aria-label="Série fatiada em sete dias"></svg>
+          <div class="dv-cells" id="dv-cells" aria-label="Vetor de 24 células do dia selecionado"></div>
+          <div class="dv-flow">
+            <span class="dv-tag" id="dvt-1">1 · Fatiar em dias</span><span class="dv-arrow" id="dva-1">➜</span>
+            <span class="dv-tag" id="dvt-2">2 · Selecionar dia</span><span class="dv-arrow" id="dva-2">➜</span>
+            <span class="dv-tag" id="dvt-3">3 · Vetor 24 h</span><span class="dv-arrow" id="dva-3">➜</span>
+            <span class="dv-tag" id="dvt-4">4 · Normalizar (z-score)</span><span class="dv-arrow" id="dva-4">➜</span>
+            <span class="dv-tag" id="dvt-5">5 · Enviar ao K-Means</span>
+            <button class="btn small" id="dv-play" style="margin-left:auto" aria-label="Animar transformação do dia em vetor">▶ Animar</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 02 · K-MEANS ================= -->
+      <section id="kmeans" aria-labelledby="h-km">
+        <div class="eyebrow">Etapa 2 · Cluster K-Means</div>
+        <h2 id="h-km">K-Means com K = 6 — iteração por iteração</h2>
+        <p class="lead">Os vetores diários (z-normalizados) são projetados em duas dimensões <b>para fins didáticos</b>: rampa matinal no eixo x e intensidade vespertina no eixo y. O algoritmo alterna <b>atribuição</b> (cada ponto vai ao centroide mais próximo, linhas temporárias mostram as distâncias) e <b>atualização</b> (cada centroide move-se para a média do seu cluster), até a convergência.</p>
+        <div class="fx big mts" data-tip="Função objetivo do K-Means|Minimiza a soma das distâncias quadráticas de cada ponto ao centroide μₖ do seu cluster Cₖ — a inércia.">arg min&nbsp; Σₖ Σ<sub>x∈Cₖ</sub> ‖x − μₖ‖²</div>
+        <p class="plain mts" style="color:var(--faint);font-size:12px">📄 <b style="color:var(--muted)">Na dissertação:</b> matriz perfil × empresa (87 × 24, média horária por empresa), normalizada linha a linha por Min-Max (Eq. 4.1) para agrupar por <i>forma</i> do perfil, não por magnitude. K-Means com k=6, random_state=42, n_init=10. Aqui a animação usa 72 pontos didáticos (12 por tipologia) e uma projeção 2D simplificada para visualização — a mecânica do algoritmo é idêntica.</p>
+        <div class="km-layout mt">
+          <div class="chart-wrap"><canvas id="chart-km" style="height:390px" role="img" aria-label="Animação do K-Means em duas dimensões"></canvas></div>
+          <div class="km-panel">
+            <div class="km-stat"><div class="kl">Iteração</div><div class="kv" id="km-iter">0</div></div>
+            <div class="km-stat"><div class="kl">Inércia · Σ‖x−μ‖²</div><div class="kv" id="km-inertia">—</div></div>
+            <div class="km-stat"><div class="kl">Deslocamento médio dos centroides</div><div class="kv" id="km-shift">—</div></div>
+            <div class="km-stat"><div class="kl">Status</div><div class="kv" id="km-status" style="font-size:14px;font-family:var(--f-body);color:var(--muted)">aguardando</div></div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="btn small primary" id="km-run" aria-label="Executar K-Means">▶ Executar</button>
+              <button class="btn small" id="km-step" aria-label="Próxima iteração do K-Means">Próxima iteração</button>
+              <button class="btn small" id="km-pause" aria-label="Pausar K-Means">⏸</button>
+              <button class="btn small" id="km-reset" aria-label="Reiniciar K-Means">↺</button>
+            </div>
+            <div class="ctrl"><label for="km-speed">Velocidade local</label>
+              <select id="km-speed"><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="km-map" id="km-map" aria-live="polite"></div>
+      </section>
+
+      <!-- ================= 03 · MODELOS ================= -->
+      <section id="modelos" aria-labelledby="h-mod">
+        <div class="eyebrow">Etapa 3 · Modelos e previsões</div>
+        <h2 id="h-mod">Cinco arquiteturas, executadas em paralelo</h2>
+        <p class="lead">Cada card acompanha um modelo: status, etapa atual, progresso, minigráfico vivo, RMSE parcial e tempo simulado. As linhas de previsão são desenhadas progressivamente no gráfico global conforme cada modelo avança. As durações diferem apenas por coreografia pedagógica — <b>não representam benchmark real de velocidade computacional</b>.</p>
+        <div style="margin-top:12px"><button class="btn primary" id="btn-run-models-2" aria-label="Rodar os cinco modelos juntos">▶ Rodar os cinco modelos juntos</button></div>
+        <div class="model-cards mt" id="model-cards"></div>
+
+        <h3 class="mt" style="font-size:16px">Gráfico global — histórico, realizado e as cinco previsões</h3>
+        <p class="plain">Clique na legenda para ocultar/exibir modelos. Passe o mouse para o tooltip compartilhado por hora. O gráfico foca no fim do histórico e no horizonte.</p>
+        <div class="chart-wrap chart-tall mts">
+          <canvas id="chart-global" role="img" aria-label="Gráfico com histórico, realizado futuro e previsões dos cinco modelos"></canvas>
+          <div class="legend" id="legend-global"></div>
+        </div>
+
+        <h3 class="mt" style="font-size:16px">Small multiples — cada modelo contra o realizado</h3>
+        <div class="smalls mts" id="smalls"></div>
+        <p class="note mt">Os dados e as métricas são calculados no navegador. As animações internas representam pedagogicamente a mecânica das arquiteturas; não correspondem ao treinamento completo de modelos reais dentro do HTML.</p>
+      </section>
+
+      <!-- ================= 04 · LABORATÓRIO VISUAL ================= -->
+      <section id="lab" aria-labelledby="h-lab">
+        <div class="eyebrow">Etapa 3½ · Laboratório visual das arquiteturas</div>
+        <h2 id="h-lab">Reconstruções vetoriais interativas</h2>
+        <p class="lead">Seis módulos reconstruídos do zero em SVG/HTML/Canvas — anatomia SARIMAX, decomposição temporal, boosting do XGBoost, célula LSTM, arquitetura completa do TFT e o modelo fundacional TimesFM. Clique em qualquer bloco para ver função, entradas, saídas, fórmula e relação com a previsão de carga horária. Cada módulo tem narrativa em etapas, com reprodução automática, avanço manual e controle de velocidade.</p>
+        <div id="lab-mods"></div>
+      </section>
+
+      <!-- ================= 05 · MÉTRICAS ================= -->
+      <section id="metricas" aria-labelledby="h-met">
+        <div class="eyebrow">Etapa 4 · Métricas e ranking</div>
+        <h2 id="h-met">Métricas calculadas de verdade, ponto a ponto</h2>
+        <p class="lead">Todas as métricas abaixo são computadas em JavaScript sobre os pares (realizado, previsto) do horizonte. <b>Menor erro é melhor</b> para MAE, MSE, RMSE e MAPE; <b>maior é melhor</b> para R². O <b>RMSE é o critério primário</b> do ranking, por penalizar mais os erros grandes — exatamente os que causam sub ou sobrecontratação de energia.</p>
+
+        <div class="metric-cards mt">
+          <div class="metric-card"><h4>MAE</h4><div class="fx">MAE = (1/n) Σ |yₜ − ŷₜ|</div><p>Erro absoluto médio, em kW. Leitura direta: “erramos, em média, X kW por hora”.</p></div>
+          <div class="metric-card"><h4>MSE</h4><div class="fx">MSE = (1/n) Σ (yₜ − ŷₜ)²</div><p>Erro quadrático médio. Eleva ao quadrado: erros grandes pesam desproporcionalmente.</p></div>
+          <div class="metric-card"><h4>RMSE</h4><div class="fx">RMSE = √MSE</div><p>Raiz do MSE — volta à unidade original (kW) mantendo a penalização quadrática.</p></div>
+          <div class="metric-card"><h4>MAPE</h4><div class="fx">MAPE = (100/n) Σ |(yₜ − ŷₜ)/yₜ|</div><p>Erro percentual médio. Adimensional, permite comparar tipologias de níveis distintos.</p></div>
+          <div class="metric-card"><h4>R²</h4><div class="fx">R² = 1 − SS<sub>res</sub>/SS<sub>tot</sub></div><p>Fração da variância explicada frente ao previsor trivial “média do realizado”.</p></div>
+          <div class="metric-card"><h4>Assertividade</h4><div class="fx">(1 − WAPE) × 100, WAPE = Σ|yₜ−ŷₜ| / Σ|yₜ|</div><p>Métrica proposta na Qualificação de Mestrado (Eq. 4.5): agrega numerador e denominador antes de dividir, então não explode em tipologias de baixa magnitude — ao contrário do MAPE.</p></div>
+        </div>
+
+        <div class="card mt">
+          <h3>Anatomia do erro — como cada métrica nasce</h3>
+          <p class="plain mts">A animação percorre o horizonte hora a hora para o <b>modelo em foco</b>: mostra o realizado e o previsto no ponto, a linha vertical do erro, o erro com sinal, o valor absoluto, o quadrado, as médias acumuladas, a raiz do MSE, o erro percentual e a comparação com a média do realizado que fundamenta o R².</p>
+          <div class="anat-layout mts">
+            <div class="chart-wrap"><canvas id="chart-anat" style="height:260px" role="img" aria-label="Anatomia visual do erro ponto a ponto"></canvas></div>
+            <div class="anat-read">
+              <div class="anat-row"><span>Hora do horizonte t</span><b id="an-t">—</b></div>
+              <div class="anat-row"><span>Realizado yₜ</span><b id="an-y">—</b></div>
+              <div class="anat-row"><span>Previsto ŷₜ</span><b id="an-yh">—</b></div>
+              <div class="anat-row"><span>Erro eₜ = yₜ − ŷₜ</span><b id="an-e">—</b></div>
+              <div class="anat-row"><span>|eₜ|</span><b id="an-ae">—</b></div>
+              <div class="anat-row"><span>eₜ²</span><b id="an-e2">—</b></div>
+              <div class="anat-row hl"><span>MAE acumulado</span><b id="an-mae">—</b></div>
+              <div class="anat-row hl"><span>RMSE = √MSE acumulado</span><b id="an-rmse">—</b></div>
+              <div class="anat-row"><span>|eₜ/yₜ| · 100 (MAPE parcial)</span><b id="an-mape">—</b></div>
+              <div class="anat-row"><span>R² parcial vs média</span><b id="an-r2">—</b></div>
+              <div style="display:flex;gap:6px;margin-top:4px">
+                <button class="btn small primary" id="an-play" aria-label="Animar anatomia do erro">▶ Animar</button>
+                <button class="btn small" id="an-pause" aria-label="Pausar anatomia do erro">⏸</button>
+                <button class="btn small" id="an-reset" aria-label="Reiniciar anatomia do erro">↺</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt">
+          <h3>Erro por horizonte</h3>
+          <p class="plain mts">RMSE de cada modelo por bloco de 24 h do horizonte — modelos que degradam com a distância ficam evidentes.</p>
+          <div class="chart-wrap chart-mid mts"><canvas id="chart-hbars" role="img" aria-label="Barras de RMSE por bloco de horizonte e modelo"></canvas></div>
+        </div>
+
+        <div class="card mt">
+          <h3>Scoreboard final</h3>
+          <div class="champ-banner" id="champ"><span class="cup">🏆</span><span id="champ-txt"></span></div>
+          <div style="overflow-x:auto" class="mts">
+            <table class="score-table" id="score-table" aria-label="Tabela comparativa de métricas por modelo">
+              <thead><tr><th>Modelo</th><th>MAE (kW)</th><th>MSE</th><th>RMSE (kW)</th><th>MAPE (%)</th><th>R²</th><th>Assertividade</th></tr></thead>
+              <tbody id="score-body"><tr><td colspan="7" style="text-align:center;color:var(--faint)">Rode os cinco modelos para preencher o scoreboard.</td></tr></tbody>
+            </table>
+          </div>
+          <div class="rank-tabs" role="tablist" aria-label="Critério do ranking">
+            <button class="rank-tab on" data-rk="RMSE" role="tab">Ranking por RMSE ★</button>
+            <button class="rank-tab" data-rk="MAE" role="tab">por MAE</button>
+            <button class="rank-tab" data-rk="MAPE" role="tab">por MAPE</button>
+            <button class="rank-tab" data-rk="R2" role="tab">por R²</button>
+            <button class="rank-tab" data-rk="Assertividade" role="tab">por Assertividade</button>
+          </div>
+          <div class="rank-bars" id="rank-bars"></div>
+          <div class="card mts" id="focus-summary" style="padding:13px 16px"><p class="plain">Resumo do modelo em foco aparecerá aqui após a execução.</p></div>
+        </div>
+      </section>
+
+      <!-- ================= 06 · REFERÊNCIAS ================= -->
+      <section id="referencias" aria-labelledby="h-ref">
+        <div class="eyebrow">Referências</div>
+        <h2 id="h-ref">Base conceitual</h2>
+        <ol class="refs">
+          <li><b>Box, G. E. P.; Jenkins, G. M.; Reinsel, G. C.; Ljung, G. M.</b> <i>Time Series Analysis: Forecasting and Control.</i> 5. ed. Wiley, 2015. — Fundamento ARIMA/SARIMA(X).</li>
+          <li><b>Hyndman, R. J.; Athanasopoulos, G.</b> <i>Forecasting: Principles and Practice.</i> 3. ed. OTexts, 2021. — Decomposição, sazonalidade, avaliação de previsões.</li>
+          <li><b>Cleveland, R. B. et al.</b> STL: A Seasonal-Trend Decomposition Procedure Based on Loess. <i>Journal of Official Statistics</i>, 6(1), 1990.</li>
+          <li><b>MacQueen, J.</b> Some Methods for Classification and Analysis of Multivariate Observations. <i>Proc. 5th Berkeley Symposium</i>, 1967. — K-Means.</li>
+          <li><b>Chen, T.; Guestrin, C.</b> XGBoost: A Scalable Tree Boosting System. <i>KDD</i>, 2016.</li>
+          <li><b>Hochreiter, S.; Schmidhuber, J.</b> Long Short-Term Memory. <i>Neural Computation</i>, 9(8), 1997.</li>
+          <li><b>Lim, B.; Arık, S. Ö.; Loeff, N.; Pfister, T.</b> Temporal Fusion Transformers for Interpretable Multi-horizon Time Series Forecasting. <i>International Journal of Forecasting</i>, 37(4), 2021.</li>
+          <li><b>Das, A.; Kong, W.; Sen, R.; Zhou, Y.</b> A Decoder-Only Foundation Model for Time-Series Forecasting (TimesFM). <i>ICML</i>, 2024.</li>
+        </ol>
+        <footer>
+          TS·Lab — plataforma educacional autocontida (HTML + CSS + JavaScript vanilla, sem dependências externas, funciona offline).
+          Dados sintéticos determinísticos com semente; previsões simuladas com assinaturas coerentes por arquitetura; métricas calculadas de verdade no navegador.
+        </footer>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div id="tip" role="tooltip"></div>
+<div id="chart-tip"></div>
+<div id="toast"><span id="toast-txt"></span><button class="btn small primary" id="toast-btn">Abrir</button><button class="btn small ghost" id="toast-x" aria-label="Fechar aviso">✕</button></div>
+<div class="present-hint">Modo apresentação — <kbd>←</kbd> <kbd>→</kbd> navegam · <kbd>Esc</kbd> sai</div>
+
+<script>
+'use strict';
+/* =====================================================================
+   TS·Lab — núcleo JavaScript (vanilla, sem dependências)
+   Módulos: Utils · Sched (engine de animação) · Data · Charts · DayVector
+            KMeans · Models · Metrics · Lab · Nav · Present · Pipeline
+   ===================================================================== */
+
+/* ---------------- Utils ---------------- */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+const lerp  = (a,b,t) => a + (b-a)*t;
+const mean  = a => a.reduce((s,v)=>s+v,0)/a.length;
+const fmt   = (v,d=1) => Number(v).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Gerador pseudoaleatório com semente (mulberry32 + hash FNV-1a) */
+function hashSeed(str){
+  let h = 2166136261 >>> 0;
+  for (let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function mulberry32(a){
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a>>>15), 1|a);
+    t = (t + Math.imul(t ^ (t>>>7), 61|t)) ^ t;
+    return ((t ^ (t>>>14)) >>> 0) / 4294967296;
+  };
+}
+const gaussFn = (h,mu,s) => Math.exp(-((h-mu)*(h-mu))/(2*s*s));
+const smoothstep = t => { t = clamp(t,0,1); return t*t*(3-2*t); };
+const plateauFn = (h,a,b,soft) => smoothstep((h-a+soft)/soft) * (1 - smoothstep((h-b+0)/soft));
+
+/* ---------------- Sched — engine central de animação ----------------
+   Controle único de tempo: velocidade global, pausa/retomada e
+   cancelamento total (Reiniciar tudo). Nenhum setTimeout/Interval solto. */
+const Sched = (() => {
+  const tasks = new Set();
+  let last = 0, paused = false, speed = 1;
+  function loop(ts){
+    requestAnimationFrame(loop);
+    if (!last){ last = ts; return; }
+    const dt = ts - last; last = ts;
+    if (paused) return;
+    const d = dt * speed * (REDUCED ? 8 : 1);
+    for (const t of [...tasks]){
+      t.t += d;
+      const p = t.dur > 0 ? clamp(t.t/t.dur, 0, 1) : 1;
+      if (t.tick) t.tick(p, d);
+      if (p >= 1){ tasks.delete(t); if (t.done) t.done(); }
+    }
+  }
+  requestAnimationFrame(loop);
+  return {
+    tween(dur, tick, done){ const t = {t:0, dur, tick, done}; tasks.add(t); return t; },
+    after(ms, done){ return this.tween(ms, null, done); },
+    cancel(t){ tasks.delete(t); },
+    cancelAll(){ tasks.clear(); },
+    pause(){ paused = true; },
+    resume(){ paused = false; },
+    get paused(){ return paused; },
+    setSpeed(v){ speed = v; document.documentElement.style.setProperty('--flowdur', (1/Math.max(.25,v)) + 's'); }
+  };
+})();
+
+/* ---------------- Estado global ---------------- */
+const State = {
+  tip: 1, hor: 48, noise: 35, diff: 'media', speed: 1,
+  focus: 'TFT', sync: true,
+  data: null, forecasts: null, revealed: {}, hidden: {},
+  metrics: null, running: false, kmDone: false
+};
+
+/* ---------------- Tipologias ---------------- */
+const TYPOLOGIES = [
+  { id:'continuo',  nome:'Tipo 1 · Contínuo Alto', cor:'#2dd4ee',
+    desc:'Operação 24h com baixa variação intradiária e carga absoluta elevada — processos contínuos (fornos, extrusão).',
+    shape:h => 0.85 + 0.05*Math.sin((h/24)*2*Math.PI - 1.1) },
+  { id:'picoduplo', nome:'Tipo 2 · Pico Duplo', cor:'#60a5fa',
+    desc:'Dois picos diários com vale intermediário — típico de operação em dois turnos com pausa.',
+    shape:h => 0.30 + 0.52*gaussFn(h,8,2.0) + 0.58*gaussFn(h,18,2.3) },
+  { id:'vespertino', nome:'Tipo 3 · Pico Tarde/Noite', cor:'#fb923c',
+    desc:'Carga crescente do início da tarde ao final da jornada, com vale matinal.',
+    shape:h => 0.26 + 0.64*gaussFn(h,18,3.4) },
+  { id:'comercial', nome:'Tipo 4 · Comercial Estendido', cor:'#f0c14b',
+    desc:'Carga sustentada ao longo do horário comercial ampliado, com rampas suaves.',
+    shape:h => 0.24 + 0.56*plateauFn(h,9,19,2.2) },
+  { id:'matinal',   nome:'Tipo 5 · Pico Manhã', cor:'#a78bfa',
+    desc:'Pico matinal pronunciado seguido de declínio gradual ao longo do dia.',
+    shape:h => 0.28 + 0.62*gaussFn(h,8,2.5) },
+  { id:'regular',   nome:'Tipo 6 · Típico/Regular', cor:'#37d99b',
+    desc:'Comportamento médio, sem pico dominante — baixa intensidade e variação suave.',
+    shape:h => 0.22 + 0.09*Math.sin(((h-6)/24)*2*Math.PI) }
+];
+
+/* ---------------- Geração dos dados ---------------- */
+const HIST_N = 168, BASE_KW = 1200;
+function diffLevel(){ return State.diff === 'baixa' ? 0 : State.diff === 'media' ? 0.5 : 1; }
+
+function buildData(){
+  const tip = TYPOLOGIES[State.tip];
+  const seed = hashSeed(`${tip.id}|${State.hor}|${State.noise}|${State.diff}|v5`);
+  const rng = mulberry32(seed);
+  const dlev = diffLevel();
+  const N = HIST_N + State.hor;
+  const noiseAmp = BASE_KW * 0.018 * (0.35 + (State.noise/100)*1.9) * (1 + 0.4*dlev);
+  const trendSlope = (rng()*2-1) * 0.00055 * (1 + dlev);
+  const regimeAt = 96 + Math.floor(rng()*24);           // mudança de regime ~5º dia
+  const regimeMul = 1 + (rng() > 0.5 ? 1 : -1) * (0.03 + 0.11*dlev);
+  const y = new Array(N);
+  let ar = 0;                                            // ruído AR(1) — oscilação horária realista
+  for (let t=0; t<N; t++){
+    const h = t % 24;
+    ar = 0.55*ar + (rng()*2-1);
+    let v = BASE_KW * tip.shape(h) * (1 + trendSlope*t) * (t >= regimeAt ? regimeMul : 1);
+    v += noiseAmp * ar;
+    if (rng() < 0.012 + 0.01*dlev) v += (rng()>0.5?1:-1) * noiseAmp * (2.2 + 2*rng()); // picos/vales
+    y[t] = Math.max(40, v);
+  }
+  const hist = y.slice(0, HIST_N), future = y.slice(HIST_N);
+  /* tendência suavizada — média móvel centrada de 24 h */
+  const trend = hist.map((_,i)=>{
+    const a = Math.max(0, i-12), b = Math.min(HIST_N, i+12);
+    return mean(hist.slice(a,b));
+  });
+  /* sazonal-naive: média por hora dos 3 últimos dias históricos */
+  const naive = [];
+  for (let t=0; t<State.hor; t++){
+    const h = (HIST_N + t) % 24;
+    naive.push((hist[96+h] + hist[120+h] + hist[144+h]) / 3);
+  }
+  State.data = { hist, future, trend, naive, regimeAt, seed };
+}
+
+/* ---------------- Charts — núcleo de desenho em Canvas ---------------- */
+function setupCanvas(cv){
+  const dpr = window.devicePixelRatio || 1;
+  const r = cv.getBoundingClientRect();
+  if (r.width === 0) return null;
+  cv.width = Math.round(r.width*dpr); cv.height = Math.round(r.height*dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return { ctx, w:r.width, h:r.height };
+}
+const C = { grid:'#152647', axis:'#27406e', txt:'#5f759b', hist:'#2dd4ee', real:'#37d99b', trend:'#f0c14b' };
+
+function drawFrame(ctx,w,h,pad,yMin,yMax,xMin,xMax,xLabelEvery=24,unit='kW'){
+  ctx.clearRect(0,0,w,h);
+  ctx.font = '10px ui-monospace,monospace';
+  ctx.fillStyle = C.txt; ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
+  const X = t => pad.l + (t - xMin) / (xMax - xMin) * (w - pad.l - pad.r);
+  const Y = v => h - pad.b - (v - yMin) / (yMax - yMin) * (h - pad.t - pad.b);
+  for (let i=0;i<=4;i++){
+    const v = yMin + (yMax-yMin)*i/4, yy = Y(v);
+    ctx.beginPath(); ctx.moveTo(pad.l, yy); ctx.lineTo(w-pad.r, yy); ctx.stroke();
+    ctx.fillText(fmt(v,0), 4, yy+3);
+  }
+  for (let t=Math.ceil(xMin/xLabelEvery)*xLabelEvery; t<=xMax; t+=xLabelEvery){
+    const xx = X(t);
+    ctx.beginPath(); ctx.moveTo(xx, pad.t); ctx.lineTo(xx, h-pad.b); ctx.stroke();
+    ctx.fillText('h'+t, xx-8, h-pad.b+13);
+  }
+  ctx.fillText(unit, 4, pad.t-4 < 8 ? 10 : pad.t-4);
+  return { X, Y };
+}
+function drawLine(ctx, X, Y, data, offset, color, width=1.6, dash=null, upTo=Infinity){
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = width;
+  if (dash) ctx.setLineDash(dash);
+  ctx.beginPath();
+  const n = Math.min(data.length, upTo);
+  for (let i=0;i<n;i++){
+    const x = X(offset+i), y = Y(data[i]);
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  }
+  ctx.stroke(); ctx.restore();
+}
+
+/* Tooltip compartilhado dos gráficos */
+const chartTip = $('#chart-tip');
+const chartMeta = new Map(); // canvas -> {xMin,xMax,pad,w,series:[{name,color,data,offset}]}
+function bindChartTip(cv){
+  cv.addEventListener('mousemove', e => {
+    const m = chartMeta.get(cv); if (!m) return;
+    const r = cv.getBoundingClientRect();
+    const px = e.clientX - r.left;
+    const t = Math.round(m.xMin + (px - m.pad.l)/(m.w - m.pad.l - m.pad.r) * (m.xMax - m.xMin));
+    if (t < m.xMin || t > m.xMax){ chartTip.style.display='none'; return; }
+    let html = `<div class="tt">hora ${t} · dia ${Math.floor(t/24)+1} · ${String(t%24).padStart(2,'0')}h</div>`;
+    let any = false;
+    for (const s of m.series){
+      const i = t - s.offset;
+      if (i>=0 && i<s.n){
+        any = true;
+        html += `<div class="row"><span style="color:${s.color}">${s.name}</span><b>${fmt(s.data[i],0)} kW</b></div>`;
+      }
+    }
+    if (!any){ chartTip.style.display='none'; return; }
+    chartTip.innerHTML = html;
+    chartTip.style.display = 'block';
+    chartTip.style.left = Math.min(window.innerWidth-190, e.clientX+14) + 'px';
+    chartTip.style.top  = Math.max(8, e.clientY-20) + 'px';
+  });
+  cv.addEventListener('mouseleave', ()=> chartTip.style.display='none');
+}
+
+/* ---------------- Gráfico principal da série ---------------- */
+let serieProgress = 1;
+function drawSerie(){
+  const cv = $('#chart-serie'); const s = setupCanvas(cv); if (!s) return;
+  const {ctx,w,h} = s; const {hist,trend,future,regimeAt} = State.data;
+  const pad = {l:52,t:16,r:14,b:26};
+  const all = hist.concat(future);
+  const yMin = Math.min(...all)*0.92, yMax = Math.max(...all)*1.06;
+  const xMax = HIST_N + State.hor;
+  const {X,Y} = drawFrame(ctx,w,h,pad,yMin,yMax,0,xMax);
+  /* janela histórica sombreada */
+  ctx.fillStyle = 'rgba(45,212,238,.045)';
+  ctx.fillRect(X(0), pad.t, X(HIST_N)-X(0), h-pad.t-pad.b);
+  /* mudança de regime */
+  ctx.strokeStyle = 'rgba(244,121,111,.5)'; ctx.setLineDash([3,5]);
+  ctx.beginPath(); ctx.moveTo(X(regimeAt),pad.t); ctx.lineTo(X(regimeAt),h-pad.b); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = '#f4796f'; ctx.fillText('regime', X(regimeAt)+3, pad.t+11);
+  /* início do horizonte */
+  ctx.strokeStyle = C.real; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(X(HIST_N),pad.t); ctx.lineTo(X(HIST_N),h-pad.b); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = C.real; ctx.fillText('horizonte →', X(HIST_N)+4, pad.t+11);
+  const upto = Math.floor(hist.length * serieProgress);
+  drawLine(ctx,X,Y,hist,0,C.hist,1.5,null,upto);
+  drawLine(ctx,X,Y,trend,0,C.trend,1.4,[6,5],upto);
+  if (serieProgress >= 1) drawLine(ctx,X,Y,future,HIST_N,'rgba(55,217,155,.55)',1.3,[2,4]);
+  chartMeta.set(cv,{xMin:0,xMax,pad,w,series:[
+    {name:'Histórico',color:C.hist,data:hist,offset:0,n:hist.length},
+    {name:'Tendência',color:C.trend,data:trend,offset:0,n:trend.length},
+    {name:'Realizado (futuro)',color:C.real,data:future,offset:HIST_N,n:future.length}
+  ]});
+  $('#legend-serie').innerHTML =
+    `<span class="li"><span class="sw" style="background:${C.hist}"></span>Série histórica (168 h)</span>`+
+    `<span class="li"><span class="sw" style="background:${C.trend}"></span>Tendência suavizada (MM 24 h)</span>`+
+    `<span class="li"><span class="sw" style="background:${C.real}"></span>Realizado futuro</span>`+
+    `<span class="li"><span class="sw" style="background:#f4796f"></span>Mudança de regime</span>`;
+}
+function animateSerie(done){
+  serieProgress = 0;
+  Sched.tween(1600, p => { serieProgress = p; drawSerie(); }, () => { serieProgress = 1; drawSerie(); done && done(); });
+}
+
+/* ---------------- Cards de tipologia ---------------- */
+function tipStats(shape){
+  const v = Array.from({length:24},(_,h)=>shape(h)*BASE_KW);
+  return { media: mean(v), pico: Math.max(...v), amp: Math.max(...v)-Math.min(...v), v };
+}
+function miniPath(v, w, h, pad=4){
+  const mn = Math.min(...v), mx = Math.max(...v);
+  return v.map((x,i)=>{
+    const px = pad + i/(v.length-1)*(w-2*pad);
+    const py = h-pad - (x-mn)/(mx-mn+1e-9)*(h-2*pad);
+    return (i?'L':'M')+px.toFixed(1)+' '+py.toFixed(1);
+  }).join(' ');
+}
+function buildTipGrid(){
+  const g = $('#tip-grid'); g.innerHTML = '';
+  TYPOLOGIES.forEach((t,i)=>{
+    const st = tipStats(t.shape);
+    const b = document.createElement('button');
+    b.className = 'tip-card' + (i===State.tip ? ' on' : '');
+    b.setAttribute('role','radio');
+    b.setAttribute('aria-checked', i===State.tip);
+    b.setAttribute('aria-label', 'Selecionar tipologia ' + t.nome);
+    b.dataset.i = i;
+    b.innerHTML = `
+      <h3><span class="cdot" style="background:${t.cor}"></span>${t.nome}</h3>
+      <svg viewBox="0 0 200 52" aria-hidden="true"><path d="${miniPath(st.v,200,52)}" fill="none" stroke="${t.cor}" stroke-width="1.8"/></svg>
+      <p>${t.desc}</p>
+      <div class="tip-stats"><span>média <b>${fmt(st.media,0)}</b></span><span>pico <b>${fmt(st.pico,0)}</b></span><span>amplitude <b>${fmt(st.amp,0)}</b></span></div>`;
+    b.addEventListener('click', ()=>{ State.tip = i; $('#sel-tip').value = i; rebuildAll('Tipologia: '+t.nome); });
+    g.appendChild(b);
+  });
+}
+
+/* ---------------- Dia como vetor ---------------- */
+function buildDayVector(){
+  const cells = $('#dv-cells'); cells.innerHTML = '';
+  for (let h=0; h<24; h++){
+    const d = document.createElement('div');
+    d.className = 'dv-cell'; d.dataset.h = h; d.id = 'dvc-'+h;
+    d.setAttribute('aria-label','célula da hora '+h);
+    cells.appendChild(d);
+  }
+  drawDVStrip(-1);
+}
+function drawDVStrip(selDay){
+  const svg = $('#dv-strip'); const {hist} = State.data;
+  const W = 900, H = 90, mn = Math.min(...hist), mx = Math.max(...hist);
+  let s = '';
+  for (let d=0; d<7; d++){
+    const x0 = d*(W/7);
+    s += `<rect x="${x0+1}" y="2" width="${W/7-2}" height="${H-16}" rx="6" fill="${d===selDay?'rgba(45,212,238,.12)':'rgba(255,255,255,.015)'}" stroke="${d===selDay?'#2dd4ee':'#1d3156'}" stroke-width="1"/>`;
+    let p = '';
+    for (let h=0; h<24; h++){
+      const v = hist[d*24+h];
+      const px = x0 + 6 + h/23*(W/7-12);
+      const py = H-20 - (v-mn)/(mx-mn+1e-9)*(H-30);
+      p += (h?'L':'M')+px.toFixed(1)+' '+py.toFixed(1);
+    }
+    s += `<path d="${p}" fill="none" stroke="${d===selDay?'#2dd4ee':'#5f759b'}" stroke-width="1.4"/>`;
+    s += `<text x="${x0+W/14}" y="${H-3}" text-anchor="middle" class="svlbl">dia ${d+1}</text>`;
+  }
+  svg.innerHTML = s;
+}
+function playDayVector(){
+  const {hist} = State.data;
+  const day = 5;                     // dia didático fixo
+  const vec = hist.slice(day*24, day*24+24);
+  const mu = mean(vec), sd = Math.sqrt(mean(vec.map(v=>(v-mu)*(v-mu))));
+  const tags = i => { $$('.dv-tag').forEach((t,k)=>t.classList.toggle('on', k===i)); $$('.dv-arrow').forEach((a,k)=>a.classList.toggle('on', k===i-1 && i>0)); };
+  $$('.dv-cell').forEach(c => { c.classList.remove('fill'); c.style.background=''; c.textContent=''; });
+  drawDVStrip(-1); tags(0);
+  Sched.after(700, ()=>{ tags(1); drawDVStrip(day); });
+  Sched.after(1500, ()=>{
+    tags(2);
+    vec.forEach((v,h)=> Sched.after(h*55, ()=>{
+      const c = $('#dvc-'+h);
+      c.classList.add('fill'); c.textContent = Math.round(v);
+      c.style.background = 'rgba(45,212,238,.75)';
+    }));
+  });
+  Sched.after(1500 + 24*55 + 600, ()=>{
+    tags(3);
+    vec.forEach((v,h)=>{
+      const z = (v-mu)/(sd+1e-9);
+      const c = $('#dvc-'+h);
+      c.textContent = z.toFixed(1);
+      const g = clamp((z+2)/4, 0, 1);
+      c.style.background = `rgba(${Math.round(lerp(96,45,g))},${Math.round(lerp(165,212,g))},${Math.round(lerp(250,238,g))},${(0.35+0.6*g).toFixed(2)})`;
+    });
+  });
+  Sched.after(1500 + 24*55 + 1700, ()=> tags(4));
+}
+
+/* ---------------- K-Means didático (K = 6) ---------------- */
+const KM = {
+  pts: [], cents: [], iter: 0, inertia: 0, shift: 0,
+  phase: 'idle', running: false, speedLocal: 1, showLines: false, converged: false
+};
+const KM_COLORS = TYPOLOGIES.map(t=>t.cor);
+
+function kmBuild(){
+  const rng = mulberry32(hashSeed('km|'+State.data.seed));
+  KM.pts = [];
+  /* 12 dias sintéticos por tipologia → vetor 24 h z-normalizado → 2 features didáticas */
+  TYPOLOGIES.forEach((t,ti)=>{
+    for (let k=0;k<12;k++){
+      const vec = Array.from({length:24},(_,h)=> t.shape(h) + (rng()*2-1)*0.05);
+      const mu = mean(vec), sd = Math.sqrt(mean(vec.map(v=>(v-mu)*(v-mu))))+1e-9;
+      const z = vec.map(v=>(v-mu)/sd);
+      const f1 = mean(z.slice(6,12)) - mean(z.slice(0,6));   // rampa matinal
+      const f2 = mean(z.slice(15,21));                        // intensidade vespertina
+      KM.pts.push({ x:f1, y:f2, c:-1, true:ti });
+    }
+  });
+  /* centroides iniciais: 6 pontos sorteados com semente */
+  const idx = new Set();
+  while (idx.size < 6) idx.add(Math.floor(rng()*KM.pts.length));
+  KM.cents = [...idx].map(i=>({ x:KM.pts[i].x, y:KM.pts[i].y }));
+  KM.iter = 0; KM.inertia = 0; KM.shift = 0;
+  KM.phase = 'idle'; KM.converged = false; KM.showLines = false;
+  KM.pts.forEach(p=>p.c=-1);
+  $('#km-iter').textContent = '0';
+  $('#km-inertia').textContent = '—';
+  $('#km-shift').textContent = '—';
+  $('#km-status').textContent = 'aguardando';
+  $('#km-map').classList.remove('show');
+  kmDraw();
+}
+function kmAssign(){
+  let inertia = 0;
+  for (const p of KM.pts){
+    let best = 0, bd = Infinity;
+    KM.cents.forEach((c,i)=>{
+      const d = (p.x-c.x)**2 + (p.y-c.y)**2;
+      if (d < bd){ bd = d; best = i; }
+    });
+    p.c = best; inertia += bd;
+  }
+  KM.inertia = inertia;
+}
+function kmUpdate(){
+  let shift = 0;
+  KM.cents.forEach((c,i)=>{
+    const mine = KM.pts.filter(p=>p.c===i);
+    if (!mine.length) return;
+    const nx = mean(mine.map(p=>p.x)), ny = mean(mine.map(p=>p.y));
+    shift += Math.hypot(nx-c.x, ny-c.y);
+    c.tx = nx; c.ty = ny;                 // alvo para animar
+  });
+  KM.shift = shift / KM.cents.length;
+}
+function kmDraw(centLerp=1){
+  const cv = $('#chart-km'); const s = setupCanvas(cv); if (!s) return;
+  const {ctx,w,h} = s;
+  ctx.clearRect(0,0,w,h);
+  const xs = KM.pts.map(p=>p.x), ys = KM.pts.map(p=>p.y);
+  const xMin = Math.min(...xs)-.25, xMax = Math.max(...xs)+.25;
+  const yMin = Math.min(...ys)-.25, yMax = Math.max(...ys)+.25;
+  const X = x => 40 + (x-xMin)/(xMax-xMin)*(w-56);
+  const Y = y => h-30 - (y-yMin)/(yMax-yMin)*(h-46);
+  ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
+  ctx.strokeRect(40, 16, w-56, h-46);
+  ctx.fillStyle = C.txt; ctx.font = '10px ui-monospace,monospace';
+  ctx.fillText('f₁ · rampa matinal →', w/2-50, h-8);
+  ctx.save(); ctx.translate(12, h/2+58); ctx.rotate(-Math.PI/2);
+  ctx.fillText('f₂ · intensidade vespertina →', 0, 0); ctx.restore();
+  const cpos = KM.cents.map(c=>({
+    x: c.tx !== undefined ? lerp(c.x, c.tx, centLerp) : c.x,
+    y: c.ty !== undefined ? lerp(c.y, c.ty, centLerp) : c.y
+  }));
+  if (KM.showLines){
+    ctx.globalAlpha = .3; ctx.lineWidth = .7;
+    for (const p of KM.pts){
+      if (p.c < 0) continue;
+      ctx.strokeStyle = KM_COLORS[p.c];
+      ctx.beginPath(); ctx.moveTo(X(p.x),Y(p.y)); ctx.lineTo(X(cpos[p.c].x),Y(cpos[p.c].y)); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+  for (const p of KM.pts){
+    ctx.fillStyle = p.c >= 0 ? KM_COLORS[p.c] : '#5f759b';
+    ctx.beginPath(); ctx.arc(X(p.x), Y(p.y), 4, 0, 7); ctx.fill();
+  }
+  cpos.forEach((c,i)=>{
+    ctx.strokeStyle = KM_COLORS[i]; ctx.lineWidth = 2.2; ctx.fillStyle = '#050b19';
+    ctx.beginPath(); ctx.arc(X(c.x), Y(c.y), 9, 0, 7); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = KM_COLORS[i];
+    ctx.beginPath(); ctx.moveTo(X(c.x)-4,Y(c.y)); ctx.lineTo(X(c.x)+4,Y(c.y));
+    ctx.moveTo(X(c.x),Y(c.y)-4); ctx.lineTo(X(c.x),Y(c.y)+4); ctx.stroke();
+  });
+}
+function kmIterate(auto, onConverge){
+  if (KM.converged){ onConverge && onConverge(); return; }
+  KM.phase = 'assign'; KM.running = true;
+  $('#km-status').textContent = 'atribuindo pontos…';
+  const D = ms => ms / KM.speedLocal;
+  KM.showLines = true; kmAssign(); kmDraw();
+  Sched.after(D(750), ()=>{
+    $('#km-status').textContent = 'movendo centroides…';
+    kmUpdate();
+    Sched.tween(D(650), p => kmDraw(smoothstep(p)), ()=>{
+      KM.cents.forEach(c=>{ if (c.tx!==undefined){ c.x=c.tx; c.y=c.ty; delete c.tx; delete c.ty; } });
+      KM.showLines = false;
+      KM.iter++;
+      $('#km-iter').textContent = KM.iter;
+      $('#km-inertia').textContent = fmt(KM.inertia,1);
+      $('#km-shift').textContent = fmt(KM.shift,4) + ' ';
+      kmDraw();
+      const conv = KM.shift < 0.004 || KM.iter >= 14;
+      if (conv){ kmConverge(onConverge); }
+      else if (auto){ Sched.after(D(420), ()=> kmIterate(true, onConverge)); }
+      else { KM.running = false; $('#km-status').textContent = 'pausado entre iterações'; }
+    });
+  });
+}
+function kmConverge(cb){
+  KM.converged = true; KM.running = false;
+  $('#km-status').textContent = '✔ convergiu';
+  $('#km-status').style.color = 'var(--green)';
+  /* transformação visual: clusters → cards de tipologia */
+  const map = $('#km-map');
+  const chips = KM.cents.map((c,i)=>{
+    const mine = KM.pts.filter(p=>p.c===i);
+    const counts = new Array(6).fill(0);
+    mine.forEach(p=>counts[p.true]++);
+    const tIdx = counts.indexOf(Math.max(...counts));
+    return `<span class="km-chip"><span class="cdot" style="background:${KM_COLORS[i]}"></span>cluster ${i+1} → <b style="color:var(--text)">&nbsp;${TYPOLOGIES[tIdx].nome}</b>&nbsp;(${mine.length} dias)</span>`;
+  }).join('');
+  map.innerHTML = `<span class="plain" style="width:100%">Os seis clusters convergidos correspondem às seis tipologias:</span>` + chips;
+  map.classList.add('show');
+  $$('#tip-grid .tip-card').forEach(c=>c.classList.add('km-glow'));
+  Sched.after(3400, ()=> $$('#tip-grid .tip-card').forEach(c=>c.classList.remove('km-glow')));
+  State.kmDone = true;
+  cb && cb();
+}
+
+/* ---------------- Modelos ---------------- */
+const MODELS = [
+  { key:'SARIMAX', cor:'#e879b9', dur:5200,
+    skill:[.86,.80,.82,.84,.81,.885], nSens:.10, dPen:.13, decay:.05,
+    fases:['identificando (p,d,q)(P,D,Q)ₛ','estimando φ, θ e β por máx. verossimilhança','projetando recursivamente ŷₜ₊ₕ','diagnóstico de resíduos'],
+    resumo:'Modelo estatístico clássico: combina autorregressão, diferenciação, médias móveis dos erros, componente sazonal e variáveis exógenas. Forte quando a sazonalidade é estável; sofre com mudanças de regime.',
+    ficha:['SARIMAX Híbrido — atua sobre os componentes diários offset e amplitude (não sobre a série horária bruta); o shape horário reconstrói a curva na Eq. (4.3).',
+      'Sazonal fixado em (0,0,1)₅, período s = 5 (ciclo semanal de dias úteis das séries de componentes) — não s = 24.',
+      'Ordens não sazonais (p,d,q) por busca em grade (p∈{0,1,2}, d∈{0,1}, q∈{0,1,2}) minimizando AIC sobre a série diária de offset.',
+      'Melhor ordem por tipologia: T1 (0,1,2) · T2 (2,1,1) · T3 (2,1,2) · T4 (1,1,1) · T5 (1,1,2) · T6 (1,1,2).'] },
+  { key:'XGBoost', cor:'#60a5fa', dur:3600,
+    skill:[.84,.87,.845,.85,.86,.84], nSens:.07, dPen:.055, decay:.035,
+    fases:['gerando matriz de features (lags, janelas móveis, calendário Fourier)','crescendo árvores sequenciais sobre resíduos','aplicando shrinkage η e regularização','somando o ensemble'],
+    resumo:'Gradient boosting de árvores sobre features tabulares (lags, janelas móveis, calendário). Captura não linearidades e interações; depende da qualidade do feature engineering.',
+    ficha:['Modelagem horária nativa (sem decomposição), previsão recursiva multi-passo — cada hora prevista realimenta as defasagens da hora seguinte.',
+      'Features: lags de 1, 2, 3, 24, 48 e 168 h; média, desvio, mínimo e máximo móveis em janelas de 24 h e 168 h (via shift(1), sem vazamento); hora e dia da semana com codificação de Fourier (1º e 2º harmônicos); exógenas do cenário.',
+      'Hiperparâmetros: n_estimators=400, max_depth=6, learning_rate=0,06, subsample=0,85, colsample_bytree=0,85, reg_lambda=1,0, min_child_weight=2, random_state=42.'] },
+  { key:'LSTM', cor:'#a78bfa', dur:6400,
+    skill:[.82,.83,.86,.83,.84,.85], nSens:.085, dPen:.075, decay:.06,
+    fases:['montando janelas sequenciais dos componentes diários','épocas de treino — gates aprendendo o que lembrar','propagando estado de célula cₜ','gerando previsões recorrentes'],
+    resumo:'Rede recorrente profunda com célula de memória e três gates (forget, input, output). Aprende dependências longas e suaviza a previsão; tende a atrasar levemente reações a quebras bruscas.',
+    ficha:['Atua sobre os mesmos componentes diários do SARIMAX (offset e amplitude), com arquitetura empilhada: BiLSTM 64 (tanh) → LSTM 48 (tanh) → LSTM 32 (tanh) → Dense 32 (relu) → Dropout 0,15 → Dense 1 (linear).',
+      'Janela de 30 lags diários, entradas normalizadas Min-Max, perda MSE, otimizador Adam (clipnorm 1,0), dropout 0,15, regularização L2 1e-5 em todas as camadas.',
+      'Early stopping + ReduceLROnPlateau sobre a validação; semente fixa 42 e modo determinístico do TensorFlow (execuções reprodutíveis).'] },
+  { key:'TFT', cor:'#fb923c', dur:7200,
+    skill:[.875,.885,.875,.885,.87,.862], nSens:.055, dPen:.025, decay:.02,
+    fases:['seleção de variáveis (VSN + softmax)','encoder/decoder LSTM sobre passado e futuro conhecido','multi-head attention nos tempos relevantes','saídas por quantil P10/P50/P90'],
+    resumo:'Transformer híbrido com seleção de variáveis, LSTMs locais, atenção interpretável e saídas quantílicas. Muito adaptável a regimes e horizontes; o mais robusto do conjunto na média.',
+    ficha:['Modelo global: um único TFT por cenário (3 ao todo), treinado sobre as seis tipologias simultaneamente usando a tipologia como group_id — permite transferência implícita entre séries.',
+      'max_encoder_length=48 (2 dias úteis), max_prediction_length=24, hidden_size=8, attention_head_size=1, dropout=0,10, hidden_continuous_size=4.',
+      'learning_rate=0,01, perda RMSE, otimizador Adam, max_epochs=15 com early stopping (paciência 5), train_lookback_days=120.',
+      'Atributos conhecidos no tempo: hora_sin, hora_cos, dow_sin, dow_cos, time_idx_norm + exógenas do cenário. Alvo escalonado por z-score manual (estatísticas do treino).'] },
+  { key:'TimesFM', cor:'#f0c14b', dur:4600,
+    skill:[.85,.845,.85,.862,.88,.868], nSens:.06, dPen:.045, decay:.015,
+    fases:['normalizando contexto e criando patches','embeddings → blocos decoder-only pré-treinados','atenção causal sobre o contexto','rollout day-ahead a cada bloco de 24 h'],
+    resumo:'Modelo fundacional pré-treinado em larga escala: inferência zero-shot, sem treino local. Divide o contexto em patches e gera o futuro por rollout — generalização forte e estável no horizonte.',
+    ficha:['Checkpoint google/timesfm-2.5-200m (≈200M parâmetros, backend PyTorch), pré-treinado em ~100 bilhões de pontos; carregado e aplicado sem re-treinamento (zero-shot).',
+      'Protocolo rolling day-ahead: a cada bloco de 24 h do teste, contexto = histórico real até o início do dia (max_context=512), prevendo max_horizon=24 h seguintes.',
+      'normalize_inputs ativo, cabeça de quantis contínua habilitada, previsões negativas truncadas em zero.',
+      'Exógenas via "XReg + TimesFM": regressão Ridge (α=1,0, exógenas padronizadas) no contexto estima a parte linear; o TimesFM prevê os resíduos; a previsão final soma as duas partes.'] }
+];
+const MODEL_BY_KEY = Object.fromEntries(MODELS.map(m=>[m.key,m]));
+
+function genForecasts(){
+  const {future, naive} = State.data;
+  const H = State.hor, n = State.noise/100, d = diffLevel();
+  State.forecasts = {};
+  MODELS.forEach((m,mi)=>{
+    const rng = mulberry32(hashSeed(m.key + '|' + State.data.seed));
+    const w0 = clamp(m.skill[State.tip] - m.nSens*n - m.dPen*d, .45, .97);
+    let ema = null, arn = 0;
+    const pred = new Array(H);
+    for (let t=0; t<H; t++){
+      const w = clamp(w0 - m.decay*(t/H), .35, .97);
+      arn = 0.5*arn + (rng()*2-1);
+      let v = w*future[t] + (1-w)*naive[t] + arn * BASE_KW*0.012*(0.5+n);
+      if (m.key === 'XGBoost'){                       // degraus leves das folhas
+        const step = BASE_KW*0.02;
+        v = 0.72*v + 0.28*(Math.round(v/step)*step);
+      }
+      if (m.key === 'LSTM'){                          // suavização + leve atraso
+        ema = ema === null ? v : 0.62*v + 0.38*ema;
+        v = t>0 ? 0.86*ema + 0.14*(0.5*future[t-1]+0.5*naive[t]) : ema;
+      }
+      if (m.key === 'TimesFM' && t % 8 === 7){        // fronteira de patch: leve reancoragem
+        v = 0.9*v + 0.1*naive[t];
+      }
+      pred[t] = Math.max(30, v);
+    }
+    State.forecasts[m.key] = pred;
+    State.revealed[m.key] = 0;
+  });
+}
+
+/* ---------------- Cards + execução paralela ---------------- */
+function buildModelCards(){
+  const wrap = $('#model-cards'); wrap.innerHTML = '';
+  MODELS.forEach(m=>{
+    const c = document.createElement('div');
+    c.className = 'mcard'; c.id = 'mc-'+m.key;
+    c.style.setProperty('--mc', m.cor);
+    c.innerHTML = `
+      <h3><span style="color:${m.cor}">${m.key}</span><span class="mstatus" id="ms-${m.key}">aguardando</span></h3>
+      <div class="metapa" id="me-${m.key}">${m.resumo.split('.')[0]}.</div>
+      <div class="mbar"><i id="mb-${m.key}"></i></div>
+      <div class="mrow"><span>progresso <b id="mp-${m.key}">0%</b></span><span>t <b id="mt-${m.key}">0,0s</b></span></div>
+      <div class="mrow"><span>RMSE parcial</span><b id="mr-${m.key}">—</b></div>
+      <canvas id="mcv-${m.key}" aria-label="Minigráfico do modelo ${m.key}"></canvas>
+      <details class="mspec" onclick="event.stopPropagation()">
+        <summary>📄 Ficha técnica (Qualificação de Mestrado)</summary>
+        <ul>${m.ficha.map(f=>`<li>${f}</li>`).join('')}</ul>
+      </details>`;
+    c.addEventListener('click', ()=> setFocus(m.key));
+    wrap.appendChild(c);
+  });
+}
+function partialRMSE(key, upTo){
+  const {future} = State.data, pred = State.forecasts[key];
+  if (!upTo) return null;
+  let s = 0;
+  for (let i=0;i<upTo;i++) s += (future[i]-pred[i])**2;
+  return Math.sqrt(s/upTo);
+}
+function drawMini(key){
+  const cv = $('#mcv-'+key); const s = setupCanvas(cv); if (!s) return;
+  const {ctx,w,h} = s;
+  const {future} = State.data, pred = State.forecasts[key], up = State.revealed[key];
+  const all = future.concat(pred);
+  const mn = Math.min(...all)*.96, mx = Math.max(...all)*1.04;
+  const X = i => 3 + i/(State.hor-1)*(w-6);
+  const Y = v => h-3 - (v-mn)/(mx-mn+1e-9)*(h-6);
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle = 'rgba(55,217,155,.75)'; ctx.lineWidth = 1.1; ctx.beginPath();
+  future.forEach((v,i)=> i ? ctx.lineTo(X(i),Y(v)) : ctx.moveTo(X(i),Y(v))); ctx.stroke();
+  ctx.strokeStyle = MODEL_BY_KEY[key].cor; ctx.lineWidth = 1.5; ctx.beginPath();
+  for (let i=0;i<up;i++) i ? ctx.lineTo(X(i),Y(pred[i])) : ctx.moveTo(X(i),Y(pred[i]));
+  ctx.stroke();
+}
+let lastGlobalDraw = 0;
+function runAllModels(onAllDone){
+  if (!State.forecasts) genForecasts();
+  State.running = true;
+  setStatus('run','Rodando os cinco modelos…');
+  let pending = MODELS.length;
+  const rngJ = mulberry32(hashSeed('durs|'+State.data.seed));
+  MODELS.forEach(m=>{
+    State.revealed[m.key] = 0;
+    const card = $('#mc-'+m.key);
+    card.classList.add('running'); card.classList.remove('done');
+    $('#ms-'+m.key).textContent = 'executando';
+    const dur = m.dur * (0.92 + rngJ()*0.18) * (State.hor/48 + .5);
+    Sched.tween(dur, (p)=>{
+      const up = Math.max(1, Math.floor(p*State.hor));
+      State.revealed[m.key] = up;
+      const fi = Math.min(m.fases.length-1, Math.floor(p*m.fases.length));
+      $('#me-'+m.key).textContent = m.fases[fi];
+      $('#mb-'+m.key).style.width = (p*100).toFixed(0)+'%';
+      $('#mp-'+m.key).textContent = (p*100).toFixed(0)+'%';
+      $('#mt-'+m.key).textContent = fmt(p*dur/1000,1)+'s';
+      const r = partialRMSE(m.key, up);
+      $('#mr-'+m.key).textContent = r ? fmt(r,1)+' kW' : '—';
+      drawMini(m.key);
+      const now = performance.now();
+      if (now - lastGlobalDraw > 70){ lastGlobalDraw = now; drawGlobal(); drawSmalls(); }
+    }, ()=>{
+      State.revealed[m.key] = State.hor;
+      card.classList.remove('running'); card.classList.add('done');
+      $('#ms-'+m.key).textContent = '✔ concluído';
+      $('#me-'+m.key).textContent = 'previsão completa no horizonte de '+State.hor+' h';
+      $('#mb-'+m.key).style.width = '100%'; $('#mp-'+m.key).textContent = '100%';
+      drawMini(m.key); drawGlobal(); drawSmalls();
+      if (--pending === 0){
+        State.running = false;
+        computeMetrics(); renderScoreboard(); drawHBars(); renderFocusSummary();
+        setStatus('ok','Modelos concluídos — métricas atualizadas');
+        onAllDone && onAllDone();
+      }
+    });
+  });
+}
+
+/* ---------------- Gráfico global + small multiples ---------------- */
+function buildGlobalLegend(){
+  const lg = $('#legend-global'); lg.innerHTML = '';
+  const items = [
+    {key:'_hist', name:'Histórico (últimas 48 h)', cor:C.hist},
+    {key:'_real', name:'Realizado', cor:C.real},
+    ...MODELS.map(m=>({key:m.key, name:m.key, cor:m.cor}))
+  ];
+  items.forEach(it=>{
+    const li = document.createElement('span');
+    li.className = 'li' + (State.hidden[it.key] ? ' off' : '');
+    li.setAttribute('role','button'); li.tabIndex = 0;
+    li.setAttribute('aria-label','Alternar exibição de '+it.name);
+    li.innerHTML = `<span class="sw" style="background:${it.cor}"></span>${it.name}`;
+    const tg = ()=>{ State.hidden[it.key] = !State.hidden[it.key]; li.classList.toggle('off'); drawGlobal(); };
+    li.addEventListener('click', tg);
+    li.addEventListener('keydown', e=>{ if (e.key==='Enter'||e.key===' '){ e.preventDefault(); tg(); } });
+    lg.appendChild(li);
+  });
+}
+function drawGlobal(){
+  const cv = $('#chart-global'); const s = setupCanvas(cv); if (!s) return;
+  const {ctx,w,h} = s;
+  const {hist,future} = State.data;
+  const showHist = 48;                                 // zoom no fim do histórico + horizonte
+  const xMin = HIST_N - showHist, xMax = HIST_N + State.hor;
+  const pad = {l:52,t:16,r:14,b:26};
+  const vis = hist.slice(xMin).concat(future);
+  const yMin = Math.min(...vis)*.92, yMax = Math.max(...vis)*1.07;
+  const {X,Y} = drawFrame(ctx,w,h,pad,yMin,yMax,xMin,xMax,12);
+  ctx.strokeStyle = C.real; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(X(HIST_N),pad.t); ctx.lineTo(X(HIST_N),h-pad.b); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = C.real; ctx.fillText('histórico | futuro', X(HIST_N)-46, pad.t+11);
+  const series = [];
+  if (!State.hidden._hist){
+    drawLine(ctx,X,Y,hist.slice(xMin),xMin,C.hist,1.4);
+    series.push({name:'Histórico',color:C.hist,data:hist.slice(xMin),offset:xMin,n:showHist});
+  }
+  if (!State.hidden._real){
+    drawLine(ctx,X,Y,future,HIST_N,C.real,2.6);
+    series.push({name:'Realizado',color:C.real,data:future,offset:HIST_N,n:future.length});
+  }
+  MODELS.forEach(m=>{
+    if (State.hidden[m.key] || !State.forecasts) return;
+    const up = State.revealed[m.key] || 0;
+    const isF = m.key === State.focus;
+    ctx.globalAlpha = isF ? 1 : .78;
+    drawLine(ctx,X,Y,State.forecasts[m.key],HIST_N,m.cor,isF?2.4:1.4,null,up);
+    ctx.globalAlpha = 1;
+    if (up>0) series.push({name:m.key,color:m.cor,data:State.forecasts[m.key],offset:HIST_N,n:up});
+  });
+  chartMeta.set(cv,{xMin,xMax,pad,w,series});
+}
+function buildSmalls(){
+  const wrap = $('#smalls'); wrap.innerHTML = '';
+  MODELS.forEach(m=>{
+    const d = document.createElement('div');
+    d.className = 'sm'; d.id = 'sm-'+m.key;
+    d.style.setProperty('--smc', m.cor);
+    d.tabIndex = 0;
+    d.setAttribute('aria-label','Selecionar '+m.key+' como modelo em foco');
+    d.innerHTML = `
+      <h4><span style="color:${m.cor}">${m.key} vs realizado</span><span class="sst" id="sms-${m.key}">aguardando</span></h4>
+      <canvas id="smc-${m.key}"></canvas>
+      <div class="smx">
+        <span>RMSE <b id="smr-${m.key}">—</b></span>
+        <span>MAE <b id="sma-${m.key}">—</b></span>
+        <span>MAPE <b id="smp-${m.key}">—</b></span>
+      </div>`;
+    d.addEventListener('click', ()=> setFocus(m.key));
+    d.addEventListener('keydown', e=>{ if (e.key==='Enter') setFocus(m.key); });
+    wrap.appendChild(d);
+  });
+}
+function drawSmalls(){
+  MODELS.forEach(m=>{
+    const cv = $('#smc-'+m.key); const s = setupCanvas(cv); if (!s) return;
+    const {ctx,w,h} = s;
+    const {future} = State.data, pred = State.forecasts ? State.forecasts[m.key] : null;
+    const all = pred ? future.concat(pred) : future;
+    const mn = Math.min(...all)*.95, mx = Math.max(...all)*1.05;
+    const X = i => 4 + i/(State.hor-1)*(w-8);
+    const Y = v => h-4 - (v-mn)/(mx-mn+1e-9)*(h-8);
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle = C.real; ctx.lineWidth = 1.7; ctx.beginPath();
+    future.forEach((v,i)=> i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v))); ctx.stroke();
+    if (pred){
+      const up = State.revealed[m.key]||0;
+      ctx.strokeStyle = m.cor; ctx.lineWidth = 1.4; ctx.beginPath();
+      for (let i=0;i<up;i++) i?ctx.lineTo(X(i),Y(pred[i])):ctx.moveTo(X(i),Y(pred[i]));
+      ctx.stroke();
+      $('#sms-'+m.key).textContent = up>=State.hor ? 'concluído' : up>0 ? 'rodando' : 'aguardando';
+    }
+    if (State.metrics && State.metrics[m.key]){
+      const M = State.metrics[m.key];
+      $('#smr-'+m.key).textContent = fmt(M.RMSE,1);
+      $('#sma-'+m.key).textContent = fmt(M.MAE,1);
+      $('#smp-'+m.key).textContent = fmt(M.MAPE,2)+'%';
+    }
+    $('#sm-'+m.key).classList.toggle('focus', m.key===State.focus);
+  });
+}
+function setFocus(key){
+  State.focus = key;
+  $('#sel-focus').value = key;
+  $$('.mcard').forEach(c=>c.classList.toggle('focus', c.id==='mc-'+key));
+  drawGlobal(); drawSmalls(); renderFocusSummary();
+  if (State.sync){
+    const mod = $('#lab-'+key.toLowerCase());
+    if (mod) mod.scrollIntoView({behavior: REDUCED?'auto':'smooth', block:'nearest'});
+  }
+}
+
+/* ---------------- Métricas (cálculo real) ---------------- */
+function metricsFor(real, pred){
+  const n = real.length;
+  let sae=0, sse=0, spe=0, sst=0, sabsY=0;
+  const mu = mean(real);
+  for (let i=0;i<n;i++){
+    const e = real[i]-pred[i];
+    sae += Math.abs(e); sse += e*e;
+    spe += Math.abs(e/real[i]);
+    sst += (real[i]-mu)*(real[i]-mu);
+    sabsY += Math.abs(real[i]);
+  }
+  const MSE = sse/n;
+  const WAPE = sae/(sabsY+1e-9);                 // Eq. (4.5) da Qualificação — ∑|e| / ∑|y|
+  return { MAE:sae/n, MSE, RMSE:Math.sqrt(MSE), MAPE:100*spe/n, R2: 1 - sse/(sst+1e-9),
+    WAPE:100*WAPE, Assertividade:(1-WAPE)*100 };
+}
+function computeMetrics(){
+  State.metrics = {};
+  MODELS.forEach(m=>{ State.metrics[m.key] = metricsFor(State.data.future, State.forecasts[m.key]); });
+}
+
+/* ---------------- Scoreboard e rankings ---------------- */
+let rankCrit = 'RMSE';
+function renderScoreboard(){
+  if (!State.metrics) return;
+  const rows = MODELS.map(m=>({key:m.key, cor:m.cor, ...State.metrics[m.key]}));
+  const best = k => (k==='R2')
+    ? rows.reduce((a,b)=>b.R2>a.R2?b:a)
+    : rows.reduce((a,b)=>b[k]<a[k]?b:a);
+  const champ = best('RMSE');
+  const bestA = rows.reduce((a,b)=>b.Assertividade>a.Assertividade?b:a);
+  $('#score-body').innerHTML = rows.map(r=>`
+    <tr class="${r.key===champ.key?'champ':''}">
+      <td><span class="mdot" style="background:${r.cor}"></span>${r.key}${r.key===champ.key?' 🏆':''}</td>
+      <td class="${r.key===best('MAE').key?'best':''}">${fmt(r.MAE,1)}</td>
+      <td class="${r.key===best('MSE').key?'best':''}">${fmt(r.MSE,0)}</td>
+      <td class="${r.key===best('RMSE').key?'best':''}">${fmt(r.RMSE,1)}</td>
+      <td class="${r.key===best('MAPE').key?'best':''}">${fmt(r.MAPE,2)}</td>
+      <td class="${r.key===best('R2').key?'best':''}">${fmt(r.R2,3)}</td>
+      <td class="${r.key===bestA.key?'best':''}">${fmt(r.Assertividade,1)}%</td>
+    </tr>`).join('');
+  $('#champ').classList.add('show');
+  $('#champ-txt').innerHTML = `Campeão por RMSE (critério primário): <b>${champ.key}</b> — RMSE ${fmt(champ.RMSE,1)} kW · MAE ${fmt(champ.MAE,1)} kW · MAPE ${fmt(champ.MAPE,2)}% · R² ${fmt(champ.R2,3)} · Assertividade ${fmt(champ.Assertividade,1)}% — tipologia <b>${TYPOLOGIES[State.tip].nome}</b>, horizonte ${State.hor} h.`;
+  renderRankBars();
+}
+function renderRankBars(){
+  if (!State.metrics) return;
+  const rows = MODELS.map(m=>({key:m.key, cor:m.cor, ...State.metrics[m.key]}));
+  const higherBetter = rankCrit === 'R2' || rankCrit === 'Assertividade';
+  const asc = !higherBetter;
+  rows.sort((a,b)=> asc ? a[rankCrit]-b[rankCrit] : b[rankCrit]-a[rankCrit]);
+  const vmax = Math.max(...rows.map(r=>Math.abs(r[rankCrit]))) + 1e-9;
+  const unit = rankCrit==='MAPE'||rankCrit==='Assertividade' ? '%' : rankCrit==='R2' ? '' : ' kW';
+  $('#rank-bars').innerHTML = rows.map((r,i)=>`
+    <div class="rbar">
+      <span class="rn">${i+1}º · ${r.key}${i===0?' ★':''}</span>
+      <div class="rt"><i style="background:${r.cor}" data-w="${(Math.abs(r[rankCrit])/vmax*100).toFixed(1)}"></i></div>
+      <span class="rv">${fmt(r[rankCrit], rankCrit==='R2'?3:rankCrit==='MAPE'||rankCrit==='Assertividade'?1:1)}${unit}</span>
+    </div>`).join('');
+  requestAnimationFrame(()=> $$('#rank-bars .rt i').forEach(i=> i.style.width = i.dataset.w+'%'));
+}
+function renderFocusSummary(){
+  const m = MODEL_BY_KEY[State.focus];
+  const M = State.metrics ? State.metrics[m.key] : null;
+  $('#focus-summary').innerHTML = `
+    <h3 style="color:${m.cor};font-size:14px">Modelo em foco — ${m.key}</h3>
+    <p class="plain mts">${m.resumo}</p>
+    ${M ? `<p class="plain mts" style="font-family:var(--f-mono)">RMSE ${fmt(M.RMSE,1)} kW · MAE ${fmt(M.MAE,1)} kW · MSE ${fmt(M.MSE,0)} · MAPE ${fmt(M.MAPE,2)}% · R² ${fmt(M.R2,3)} · Assertividade ${fmt(M.Assertividade,1)}%</p>` : '<p class="plain mts">Rode os modelos para ver as métricas.</p>'}`;
+}
+
+/* ---------------- Anatomia do erro ---------------- */
+const Anat = { i: -1, task: null };
+function drawAnat(){
+  const cv = $('#chart-anat'); const s = setupCanvas(cv); if (!s) return;
+  const {ctx,w,h} = s;
+  const {future} = State.data;
+  const pred = State.forecasts ? State.forecasts[State.focus] : null;
+  const pad = {l:50,t:14,r:12,b:24};
+  const all = pred ? future.concat(pred) : future;
+  const yMin = Math.min(...all)*.92, yMax = Math.max(...all)*1.07;
+  const {X,Y} = drawFrame(ctx,w,h,pad,yMin,yMax,0,State.hor-1,6);
+  const mu = mean(future);
+  ctx.strokeStyle = 'rgba(143,166,201,.6)'; ctx.setLineDash([2,5]);
+  ctx.beginPath(); ctx.moveTo(pad.l,Y(mu)); ctx.lineTo(w-pad.r,Y(mu)); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = '#8fa6c9'; ctx.fillText('média do realizado (base do R²)', pad.l+4, Y(mu)-4);
+  drawLine(ctx,X,Y,future,0,C.real,2);
+  if (!pred) return;
+  const mcor = MODEL_BY_KEY[State.focus].cor;
+  drawLine(ctx,X,Y,pred,0,mcor,1.5);
+  const up = Anat.i >= 0 ? Anat.i+1 : 0;
+  for (let i=0;i<up;i++){                         // linhas verticais de erro
+    ctx.strokeStyle = i===Anat.i ? '#f4796f' : 'rgba(244,121,111,.3)';
+    ctx.lineWidth = i===Anat.i ? 2.2 : 1;
+    ctx.beginPath(); ctx.moveTo(X(i),Y(future[i])); ctx.lineTo(X(i),Y(pred[i])); ctx.stroke();
+  }
+  if (Anat.i >= 0){
+    const i = Anat.i;
+    ctx.fillStyle = C.real; ctx.beginPath(); ctx.arc(X(i),Y(future[i]),4.5,0,7); ctx.fill();
+    ctx.fillStyle = mcor; ctx.beginPath(); ctx.arc(X(i),Y(pred[i]),4.5,0,7); ctx.fill();
+  }
+}
+function anatStep(){
+  const {future} = State.data, pred = State.forecasts[State.focus];
+  const i = Anat.i;
+  const y = future[i], yh = pred[i], e = y-yh;
+  let sae=0, sse=0, spe=0, sst=0;
+  const mu = mean(future);
+  for (let k=0;k<=i;k++){
+    const ek = future[k]-pred[k];
+    sae += Math.abs(ek); sse += ek*ek; spe += Math.abs(ek/future[k]);
+    sst += (future[k]-mu)*(future[k]-mu);
+  }
+  const n = i+1;
+  $('#an-t').textContent = 't = '+i;
+  $('#an-y').textContent = fmt(y,1)+' kW';
+  $('#an-yh').textContent = fmt(yh,1)+' kW';
+  $('#an-e').textContent = (e>=0?'+':'')+fmt(e,1)+' kW';
+  $('#an-ae').textContent = fmt(Math.abs(e),1)+' kW';
+  $('#an-e2').textContent = fmt(e*e,0);
+  $('#an-mae').textContent = fmt(sae/n,1)+' kW';
+  $('#an-rmse').textContent = fmt(Math.sqrt(sse/n),1)+' kW';
+  $('#an-mape').textContent = fmt(100*spe/n,2)+'%';
+  $('#an-r2').textContent = sst>0 ? fmt(1-sse/sst,3) : '—';
+  drawAnat();
+}
+function anatPlay(){
+  if (!State.forecasts || State.revealed[State.focus] < State.hor){ toast('Rode os cinco modelos primeiro para animar a anatomia do erro.', null); return; }
+  if (Anat.task) Sched.cancel(Anat.task);
+  Anat.i = -1;
+  const total = State.hor;
+  Anat.task = Sched.tween(total*230, p=>{
+    const i = Math.min(total-1, Math.floor(p*total));
+    if (i !== Anat.i){ Anat.i = i; anatStep(); }
+  }, ()=>{ Anat.task = null; });
+}
+
+/* ---------------- Erro por bloco de horizonte ---------------- */
+function drawHBars(){
+  const cv = $('#chart-hbars'); const s = setupCanvas(cv); if (!s) return;
+  const {ctx,w,h} = s;
+  ctx.clearRect(0,0,w,h);
+  if (!State.metrics){ ctx.fillStyle = C.txt; ctx.font='12px system-ui'; ctx.fillText('Rode os modelos para calcular o erro por horizonte.', 20, h/2); return; }
+  const {future} = State.data;
+  const blocks = Math.ceil(State.hor/24);
+  const data = MODELS.map(m=>{
+    const p = State.forecasts[m.key];
+    return Array.from({length:blocks},(_,b)=>{
+      const a = b*24, z = Math.min(State.hor,(b+1)*24);
+      let sse=0; for (let i=a;i<z;i++) sse += (future[i]-p[i])**2;
+      return Math.sqrt(sse/(z-a));
+    });
+  });
+  const vmax = Math.max(...data.flat())*1.15;
+  const pad = {l:50,t:14,r:12,b:30};
+  const bw = (w-pad.l-pad.r)/blocks;
+  ctx.font = '10px ui-monospace,monospace';
+  ctx.strokeStyle = C.grid; ctx.fillStyle = C.txt;
+  for (let i=0;i<=4;i++){
+    const v = vmax*i/4, yy = h-pad.b-(v/vmax)*(h-pad.t-pad.b);
+    ctx.beginPath(); ctx.moveTo(pad.l,yy); ctx.lineTo(w-pad.r,yy); ctx.stroke();
+    ctx.fillText(fmt(v,0), 6, yy+3);
+  }
+  for (let b=0;b<blocks;b++){
+    ctx.fillStyle = C.txt;
+    ctx.fillText(`h+${b*24+1}–${Math.min(State.hor,(b+1)*24)}`, pad.l + b*bw + bw/2 - 26, h-10);
+    MODELS.forEach((m,mi)=>{
+      const v = data[mi][b];
+      const barW = Math.min(26, bw/7);
+      const x = pad.l + b*bw + bw/2 + (mi-2)*(barW+3) - barW/2;
+      const bh = (v/vmax)*(h-pad.t-pad.b);
+      ctx.fillStyle = m.cor;
+      ctx.fillRect(x, h-pad.b-bh, barW, bh);
+      ctx.fillStyle = '#8fa6c9';
+      ctx.fillText(fmt(v,0), x-2, h-pad.b-bh-4);
+    });
+  }
+  ctx.fillStyle = C.txt; ctx.fillText('RMSE (kW) por bloco de 24 h', pad.l, 10);
+}
+/* =====================================================================
+   LABORATÓRIO VISUAL — reconstruções vetoriais + engine de etapas
+   ===================================================================== */
+
+/* Helpers de construção SVG */
+function sBox(id,x,y,w,h,l1,l2,ac,tip){
+  const t2 = l2 ? `<text x="${x+w/2}" y="${y+h/2+13}" text-anchor="middle" font-size="9.5" class="fxsvg">${l2}</text>` : '';
+  return `<g class="blk" id="${id}" data-block="${id}" tabindex="0" role="button" ${tip?`data-tip="${tip}"`:''} style="--ac:${ac||'var(--cyan)'}">
+    <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9"/>
+    <text x="${x+w/2}" y="${y+h/2+(l2?-2:4)}" text-anchor="middle" font-size="11.5">${l1}</text>${t2}</g>`;
+}
+function sCirc(id,x,y,r,lbl,ac,tip){
+  return `<g class="blk" id="${id}" data-block="${id}" tabindex="0" role="button" ${tip?`data-tip="${tip}"`:''} style="--ac:${ac||'var(--cyan)'}">
+    <circle cx="${x}" cy="${y}" r="${r}"/><text x="${x}" y="${y+4.5}" text-anchor="middle" font-size="${r>16?13:11}">${lbl}</text></g>`;
+}
+function sWire(id,d,ac){ return `<path class="wire" id="${id}" d="${d}" style="--ac:${ac||'var(--cyan)'}"/>`; }
+function sLbl(x,y,t,big){ return `<text x="${x}" y="${y}" class="svlbl${big?' big':''}">${t}</text>`; }
+
+/* Engine de etapas — reprodução, passo a passo, pausa, velocidade */
+class StepPlayer{
+  constructor(root, def){
+    this.root = root; this.def = def; this.i = -1;
+    this.task = null; this.speedLocal = 1; this.playing = false; this.onComplete = null;
+    root.querySelector('[data-act=play]').addEventListener('click', ()=> this.playing ? this.stop() : this.play());
+    root.querySelector('[data-act=next]').addEventListener('click', ()=>{ this.stop(); this.next(); });
+    root.querySelector('[data-act=prev]').addEventListener('click', ()=>{ this.stop(); this.goto(Math.max(-1, this.i-1)); });
+    root.querySelector('[data-act=reset]').addEventListener('click', ()=> this.reset());
+    root.querySelector('[data-act=speed]').addEventListener('change', e=> this.speedLocal = parseFloat(e.target.value));
+    this.narr = root.querySelector('.lab-narr');
+    this.prog = root.querySelector('.lab-progress i');
+    this.reset(true);
+  }
+  goto(i){
+    this.i = i;
+    const steps = this.def.steps;
+    /* aplica estados: concluído / ativo */
+    this.root.querySelectorAll('.blk,.wire').forEach(el=>el.classList.remove('active','done'));
+    for (let k=0; k<=i; k++){
+      const cls = k===i ? 'active' : 'done';
+      (steps[k].ids||[]).forEach(id=>{
+        const el = this.root.querySelector('#'+id);
+        if (el){ el.classList.remove('active','done'); el.classList.add(cls); }
+      });
+    }
+    if (i < 0){
+      this.narr.innerHTML = `<span class="ns">Etapa 0 de ${steps.length}</span><h4>${this.def.titulo}</h4><p>${this.def.intro}</p>`;
+    } else {
+      const st = steps[i];
+      this.narr.innerHTML = `<span class="ns">Etapa ${i+1} de ${steps.length}</span><h4>${st.titulo}</h4><p>${st.texto}</p>`+
+        (st.formula ? `<span class="fx">${st.formula}</span>` : '');
+    }
+    this.prog.style.width = ((i+1)/steps.length*100) + '%';
+    if (this.def.onStep) this.def.onStep(i, this);
+  }
+  next(){ if (this.i < this.def.steps.length-1) this.goto(this.i+1); }
+  play(){
+    if (this.i >= this.def.steps.length-1) this.goto(-1);
+    this.playing = true;
+    this.root.querySelector('[data-act=play]').textContent = '⏸ Pausar módulo';
+    const tick = ()=>{
+      if (!this.playing) return;
+      if (this.i >= this.def.steps.length-1){ this.stop(); this.onComplete && this.onComplete(); return; }
+      this.next();
+      this.task = Sched.after((this.def.stepDur||2400)/this.speedLocal, tick);
+    };
+    tick();
+  }
+  stop(){
+    this.playing = false;
+    if (this.task) Sched.cancel(this.task);
+    this.root.querySelector('[data-act=play]').textContent = '▶ Animar';
+  }
+  reset(silent){ this.stop(); this.goto(-1); if (!silent && this.def.onReset) this.def.onReset(this); }
+}
+
+/* ------- Definições dos seis módulos ------- */
+const LAB_DEFS = [];
+
+/* 1 · SARIMAX — anatomia */
+(function(){
+  const AC = '#e879b9';
+  const comps = [
+    ['sx-in-lags','yₜ₋₁ … yₜ₋ₚ','lags da série', 40],
+    ['sx-in-lvl','yₜ (nível)','série em nível', 120],
+    ['sx-in-err','εₜ₋₁ … εₜ₋q','erros passados', 200],
+    ['sx-in-seas','yₜ₋₂₄ · εₜ₋₂₄','defasagens sazonais', 280],
+    ['sx-in-x','Xₜ','exógenas', 360]
+  ];
+  const blocks = [
+    ['sx-ar','Autoregressive','AR — ordem p', 40],
+    ['sx-i','Integrated','I — ordem d', 120],
+    ['sx-ma','Moving Average','MA — ordem q', 200],
+    ['sx-seas','Sazonal','(P, D, Q)ₛ · s = 24', 280],
+    ['sx-x','Exógenas','βᵀ Xₜ', 360]
+  ];
+  let svg = `<svg viewBox="0 0 900 470" aria-label="Anatomia do SARIMAX">`;
+  svg += `<rect x="212" y="16" width="440" height="438" rx="14" fill="rgba(232,121,185,.03)" stroke="#3a2a48" stroke-dasharray="4 5"/>`;
+  svg += sLbl(232, 34, 'SARIMAX (p,d,q)(P,D,Q)ₛ + X', true);
+  comps.forEach(c=> svg += sBox(c[0],16,c[3],166,52,c[1],c[2],AC,`${c[2]}|Entrada que alimenta o componente correspondente do SARIMAX.`));
+  blocks.forEach(b=> svg += sBox(b[0],250,b[3],184,52,b[1],b[2],AC));
+  svg += sCirc('sx-sum',560,244,26,'Σ',AC,'Combinação linear|Todos os componentes são somados na equação única do modelo.');
+  svg += sBox('sx-out',712,216,168,56,'ŷₜ₊ₕ','previsão h passos à frente','#37d99b','Saída|Previsão recursiva: cada ŷ alimenta os lags do passo seguinte.');
+  comps.forEach((c,i)=> svg += sWire('sx-wi'+i, `M182 ${c[3]+26} H248`, AC));
+  blocks.forEach((b,i)=> svg += sWire('sx-wc'+i, `M434 ${b[3]+26} C500 ${b[3]+26} 512 244 536 244`, AC));
+  svg += sWire('sx-wo', 'M586 244 H710', '#37d99b');
+  svg += `</svg>`;
+  LAB_DEFS.push({
+    key:'sarimax', modelKey:'SARIMAX', ac:AC,
+    titulo:'Anatomia ARIMA → SARIMAX',
+    resumo:'Reconstrução vetorial do diagrama ARIMA clássico, ampliada com o ramo sazonal (P,D,Q)ₛ e as variáveis exógenas X — a espinha dorsal estatística da previsão de carga horária.',
+    intro:'Clique em Animar para acompanhar como lags, diferenciação, erros passados, sazonalidade de 24 h e exógenas se combinam em uma única equação linear no tempo.',
+    svg,
+    steps:[
+      {titulo:'Lags entram no bloco AR', ids:['sx-in-lags','sx-wi0','sx-ar'],
+       texto:'O componente autorregressivo usa os próprios valores passados da série: a carga de agora depende da carga das últimas p horas.',
+       formula:'φ(B)·yₜ = φ₁yₜ₋₁ + … + φₚyₜ₋ₚ'},
+      {titulo:'Diferenciação — I(d)', ids:['sx-in-lvl','sx-wi1','sx-i'],
+       texto:'A diferenciação remove tendência para tornar a série estacionária: modela-se a variação, não o nível.',
+       formula:'Δyₜ = yₜ − yₜ₋₁ &nbsp;⇔&nbsp; (1−B)ᵈ yₜ'},
+      {titulo:'Erros passados no bloco MA', ids:['sx-in-err','sx-wi2','sx-ma'],
+       texto:'O componente de médias móveis corrige o presente com os erros de previsão recentes — choques que ainda ecoam.',
+       formula:'θ(B)·εₜ = εₜ + θ₁εₜ₋₁ + … + θ_qεₜ₋q'},
+      {titulo:'Componente sazonal busca t − 24', ids:['sx-in-seas','sx-wi3','sx-seas'],
+       texto:'Com s = 24, o modelo olha para a mesma hora do dia anterior: a assinatura diária da carga industrial.',
+       formula:'(1−B²⁴)ᴰ · Φ(B²⁴) · Θ(B²⁴)'},
+      {titulo:'Exógenas entram com coeficientes β', ids:['sx-in-x','sx-wi4','sx-x'],
+       texto:'Temperatura, calendário de produção ou tarifa entram como regressores externos, ponderados por β.',
+       formula:'+ βᵀXₜ'},
+      {titulo:'Os componentes são somados', ids:['sx-wc0','sx-wc1','sx-wc2','sx-wc3','sx-wc4','sx-sum'],
+       texto:'Tudo se combina em uma única equação linear — a elegância do SARIMAX é ser inteiramente interpretável.',
+       formula:'Φ(Bˢ)·φ(B)·(1−B)ᵈ·(1−Bˢ)ᴰ·yₜ = Θ(Bˢ)·θ(B)·εₜ + βᵀXₜ'},
+      {titulo:'Surge ŷₜ₊ₕ', ids:['sx-wo','sx-out'],
+       texto:'A previsão é recursiva: ŷₜ₊₁ alimenta os lags para prever ŷₜ₊₂, e assim por diante ao longo do horizonte — por isso o erro tende a crescer com h.'}
+    ],
+    blocks:{
+      'sx-ar':{nome:'AR — Autoregressive (p)',funcao:'Regressão da série sobre seus próprios lags.',entrada:'yₜ₋₁ … yₜ₋ₚ',saida:'Contribuição autorregressiva',formula:'φ₁yₜ₋₁+…+φₚyₜ₋ₚ',rel:'Captura a inércia térmica/operacional da carga entre horas vizinhas.'},
+      'sx-i':{nome:'I — Integrated (d)',funcao:'Diferenciação para estacionariedade.',entrada:'Série em nível',saida:'Série diferenciada',formula:'(1−B)ᵈ yₜ',rel:'Remove a tendência local de crescimento/queda da planta.'},
+      'sx-ma':{nome:'MA — Moving Average (q)',funcao:'Combina erros de previsão recentes.',entrada:'εₜ₋₁ … εₜ₋q',saida:'Correção de choques',formula:'θ(B)εₜ',rel:'Absorve choques transitórios (paradas curtas, picos de demanda).'},
+      'sx-seas':{nome:'Componente sazonal',funcao:'AR/I/MA nas defasagens múltiplas de s = 24.',entrada:'yₜ₋₂₄, εₜ₋₂₄…',saida:'Padrão diário',formula:'(P,D,Q)₂₄',rel:'Reproduz o ciclo de turnos: a mesma hora de ontem prevê a de hoje.'},
+      'sx-x':{nome:'Exógenas',funcao:'Regressores externos lineares.',entrada:'Xₜ (temperatura, calendário…)',saida:'βᵀXₜ',formula:'βᵀXₜ',rel:'Injeta informação que a própria série não contém.'},
+      'sx-sum':{nome:'Combinação linear',funcao:'Soma de todos os componentes.',entrada:'AR + I + MA + sazonal + βX',saida:'Equação única do modelo',formula:'Φ(Bˢ)φ(B)(1−B)ᵈ(1−Bˢ)ᴰyₜ = Θ(Bˢ)θ(B)εₜ + βᵀXₜ',rel:'Estrutura totalmente interpretável — cada coeficiente tem leitura física.'},
+      'sx-out':{nome:'ŷₜ₊ₕ',funcao:'Previsão recursiva multi-passo.',entrada:'Modelo ajustado',saida:'Horizonte de 24–72 h',formula:'ŷₜ₊ₕ = E[yₜ₊ₕ | ℱₜ]',rel:'Base da provisão horária de energia por tipologia.'}
+    }
+  });
+})();
+
+/* 2 · Decomposição temporal (canvas de 4 faixas) */
+(function(){
+  const local = { prog:[0,0,0,0], task:null };
+  function decompData(){
+    const {hist, trend} = State.data;
+    const detr = hist.map((v,i)=>v-trend[i]);
+    const seasonal = new Array(24).fill(0).map((_,h)=>{
+      const vals = []; for (let d=0; d<7; d++) vals.push(detr[d*24+h]);
+      return mean(vals);
+    });
+    const seas = hist.map((_,i)=>seasonal[i%24]);
+    const resid = hist.map((v,i)=>v-trend[i]-seas[i]);
+    return { hist, trend, seas, resid };
+  }
+  function draw(){
+    const cv = $('#cv-decomp'); const s = setupCanvas(cv); if (!s) return;
+    const {ctx,w,h} = s;
+    ctx.clearRect(0,0,w,h);
+    const D = decompData();
+    const lanes = [
+      {d:D.hist,  n:'Série original', c:'#2dd4ee'},
+      {d:D.trend, n:'Tendência',      c:'#f0c14b'},
+      {d:D.seas,  n:'Sazonalidade (24 h)', c:'#a78bfa'},
+      {d:D.resid, n:'Resíduos', c:'#f4796f'}
+    ];
+    const lh = h/4;
+    lanes.forEach((L,li)=>{
+      const y0 = li*lh, p = local.prog[li];
+      ctx.strokeStyle = C.grid; ctx.strokeRect(46, y0+6, w-56, lh-12);
+      ctx.fillStyle = p>0 ? L.c : '#5f759b'; ctx.font = '10.5px ui-monospace,monospace';
+      ctx.fillText(L.n, 50, y0+18);
+      if (p<=0) return;
+      const mn = Math.min(...L.d), mx = Math.max(...L.d);
+      const X = i => 46 + i/(HIST_N-1)*(w-56);
+      const Y = v => y0+lh-12 - (v-mn)/(mx-mn+1e-9)*(lh-30);
+      if (li===3){ ctx.strokeStyle='rgba(143,166,201,.4)'; ctx.setLineDash([2,4]);
+        ctx.beginPath(); ctx.moveTo(46,Y(0)); ctx.lineTo(w-10,Y(0)); ctx.stroke(); ctx.setLineDash([]); }
+      ctx.strokeStyle = L.c; ctx.lineWidth = li===0?1.5:1.3; ctx.beginPath();
+      const upto = Math.floor(HIST_N*p);
+      for (let i=0;i<upto;i++) i?ctx.lineTo(X(i),Y(L.d[i])):ctx.moveTo(X(i),Y(L.d[i]));
+      ctx.stroke();
+    });
+  }
+  function sweep(lane){
+    if (local.task) Sched.cancel(local.task);
+    local.prog[lane] = 0.001;
+    local.task = Sched.tween(1400, p=>{ local.prog[lane]=p; draw(); }, ()=>{ local.prog[lane]=1; draw(); });
+  }
+  LAB_DEFS.push({
+    key:'decomp', ac:'#f0c14b',
+    titulo:'Decomposição temporal',
+    resumo:'A série histórica é separada progressivamente em tendência, sazonalidade diária e resíduos — decomposição aditiva clássica calculada de verdade sobre os dados desta sessão.',
+    intro:'y = tendência + sazonalidade + resíduo. Cada etapa varre a faixa correspondente da esquerda para a direita, como se a série original fosse sendo "peneirada".',
+    isCanvas:true, stepDur:2100,
+    steps:[
+      {titulo:'Série original', texto:'As 168 horas históricas como observadas: nível, ciclo diário, tendência e ruído sobrepostos.', formula:'yₜ = Tₜ + Sₜ + Rₜ'},
+      {titulo:'Tendência', texto:'Média móvel centrada de 24 h: o nível lento da série, imune ao ciclo diário. Note a mudança de regime.', formula:'Tₜ = MM₂₄(yₜ)'},
+      {titulo:'Sazonalidade', texto:'Média, por hora do dia, da série sem tendência — a assinatura de 24 h que se repete dia após dia.', formula:'Sₕ = média(yₜ − Tₜ | t mod 24 = h)'},
+      {titulo:'Resíduos', texto:'O que sobra: choques e ruído em torno de zero. Resíduos estruturados indicariam informação ainda não modelada.', formula:'Rₜ = yₜ − Tₜ − Sₜ'}
+    ],
+    extraHTML:`<div class="chart-wrap" style="margin-top:4px"><canvas id="cv-decomp" style="height:400px" role="img" aria-label="Decomposição da série em quatro faixas"></canvas></div>`,
+    onStep(i){ if (i<0){ local.prog=[0,0,0,0]; draw(); } else sweep(i); },
+    onReset(){ local.prog=[0,0,0,0]; draw(); },
+    redraw: draw
+  });
+})();
+
+/* 3 · XGBoost — boosting sequencial */
+(function(){
+  const AC = '#60a5fa';
+  function miniTree(px,py,id,ac){
+    let s = `<g class="blk" id="${id}" data-block="${id}" tabindex="0" role="button" style="--ac:${ac}">`;
+    s += `<rect x="${px}" y="${py}" width="112" height="118" rx="9"/>`;
+    const nodes = [[56,22],[30,58],[82,58],[16,96],[44,96],[68,96],[96,96]];
+    s += `<path d="M${px+56} ${py+28} L${px+30} ${py+52} M${px+56} ${py+28} L${px+82} ${py+52} M${px+30} ${py+64} L${px+16} ${py+90} M${px+30} ${py+64} L${px+44} ${py+90} M${px+82} ${py+64} L${px+68} ${py+90} M${px+82} ${py+64} L${px+96} ${py+90}" stroke="#27406e" fill="none"/>`;
+    nodes.forEach((n,i)=> s += `<circle cx="${px+n[0]}" cy="${py+n[1]}" r="${i===0?7:i<3?6:5}" fill="${i>=3?'rgba(96,165,250,.25)':'#0f1f3d'}" stroke="#27406e"/>`);
+    s += `</g>`;
+    return s;
+  }
+  let svg = `<svg viewBox="0 0 940 430" aria-label="Boosting sequencial do XGBoost">`;
+  svg += sBox('xg-serie',12,175,104,60,'Série','yₜ histórica',AC,'Série temporal|Entrada bruta: 168 h de carga horária.');
+  svg += sBox('xg-feat',146,165,126,80,'Matriz de','features',AC,'Feature engineering|Lags, médias móveis, calendário e exógenas viram colunas tabulares.');
+  svg += miniTree(302,146,'xg-t1',AC);
+  svg += sCirc('xg-r1',466,205,21,'r₁',AC,'Resíduo 1|Erro deixado pela árvore 1: r₁ = y − η·f₁(x).');
+  svg += miniTree(516,146,'xg-t2',AC);
+  svg += sCirc('xg-r2',680,205,21,'r₂',AC,'Resíduo 2|Erro remanescente após duas árvores.');
+  svg += miniTree(724,146,'xg-t3',AC);
+  svg += sBox('xg-sum',812,40,116,58,'Σ η·fₘ','shrinkage η','#f0c14b','Soma ponderada|Ensemble: soma das árvores, cada uma encolhida por η.');
+  svg += sBox('xg-out',812,330,116,56,'Forecast','ŷₜ₊ₕ','#37d99b');
+  svg += sLbl(318,140,'Árvore 1'); svg += sLbl(532,140,'Árvore 2'); svg += sLbl(740,140,'Árvore 3');
+  svg += sWire('xg-w0','M116 205 H144',AC);
+  svg += sWire('xg-w1','M272 205 H300',AC);
+  svg += sWire('xg-w2','M414 205 H443',AC);
+  svg += sWire('xg-w3','M487 205 H514',AC);
+  svg += sWire('xg-w4','M628 205 H657',AC);
+  svg += sWire('xg-w5','M701 205 H722',AC);
+  svg += sWire('xg-ws1','M358 146 C358 70 700 69 810 69','#f0c14b');
+  svg += sWire('xg-ws2','M572 146 C572 92 720 84 810 76','#f0c14b');
+  svg += sWire('xg-ws3','M836 146 C860 120 868 112 870 100','#f0c14b');
+  svg += sWire('xg-wo','M870 98 V328','#37d99b');
+  svg += `</svg>`;
+  LAB_DEFS.push({
+    key:'xgboost', modelKey:'XGBoost', ac:AC,
+    titulo:'XGBoost — boosting sequencial',
+    resumo:'Cada árvore aprende o resíduo da anterior; a previsão final é a soma do ensemble com shrinkage η. Reconstrução do fluxo de boosting adaptada à previsão temporal.',
+    intro:'Série → features → Árvore 1 → Resíduo 1 → Árvore 2 → Resíduo 2 → Árvore 3 → Soma ponderada → Forecast. Repare que as árvores não competem: cooperam em sequência.',
+    svg, stepDur:2300,
+    steps:[
+      {titulo:'Matriz de features', ids:['xg-serie','xg-w0','xg-feat'],
+       texto:'A série vira tabela: lag 1, lag 24, lag 168, média móvel 6 h, média móvel 24 h, desvio móvel, hora do dia, dia da semana, tendência e uma exógena simulada (tabela abaixo).'},
+      {titulo:'Seleção de um split', ids:['xg-w1','xg-t1'],
+       texto:'A raiz da árvore 1 escolhe o corte de maior ganho — por exemplo, «lag_24 ≤ 812 kW?» — separando horas de carga alta e baixa.',
+       formula:'Ganho = ½·[G_L²/(H_L+λ) + G_R²/(H_R+λ) − (G_L+G_R)²/(H_L+H_R+λ)] − γ'},
+      {titulo:'Fluxo pelos nós', ids:['xg-t1'],
+       texto:'Cada observação desce pelos testes até uma folha. Profundidade limitada e γ regularizam a árvore contra overfitting.'},
+      {titulo:'Valor das folhas', ids:['xg-t1'],
+       texto:'Cada folha j guarda um peso ótimo, derivado dos gradientes das observações que caíram nela.',
+       formula:'w*ⱼ = −Gⱼ/(Hⱼ+λ)'},
+      {titulo:'Primeira previsão', ids:['xg-t1','xg-ws1'],
+       texto:'A árvore 1 sozinha já produz uma previsão grosseira — o esqueleto do padrão sazonal.'},
+      {titulo:'Cálculo do resíduo', ids:['xg-w2','xg-r1'],
+       texto:'O que a árvore 1 errou vira o novo alvo: r₁ = y − η·f₁(x). O boosting aprende com o próprio erro.'},
+      {titulo:'O resíduo entra na árvore seguinte', ids:['xg-w3','xg-t2','xg-w4','xg-r2','xg-w5','xg-t3','xg-ws2','xg-ws3'],
+       texto:'Árvores 2 e 3 refinam sucessivamente os resíduos: cada rodada reduz o erro remanescente em regiões específicas do espaço de features.'},
+      {titulo:'Shrinkage η', ids:['xg-sum'],
+       texto:'Cada árvore contribui só uma fração η (ex.: 0,1) — passos pequenos e muitos, que estabilizam o aprendizado.',
+       formula:'Fₘ(x) = Fₘ₋₁(x) + η·fₘ(x)'},
+      {titulo:'Soma do ensemble', ids:['xg-sum','xg-wo','xg-out'],
+       texto:'A previsão final soma todas as árvores. Regularização (λ, γ), profundidade e nº de folhas controlam a complexidade total.',
+       formula:'ŷᵢ = Σₘ η·fₘ(xᵢ)'}
+    ],
+    extraHTML:`<div style="overflow-x:auto;margin-top:10px"><table class="score-table" aria-label="Matriz de features do XGBoost" style="font-size:11px">
+      <thead><tr><th>t</th><th>lag_1</th><th>lag_24</th><th>lag_168</th><th>mm_6h</th><th>mm_24h</th><th>desvio_móvel</th><th>hora</th><th>dia_semana</th><th>tendência</th><th>exógena</th><th style="color:var(--green)">alvo y</th></tr></thead>
+      <tbody id="xg-feat-body"></tbody></table></div>`,
+    onStep(i){ if (i===0) fillXgFeat(); },
+    blocks:{
+      'xg-feat':{nome:'Feature engineering',funcao:'Transforma a série em matriz tabular.',entrada:'yₜ histórico + calendário',saida:'X ∈ ℝⁿˣ¹⁰',formula:'lags, MMs, hora, dia, tendência, exógena',rel:'É aqui que o conhecimento de domínio sobre carga entra no modelo.'},
+      'xg-t1':{nome:'Árvore 1',funcao:'Primeiro aprendiz fraco: aproxima o padrão bruto.',entrada:'Matriz de features',saida:'f₁(x) — valores de folha',formula:'splits por ganho máximo',rel:'Captura o grosso da sazonalidade via hora do dia e lag 24.'},
+      'xg-t2':{nome:'Árvore 2',funcao:'Aprende o resíduo r₁.',entrada:'X + r₁',saida:'f₂(x)',formula:'r₁ = y − η f₁(x)',rel:'Refina horários de transição de turno onde a árvore 1 errou.'},
+      'xg-t3':{nome:'Árvore 3',funcao:'Aprende o resíduo r₂.',entrada:'X + r₂',saida:'f₃(x)',formula:'r₂ = r₁ − η f₂(x)',rel:'Ajustes finos — não linearidades residuais.'},
+      'xg-sum':{nome:'Soma ponderada',funcao:'Agrega o ensemble com shrinkage.',entrada:'f₁ … fₘ',saida:'ŷ = Σ η fₘ(x)',formula:'η ≈ 0,05–0,3',rel:'Menor η + mais árvores ⇒ curva de previsão mais estável.'}
+    }
+  });
+  window.fillXgFeat = function(){
+    const b = $('#xg-feat-body'); if (!b || !State.data) return;
+    const {hist} = State.data;
+    const rows = [166,167].concat([]).map(t=>{
+      const mm6 = mean(hist.slice(t-6,t)), mm24 = mean(hist.slice(t-24,t));
+      const sd = Math.sqrt(mean(hist.slice(t-24,t).map(v=>(v-mm24)**2)));
+      return `<tr><td>${t}</td><td>${fmt(hist[t-1],0)}</td><td>${fmt(hist[t-24],0)}</td><td>${fmt(hist[t-168]!==undefined?hist[t-168]:hist[t-144],0)}</td><td>${fmt(mm6,0)}</td><td>${fmt(mm24,0)}</td><td>${fmt(sd,0)}</td><td>${t%24}</td><td>${Math.floor(t/24)%7}</td><td>${fmt(State.data.trend[t]||mm24,0)}</td><td>${fmt(20+6*Math.sin(t/24),1)}</td><td style="color:var(--green)">${fmt(hist[t],0)}</td></tr>`;
+    }).join('');
+    b.innerHTML = rows;
+  };
+})();
+
+/* 4 · LSTM — célula completa */
+(function(){
+  const AC = '#a78bfa';
+  let svg = `<svg viewBox="0 0 900 470" aria-label="Célula LSTM completa">`;
+  svg += `<rect x="150" y="46" width="600" height="330" rx="16" fill="rgba(167,139,250,.03)" stroke="#332a54" stroke-dasharray="4 5"/>`;
+  svg += sLbl(168, 66, 'Célula LSTM — passo t', true);
+  /* linha de memória cₜ (topo) */
+  svg += sBox('ls-cprev',16,86,110,46,'cₜ₋₁','memória anterior',AC,'Estado de célula anterior|A “esteira” de memória de longo prazo que atravessa o tempo.');
+  svg += sCirc('ls-mulf',300,109,19,'×',AC,'Multiplicação elementwise|O forget gate escala cₜ₋₁: 0 apaga, 1 preserva.');
+  svg += sCirc('ls-add',520,109,19,'+',AC,'Soma da memória|Memória preservada + informação nova candidata.');
+  svg += sBox('ls-cout',770,86,112,46,'cₜ','nova memória','#37d99b','Novo estado de célula|Segue para o próximo passo temporal quase sem atrito — o segredo do longo prazo.');
+  /* gates */
+  svg += sBox('ls-gf',236,232,96,52,'σ','forget fₜ',AC);
+  svg += sBox('ls-gi',356,232,96,52,'σ','input iₜ',AC);
+  svg += sBox('ls-gc',476,232,96,52,'tanh','candidata C̃ₜ',AC);
+  svg += sBox('ls-go',616,232,96,52,'σ','output oₜ',AC);
+  svg += sCirc('ls-muli',450,168,17,'×',AC,'Portão de entrada|iₜ decide quanto da candidata C̃ₜ entra na memória.');
+  svg += sCirc('ls-tanh',600,168,19,'tanh',AC,'Ativação da memória|cₜ passa por tanh antes de virar saída.');
+  svg += sCirc('ls-mulo',664,168,17,'×',AC,'Portão de saída|oₜ filtra o que da memória vira estado oculto hₜ.');
+  /* entradas */
+  svg += sBox('ls-hprev',16,330,110,46,'hₜ₋₁','estado oculto',AC,'Estado oculto anterior|A “memória de trabalho” do passo anterior.');
+  svg += sBox('ls-x',16,404,110,46,'xₜ','entrada atual',AC,'Entrada|A observação de carga da hora t (e features).');
+  svg += sCirc('ls-cat',190,352,17,'⊕','#2dd4ee','Concatenação|[hₜ₋₁ ; xₜ] alimenta os quatro gates.');
+  svg += sBox('ls-hout',770,330,112,46,'hₜ','estado oculto','#37d99b','Novo estado oculto|Saída do passo t; alimenta a previsão e o passo t+1.');
+  /* fios */
+  svg += sWire('ls-w-c1','M128 109 H279',AC);
+  svg += sWire('ls-w-c2','M321 109 H499',AC);
+  svg += sWire('ls-w-c3','M541 109 H768','#37d99b');
+  svg += sWire('ls-w-h','M128 353 H171',AC);
+  svg += sWire('ls-w-x','M128 427 C150 427 158 380 175 364',AC);
+  svg += sWire('ls-w-bus1','M207 352 C230 340 246 310 278 286',AC);
+  svg += sWire('ls-w-bus2','M207 352 C280 340 340 310 398 286',AC);
+  svg += sWire('ls-w-bus3','M207 352 C330 360 440 320 518 286',AC);
+  svg += sWire('ls-w-bus4','M207 352 C400 380 560 330 658 286',AC);
+  svg += sWire('ls-w-f','M284 230 C284 190 292 150 297 130',AC);
+  svg += sWire('ls-w-i','M404 230 C412 210 428 194 438 182',AC);
+  svg += sWire('ls-w-cc','M524 230 C500 212 474 196 462 184',AC);
+  svg += sWire('ls-w-ic','M450 151 C450 138 480 118 501 112',AC);
+  svg += sWire('ls-w-ct','M560 118 C588 128 596 138 600 149',AC);
+  svg += sWire('ls-w-o','M664 230 C664 214 664 200 664 187',AC);
+  svg += sWire('ls-w-th','M619 168 H645',AC);
+  svg += sWire('ls-w-ho','M681 168 C730 190 752 280 770 330','#37d99b');
+  svg += `</svg>`;
+  LAB_DEFS.push({
+    key:'lstm', modelKey:'LSTM', ac:AC,
+    titulo:'Célula LSTM — gates e fluxo de memória',
+    resumo:'Reconstrução integral da célula: a esteira de memória cₜ no topo, os três gates (forget, input, output) embaixo e as operações elementwise que decidem o que lembrar, o que escrever e o que expor.',
+    intro:'Todas as quatro caixas de gate leem a mesma concatenação [hₜ₋₁; xₜ]. O que muda é a função de cada uma: apagar, admitir, propor e revelar.',
+    svg, stepDur:2300,
+    steps:[
+      {titulo:'Concatenação de xₜ e hₜ₋₁', ids:['ls-x','ls-hprev','ls-w-x','ls-w-h','ls-cat'],
+       texto:'A entrada da hora atual junta-se ao estado oculto anterior — contexto imediato + memória de trabalho num único vetor.',
+       formula:'z = [hₜ₋₁ ; xₜ]'},
+      {titulo:'Forget gate fₜ', ids:['ls-w-bus1','ls-gf'],
+       texto:'Um sigmoide decide, dimensão a dimensão, quanto da memória antiga sobrevive: 0 = esquecer, 1 = manter.',
+       formula:'fₜ = σ(W_f·[hₜ₋₁, xₜ] + b_f)'},
+      {titulo:'Multiplicação por cₜ₋₁', ids:['ls-cprev','ls-w-c1','ls-w-f','ls-mulf'],
+       texto:'A memória anterior é escalada por fₜ. Em carga horária: “o padrão de ontem ainda vale?”',
+       formula:'fₜ ⊙ cₜ₋₁'},
+      {titulo:'Input gate iₜ', ids:['ls-w-bus2','ls-gi'],
+       texto:'Outro sigmoide decide quanto da informação nova merece ser escrita na memória.',
+       formula:'iₜ = σ(W_i·[hₜ₋₁, xₜ] + b_i)'},
+      {titulo:'Candidata C̃ₜ', ids:['ls-w-bus3','ls-gc','ls-w-cc'],
+       texto:'Um tanh propõe o conteúdo novo — valores entre −1 e 1 que poderiam entrar na memória.',
+       formula:'C̃ₜ = tanh(W_c·[hₜ₋₁, xₜ] + b_c)'},
+      {titulo:'Atualização de cₜ', ids:['ls-w-i','ls-muli','ls-w-ic','ls-w-c2','ls-add','ls-w-c3','ls-cout'],
+       texto:'Memória nova = o que sobreviveu do passado + o que foi admitido do presente. Esta soma é o caminho de gradiente quase livre que evita o esquecimento.',
+       formula:'cₜ = fₜ⊙cₜ₋₁ + iₜ⊙C̃ₜ'},
+      {titulo:'Output gate oₜ', ids:['ls-w-bus4','ls-go','ls-w-o'],
+       texto:'Um último sigmoide decide que parte da memória será exposta como estado oculto.',
+       formula:'oₜ = σ(W_o·[hₜ₋₁, xₜ] + b_o)'},
+      {titulo:'Geração de hₜ', ids:['ls-w-ct','ls-tanh','ls-w-th','ls-mulo','ls-w-ho','ls-hout'],
+       texto:'hₜ = oₜ ⊙ tanh(cₜ) — é este vetor que alimenta a camada de previsão da carga da próxima hora.',
+       formula:'hₜ = oₜ ⊙ tanh(cₜ)'},
+      {titulo:'Deslocamento para o próximo passo', ids:['ls-cout','ls-hout'],
+       texto:'cₜ e hₜ tornam-se cₜ₋₁ e hₜ₋₁ do passo seguinte. Abaixo, a sequência de células mostra a memória atravessando muitas horas — ative o fluxo.'}
+    ],
+    extraHTML:`
+      <div style="display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn small" id="ls-seq-btn" aria-label="Animar sequência de células LSTM">▶ Memória de longo prazo — várias células</button>
+        <span class="plain">A linha superior (cₜ) atravessa as células quase sem transformação.</span>
+      </div>
+      <svg viewBox="0 0 900 120" style="margin-top:8px" aria-label="Sequência de células LSTM">
+        ${[0,1,2,3].map(i=>`
+          <g class="blk" id="lsq-${i}"><rect x="${60+i*210}" y="34" width="130" height="62" rx="10"/>
+          <text x="${125+i*210}" y="60" text-anchor="middle" font-size="11">LSTM</text>
+          <text x="${125+i*210}" y="76" text-anchor="middle" font-size="9.5" class="fxsvg">t=${i+1}</text></g>
+          <path class="wire" id="lsq-c${i}" d="M${i===0?14:190+(i-1)*210} 48 H${58+i*210}" style="--ac:#a78bfa"/>
+          <path class="wire" id="lsq-x${i}" d="M${125+i*210} 116 V98" style="--ac:#2dd4ee"/>`).join('')}
+        <path class="wire" id="lsq-c4" d="M820 48 H886" style="--ac:#37d99b"/>
+        <text x="16" y="40" class="svlbl">c₀</text><text x="866" y="40" class="svlbl">c₄ →</text>
+      </svg>`,
+    blocks:{
+      'ls-gf':{nome:'Forget gate',funcao:'Decide o que apagar da memória.',entrada:'[hₜ₋₁ ; xₜ]',saida:'fₜ ∈ (0,1)ᵈ',formula:'fₜ = σ(W_f z + b_f)',rel:'Permite “esquecer” o padrão de um feriado e voltar ao regime normal.'},
+      'ls-gi':{nome:'Input gate',funcao:'Decide o que escrever na memória.',entrada:'[hₜ₋₁ ; xₜ]',saida:'iₜ ∈ (0,1)ᵈ',formula:'iₜ = σ(W_i z + b_i)',rel:'Admite mudanças reais de regime de produção, filtrando ruído.'},
+      'ls-gc':{nome:'Candidata',funcao:'Propõe conteúdo novo.',entrada:'[hₜ₋₁ ; xₜ]',saida:'C̃ₜ ∈ (−1,1)ᵈ',formula:'C̃ₜ = tanh(W_c z + b_c)',rel:'Codifica a informação da hora corrente em forma comprimida.'},
+      'ls-go':{nome:'Output gate',funcao:'Decide o que expor da memória.',entrada:'[hₜ₋₁ ; xₜ]',saida:'oₜ ∈ (0,1)ᵈ',formula:'oₜ = σ(W_o z + b_o)',rel:'Controla o quanto do estado interno influencia a previsão da hora.'},
+      'ls-cout':{nome:'cₜ — estado de célula',funcao:'Memória de longo prazo.',entrada:'fₜ⊙cₜ₋₁ + iₜ⊙C̃ₜ',saida:'próximo passo',formula:'cₜ = fₜ⊙cₜ₋₁ + iₜ⊙C̃ₜ',rel:'Carrega a sazonalidade de 24 h através de dezenas de passos.'},
+      'ls-hout':{nome:'hₜ — estado oculto',funcao:'Memória de trabalho / saída.',entrada:'oₜ ⊙ tanh(cₜ)',saida:'camada densa de previsão',formula:'hₜ = oₜ⊙tanh(cₜ)',rel:'É lido pela cabeça de regressão que gera ŷ da próxima hora.'}
+    }
+  });
+})();
+
+/* 5 · TFT — arquitetura completa */
+(function(){
+  const AC = '#fb923c';
+  let svg = `<svg viewBox="0 0 920 640" aria-label="Arquitetura do Temporal Fusion Transformer">`;
+  /* Entradas (base) */
+  svg += sBox('tf-in-s',18,576,196,46,'Metadados estáticos','tipologia, setor, região',AC,'Entradas estáticas|Não variam no tempo: identidade da unidade consumidora.');
+  svg += sBox('tf-in-p',242,576,180,46,'Passado observado','carga, temperatura…',AC,'Variáveis passadas|Tudo que foi observado até t.');
+  svg += sBox('tf-in-y',450,576,130,46,'Alvo yₜ','carga histórica',AC,'Variável alvo|A própria série de carga entra como entrada do encoder.');
+  svg += sBox('tf-in-f',626,576,196,46,'Futuro conhecido','hora, calendário, tarifas',AC,'Variáveis futuras conhecidas|Conhecidas de antemão para todo o horizonte.');
+  /* Seleção de variáveis */
+  svg += sBox('tf-vsn-s',30,502,172,44,'Seleção de variáveis','VSN · softmax',AC);
+  svg += sBox('tf-vsn-p',270,502,180,44,'Seleção de variáveis','VSN · softmax',AC);
+  svg += sBox('tf-vsn-f',638,502,172,44,'Seleção de variáveis','VSN · softmax',AC);
+  /* Encoders estáticos */
+  svg += sBox('tf-senc',30,414,172,52,'Static covariate','encoders (4 contextos)',AC,'Encoders estáticos|Geram vetores de contexto que condicionam VSNs, LSTMs e GRNs.');
+  /* LSTMs */
+  svg += sBox('tf-enc',258,414,192,52,'LSTM encoder','processa o passado',AC);
+  svg += sBox('tf-dec',628,414,192,52,'LSTM decoder','processa o futuro conhecido',AC);
+  /* GRN / gates */
+  svg += sBox('tf-grn1',258,334,562,44,'Gate → Add &amp; Norm → GRN','gated residual network + skip connections',AC,'GRN + gating|Camada com skip connection: a rede pode “desligar” blocos desnecessários.');
+  /* Atenção */
+  svg += sBox('tf-attn',300,252,478,50,'Multi-head attention','interpretável · pesos por tempo',AC);
+  svg += sBox('tf-grn2',300,178,478,44,'Gate → Add &amp; Norm → GRN','refinamento pós-atenção',AC);
+  svg += sBox('tf-dense',388,106,302,42,'Camada densa','projeção final',AC);
+  /* Quantis */
+  svg += sBox('tf-q10',330,26,116,44,'P10','quantil inferior','#2dd4ee','Quantil P10|Cenário otimista de carga baixa — limite inferior da faixa.');
+  svg += sBox('tf-q50',482,26,116,44,'P50','mediana','#37d99b','Quantil P50|A previsão central usada no benchmark pontual.');
+  svg += sBox('tf-q90',634,26,116,44,'P90','quantil superior','#f4796f','Quantil P90|Cenário de carga alta — dimensiona risco de sobrecarga.');
+  /* Fios */
+  svg += sWire('tf-wi-s','M116 574 V548',AC);
+  svg += sWire('tf-wi-p','M332 574 V548',AC);
+  svg += sWire('tf-wi-y','M515 574 C515 560 420 556 380 548',AC);
+  svg += sWire('tf-wi-f','M724 574 V548',AC);
+  svg += sWire('tf-w-svsn','M116 500 V468',AC);
+  svg += sWire('tf-w-enc','M360 500 V468',AC);
+  svg += sWire('tf-w-dec','M724 500 V468',AC);
+  svg += sWire('tf-w-ctx1','M204 440 H256','#f0c14b');
+  svg += sWire('tf-w-ctx2','M204 430 C400 386 520 400 626 432','#f0c14b');
+  svg += sWire('tf-w-enc2','M354 412 V380',AC);
+  svg += sWire('tf-w-dec2','M724 412 V380',AC);
+  svg += sWire('tf-w-attn','M539 332 V304',AC);
+  svg += sWire('tf-w-attn2','M539 250 V224',AC);
+  svg += sWire('tf-w-dense','M539 176 V150',AC);
+  svg += sWire('tf-skip','M270 334 C200 260 240 200 298 196','#37d99b');
+  svg += sWire('tf-wq1','M470 104 C440 92 410 84 396 72',AC);
+  svg += sWire('tf-wq2','M539 104 V72',AC);
+  svg += sWire('tf-wq3','M608 104 C640 92 668 84 682 72',AC);
+  svg += `</svg>`;
+  LAB_DEFS.push({
+    key:'tft', modelKey:'TFT', ac:AC,
+    titulo:'Temporal Fusion Transformer — arquitetura completa',
+    resumo:'Reconstrução vetorial da arquitetura de Lim et al. (2021): três caminhos de entrada, seleção de variáveis com softmax, contexto estático, LSTMs locais, atenção multi-cabeça interpretável, GRNs com gating e saídas quantílicas.',
+    intro:'Leia de baixo para cima: entradas na base, quantis no topo. As linhas douradas são o contexto estático condicionando toda a rede; a linha verde é uma skip connection.',
+    svg, stepDur:2500,
+    steps:[
+      {titulo:'Entradas por três caminhos', ids:['tf-in-s','tf-in-p','tf-in-y','tf-in-f','tf-wi-s','tf-wi-p','tf-wi-y','tf-wi-f'],
+       texto:'Metadados estáticos, passado observado (incluindo o alvo yₜ) e futuro conhecido entram por rotas separadas — o TFT trata cada natureza de dado de forma distinta.'},
+      {titulo:'Seleção de variáveis (VSN)', ids:['tf-vsn-s','tf-vsn-p','tf-vsn-f','tf-w-svsn','tf-w-enc','tf-w-dec'],
+       texto:'Cada VSN calcula pesos softmax sobre as variáveis: a rede aprende, por instância, o que importa — e esses pesos são interpretáveis.',
+       formula:'v = Softmax(GRN(Ξ)) &nbsp;→&nbsp; ξ̃ = Σⱼ vⱼ·ξⱼ'},
+      {titulo:'Contexto estático condiciona a rede', ids:['tf-senc','tf-w-ctx1','tf-w-ctx2'],
+       texto:'Quatro encoders geram vetores de contexto a partir da tipologia: inicializam os LSTMs e enriquecem VSNs e GRNs. A mesma arquitetura se adapta a cada perfil industrial.'},
+      {titulo:'Encoder processa o passado', ids:['tf-enc','tf-w-enc2'],
+       texto:'Um LSTM varre a janela histórica e produz representações locais, sensíveis à ordem — o processamento sequencial fino que a atenção sozinha não faz.'},
+      {titulo:'Decoder processa o futuro conhecido', ids:['tf-dec','tf-w-dec2','tf-grn1'],
+       texto:'Outro LSTM percorre as variáveis futuras conhecidas (hora, calendário). Gates + Add &amp; Norm com skip connections deixam a rede pular blocos que não agregam.'},
+      {titulo:'Atenção destaca tempos relevantes', ids:['tf-attn','tf-w-attn'],
+       texto:'A atenção multi-cabeça olha para toda a janela e pesa quais horas passadas explicam cada hora futura — veja o mapa de atenção abaixo: as diagonais de t−24 e t−48 brilham.',
+       formula:'Attn(Q,K,V) = Softmax(QKᵀ/√d)·V'},
+      {titulo:'GRNs refinam a representação', ids:['tf-grn2','tf-w-attn2','tf-skip','tf-dense','tf-w-dense'],
+       texto:'Novo bloco de gating e normalização pós-atenção, com skip connection direto do encoder — estabilidade de treino e fluxo de gradiente.'},
+      {titulo:'Saídas por quantil', ids:['tf-wq1','tf-wq2','tf-wq3','tf-q10','tf-q50','tf-q90'],
+       texto:'A cabeça final gera P10, P50 e P90 — uma faixa de incerteza, não um único número. O benchmark usa P50; P10/P90 dimensionam risco de contratação.',
+       formula:'L_q(y,ŷ) = max[q·(y−ŷ), (q−1)·(y−ŷ)]'}
+    ],
+    extraHTML:`<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:10px">
+      <canvas id="tf-heat" width="180" height="180" style="width:180px;height:180px;border:1px solid var(--line);border-radius:8px;background:var(--bg2)" role="img" aria-label="Mapa de atenção animado"></canvas>
+      <p class="plain" style="max-width:52ch">Mapa de atenção (horizonte × passado): células claras indicam as horas históricas em que cada hora futura mais “presta atenção”. A faixa forte em t−24 é a sazonalidade diária redescoberta pela atenção.</p></div>`,
+    onStep(i, player){ if (i===5) animAttn(); },
+    onReset(){ drawAttn(0); },
+    redraw(){ drawAttn(1); }
+  });
+  let attnTask = null;
+  function drawAttn(p){
+    const cv = $('#tf-heat'); if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const n = 16, cell = 180/n;
+    ctx.clearRect(0,0,180,180);
+    for (let i=0;i<n;i++) for (let j=0;j<n;j++){
+      const lag = (i+n) - j;
+      let a = 0.06 + 0.85*Math.exp(-((lag-8)%8===0?0:(Math.min(Math.abs(lag-8),Math.abs(lag-16))))*0.9);
+      a = 0.05 + 0.9*(0.25*Math.exp(-Math.abs(lag-8)*0.8) + 0.75*Math.exp(-Math.abs(lag-16)*0.55));
+      const vis = (i*n+j)/(n*n) <= p ? 1 : 0;
+      ctx.fillStyle = `rgba(251,146,60,${(a*vis).toFixed(3)})`;
+      ctx.fillRect(j*cell, i*cell, cell-1, cell-1);
+    }
+    ctx.fillStyle = '#5f759b'; ctx.font = '8.5px ui-monospace,monospace';
+    ctx.fillText('← passado', 4, 176); ctx.save(); ctx.translate(8,60); ctx.rotate(-Math.PI/2); ctx.fillText('horizonte →',-50,0); ctx.restore();
+  }
+  window.animAttn = function(){
+    if (attnTask) Sched.cancel(attnTask);
+    attnTask = Sched.tween(1600, p=>drawAttn(p), ()=>{ attnTask=null; });
+  };
+  window.drawAttnFull = ()=>drawAttn(1);
+})();
+
+/* 6 · TimesFM — modelo fundacional */
+(function(){
+  const AC = '#f0c14b';
+  let svg = `<svg viewBox="0 0 940 320" aria-label="Arquitetura do TimesFM">`;
+  svg += sBox('tm-ctx',14,126,128,62,'Contexto','janela histórica',AC,'Contexto|Últimas centenas de horas observadas — tudo que o modelo “vê”.');
+  svg += sBox('tm-norm',172,126,110,62,'Normalização','escala e nível',AC);
+  /* patches com mini-retângulos */
+  svg += `<g class="blk" id="tm-patch" data-block="tm-patch" tabindex="0" role="button" style="--ac:${AC}" data-tip="Patches|Blocos contíguos de pontos (ex.: 32 h) tratados como tokens.">
+    <rect x="312" y="112" width="140" height="90" rx="9"/>
+    <text x="382" y="134" text-anchor="middle" font-size="11.5">Patches</text>
+    ${[0,1,2,3].map(i=>`<rect x="${324+i*32}" y="148" width="26" height="38" rx="4" fill="rgba(240,193,75,.14)" stroke="#5a4b22"/>`).join('')}
+  </g>`;
+  svg += sBox('tm-emb',482,126,112,62,'Embeddings','projeção + posição',AC);
+  svg += `<g class="blk" id="tm-blocks" data-block="tm-blocks" tabindex="0" role="button" style="--ac:${AC}" data-tip="Blocos decoder-only|Pilha transformer com atenção causal — cada patch só enxerga o passado.">
+    <rect x="624" y="92" width="142" height="130" rx="9"/>
+    ${[0,1,2].map(i=>`<rect x="636" y="${104+i*36}" width="118" height="28" rx="5" fill="rgba(240,193,75,.1)" stroke="#5a4b22"/>
+      <text x="695" y="${122+i*36}" text-anchor="middle" font-size="9" class="fxsvg" fill="#8fa6c9">decoder ${i+1}…N</text>`).join('')}
+    <text x="695" y="238" text-anchor="middle" font-size="10" class="svlbl">atenção causal</text>
+  </g>`;
+  svg += sBox('tm-head',796,126,128,62,'Cabeça de saída','patch futuro ŷ','#37d99b');
+  svg += sWire('tm-w0','M142 157 H170',AC);
+  svg += sWire('tm-w1','M282 157 H310',AC);
+  svg += sWire('tm-w2','M452 157 H480',AC);
+  svg += sWire('tm-w3','M594 157 H622',AC);
+  svg += sWire('tm-w4','M766 157 H794',AC);
+  svg += sWire('tm-roll','M860 190 C860 280 420 292 382 206','#37d99b');
+  svg += sLbl(560,296,'rollout autorregressivo: o patch previsto volta como contexto', true);
+  svg += `</svg>`;
+  LAB_DEFS.push({
+    key:'timesfm', modelKey:'TimesFM', ac:AC,
+    titulo:'TimesFM — modelo fundacional de séries temporais',
+    resumo:'Arquitetura decoder-only pré-treinada em larga escala sobre bilhões de pontos de séries reais e sintéticas. Aqui não há treino local: a previsão é inferência zero-shot com rollout de patches.',
+    intro:'Contexto → Normalização → Patches → Embeddings → Blocos decoder-only → Cabeça de saída → Rollout. A mesma pipeline de um LLM, com patches de série no lugar de tokens de texto.',
+    svg, stepDur:2300,
+    steps:[
+      {titulo:'Seleção da janela de contexto', ids:['tm-ctx'],
+       texto:'O modelo recebe as últimas horas observadas — quanto mais contexto, melhor a inferência da sazonalidade e do nível.'},
+      {titulo:'Divisão em patches', ids:['tm-w0','tm-norm','tm-w1','tm-patch'],
+       texto:'Após normalizar escala e nível, a série é dividida em blocos contíguos (patches). Cada patch é um “token”: comprime várias horas em uma unidade.'},
+      {titulo:'Transformação em embeddings', ids:['tm-w2','tm-emb'],
+       texto:'Cada patch é projetado em um vetor denso com codificação posicional — a representação que o transformer entende.'},
+      {titulo:'Passagem pelos blocos', ids:['tm-w3','tm-blocks'],
+       texto:'Uma pilha de blocos decoder-only processa a sequência de patches. Os pesos foram aprendidos no pré-treinamento em larga escala — nada é ajustado agora.'},
+      {titulo:'Atenção causal', ids:['tm-blocks'],
+       texto:'Cada posição só atende ao passado (máscara causal) — exatamente a restrição de quem prevê o futuro sem vazamento de informação.'},
+      {titulo:'Geração de um patch futuro', ids:['tm-w4','tm-head'],
+       texto:'A cabeça de saída decodifica o último estado em um patch inteiro de previsões futuras de uma só vez (ex.: 128 h por passo).'},
+      {titulo:'Rollout até completar o horizonte', ids:['tm-roll','tm-patch','tm-head'],
+       texto:'O patch previsto volta ao contexto e o processo se repete até cobrir as 24–72 h. Zero-shot: transferência de representações temporais aprendidas em milhões de séries — a diferença essencial frente ao treino local de SARIMAX, XGBoost, LSTM e TFT. Nenhum modelo real é executado neste navegador; a mecânica acima é pedagógica.'}
+    ],
+    blocks:{
+      'tm-norm':{nome:'Normalização',funcao:'Remove escala e nível do contexto.',entrada:'Janela bruta em kW',saida:'Série adimensional',formula:'(y − μ)/σ por janela',rel:'Permite que um único modelo sirva de 100 kW a 100 MW.'},
+      'tm-emb':{nome:'Embeddings',funcao:'Projeta patches em vetores densos.',entrada:'Patches',saida:'Tokens contínuos + posição',formula:'e = W·patch + pos',rel:'Mesma ideia dos embeddings de texto em LLMs.'},
+      'tm-head':{nome:'Cabeça de saída',funcao:'Decodifica o estado em previsões.',entrada:'Último estado do decoder',saida:'Patch futuro (ex.: 128 pts)',formula:'ŷ = MLP(hₙ)',rel:'Um passo do modelo cobre vários horizontes de uma vez.'}
+    }
+  });
+})();
+
+/* ------- Construção dos módulos no DOM ------- */
+const LabPlayers = {};
+function buildLab(){
+  const wrap = $('#lab-mods'); wrap.innerHTML = '';
+  LAB_DEFS.forEach(def=>{
+    const art = document.createElement('article');
+    art.className = 'lab-mod'; art.id = 'lab-'+(def.modelKey ? def.modelKey.toLowerCase() : def.key);
+    art.innerHTML = `
+      <div class="lab-head">
+        <div class="lt"><h3 style="color:${def.ac}">${def.titulo}</h3><p>${def.resumo}</p></div>
+        <div class="lab-controls">
+          <button class="btn small primary" data-act="play" aria-label="Animar módulo ${def.titulo}">▶ Animar</button>
+          <button class="btn small" data-act="prev" aria-label="Etapa anterior">← Etapa anterior</button>
+          <button class="btn small" data-act="next" aria-label="Próxima etapa">Próxima etapa →</button>
+          <button class="btn small" data-act="reset" aria-label="Reiniciar módulo">↺ Reiniciar</button>
+          <select data-act="speed" aria-label="Velocidade do módulo">
+            <option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option>
+          </select>
+        </div>
+      </div>
+      <div class="lab-progress" style="margin:0 20px" aria-hidden="true"><i></i></div>
+      <div class="lab-body">
+        <div class="lab-stage">${def.svg || ''}${def.extraHTML && def.isCanvas ? def.extraHTML : ''}</div>
+        <div class="lab-side">
+          <div class="lab-narr" aria-live="polite"></div>
+          <div class="lab-detail" id="det-${def.key}"><h4>ℹ Detalhe do bloco</h4><p>Clique (ou foque e pressione Enter) em qualquer bloco do diagrama para ver nome, função, entrada, saída, fórmula e relação com a previsão de carga horária.</p></div>
+          <div class="lab-legend"><span>◻ inativo</span><span style="color:var(--cyan)">◻ etapa ativa</span><span style="color:var(--green)">◻ concluído</span></div>
+        </div>
+      </div>
+      ${def.extraHTML && !def.isCanvas ? `<div class="lab-extra">${def.extraHTML}</div>` : ''}`;
+    wrap.appendChild(art);
+    LabPlayers[def.key] = new StepPlayer(art, def);
+    /* interatividade dos blocos */
+    art.querySelectorAll('[data-block]').forEach(el=>{
+      const open = ()=>{
+        const id = el.dataset.block;
+        const info = (def.blocks && def.blocks[id]) || null;
+        const det = $('#det-'+def.key);
+        const label = el.querySelector('text') ? el.querySelector('text').textContent : id;
+        if (info){
+          det.innerHTML = `<h4><span class="cdot" style="width:9px;height:9px;border-radius:50%;background:${def.ac};display:inline-block"></span>${info.nome}</h4>
+            <dl><dt>Função</dt><dd>${info.funcao}</dd><dt>Entrada</dt><dd>${info.entrada}</dd><dt>Saída</dt><dd>${info.saida}</dd>
+            <dt>Relação</dt><dd>${info.rel}</dd></dl><span class="fx">${info.formula}</span>`;
+        } else {
+          det.innerHTML = `<h4>${label}</h4><p>Componente do diagrama “${def.titulo}”. Avance as etapas para vê-lo em ação na narrativa.</p>`;
+        }
+      };
+      el.addEventListener('click', open);
+      el.addEventListener('keydown', e=>{ if (e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+    });
+  });
+  const seqBtn = $('#ls-seq-btn');
+  if (seqBtn) seqBtn.addEventListener('click', ()=>{
+    [0,1,2,3,4].forEach(i=> Sched.after(i*450, ()=>{
+      const w = $('#lsq-c'+i); if (w) w.classList.add('active');
+      const x = $('#lsq-x'+i); if (x) x.classList.add('active');
+      const c = $('#lsq-'+i); if (c) c.classList.add('active');
+    }));
+    Sched.after(3400, ()=> $$('#lab-lstm .lab-extra .active, #lab-lstm [id^=lsq-].active').forEach(e=>e.classList.remove('active')));
+  });
+}
+function runLab(){
+  const keys = LAB_DEFS.map(d=>d.key);
+  let k = 0;
+  const nextMod = ()=>{
+    if (k >= keys.length){ setStatus('ok','Laboratório visual concluído'); return; }
+    const key = keys[k++];
+    const def = LAB_DEFS.find(d=>d.key===key);
+    const art = $('#lab-'+(def.modelKey ? def.modelKey.toLowerCase() : def.key));
+    art.scrollIntoView({behavior: REDUCED?'auto':'smooth', block:'start'});
+    const p = LabPlayers[key];
+    p.reset(); p.onComplete = ()=> Sched.after(900, nextMod);
+    Sched.after(650, ()=> p.play());
+  };
+  setStatus('run','Rodando laboratório visual…');
+  nextMod();
+}
+
+/* =====================================================================
+   Tooltip global · Navegação · Status · Apresentação · Pipeline · Init
+   ===================================================================== */
+
+/* ---------------- Tooltip (mouse + foco de teclado) ---------------- */
+const tipEl = $('#tip');
+function showTip(target, ev){
+  const raw = target.dataset.tip; if (!raw) return;
+  const [t,b] = raw.split('|');
+  tipEl.innerHTML = `<b>${t}</b>${b||''}`;
+  tipEl.style.display = 'block';
+  const r = target.getBoundingClientRect();
+  const x = ev && ev.clientX ? ev.clientX : r.left + r.width/2;
+  const y = ev && ev.clientY ? ev.clientY : r.top;
+  tipEl.style.left = clamp(x+12, 8, window.innerWidth-290) + 'px';
+  tipEl.style.top  = clamp(y-10, 8, window.innerHeight-90) + 'px';
+}
+document.addEventListener('mouseover', e=>{ const t = e.target.closest('[data-tip]'); if (t) showTip(t, e); });
+document.addEventListener('mouseout',  e=>{ if (e.target.closest('[data-tip]')) tipEl.style.display='none'; });
+document.addEventListener('focusin',   e=>{ const t = e.target.closest('[data-tip]'); if (t) showTip(t); });
+document.addEventListener('focusout',  ()=> tipEl.style.display='none');
+
+/* ---------------- Status + stepper ---------------- */
+function setStatus(mode, txt){
+  const p = $('#status');
+  p.classList.remove('run','ok','paused');
+  if (mode) p.classList.add(mode);
+  $('#status-txt').textContent = txt;
+}
+function setStep(n){
+  $$('#stepper .step').forEach(s=>{
+    const k = +s.dataset.step;
+    s.classList.toggle('active', k===n);
+    s.classList.toggle('done', k<n);
+  });
+}
+
+/* ---------------- Navegação lateral (scrollspy) ---------------- */
+function initNav(){
+  const links = $$('.navlink');
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if (en.isIntersecting){
+        links.forEach(l=>l.classList.toggle('on', l.getAttribute('href')==='#'+en.target.id));
+      }
+    });
+  }, {rootMargin:'-30% 0px -55% 0px'});
+  $$('main > section').forEach(s=>obs.observe(s));
+}
+
+/* ---------------- Modo apresentação ---------------- */
+let presentOn = false;
+function togglePresent(force){
+  presentOn = force !== undefined ? force : !presentOn;
+  document.body.classList.toggle('present', presentOn);
+  if (presentOn){
+    (document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(()=>{}));
+    setStatus(null,'Modo apresentação — setas navegam, Esc sai');
+  } else {
+    if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+    setStatus(null,'Pronto');
+  }
+  Sched.after(280, redrawAll);
+}
+document.addEventListener('fullscreenchange', ()=>{ if (!document.fullscreenElement && presentOn) togglePresent(false); });
+document.addEventListener('keydown', e=>{
+  if (e.key === 'Escape' && presentOn){ togglePresent(false); return; }
+  if (!presentOn) return;
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+  e.preventDefault();
+  const secs = $$('main > section');
+  const cur = secs.findIndex(s=>{ const r = s.getBoundingClientRect(); return r.top <= 120 && r.bottom > 120; });
+  const dir = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1 : -1;
+  const nx = clamp(cur + dir, 0, secs.length-1);
+  secs[nx].scrollIntoView({behavior: REDUCED?'auto':'smooth'});
+});
+
+/* ---------------- Toast ---------------- */
+let toastAction = null;
+function toast(txt, onOpen){
+  $('#toast-txt').textContent = txt;
+  toastAction = onOpen;
+  $('#toast-btn').style.display = onOpen ? '' : 'none';
+  $('#toast').classList.add('show');
+  Sched.after(12000, ()=> $('#toast').classList.remove('show'));
+}
+$('#toast-btn').addEventListener('click', ()=>{ $('#toast').classList.remove('show'); toastAction && toastAction(); });
+$('#toast-x').addEventListener('click', ()=> $('#toast').classList.remove('show'));
+
+/* ---------------- Pipeline completo ---------------- */
+function scrollToSec(sel){ $(sel).scrollIntoView({behavior: REDUCED?'auto':'smooth', block:'start'}); }
+function runPipeline(){
+  resetAll(true);
+  setStatus('run','Etapa 1 — série temporal');
+  setStep(1); scrollToSec('#serie');
+  animateSerie(()=>{
+    Sched.after(500, ()=> playDayVector());
+    Sched.after(3800, ()=>{
+      setStatus('run','Etapa 2 — K-Means convergindo…');
+      setStep(2); scrollToSec('#kmeans');
+      Sched.after(600, ()=> kmIterate(true, ()=>{
+        Sched.after(1100, ()=>{
+          setStatus('run','Etapa 3 — cinco modelos em paralelo');
+          setStep(3); scrollToSec('#modelos');
+          Sched.after(500, ()=> runAllModels(()=>{
+            Sched.after(700, ()=>{
+              setStep(4); scrollToSec('#metricas');
+              setStatus('ok','Etapa 4 — métricas e ranking prontos');
+              Sched.after(900, ()=> anatPlay());
+              Sched.after(1600, ()=> toast('Pipeline concluído. Abrir o laboratório visual das arquiteturas?', ()=>{ scrollToSec('#lab'); Sched.after(700, runLab); }));
+            });
+          }));
+        });
+      }));
+    });
+  });
+}
+
+/* ---------------- Reset / rebuild ---------------- */
+function clearOutputs(){
+  Sched.cancelAll();
+  Anat.i = -1; Anat.task = null;
+  State.metrics = null; State.running = false; State.kmDone = false;
+  MODELS.forEach(m=>{
+    State.revealed[m.key] = 0;
+    const c = $('#mc-'+m.key); if (!c) return;
+    c.classList.remove('running','done');
+    $('#ms-'+m.key).textContent = 'aguardando';
+    $('#me-'+m.key).textContent = m.resumo.split('.')[0]+'.';
+    $('#mb-'+m.key).style.width = '0%';
+    $('#mp-'+m.key).textContent = '0%'; $('#mt-'+m.key).textContent = '0,0s';
+    $('#mr-'+m.key).textContent = '—';
+    $('#sms-'+m.key).textContent = 'aguardando';
+    $('#smr-'+m.key).textContent = '—'; $('#sma-'+m.key).textContent = '—'; $('#smp-'+m.key).textContent = '—';
+  });
+  $('#score-body').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--faint)">Rode os cinco modelos para preencher o scoreboard.</td></tr>';
+  $('#rank-bars').innerHTML = '';
+  $('#champ').classList.remove('show');
+  ['an-t','an-y','an-yh','an-e','an-ae','an-e2','an-mae','an-rmse','an-mape','an-r2'].forEach(id=> $('#'+id).textContent = '—');
+  $$('.dv-cell').forEach(c=>{ c.classList.remove('fill'); c.style.background=''; c.textContent=''; });
+  $$('.dv-tag').forEach(t=>t.classList.remove('on'));
+  $$('.dv-arrow').forEach(a=>a.classList.remove('on'));
+  setStep(0);
+  Object.values(LabPlayers).forEach(p=>p.reset());
+  if (Sched.paused){ Sched.resume(); $('#btn-pause').textContent = '⏸ Pausar'; }
+}
+function redrawAll(){
+  drawSerie(); kmDraw(); drawGlobal(); drawSmalls();
+  MODELS.forEach(m=>drawMini(m.key));
+  drawAnat(); drawHBars();
+  const dc = LAB_DEFS.find(d=>d.key==='decomp'); if (dc && dc.redraw) dc.redraw();
+  if (window.drawAttnFull) drawAttnFull();
+}
+function resetAll(keepScroll){
+  clearOutputs();
+  buildData(); genForecasts(); kmBuild();
+  serieProgress = 1;
+  drawDVStrip(-1);
+  window.fillXgFeat && fillXgFeat();
+  redrawAll();
+  renderFocusSummary();
+  setStatus(null,'Pronto');
+  if (!keepScroll) scrollToSec('#visao');
+}
+function rebuildAll(reason){
+  $$('#tip-grid .tip-card').forEach((c,i)=>{ c.classList.toggle('on', i===State.tip); c.setAttribute('aria-checked', i===State.tip); });
+  resetAll(true);
+  if (reason) setStatus(null, reason);
+}
+
+/* ---------------- Listeners globais ---------------- */
+function initControls(){
+  const st = $('#sel-tip');
+  TYPOLOGIES.forEach((t,i)=>{ const o = document.createElement('option'); o.value = i; o.textContent = t.nome; st.appendChild(o); });
+  st.value = State.tip;
+  st.addEventListener('change', ()=>{ State.tip = +st.value; rebuildAll('Tipologia: '+TYPOLOGIES[State.tip].nome); });
+  const sf = $('#sel-focus');
+  MODELS.forEach(m=>{ const o = document.createElement('option'); o.value = m.key; o.textContent = m.key; sf.appendChild(o); });
+  sf.value = State.focus;
+  sf.addEventListener('change', ()=> setFocus(sf.value));
+  $('#sel-hor').addEventListener('change', e=>{ State.hor = +e.target.value; rebuildAll('Horizonte: '+State.hor+' h'); });
+  $('#rng-noise').addEventListener('input', e=>{ $('#out-noise').textContent = e.target.value+'%'; });
+  $('#rng-noise').addEventListener('change', e=>{ State.noise = +e.target.value; rebuildAll('Ruído: '+State.noise+'%'); });
+  $('#sel-diff').addEventListener('change', e=>{ State.diff = e.target.value; rebuildAll('Dificuldade: '+State.diff); });
+  $('#sel-speed').addEventListener('change', e=>{ State.speed = parseFloat(e.target.value); Sched.setSpeed(State.speed); });
+  $('#chk-sync').addEventListener('change', e=> State.sync = e.target.checked);
+
+  $('#btn-pipeline').addEventListener('click', runPipeline);
+  const runM = ()=>{ setStep(3); scrollToSec('#modelos'); Sched.after(300, ()=> runAllModels(()=> setStep(4))); };
+  $('#btn-run-models').addEventListener('click', runM);
+  $('#btn-run-models-2').addEventListener('click', runM);
+  $('#btn-run-lab').addEventListener('click', ()=>{ scrollToSec('#lab'); Sched.after(500, runLab); });
+  $('#btn-pause').addEventListener('click', ()=>{
+    if (Sched.paused){ Sched.resume(); $('#btn-pause').textContent = '⏸ Pausar'; setStatus(State.running?'run':null, State.running?'Retomado…':'Pronto'); }
+    else { Sched.pause(); $('#btn-pause').textContent = '▶ Continuar'; setStatus('paused','Pausado'); }
+  });
+  $('#btn-reset').addEventListener('click', ()=> resetAll(true));
+  $('#btn-present').addEventListener('click', ()=> togglePresent());
+
+  /* K-Means */
+  $('#km-run').addEventListener('click', ()=>{ if (KM.converged) kmBuild(); kmIterate(true, null); });
+  $('#km-step').addEventListener('click', ()=>{ if (KM.converged) kmBuild(); if (!KM.running) kmIterate(false, null); });
+  $('#km-pause').addEventListener('click', ()=> Sched.paused ? Sched.resume() : Sched.pause());
+  $('#km-reset').addEventListener('click', ()=>{ kmBuild(); $('#km-status').style.color=''; });
+  $('#km-speed').addEventListener('change', e=> KM.speedLocal = parseFloat(e.target.value));
+
+  /* Dia como vetor */
+  $('#dv-play').addEventListener('click', playDayVector);
+
+  /* Anatomia do erro */
+  $('#an-play').addEventListener('click', anatPlay);
+  $('#an-pause').addEventListener('click', ()=> Sched.paused ? Sched.resume() : Sched.pause());
+  $('#an-reset').addEventListener('click', ()=>{ if (Anat.task) Sched.cancel(Anat.task); Anat.i = -1; drawAnat();
+    ['an-t','an-y','an-yh','an-e','an-ae','an-e2','an-mae','an-rmse','an-mape','an-r2'].forEach(id=> $('#'+id).textContent = '—'); });
+
+  /* Ranking */
+  $$('.rank-tab').forEach(b=> b.addEventListener('click', ()=>{
+    $$('.rank-tab').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+    rankCrit = b.dataset.rk; renderRankBars();
+  }));
+
+  /* Redimensionamento sem destruir os gráficos */
+  let rt = null;
+  window.addEventListener('resize', ()=>{ clearTimeout(rt); rt = setTimeout(redrawAll, 180); });
+}
+
+/* ---------------- Marcador de seta compartilhado para os SVGs ---------------- */
+(function(){
+  const d = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  d.setAttribute('width','0'); d.setAttribute('height','0');
+  d.style.position = 'absolute';
+  d.innerHTML = `<defs><marker id="arrw" markerWidth="7" markerHeight="7" refX="5.6" refY="3.5" orient="auto">
+    <path d="M0 0 L7 3.5 L0 7 Z" fill="#27406e"/></marker></defs>`;
+  document.body.appendChild(d);
+})();
+
+/* ---------------- Inicialização ---------------- */
+function init(){
+  buildData();
+  genForecasts();
+  buildTipGrid();
+  buildDayVector();
+  buildModelCards();
+  buildGlobalLegend();
+  buildSmalls();
+  buildLab();
+  kmBuild();
+  initControls();
+  initNav();
+  window.fillXgFeat && fillXgFeat();
+  redrawAll();
+  renderFocusSummary();
+  setFocus(State.focus);
+  setStatus(null,'Pronto — selecione uma tipologia ou rode o pipeline completo');
+}
+document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
+</script>
+</body>
+</html>
