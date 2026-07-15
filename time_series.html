@@ -460,7 +460,7 @@ body.present .present-hint{display:block}
   <aside class="sidenav" aria-label="Navegação principal">
     <div class="brand">
       <span class="brand-dot" aria-hidden="true"></span>
-      <div><strong>Time Series · Lab Gabriel Groehs</strong><small>Séries temporais · benchmark visual</small></div>
+      <div><strong>TS·Lab</strong><small>Séries temporais · benchmark visual</small></div>
     </div>
     <nav aria-label="Seções">
       <a class="navlink" href="#visao"><span class="n">00</span>Visão geral</a>
@@ -1493,12 +1493,12 @@ function drawSmalls(){
     $('#sm-'+m.key).classList.toggle('focus', m.key===State.focus);
   });
 }
-function setFocus(key){
+function setFocus(key, skipScroll){
   State.focus = key;
   $('#sel-focus').value = key;
   $$('.mcard').forEach(c=>c.classList.toggle('focus', c.id==='mc-'+key));
   drawGlobal(); drawSmalls(); renderFocusSummary();
-  if (State.sync){
+  if (State.sync && !skipScroll){
     const mod = $('#lab-'+key.toLowerCase());
     if (mod) mod.scrollIntoView({behavior: REDUCED?'auto':'smooth', block:'nearest'});
   }
@@ -2567,6 +2567,7 @@ function initControls(){
 
 /* ---------------- Inicialização ---------------- */
 function init(){
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   buildData();
   genForecasts();
   buildTipGrid();
@@ -2581,8 +2582,9 @@ function init(){
   window.fillXgFeat && fillXgFeat();
   redrawAll();
   renderFocusSummary();
-  setFocus(State.focus);
+  setFocus(State.focus, true);
   setStatus(null,'Pronto — selecione uma tipologia ou rode o pipeline completo');
+  window.scrollTo(0,0);
 }
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 </script>
