@@ -413,18 +413,6 @@
       font-weight: 900;
     }
 
-    .project-card.maintenance {
-      cursor: default;
-      opacity: .72;
-      filter: grayscale(.18);
-    }
-    .project-card.maintenance:hover { transform: none; box-shadow: var(--shadow); }
-    .maintenance .open-label {
-      color: #64748b;
-      border-color: var(--line);
-      background: var(--bg-soft);
-    }
-
     footer {
       display: flex;
       align-items: center;
@@ -668,12 +656,12 @@
           <span class="family-meta">1 projeto</span>
         </div>
         <div class="project-grid">
-          <div class="project-card maintenance" style="--accent:#64748b;--soft:#f1f5f9" aria-label="TDWI em manutenção">
+          <a class="project-card" style="--accent:#64748b;--soft:#f1f5f9" href="https://gabriel-groehs.github.io/tdwi.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir TDWI — Maturidade Analítica">
             <div class="card-top"><span class="project-icon">TD</span><span class="project-type">Modelo de maturidade</span></div>
             <h3>TDWI — Maturidade Analítica</h3>
-            <p>Evolução, florescimento e poda de ativos analíticos. Página publicada atualmente em manutenção.</p>
-            <div class="card-footer"><div class="tags"><span class="tag">TDWI</span><span class="tag">Governança</span></div><span class="open-label">Manutenção</span></div>
-          </div>
+            <p>Evolução, florescimento, mensuração e poda inteligente do portfólio de ativos analíticos.</p>
+            <div class="card-footer"><div class="tags"><span class="tag">TDWI</span><span class="tag">Governança</span></div><span class="open-label">Abrir ↗</span></div>
+          </a>
         </div>
       </section>
 
