@@ -22,14 +22,14 @@ main{padding:0 6vw 80px}section{margin:70px 0}.section-head{display:flex;justify
 .area-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.area{min-height:155px;padding:21px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(145deg,#111f34,#0b1525);cursor:pointer;transition:.2s}.area:hover{transform:translateY(-4px);border-color:#43d5e866}.area .icon{font-size:28px}.area h3{margin:14px 0 5px;font-size:18px}.area p{margin:0;color:var(--muted)}.area small{display:block;color:var(--cyan);margin-top:12px}
 .credit-map{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.credit-box{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}.credit-box h3{margin:0 0 8px}.credit-box .big{font-size:27px;font-weight:850;color:var(--gold)}.credit-box p{color:var(--muted);font-size:13px}.credit-box code{color:var(--cyan);font-size:12px;white-space:normal}
 .toolbar{position:sticky;top:61px;z-index:15;display:grid;grid-template-columns:1fr 210px 210px;gap:10px;padding:13px;background:#081321e8;backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:16px;margin-bottom:20px}input,select{width:100%;padding:12px 13px;color:var(--text);background:#101e31;border:1px solid var(--line);border-radius:11px;outline:none}input:focus,select:focus{border-color:var(--cyan)}option{background:#101e31}
-.catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{position:relative;padding:20px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#101e31,#0b1525);cursor:pointer;overflow:hidden;transition:.2s}.card:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--cyan),var(--purple));opacity:.8}.card:hover{transform:translateY(-3px);border-color:#5f8fff75}.tags{display:flex;flex-wrap:wrap;gap:6px}.tag{font-size:11px;padding:4px 8px;border-radius:999px;background:#20324b;color:#bfd3ef}.tag.group{background:#183a3a;color:#83edd3}.card h3{font-size:19px;margin:15px 0 8px}.card p{color:var(--muted);margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.formula{margin:15px 0 12px;padding:10px;border-radius:10px;background:#07101e;color:#b7e9ff;overflow:auto;font-family:Cambria Math,serif}.meta{display:flex;justify-content:space-between;color:#7187a5;font-size:12px}
-.viz-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}.viz-card{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:20px;min-height:340px}canvas{max-height:270px}
+.catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{position:relative;padding:20px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#101e31,#0b1525);cursor:pointer;overflow:hidden;transition:.2s}.card:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--cyan),var(--purple));opacity:.8}.card:hover{transform:translateY(-3px);border-color:#5f8fff75}.tags{display:flex;flex-wrap:wrap;gap:6px}.tag{font-size:11px;padding:4px 8px;border-radius:999px;background:#20324b;color:#bfd3ef}.tag.group{background:#183a3a;color:#83edd3}.card h3{font-size:19px;margin:15px 0 8px}.card-copy{color:var(--muted);margin:0;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;min-height:106px}.card-copy strong{color:#dcecff;font-weight:750}.mini-chart{position:relative;height:92px;margin:14px 0 10px;border:1px solid #263b57;border-radius:13px;overflow:hidden;background:linear-gradient(180deg,#0a1525,#08111e)}.mini-chart svg{width:100%;height:100%;display:block}.mini-chart-label{position:absolute;left:10px;bottom:7px;font-size:10px;letter-spacing:.55px;text-transform:uppercase;color:#a9bad0;background:#06101ccc;padding:3px 7px;border-radius:999px}.formula{margin:12px 0 12px;padding:10px;border-radius:10px;background:#07101e;color:#b7e9ff;overflow:auto;font-family:Cambria Math,serif}.meta{display:flex;justify-content:space-between;color:#7187a5;font-size:12px}
+.viz-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}.viz-card{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:20px;min-height:410px;overflow:hidden}.viz-head{display:flex;justify-content:space-between;align-items:center;gap:14px}.viz-head h3{margin:0}.animate-btn{border:1px solid #4b72a2;background:linear-gradient(135deg,#163d64,#352a6d);color:#f4f8ff;padding:9px 13px;border-radius:10px;cursor:pointer;font-weight:800;white-space:nowrap;transition:.2s}.animate-btn:hover{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 8px 24px #0005}.animate-all{padding:11px 16px}.lab-sequence{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:13px 0 6px}.lab-step{position:relative;text-align:center;padding:7px 5px;border:1px solid #263b57;border-radius:9px;background:#0a1525;color:#849ab7;font-size:10px;font-weight:750;opacity:.55;transform:translateY(0)}.lab-step:not(:last-child):after{content:'›';position:absolute;right:-7px;top:4px;color:#55708f;font-size:17px;z-index:2}.viz-card.running .lab-step{animation:labPulse 1.65s ease both}.viz-card.running .lab-step:nth-child(2){animation-delay:.17s}.viz-card.running .lab-step:nth-child(3){animation-delay:.34s}.viz-card.running .lab-step:nth-child(4){animation-delay:.51s}.lab-note{min-height:38px;margin:8px 0 4px;color:#b9cae0;font-size:12px}.model-chip{display:inline-flex;margin-right:6px;padding:3px 7px;border-radius:999px;background:#172a43;color:#8fe7f1;font-size:10px;font-weight:800}canvas{max-height:270px}@keyframes labPulse{0%{opacity:.5;transform:translateY(0);box-shadow:none}35%{opacity:1;transform:translateY(-3px);border-color:#43d5e8;box-shadow:0 0 24px #43d5e82f;color:#effaff}100%{opacity:.85;transform:translateY(0);border-color:#5f8fff;color:#cfe2ff}}
 .matrix{overflow:auto;border:1px solid var(--line);border-radius:16px}table{border-collapse:collapse;width:100%;min-width:920px;background:var(--panel)}th,td{padding:13px;border-bottom:1px solid var(--line);text-align:left}th{position:sticky;top:0;background:#14243a;color:#cde3ff}td{color:#b9c9dc}td:first-child{color:white;font-weight:750}
 footer{border-top:1px solid var(--line);padding:35px 6vw;color:var(--muted);display:flex;justify-content:space-between;gap:20px}
 .modal{display:none;position:fixed;inset:0;background:#020711d9;z-index:50;padding:4vh 4vw;backdrop-filter:blur(8px)}.modal.open{display:flex}.modal-box{margin:auto;max-width:1050px;width:100%;max-height:92vh;overflow:auto;background:#0c1727;border:1px solid #37506f;border-radius:22px;padding:27px;box-shadow:0 30px 100px #000}.close{float:right;border:0;background:#1a2c45;color:white;border-radius:10px;padding:8px 12px;cursor:pointer}.modal h2{padding-right:50px}.modal-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:20px}.block{border:1px solid var(--line);border-radius:14px;padding:16px;background:#101e31}.block h4{margin:0 0 8px;color:var(--cyan)}.block p{color:#c0cee0;margin:0}.refbtn{display:inline-block;text-decoration:none;margin-top:14px;padding:11px 14px;border-radius:10px;background:linear-gradient(90deg,#2679d9,#6849bd);font-weight:750}
 .empty{grid-column:1/-1;padding:50px;text-align:center;color:var(--muted)}
 @media(max-width:1000px){.area-grid{grid-template-columns:repeat(2,1fr)}.credit-map{grid-template-columns:repeat(2,1fr)}.catalog{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){h1{letter-spacing:-2px}.navlinks{display:none}.toolbar{grid-template-columns:1fr;top:52px}.catalog,.viz-wrap,.modal-grid{grid-template-columns:1fr}.area-grid,.credit-map{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.section-head{align-items:start;flex-direction:column}}
+@media(max-width:700px){h1{letter-spacing:-2px}.lab-sequence{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}.toolbar{grid-template-columns:1fr;top:52px}.catalog,.viz-wrap,.modal-grid{grid-template-columns:1fr}.area-grid,.credit-map{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.section-head{align-items:start;flex-direction:column}}
 </style>
 </head>
 <body>
@@ -75,12 +75,12 @@ footer{border-top:1px solid var(--line);padding:35px 6vw;color:var(--muted);disp
 </section>
 
 <section id="laboratorio">
-<div class="section-head"><div><div class="eyebrow">LABORATÓRIO VISUAL</div><h2>Como os modelos “pensam”</h2></div><p>As animações abaixo ilustram conceitos centrais: probabilidade de default, sobrevivência e volatilidade condicional.</p></div>
+<div class="section-head"><div><div class="eyebrow">LABORATÓRIO VISUAL</div><h2>Como os modelos “pensam”</h2></div><div><p>Acione cada experimento para observar entrada, transformação matemática e saída do modelo.</p><button class="animate-btn animate-all" onclick="animateAllLabs()">▶ Animar todos</button></div></div>
 <div class="viz-wrap">
-<div class="viz-card"><h3>Curva logística de PD</h3><p style="color:var(--muted)">O score linear é convertido em probabilidade entre 0 e 1.</p><canvas id="logitChart"></canvas></div>
-<div class="viz-card"><h3>Sobrevivência e PD acumulada</h3><p style="color:var(--muted)">A sobrevivência cai à medida que o risco acumulado aumenta.</p><canvas id="survChart"></canvas></div>
-<div class="viz-card"><h3>Clustering de volatilidade GARCH</h3><p style="color:var(--muted)">Choques elevam a variância, que decai de forma persistente.</p><canvas id="garchChart"></canvas></div>
-<div class="viz-card"><h3>Atenção temporal</h3><p style="color:var(--muted)">Pesos de atenção destacam instantes mais relevantes ao forecast.</p><canvas id="attnChart"></canvas></div>
+<div class="viz-card" id="lab-logit"><div class="viz-head"><h3>Curva logística de PD</h3><button class="animate-btn" onclick="animateLab('logit')">▶ Animar</button></div><p style="color:var(--muted)"><span class="model-chip">PD12</span>O score linear é comprimido pela função sigmoide e convertido em probabilidade de inadimplência entre 0 e 1.</p><div class="lab-sequence"><div class="lab-step">Features</div><div class="lab-step">Score βᵀx</div><div class="lab-step">Sigmoide</div><div class="lab-step">PD</div></div><div class="lab-note" id="logitNote">Clique em animar para variar a inclinação da curva e observar a sensibilidade da PD ao score.</div><canvas id="logitChart"></canvas></div>
+<div class="viz-card" id="lab-surv"><div class="viz-head"><h3>Sobrevivência e PD acumulada</h3><button class="animate-btn" onclick="animateLab('surv')">▶ Animar</button></div><p style="color:var(--muted)"><span class="model-chip">PDLT</span>O hazard de cada período reduz a sobrevivência; a diferença entre sobreviver e falhar forma a curva de default lifetime.</p><div class="lab-sequence"><div class="lab-step">Tempo</div><div class="lab-step">Hazard h(t)</div><div class="lab-step">Sobrevivência S(t)</div><div class="lab-step">PD acumulada</div></div><div class="lab-note" id="survNote">A animação modifica a intensidade do risco e redesenha as curvas de sobrevivência e default.</div><canvas id="survChart"></canvas></div>
+<div class="viz-card" id="lab-garch"><div class="viz-head"><h3>Clustering de volatilidade GARCH</h3><button class="animate-btn" onclick="animateLab('garch')">▶ Animar</button></div><p style="color:var(--muted)"><span class="model-chip">MERCADO</span>Choques recentes alimentam a variância condicional, cuja persistência mantém períodos turbulentos agrupados no tempo.</p><div class="lab-sequence"><div class="lab-step">Retorno</div><div class="lab-step">Choque ε²</div><div class="lab-step">Persistência βσ²</div><div class="lab-step">Volatilidade</div></div><div class="lab-note" id="garchNote">Cada execução injeta um novo choque e mostra como a volatilidade cresce e depois se dissipa.</div><canvas id="garchChart"></canvas></div>
+<div class="viz-card" id="lab-attn"><div class="viz-head"><h3>Atenção temporal</h3><button class="animate-btn" onclick="animateLab('attn')">▶ Animar</button></div><p style="color:var(--muted)"><span class="model-chip">TRANSFORMER</span>O mecanismo de atenção atribui pesos diferentes aos instantes passados, destacando os contextos mais úteis para a previsão.</p><div class="lab-sequence"><div class="lab-step">Tokens temporais</div><div class="lab-step">Q · K</div><div class="lab-step">Softmax</div><div class="lab-step">Contexto</div></div><div class="lab-note" id="attnNote">A animação recalcula os pesos e evidencia quais períodos dominam o contexto do forecast.</div><canvas id="attnChart"></canvas></div>
 </div>
 </section>
 
@@ -108,20 +108,50 @@ const icons={"Risco de Crédito":"◈","Risco de Mercado":"⌁","Modelos Finance
 const areaDesc={"Risco de Crédito":"PD, LGD, EAD, CCF e sobrevivência","Risco de Mercado":"VaR, ES, volatilidade e caudas","Modelos Financeiros":"Derivativos, taxas e simulação","Risco de Liquidez":"Funding, fluxo e comportamento","Econometria":"Inferência, causalidade e macro","Séries Temporais":"Forecast clássico e state space","Deep Learning":"Redes densas, sequenciais e latentes","Transformers e LLM":"Attention, TSFM, RAG e copilotos"};
 const catalog=document.getElementById('catalog'), areaFilter=document.getElementById('areaFilter'), groupFilter=document.getElementById('groupFilter'), search=document.getElementById('search');
 const uniq=a=>[...new Set(a)].sort();
+const areaOrder=["Risco de Crédito","Risco de Mercado","Risco de Liquidez","Modelos Financeiros","Séries Temporais","Transformers e LLM","Econometria","Deep Learning"];
+const orderedAreas=areaOrder.filter(a=>models.some(m=>m.area===a));
 document.getElementById('nModels').textContent=models.length;
-document.getElementById('nAreas').textContent=uniq(models.map(x=>x.area)).length;
+document.getElementById('nAreas').textContent=orderedAreas.length;
 document.getElementById('nFamilies').textContent=uniq(models.map(x=>x.family)).length;
-uniq(models.map(x=>x.area)).forEach(a=>areaFilter.insertAdjacentHTML('beforeend',`<option>${a}</option>`));
+orderedAreas.forEach(a=>areaFilter.insertAdjacentHTML('beforeend',`<option>${a}</option>`));
 uniq(models.map(x=>x.group)).forEach(g=>groupFilter.insertAdjacentHTML('beforeend',`<option>${g}</option>`));
 const areaGrid=document.getElementById('areaGrid');
-uniq(models.map(x=>x.area)).forEach(a=>{const n=models.filter(x=>x.area===a).length;areaGrid.insertAdjacentHTML('beforeend',`<div class="area" onclick="setArea('${a.replaceAll("'","\\'")}')"><div class="icon">${icons[a]||'◆'}</div><h3>${a}</h3><p>${areaDesc[a]||''}</p><small>${n} modelos →</small></div>`)});
+orderedAreas.forEach(a=>{const n=models.filter(x=>x.area===a).length;areaGrid.insertAdjacentHTML('beforeend',`<div class="area" onclick="setArea('${a.replaceAll("'","\\'")}')"><div class="icon">${icons[a]||'◆'}</div><h3>${a}</h3><p>${areaDesc[a]||''}</p><small>${n} modelos →</small></div>`)});
+
+const miniColors=['#43d5e8','#b08cff','#65dfad','#ffcb6b','#ff748b','#5f8fff'];
+function miniChart(m,index){
+ const key=(m.name+' '+m.family+' '+m.group+' '+m.area).toLowerCase();
+ const c=miniColors[index%miniColors.length], c2=miniColors[(index+2)%miniColors.length];
+ const gid='mg'+index;
+ const grid=`<path d="M0 22H240M0 45H240M0 68H240M48 0V92M96 0V92M144 0V92M192 0V92" stroke="#1d3048" stroke-width="1" opacity=".55"/>`;
+ let body='', label='curva do modelo';
+ if(key.includes('surviv')||key.includes('cox')||key.includes('kaplan')||key.includes('hazard')){
+   body=`<path d="M8 12 H35 V18 H60 V25 H85 V33 H110 V43 H135 V52 H160 V63 H185 V72 H232 V80" fill="none" stroke="${c}" stroke-width="4" stroke-linejoin="round"/><path d="M8 81 C55 76,93 64,125 50 S190 20,232 11" fill="none" stroke="${c2}" stroke-width="2.5" stroke-dasharray="5 4"/>`;label='sobrevivência';
+ } else if(key.includes('árvore')||key.includes('forest')||key.includes('boost')||key.includes('xgboost')||key.includes('lightgbm')||key.includes('catboost')){
+   body=`<path d="M120 12V29M120 29L65 48M120 29L177 48M65 48L36 75M65 48L91 75M177 48L151 75M177 48L207 75" stroke="${c}" stroke-width="3" fill="none"/><g fill="${c2}" stroke="#dffaff" stroke-width="1"><circle cx="120" cy="12" r="6"/><circle cx="65" cy="48" r="6"/><circle cx="177" cy="48" r="6"/><circle cx="36" cy="75" r="5"/><circle cx="91" cy="75" r="5"/><circle cx="151" cy="75" r="5"/><circle cx="207" cy="75" r="5"/></g>`;label='partições da árvore';
+ } else if(key.includes('garch')||key.includes('arch')||key.includes('volatil')||key.includes('var')||key.includes('shortfall')||key.includes('extreme')){
+   body=`<path d="M5 67 L18 63 L31 70 L44 59 L57 64 L70 51 L83 66 L96 48 L109 57 L122 20 L135 74 L148 27 L161 59 L174 43 L187 55 L200 39 L213 47 L235 32 L235 88 L5 88Z" fill="url(#${gid})" opacity=".48"/><polyline points="5,67 18,63 31,70 44,59 57,64 70,51 83,66 96,48 109,57 122,20 135,74 148,27 161,59 174,43 187,55 200,39 213,47 235,32" fill="none" stroke="${c}" stroke-width="3"/>`;label='volatilidade e cauda';
+ } else if(key.includes('transformer')||key.includes('bert')||key.includes('gpt')||key.includes('attention')||key.includes('rag')||key.includes('timesfm')||key.includes('chronos')||key.includes('patchtst')||key.includes('informer')||key.includes('autoformer')||key.includes('fusion')){
+   const bars=[20,35,29,50,41,63,46,75,54,39,68,82];
+   body=bars.map((h,i)=>`<rect x="${10+i*19}" y="${86-h}" width="11" height="${h}" rx="3" fill="${i>7?c2:c}" opacity="${.45+i*.04}"/>`).join('');label='pesos de atenção';
+ } else if(key.includes('arima')||key.includes('sarima')||key.includes('ets')||key.includes('holt')||key.includes('prophet')||key.includes('kalman')||key.includes('lstm')||key.includes('gru')||key.includes('time')){
+   body=`<path d="M5 53 C18 24,31 24,44 52 S70 81,83 53 S109 22,122 51 S148 80,161 50 S187 22,200 45 S220 66,235 31" fill="none" stroke="${c}" stroke-width="3.5"/><path d="M5 64 C28 57,48 61,70 50 S116 46,139 40 S184 38,235 24" fill="none" stroke="${c2}" stroke-width="2" stroke-dasharray="5 4"/>`;label='sinal e forecast';
+ } else if(key.includes('black')||key.includes('merton')||key.includes('vasicek')||key.includes('hull')||key.includes('cir')||key.includes('monte carlo')){
+   body=`<path d="M8 76 C48 76,72 74,101 67 C135 59,150 47,170 34 C191 20,210 15,233 12" fill="none" stroke="${c}" stroke-width="3.5"/><path d="M8 73 L106 73 L106 64 L232 16" fill="none" stroke="${c2}" stroke-width="2.5" stroke-dasharray="6 4"/>`;label='preço e cenários';
+ } else if(key.includes('beta')||key.includes('fractional')||key.includes('tobit')||key.includes('gamma')||key.includes('tweedie')||key.includes('quantile')||key.includes('ccf')){
+   body=`<g fill="${c}" opacity=".72"><circle cx="25" cy="69" r="4"/><circle cx="52" cy="61" r="4"/><circle cx="77" cy="66" r="4"/><circle cx="102" cy="49" r="4"/><circle cx="128" cy="54" r="4"/><circle cx="154" cy="37" r="4"/><circle cx="182" cy="31" r="4"/><circle cx="211" cy="18" r="4"/></g><path d="M12 76 C56 68,92 59,126 50 S190 30,229 14" fill="none" stroke="${c2}" stroke-width="3"/>`;label='severidade estimada';
+ } else {
+   body=`<g fill="${c}" opacity=".72"><circle cx="25" cy="70" r="4"/><circle cx="50" cy="59" r="4"/><circle cx="78" cy="62" r="4"/><circle cx="104" cy="45" r="4"/><circle cx="130" cy="51" r="4"/><circle cx="158" cy="34" r="4"/><circle cx="188" cy="27" r="4"/><circle cx="216" cy="17" r="4"/></g><path d="M12 76 L230 12" stroke="${c2}" stroke-width="3"/>`;label='ajuste e observações';
+ }
+ return `<div class="mini-chart"><svg viewBox="0 0 240 92" preserveAspectRatio="none"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${c2}" stop-opacity="0"/></linearGradient></defs>${grid}${body}</svg><span class="mini-chart-label">${label}</span></div>`;
+}
 
 function setArea(a){areaFilter.value=a;render();document.getElementById('catalogo').scrollIntoView()}
 function render(){
  const q=search.value.toLowerCase(), a=areaFilter.value, g=groupFilter.value;
  const list=models.filter(m=>(!a||m.area===a)&&(!g||m.group===g)&&(!q||Object.values(m).join(' ').toLowerCase().includes(q)));
  catalog.innerHTML=list.length?'':`<div class="empty">Nenhum modelo encontrado para estes filtros.</div>`;
- list.forEach((m,i)=>catalog.insertAdjacentHTML('beforeend',`<article class="card" onclick="openModal(${models.indexOf(m)})"><div class="tags"><span class="tag">${m.area}</span><span class="tag group">${m.group}</span></div><h3>${m.name}</h3><p>${m.concept}</p><div class="formula">${m.formula}</div><div class="meta"><span>${m.family}</span><span>${m.year}</span></div></article>`));
+ list.forEach((m,i)=>{const modelIndex=models.indexOf(m);catalog.insertAdjacentHTML('beforeend',`<article class="card" onclick="openModal(${modelIndex})"><div class="tags"><span class="tag">${m.area}</span><span class="tag group">${m.group}</span></div><h3>${m.name}</h3>${miniChart(m,modelIndex)}<p class="card-copy">${m.concept} <strong>Na prática bancária:</strong> ${m.application}</p><div class="formula">${m.formula}</div><div class="meta"><span>${m.family}</span><span>${m.year}</span></div></article>`)});
 }
 [search,areaFilter,groupFilter].forEach(el=>el.addEventListener(el===search?'input':'change',render));
 function openModal(i){
@@ -134,15 +164,49 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
 Chart.defaults.color='#9eb0c8';Chart.defaults.borderColor='#263750';
+const labCharts={};
 const xs=Array.from({length:81},(_,i)=>(i-40)/8);
-new Chart(document.getElementById('logitChart'),{type:'line',data:{labels:xs,datasets:[{label:'PD',data:xs.map(x=>1/(1+Math.exp(-x))),borderWidth:3,pointRadius:0,tension:.25}]},options:{animation:{duration:1800},scales:{y:{min:0,max:1}},plugins:{legend:{display:false}}}});
-const t=Array.from({length:25},(_,i)=>i);
-const surv=t.map(x=>Math.exp(-.035*x-.0022*x*x));
-new Chart(document.getElementById('survChart'),{type:'line',data:{labels:t,datasets:[{label:'Sobrevivência',data:surv,borderWidth:3,pointRadius:0,tension:.2},{label:'PD acumulada',data:surv.map(x=>1-x),borderWidth:2,pointRadius:0,tension:.2}]},options:{animation:{duration:2100},scales:{y:{min:0,max:1}}}});
-let sig=.25, eps=0; const gs=[]; for(let i=0;i<80;i++){eps=(Math.sin(i*.8)+Math.sin(i*.17)*.7)*(i>31&&i<39?2.4:1);sig=.08+.16*eps*eps+.78*sig;gs.push(Math.sqrt(sig))}
-new Chart(document.getElementById('garchChart'),{type:'line',data:{labels:gs.map((_,i)=>i),datasets:[{label:'σ condicional',data:gs,borderWidth:2,pointRadius:0,tension:.25,fill:true}]},options:{animation:{duration:2300},plugins:{legend:{display:false}}}});
-const weights=[.03,.04,.05,.04,.06,.08,.07,.09,.13,.11,.17,.13];
-new Chart(document.getElementById('attnChart'),{type:'bar',data:{labels:weights.map((_,i)=>'t-'+(weights.length-i)),datasets:[{label:'peso',data:weights}]},options:{animation:{duration:2000},plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+function logisticData(k=1,shift=0){return xs.map(x=>1/(1+Math.exp(-k*(x-shift))))}
+function survivalData(lambda=.035,curve=.0022){const t=Array.from({length:25},(_,i)=>i);return {t,s:t.map(x=>Math.exp(-lambda*x-curve*x*x))}}
+function garchData(shockAt=35,shockSize=2.4){let sig=.25,eps=0;const out=[];for(let i=0;i<80;i++){eps=(Math.sin(i*.8)+Math.sin(i*.17)*.7)*(i>shockAt-4&&i<shockAt+4?shockSize:1);sig=.08+.16*eps*eps+.78*sig;out.push(Math.sqrt(sig))}return out}
+function attentionData(){const raw=Array.from({length:12},(_,i)=>.15+Math.abs(Math.sin(i*.73+Math.random()*1.8))*(i>7?1.35:.85));const sum=raw.reduce((a,b)=>a+b,0);return raw.map(x=>x/sum)}
+
+labCharts.logit=new Chart(document.getElementById('logitChart'),{type:'line',data:{labels:xs,datasets:[{label:'PD',data:logisticData(),borderWidth:3,pointRadius:0,tension:.25}]},options:{animation:false,scales:{y:{min:0,max:1}},plugins:{legend:{display:false}}}});
+const initialSurv=survivalData();
+labCharts.surv=new Chart(document.getElementById('survChart'),{type:'line',data:{labels:initialSurv.t,datasets:[{label:'Sobrevivência',data:initialSurv.s,borderWidth:3,pointRadius:0,tension:.2},{label:'PD acumulada',data:initialSurv.s.map(x=>1-x),borderWidth:2,pointRadius:0,tension:.2}]},options:{animation:false,scales:{y:{min:0,max:1}}}});
+const initialGarch=garchData();
+labCharts.garch=new Chart(document.getElementById('garchChart'),{type:'line',data:{labels:initialGarch.map((_,i)=>i),datasets:[{label:'σ condicional',data:initialGarch,borderWidth:2,pointRadius:0,tension:.25,fill:true}]},options:{animation:false,plugins:{legend:{display:false}}}});
+const initialWeights=attentionData();
+labCharts.attn=new Chart(document.getElementById('attnChart'),{type:'bar',data:{labels:initialWeights.map((_,i)=>'t-'+(initialWeights.length-i)),datasets:[{label:'peso',data:initialWeights}]},options:{animation:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:.22}}}});
+
+function pulseLab(type){const card=document.getElementById('lab-'+type);card.classList.remove('running');void card.offsetWidth;card.classList.add('running');setTimeout(()=>card.classList.remove('running'),2300)}
+function replay(chart,duration=1800){chart.stop();chart.options.animation={duration,easing:'easeInOutQuart'};chart.reset();chart.update()}
+function animateLab(type){
+ pulseLab(type);
+ if(type==='logit'){
+   const k=.65+Math.random()*1.15,shift=-.6+Math.random()*1.2;
+   labCharts.logit.data.datasets[0].data=logisticData(k,shift);
+   document.getElementById('logitNote').textContent=`Inclinação β = ${k.toFixed(2)}. Quanto maior o coeficiente, mais rapidamente a PD reage às mudanças do score.`;
+   replay(labCharts.logit,1750);
+ }else if(type==='surv'){
+   const lambda=.022+Math.random()*.035,curve=.0012+Math.random()*.003;
+   const d=survivalData(lambda,curve);
+   labCharts.surv.data.labels=d.t;labCharts.surv.data.datasets[0].data=d.s;labCharts.surv.data.datasets[1].data=d.s.map(x=>1-x);
+   document.getElementById('survNote').textContent=`Hazard-base aproximado: ${(lambda*100).toFixed(1)}% por período. A PD acumulada cresce à medida que S(t) diminui.`;
+   replay(labCharts.surv,1950);
+ }else if(type==='garch'){
+   const shockAt=23+Math.floor(Math.random()*34),shockSize=1.8+Math.random()*1.5;
+   labCharts.garch.data.datasets[0].data=garchData(shockAt,shockSize);
+   document.getElementById('garchNote').textContent=`Choque inserido próximo de t=${shockAt}. A persistência faz a volatilidade permanecer elevada mesmo após o evento.`;
+   replay(labCharts.garch,2100);
+ }else if(type==='attn'){
+   const w=attentionData();labCharts.attn.data.datasets[0].data=w;
+   const maxI=w.indexOf(Math.max(...w));
+   document.getElementById('attnNote').textContent=`Maior atenção em t-${w.length-maxI}, com peso ${(w[maxI]*100).toFixed(1)}%. Esse instante contribui mais para o contexto final.`;
+   replay(labCharts.attn,1550);
+ }
+}
+function animateAllLabs(){['logit','surv','garch','attn'].forEach((type,i)=>setTimeout(()=>animateLab(type),i*260))}
 render();
 </script>
 </body></html>
