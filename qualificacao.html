@@ -188,7 +188,10 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
 .iflow-step:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(22,62,100,.14)}
 .iflow-step.on{background:#fff; border-color:var(--accent); box-shadow:0 10px 30px rgba(22,62,100,.18), 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent); transform:translateY(-4px)}
 .iflow-step.on .n{transform:scale(1.18)}
-.iflow-step.dim{opacity:.55}
+/* etapas não selecionadas permanecem totalmente legíveis */
+.iflow-step.dim{opacity:1}
+.iflow-step.dim .t{color:var(--blue-dark)}
+.iflow-step.dim .n{background:#8FA6B6}
 .iflow-arrow{flex:0 0 24px; display:grid; place-items:center; color:#A8BDCD}
 .iflow-arrow svg{width:22px; height:14px}
 .iflow-arrow path{stroke:currentColor; stroke-width:1.8; fill:none; stroke-linecap:round;
@@ -207,7 +210,9 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
 .pdots i.on{background:var(--accent,var(--blue)); width:18px; border-radius:3px}
 .pdots span{font-size:10px; color:#93A5B4; margin-right:4px; letter-spacing:.08em}
 .iflow-panel .ph{font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--accent,var(--blue))}
-.iflow-panel .pb{font-size:13.4px; line-height:1.52; color:var(--ink); max-width:1050px}
+.iflow-panel .pb{font-size:13.4px; line-height:1.5; color:var(--ink); max-width:1050px}
+.iflow-panel.wide{flex-direction:row; align-items:center; gap:18px; padding:11px 16px}
+.iflow-panel.wide .pb{flex:1 1 auto}
 .iflow-panel .pf{font-family:var(--mono); font-size:12px; color:var(--blue-dark); background:var(--pale);
   border:1px solid #D3E4F0; border-radius:7px; padding:7px 11px; display:inline-block; align-self:flex-start}
 .iflow-panel .pn{font-size:11.4px; color:var(--gray); font-style:italic}
@@ -226,8 +231,8 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
 }
 .archbox .at{font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:#93A5B4; font-weight:700; margin-bottom:3px}
 .arch{flex:1 1 auto; width:100%; min-height:0; display:block}
-.arch text{font-family:var(--ff); fill:var(--blue-dark); font-size:9.5px}
-.arch .lbl{font-size:8.6px; fill:var(--gray)}
+.arch text{font-family:var(--ff); fill:var(--blue-dark); font-size:11.5px; font-weight:600}
+.arch .lbl{font-size:10px; fill:var(--gray); font-weight:400}
 .arch .plate{fill:var(--pale); stroke:#CFE2EF; stroke-width:1}
 .arch .an>rect,.arch .an>circle,.arch .an>ellipse{
   fill:#fff; stroke:#B4C8D8; stroke-width:1.3;
@@ -237,7 +242,8 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
 .arch .an,.arch .ae{transition:opacity .3s var(--ease)}
 .arch .ae{fill:none; stroke:#B4C8D8; stroke-width:1.5; stroke-linecap:round;
   transition:stroke .3s var(--ease), stroke-width .3s var(--ease)}
-.arch .dim{opacity:.22}
+/* todas as peças ficam expostas; a etapa ativa se destaca por cor e traço */
+.arch .dim{opacity:.68}
 .arch .an.on>rect,.arch .an.on>circle,.arch .an.on>ellipse{
   stroke:var(--accent); stroke-width:2.3; fill:#fff}
 .arch .an.on>text{fill:var(--accent); font-weight:700}
@@ -1028,20 +1034,30 @@ function tabelaEstacionariedade(){
    DIAGRAMAS DE ARQUITETURA (SVG nativo, sincronizados com o fluxo)
    data-p = índices das etapas do fluxo que acendem aquela peça
    ================================================================ */
+/* Os diagramas são desenhados num espaço lógico de 640×400 e projetados
+   para um formato largo (1102×352), que é o que preenche a faixa do slide. */
+const SX = 1.72, SY = 0.86, OY = 4;
+const px = v => +(v * SX).toFixed(1);
+const py = v => +(v * SY + OY).toFixed(1);
+const tp = d => d.replace(/([MLHV])\s*(-?[\d.]+)(?:\s*,\s*(-?[\d.]+))?/g,
+  (m,c,a,b) => c==='H' ? 'H'+px(+a) : c==='V' ? 'V'+py(+a) : c+px(+a)+','+py(+b));
+
 /* caixa */
 const nb = (x,y,w,h,t,sub,p,r) =>
-  `<g class="an" data-p="${p}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r||5}"/>
-   <text x="${x+w/2}" y="${y+(sub?h/2-1:h/2+3)}" text-anchor="middle">${t}</text>
-   ${sub?`<text class="lbl" x="${x+w/2}" y="${y+h/2+10}" text-anchor="middle">${sub}</text>`:''}</g>`;
+  `<g class="an" data-p="${p}"><rect x="${px(x)}" y="${py(y)}" width="${px(w)}" height="${(h*SY).toFixed(1)}" rx="${r||5}"/>
+   <text x="${px(x+w/2)}" y="${py(y)+(sub?h*SY/2-3:h*SY/2+4)}" text-anchor="middle">${t}</text>
+   ${sub?`<text class="lbl" x="${px(x+w/2)}" y="${py(y)+h*SY/2+10}" text-anchor="middle">${sub}</text>`:''}</g>`;
 /* nó circular (operação pontual) */
 const nc = (cx,cy,t,p,r) =>
-  `<g class="an" data-p="${p}"><circle cx="${cx}" cy="${cy}" r="${r||11}"/>
-   <text x="${cx}" y="${cy+3.5}" text-anchor="middle" font-size="10">${t}</text></g>`;
+  `<g class="an" data-p="${p}"><ellipse cx="${px(cx)}" cy="${py(cy)}" rx="${((r||11)*1.25).toFixed(1)}" ry="${((r||11)*0.95).toFixed(1)}"/>
+   <text x="${px(cx)}" y="${py(cy)+4}" text-anchor="middle" font-size="11">${t}</text></g>`;
 /* aresta */
-const ed = (d,p) => `<path class="ae" data-p="${p}" d="${d}" marker-end="url(#arh)"/>`;
-const edp = (d,p) => `<path class="ae" data-p="${p}" d="${d}"/>`;
+const ed = (d,p) => `<path class="ae" data-p="${p}" d="${tp(d)}" marker-end="url(#arh)"/>`;
+const edp = (d,p) => `<path class="ae" data-p="${p}" d="${tp(d)}"/>`;
 /* rótulo solto */
-const tx = (x,y,t,p,anchor) => `<g class="an" data-p="${p}"><text x="${x}" y="${y}" text-anchor="${anchor||'middle'}" class="lbl">${t}</text></g>`;
+const tx = (x,y,t,p,anchor) => `<g class="an" data-p="${p}"><text x="${px(x)}" y="${py(y)}" text-anchor="${anchor||'middle'}" class="lbl">${t}</text></g>`;
+/* placa de fundo */
+const plate = (x,y,w,h) => `<rect class="plate" x="${px(x)}" y="${py(y)}" width="${px(w)}" height="${(h*SY).toFixed(1)}" rx="12"/>`;
 
 function archSVG(id, titulo, vb, body){
   return `<div class="archbox" data-anim="scale" style="flex:1 1 auto;min-width:0">
@@ -1053,9 +1069,9 @@ function archSVG(id, titulo, vb, body){
 }
 
 /* ---- SARIMAX: fluxo de sinal da equação ---- */
-const ARCH_SARIMAX = id => archSVG(id, 'Arquitetura · fluxo de sinal do SARIMAX', '0 0 640 400', `
-  <rect class="plate" x="176" y="66" width="330" height="238" rx="12"/>
-  <text class="lbl" x="341" y="56" text-anchor="middle">bloco SARIMA(p,d,q)(P,D,Q,s=5)</text>
+const ARCH_SARIMAX = id => archSVG(id, 'Arquitetura · fluxo de sinal do SARIMAX', '0 0 1102 352', `
+  ${plate(176,66,330,238)}
+  ${tx(341,56,'bloco SARIMA(p,d,q)(P,D,Q,s=5)','')}
   ${nb(14,164,116,46,'SÉRIE y(t)','histórico observado','0')}
   ${ed('M132,187 H186','0 1')}
   ${nb(188,164,96,46,'∇ᵈ','diferenciação · d=1','1')}
@@ -1079,9 +1095,9 @@ const ARCH_SARIMAX = id => archSVG(id, 'Arquitetura · fluxo de sinal do SARIMAX
 `);
 
 /* ---- LSTM: célula com portas ---- */
-const ARCH_LSTM = id => archSVG(id, 'Arquitetura · célula LSTM com portas', '0 0 640 400', `
-  <rect class="plate" x="104" y="70" width="428" height="252" rx="14"/>
-  <text class="lbl" x="318" y="60" text-anchor="middle">unidade LSTM</text>
+const ARCH_LSTM = id => archSVG(id, 'Arquitetura · célula LSTM com portas', '0 0 1102 352', `
+  ${plate(104,70,428,252)}
+  ${tx(318,60,'unidade LSTM','')}
   ${tx(58,112,'c(t−1)','3','start')}
   ${tx(58,306,'h(t−1)','0','start')}
   ${edp('M104,118 H176','3')}
@@ -1115,7 +1131,7 @@ const ARCH_LSTM = id => archSVG(id, 'Arquitetura · célula LSTM com portas', '0
 `);
 
 /* ---- XGBoost: boosting sequencial ---- */
-const ARCH_XGB = id => archSVG(id, 'Arquitetura · boosting sequencial de árvores', '0 0 640 400', `
+const ARCH_XGB = id => archSVG(id, 'Arquitetura · boosting sequencial de árvores', '0 0 1102 352', `
   ${nb(12,40,132,44,'SÉRIE HORÁRIA','carga por tipologia','0')}
   ${ed('M78,86 V116','0')}
   ${nb(12,118,132,66,'ENGENHARIA DE ATRIBUTOS','lags · rolling · Fourier · exógenas','0')}
@@ -1145,7 +1161,7 @@ const ARCH_XGB = id => archSVG(id, 'Arquitetura · boosting sequencial de árvor
 `);
 
 /* ---- TFT: pilha do Temporal Fusion Transformer ---- */
-const ARCH_TFT = id => archSVG(id, 'Arquitetura · pilha do Temporal Fusion Transformer', '0 0 640 400', `
+const ARCH_TFT = id => archSVG(id, 'Arquitetura · pilha do Temporal Fusion Transformer', '0 0 1102 352', `
   ${nb(10,344,116,46,'ESTÁTICO','group_id','0')}
   ${nb(136,344,166,46,'PASSADO','48 h de carga','0')}
   ${nb(312,344,166,46,'FUTURO CONHECIDO','24 h · Fourier','0')}
@@ -1173,7 +1189,7 @@ const ARCH_TFT = id => archSVG(id, 'Arquitetura · pilha do Temporal Fusion Tran
 `);
 
 /* ---- TimesFM: decoder-only com patches ---- */
-const ARCH_TSFM = id => archSVG(id, 'Arquitetura · TimesFM decoder-only (zero-shot)', '0 0 640 400', `
+const ARCH_TSFM = id => archSVG(id, 'Arquitetura · TimesFM decoder-only (zero-shot)', '0 0 1102 352', `
   ${nb(10,166,110,54,'HISTÓRICO','até 512 h reais','0')}
   ${tx(65,240,'normalize_inputs','0')}
   ${ed('M122,193 H158','0 1')}
@@ -1185,7 +1201,7 @@ const ARCH_TSFM = id => archSVG(id, 'Arquitetura · TimesFM decoder-only (zero-s
   ${nb(254,110,88,40,'token + PE','','2')}
   ${nb(254,170,88,40,'token + PE','','2')}
   ${nb(254,230,88,40,'token + PE','','2')}
-  <rect class="plate" x="360" y="72" width="176" height="256" rx="12"/>
+  ${plate(360,72,176,256)}
   ${tx(448,62,'blocos empilhados','2 3')}
   ${ed('M344,130 H376','2')}${ed('M344,190 H376','2')}${ed('M344,250 H376','2')}
   ${nb(374,92,148,48,'SELF-ATTENTION CAUSAL','só olha para trás','2')}
@@ -1218,10 +1234,8 @@ function modeloConceito(o){
     <div class="fillcol" style="min-width:0;gap:8px">
       ${iflowBar(id, 'Como o mecanismo transforma dados em previsão')}
       ${iflowTrack(id)}
-      <div class="row" style="flex:1;min-height:0;gap:11px">
-        ${o.arch(id)}
-        ${iflowPanel(id, 'flex:0 0 300px;min-height:0')}
-      </div>
+      ${o.arch(id)}
+      ${iflowPanel(id, 'flex:0 0 132px;min-height:0;justify-content:center')}
     </div></div>`;
 }
 
@@ -1314,93 +1328,124 @@ SLIDES = [
   </div>
   <img class="logo-c" src="${LOGO}" alt="UNIVALI">`},
 
-/* ---------- 02 ---------- */
-{sec:'Introdução', short:'O problema começa antes do modelo',
- title:'O problema começa antes do modelo',
- sub:'“Carga industrial” não é uma única curva — misturar operações contínuas, turnos e picos em uma série média apaga o padrão que queremos prever.',
- note:'A pesquisa começa reconhecendo que a carga industrial reúne comportamentos diferentes; uma média única esconderia justamente o padrão que precisamos prever.',
- html:`<div class="row fill" style="flex:1;min-height:0">
-   <div style="flex:0 0 292px;display:flex;flex-direction:column;gap:10px">
-     ${cardN('Participação industrial', {txt:'≈35%'}, 'da carga elétrica brasileira — a classe com maior complexidade operacional.', 'dark', 'Ordem de grandeza da participação industrial no consumo nacional; motiva o recorte do estudo.')}
-     ${cardT('Storyline', 'heterogeneidade → segmentação → comparação justa → decisão por perfil', 'cyan', 'O fio condutor da apresentação: cada etapa responde à anterior.')}
-     ${cardT('Consequência', 'Prever a média de 87 consumidores é prever uma curva que <b>nenhum deles</b> tem.', 'red')}
+/* ---------- 02 · CONTEXTUALIZAÇÃO E MOTIVAÇÃO ---------- */
+{sec:'Introdução', short:'Contextualização e motivação',
+ title:'Introdução — contextualização e motivação',
+ sub:'A previsão sustenta decisões do sistema elétrico; no setor industrial, heterogeneidade e influência externa tornam o problema mais complexo.',
+ note:'Começar pelas decisões que dependem da previsão e, em seguida, explicar por que o caso industrial merece um estudo próprio: perfis distintos e influência de variáveis externas.',
+ html:`<div class="spread" style="gap:12px">
+   ${cardT('O que a previsão sustenta', 'Decisões de <b>despacho</b>, <b>planejamento da expansão</b>, <b>gestão de contratos bilaterais</b> e atendimento a critérios regulatórios de continuidade e qualidade do fornecimento.', 'dark', 'Contextualização, primeiro parágrafo do Capítulo 1 da qualificação.')}
+   <div>
+     <div class="heading" data-anim="left">No setor industrial, a previsão ganha peso por três fatores</div>
+     <div class="grid g3">
+       ${cardN('01 · Participação', {txt:'≈ 35%'}, 'da carga total brasileira é industrial, segundo a EPE — a maior fatia entre as classes de consumo.', 'dark', 'Empresa de Pesquisa Energética (EPE), 2025.')}
+       ${cardN('02 · Sensibilidade', {txt:'Turnos e ciclos'}, 'O consumo responde a <b>turnos produtivos</b>, <b>paradas programadas</b> e <b>ciclos econômicos</b>.', '')}
+       ${cardN('03 · Volatilidade', {txt:'Intradiária'}, 'A variação ao longo do dia é maior que a dos perfis <b>residencial</b> e <b>comercial</b>.', 'cyan')}
+     </div>
    </div>
-   <div class="fillcol">${chart({
-     title:'Seis tipologias, uma semana útil real', sub:'kW médios por hora · base 2011',
-     tip:'Séries reais das seis tipologias na semana de 02/05/2011 (dias úteis). As escalas são muito diferentes: o Tipo 1 opera em outra ordem de grandeza.',
-     series:semanaSeries(), xTicks:ticksSemana, xLabel:dLab, yLabel:'kW', ySteps:4, yMin:0,
-     vFmt:v=>nf(v,2)+' kW'})}</div></div>`},
-
-/* ---------- 03 ---------- */
-{sec:'Introdução', short:'Uma estação reúne perfis muito diferentes',
- title:'Uma estação pode reunir perfis muito diferentes',
- sub:'A heterogeneidade intradiária é informação, não ruído.',
- note:'O recorte industrial reduz a mistura entre mecanismos de consumo e permite estudar uma classe complexa, marcada por turnos, paradas e picos produtivos.',
- html:`<div class="row fill" style="flex:1;min-height:0">
-   <div class="fillcol">${chart({
-     title:'Assinatura intradiária de cada tipologia', sub:'perfil médio 24 h · normalizado Min–Max',
-     tip:'Perfil horário médio de cada tipologia, normalizado linha a linha. A normalização remove a magnitude e deixa apenas a FORMA — foi exatamente assim que a clusterização enxergou os consumidores.',
-     series:perfilSeries(), xTicks:ticks24, xLabel:hLab, yMin:0, yMax:1.05, ySteps:4,
-     yFmt:v=>v.toFixed(1), vFmt:v=>nf(v,2), bands:[{from:18,to:21,color:'#163E64'}]})}</div>
-   <div style="flex:0 0 268px;display:flex;flex-direction:column;gap:10px">
-     ${cardT('Decisão de recorte', '<b>Industrial.</b> Maior complexidade operacional e forte estrutura intradiária.', 'dark')}
-     ${cardT('Efeito esperado', 'Evitar que perfis residenciais e comerciais diluam os mecanismos de produção.', 'cyan')}
-     ${cardT('O que a faixa marca', 'Entre 18 h e 21 h quase todas as tipologias caem: é o horário de ponta, um comportamento tarifário compartilhado.', 'amber', 'A queda simultânea no horário de ponta é o único traço comum entre perfis; todo o resto diverge.')}
+   <div class="row fill" style="flex:0 0 auto;align-items:center">
+     ${cardT('Motivação · heterogeneidade industrial', 'Na mesma classe tarifária convivem operações contínuas, picos em horários distintos e regimes regulares. Agregar tudo em uma única série pode <b>encobrir a dinâmica intradiária</b>.', 'green')}
+     ${cardT('Motivação · influência de variáveis externas', 'Temperatura, juros e câmbio podem explicar parte da carga com <b>defasagens diferentes</b>. Incluí-los sem critério pode adicionar ruído; ignorá-los pode descartar informação útil.', 'amber', 'A dissertação avalia temperatura, dólar BCB, SELIC acumulada em 12 meses e câmbio médio, em cenários sem exógenas, diários e mensais.')}
    </div></div>`},
 
-/* ---------- 04 ---------- */
-{sec:'Introdução', short:'Por que focar no industrial',
- title:'Por que focar no industrial?',
- sub:'Objetivo: entender a fronteira de desempenho sem confundir classes de consumo.',
- note:'A indústria é relevante e operacionalmente complexa; temperatura, câmbio e Selic são avaliados como sinais externos, sem substituir a dinâmica do processo produtivo.',
- html:`<div class="grid g3" style="flex:1;min-height:0;align-content:center">
-   ${cardN('01 · Relevância', {txt:'Impacto'}, 'Planejamento, contratação e operação dependem de previsões horárias confiáveis.', 'dark')}
-   ${cardN('02 · Complexidade', {txt:'Turnos'}, 'Paradas, picos e regimes produtivos tornam a dinâmica mais difícil que um agregado homogêneo.', '')}
-   ${cardN('03 · Controle', {txt:'Recorte'}, 'A dinâmica operacional permanece central; o efeito de temperatura, câmbio e Selic é testado explicitamente.', 'cyan')}
+/* ---------- 03 · PERGUNTAS E HIPÓTESES ---------- */
+{sec:'Introdução', short:'Perguntas e hipóteses',
+ title:'Introdução — perguntas de pesquisa e hipóteses',
+ sub:'Como tipologia, variáveis exógenas e granularidade alteram o desempenho relativo dos cinco modelos?',
+ note:'Apresentar cada pergunta junto da hipótese que orienta sua investigação. As hipóteses são expectativas testáveis, não conclusões antecipadas.',
+ html:`<div class="grid g2" style="flex:1;min-height:0;gap:13px">
+   ${card('PR1 · Existe um modelo universal?', `<p>Existe um único modelo com melhor desempenho para todas as tipologias, ou o melhor modelo <b>depende do perfil de carga</b>?</p><p class="micro"><b>H1.</b> TFT, XGBoost e TimesFM tendem a ser competitivos ou superiores em perfis com forte dinâmica intradiária.</p>`, 'dark')}
+   ${card('PR2 · As variáveis exógenas ajudam?', `<p>Exógenas diárias — temperatura e dólar BCB — e mensais — SELIC acumulada em 12 meses e câmbio — melhoram a acurácia de forma <b>uniforme entre tipologias</b>?</p><p class="micro"><b>H2.</b> O ganho é heterogêneo e depende de correlação com defasagem plausível.</p>`, 'amber')}
+   ${card('PR3 · A granularidade muda o ranking?', `<p>Como as granularidades horária, diária e semanal afetam o <b>ranking relativo</b> dos modelos?</p><p class="micro"><b>Estado.</b> A etapa horária está executada; os experimentos diário e semanal ainda serão concluídos.</p>`, 'cyan')}
+   ${card('H3 · Quando o modelo clássico pode vencer?', `<p>O <b>SARIMAX híbrido</b> deve permanecer competitivo em perfis regulares e sazonais, nos quais sua estrutura explícita e interpretável representa bem o processo.</p><p class="micro">A hipótese conecta a comparação entre famílias à forma de cada tipologia.</p>`, 'green')}
+ </div>
+ <div class="card k-amber tint" data-anim="fade" style="flex:0 0 auto;padding:9px 15px 10px 17px">
+   <p style="font-size:13.2px;font-weight:600;color:var(--blue-dark)">PR1 e PR2 são investigadas em granularidade horária nesta qualificação. A resposta completa à PR3 depende das etapas diária e semanal previstas na dissertação.</p></div>`},
+
+/* ---------- 04 · SOLUÇÃO PROPOSTA ---------- */
+{sec:'Introdução', short:'Solução proposta',
+ title:'Introdução — solução proposta',
+ sub:'Um benchmark experimental controlado transforma uma base sensível de consumo em evidência comparável por tipologia.',
+ note:'A contribuição não é propor uma sexta arquitetura. É organizar dados, cenários e modelos em um pipeline reprodutível que permita uma comparação justa e tecnicamente auditável.',
+ html:`<div class="card k-dark" data-anim style="flex:0 0 auto;padding:16px 20px 18px 22px">
+     <p style="font-size:15.5px;line-height:1.42;color:var(--blue-dark);font-weight:600">A solução proposta é um <em style="font-style:normal;color:var(--blue)">pipeline reprodutível de previsão de carga industrial</em> que segmenta consumidores por comportamento, seleciona variáveis externas por defasagem plausível e compara cinco modelos sob a mesma janela temporal e o mesmo critério de avaliação.</p></div>
+   <div class="note" data-anim="fade" style="margin:2px 0">A solução é organizada em três blocos conectados:</div>
+   <div class="grid g3" style="flex:1;min-height:0;align-content:center">
+     ${cardN('01 · Dados e tipologias', {txt:'87 → 6 perfis'}, 'Dados reais de 2011 são anonimizados, normalizados e agrupados por <b>k-Means</b> sobre o perfil horário, preservando a heterogeneidade sem expor consumidores.', 'dark')}
+     ${cardN('02 · Exógenas e recorte', {txt:'3 cenários'}, 'Correlação cruzada orienta defasagens; comparam-se cenários <b>sem exógenas</b>, <b>diárias</b> e <b>mensais</b>, em janela comum de 720 h e treino apenas no passado.', 'amber')}
+     ${cardN('03 · Modelagem e evidência', {txt:'5 modelos'}, 'SARIMAX, LSTM, XGBoost, TFT e TimesFM são avaliados com <b>RMSE primário</b>, métricas de apoio e teste de Diebold–Mariano.', 'cyan')}
    </div>
-   <div class="row fill" style="flex:0 0 auto">
-     ${cardT('Variabilidade medida na base', `Coeficiente de variação horário por tipologia: de <b>0,31</b> (Tipo 3) a <b>1,10</b> (Tipo 2). Um único modelo precisa atravessar essa faixa inteira.`, 'amber', 'CV = desvio-padrão / média, calculado sobre todas as horas úteis de 2011 de cada série de tipologia.')}
-     ${cardT('Por que não agregar tudo', 'A série agregada tem CV muito menor que a das partes: a agregação cria uma curva artificialmente fácil de prever.', 'red')}
+   <div class="note" data-anim="fade">Resultado esperado: identificar qual família funciona melhor para cada tipologia e quando a informação exógena realmente acrescenta valor preditivo.</div>`},
+
+/* ---------- 05 · OBJETIVOS ---------- */
+{sec:'Introdução', short:'Objetivo geral e específicos',
+ title:'Introdução — objetivos',
+ sub:'Objetivo geral e os seis objetivos específicos, conforme a seção “Objetivos” da qualificação.',
+ note:'Ler o objetivo geral na íntegra e percorrer os específicos; eles correspondem, na ordem, às etapas do pipeline apresentado na seção Projeto.',
+ html:`<div class="card k-green" data-anim style="flex:0 0 auto;padding:14px 20px 16px 22px">
+     <h4 style="color:var(--green)">Objetivo geral</h4>
+     <p style="font-size:15.5px;line-height:1.42;color:var(--blue-dark);font-weight:600;margin-top:4px">
+     Realizar a <em style="font-style:normal;color:var(--green)">previsão horária de carga elétrica industrial</em> usando modelos de aprendizado
+     profundo e modelos estatísticos tradicionais, <em style="font-style:normal;color:var(--green)">segmentada por tipologias de comportamento de
+     carga</em> e considerando <em style="font-style:normal;color:var(--green)">cenários com e sem variáveis exógenas</em>.</p></div>
+   <div class="heading" data-anim="left" style="margin-top:6px">Objetivos específicos</div>
+   <div class="grid g3" style="flex:1;min-height:0;gap:10px">
+     ${cardT('01 · Base e tipologias', 'Construir uma base horária de consumo industrial a partir de dados reais de 2011, organizando-a em <b>seis tipologias</b> via k-Means sobre o perfil horário normalizado.', 'dark')}
+     ${cardT('02 · Exógenas', 'Selecionar variáveis climáticas (temperatura) e macroeconômicas (dólar BCB, SELIC 12 m, câmbio) por <b>correlação cruzada com defasagens</b>.', 'amber')}
+     ${cardT('03 · Janela de teste', 'Definir uma janela comum e homogênea por tipologia (≈30 dias úteis, <b>720 observações horárias</b>), garantindo ausência de <i>data leakage</i>.', 'cyan')}
+     ${cardT('04 · Modelagem', 'Implementar e avaliar <b>cinco modelos</b> em três cenários — 18 combinações por modelo e <b>90 avaliações</b> no total.', '')}
+     ${cardT('05 · Avaliação', 'Avaliar com métricas padronizadas, adotando o <b>RMSE como critério primário</b> e reportando MAE, MSE, MAPE, sMAPE e R².', 'green')}
+     ${cardT('06 · Discussão', 'Discutir os achados à luz da literatura, indicando <b>limites de validade externa</b> e direções para trabalhos futuros.', 'dark')}
    </div>`},
 
-/* ---------- 05 ---------- */
-{sec:'Introdução', short:'A pergunta de pesquisa',
- title:'A pergunta de pesquisa',
- note:'A pergunta central compara cinco modelos e investiga se o melhor depende da tipologia e se as exógenas realmente melhoram a previsão.',
- html:`<div class="statement" data-anim style="margin:2px 0 6px;font-size:21px;line-height:1.38">
-     Em que medida modelos de aprendizado de máquina, profundo e fundacionais — <em>XGBoost, LSTM, TFT e TimesFM</em> —
-     se comparam ao <em>SARIMAX</em> na previsão horária de carga industrial, e como a inclusão de variáveis exógenas
-     climáticas e macroeconômicas afeta o desempenho em <em>diferentes tipologias de consumo</em>?${info('Texto da questão central conforme a seção “Problema de Pesquisa” da qualificação.')}</div>
-   <div class="note" data-anim="fade" style="margin-bottom:4px">Desdobrando essa questão, formulam-se três perguntas específicas:</div>
-   <div class="grid g3" style="flex:1;min-height:0;align-content:center">
-     ${cardN('PR1 · modelo universal', {txt:'Depende do perfil?'}, 'Existe um único modelo com melhor desempenho para o conjunto de tipologias industriais, ou o melhor modelo <b>depende do perfil de carga</b>?', 'dark', 'Investigada em granularidade horária nesta etapa.')}
-     ${cardN('PR2 · exógenas', {txt:'Ganho uniforme?'}, 'A inclusão de exógenas diárias (temperatura, dólar BCB) e mensais (Selic 12 m, câmbio) melhora a acurácia preditiva — e essa melhora é <b>uniforme entre tipologias</b>?', '', 'Investigada em granularidade horária nesta etapa.')}
-     ${cardN('PR3 · granularidade', {txt:'Muda o ranking?'}, 'Como a granularidade temporal (horária, diária, semanal) afeta o <b>ranking relativo</b> dos modelos comparados? <b>Em execução.</b>', 'cyan', 'A PR3 depende dos experimentos diário e semanal, previstos no cronograma (atividade A6), e sua resposta completa integrará a dissertação.')}
+/* ---------- 06 · DELIMITAÇÃO E JUSTIFICATIVA ---------- */
+{sec:'Introdução', short:'Delimitação e justificativa',
+ title:'Introdução — delimitação e justificativa',
+ sub:'O recorte torna a comparação executável; a justificativa mostra por que esse recorte importa.',
+ note:'Fechar a introdução de forma integrada: primeiro declarar exatamente o que será comparado; depois mostrar o valor científico, metodológico e prático desse recorte.',
+ html:`<div class="row fill" style="flex:1;min-height:0;gap:14px">
+   <div class="fillcol" style="gap:7px;flex:1.12 1 0">
+     <div class="heading" data-anim="left" style="margin:0">Delimitação do escopo · conforme a dissertação</div>
+     ${[['Setor','industrial — cativos do <b>Grupo A</b> monitorados via medição automatizada','dark'],
+        ['Período','ano-base <b>2011</b>, granularidade <b>horária</b>, <b>dias úteis</b>','' ],
+        ['Geografia','região de atuação da concessionária fornecedora dos dados (<b>Santa Catarina</b>)','cyan'],
+        ['Modelos','<b>SARIMAX, LSTM, XGBoost, TFT e TimesFM</b> — excluídas variantes híbridas adicionais (CNN-LSTM, N-BEATS, Transformers puros) e a rede GRU/BiGRU','green'],
+        ['Cenários','sem exógenas · exógenas <b>diárias</b> · exógenas <b>mensais</b>','amber'],
+        ['Métricas','<b>RMSE</b> como critério primário; métricas percentuais como apoio interpretativo','']].map(r=>
+       `<div class="card ${r[2]?'k-'+r[2]:''}" data-anim="left" style="padding:7px 12px;display:grid;grid-template-columns:102px 1fr;align-items:center;gap:11px">
+          <span style="font-size:9.6px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--blue)">${r[0]}</span>
+          <span style="font-size:11.8px;color:var(--ink);line-height:1.34">${r[1]}</span></div>`).join('')}
    </div>
-   <div class="note" data-anim="fade">PR1 e PR2 são investigadas nesta etapa com o mesmo conjunto de 90 avaliações; a PR3 é declarada explicitamente como pendente.</div>`},
+   <div class="col-stretch" style="flex:.88 1 0;gap:8px">
+     <div class="heading" data-anim="right" style="margin:0">Por que a pesquisa se justifica</div>
+     ${cardT('Plano científico', 'Preenche lacunas sobre <b>carga industrial brasileira</b> e uso de <b>exógenas macroeconômicas</b> em granularidade horária.', 'dark')}
+     ${cardT('Plano metodológico', 'Entrega um pipeline reprodutível de <b>tipologização</b>, seleção de janela e comparação pareada entre quatro famílias.', 'cyan')}
+     ${cardT('Plano prático', 'Apoia distribuidoras e consumidores industriais na decisão entre modelos interpretáveis, profundos e fundacionais.', 'green')}
+     ${cardT('Fora do escopo', 'previsões probabilísticas · geolocalização · geração distribuída · cenários contrafactuais', 'red')}
+   </div></div>`},
 
-/* ---------- 06 ---------- */
-{sec:'Introdução', short:'A tese em uma frase',
- title:'A tese em uma frase',
- note:'A hipótese narrativa é simples: não existe um campeão universal; o desempenho depende do perfil, do protocolo e da força da evidência estatística.',
- html:`<div class="statement" data-anim style="margin:4px 0 8px">O melhor modelo <em>depende do perfil de carga</em>.</div>
-   <p class="support" data-anim style="margin-bottom:6px">Modelos mais potentes ampliam a fronteira de desempenho, mas <b>protocolo, escala e significância</b> determinam o que realmente pode ser afirmado.</p>
-   ${iflow([
-     {t:'Tipologia', d:'o perfil define o problema',
-      detail:'Cada tipologia é uma série com dinâmica própria — turnos, paradas, picos, magnitudes que diferem em uma ordem de grandeza. Comparar modelos sobre a <b>média</b> das seis apaga exatamente o efeito que se quer medir.',
-      formula:'6 tipologias  ·  CV de 0,31 a 1,10  ·  média de 1,3 kW a 49,2 kW'},
-     {t:'Protocolo', d:'como se treina e se prevê',
-      detail:'Origem única e rolling day-ahead dão ao modelo quantidades diferentes de informação. Um ranking que ignora essa assimetria mede o protocolo, não a arquitetura.',
-      formula:'origem única: SARIMAX · LSTM · XGBoost      rolling 24 h: TFT · TimesFM',
-      nota:'É a pendência metodológica declarada como prioridade nº 1 do cronograma.'},
-     {t:'Evidência', d:'o que é estatisticamente detectável',
-      detail:'O menor RMSE não é, por si, uma vitória. O teste de Diebold–Mariano separa diferença observada de diferença detectável — e no Tipo 6 essa distinção muda a conclusão.',
-      formula:'DM com HAC Newey–West (Bartlett) + correção HLN  ·  α = 0,05'}],
-     ['var(--blue-dark)','var(--blue)','var(--green)'],
-     'Os três termos que sustentam a tese')}
-   <div class="note" data-anim="fade">Os três termos são multiplicativos: falhar em qualquer um deles invalida a conclusão sobre os outros dois.</div>`},
+/* ---------- 14 · HETEROGENEIDADE NOS DADOS ---------- */
+{sec:'Fundamentação', short:'A heterogeneidade nos dados',
+ title:'Fundamentação — a heterogeneidade aparece nos dados',
+ sub:'A primeira observação da motivação, verificada na base real: seis perfis convivem na mesma classe tarifária.',
+ note:'Agora sim o gráfico: depois de explicado o problema, mostrar que a heterogeneidade descrita na motivação é mensurável na base de 2011.',
+ html:`<div class="row fill" style="flex:1;min-height:0;gap:12px">
+   ${chart({title:'Seis tipologias, uma semana útil real', sub:'kW médios por hora · base 2011',
+     tip:'Séries reais das seis tipologias na semana de 02/05/2011 (dias úteis). As escalas diferem em uma ordem de grandeza: o Tipo 1 opera em outro patamar.',
+     series:semanaSeries(), xTicks:ticksSemana, xLabel:dLab, yLabel:'kW', ySteps:4, yMin:0,
+     vFmt:v=>nf(v,2)+' kW'})}
+   ${chart({title:'Assinatura intradiária de cada tipologia', sub:'perfil médio 24 h · normalizado Min–Max',
+     tip:'Perfil horário médio normalizado linha a linha. A normalização remove a magnitude e deixa apenas a FORMA — foi assim que a clusterização enxergou os consumidores.',
+     series:perfilSeries(), xTicks:ticks24, xLabel:hLab, yMin:0, yMax:1.05, ySteps:4,
+     yFmt:v=>v.toFixed(1), vFmt:v=>nf(v,2), bands:[{from:18,to:21,color:'#163E64'}]})}
+ </div>
+ <div class="row fill" style="flex:0 0 auto;align-items:center">
+   ${cardT('O que a esquerda mostra', 'Magnitudes muito diferentes: prever a média dos 87 consumidores seria prever uma curva que <b>nenhum deles</b> tem.', 'dark')}
+   ${cardT('O que a direita mostra', 'Formas distintas de assinatura intradiária — e um único traço comum: a queda entre <b>18 h e 21 h</b>, o horário de ponta.', 'cyan')}
+   ${cardT('Variabilidade medida', 'Coeficiente de variação horário de <b>0,31</b> (Tipo 3) a <b>1,10</b> (Tipo 2). Um único modelo precisa atravessar essa faixa inteira.', 'amber')}
+ </div>`},
 
-/* ---------- 07 ---------- */
+/* ---------- 11 ---------- */
 {sec:'Fundamentação', short:'Do sinal à previsão',
  title:'Do sinal à previsão',
  sub:'O que o modelo precisa aprender em uma série industrial — e como esses componentes aparecem nos dados reais.',
@@ -1423,19 +1468,7 @@ SLIDES = [
        ${cardT('Leitura', 'O <b>nível</b> é quase plano: a série não tem tendência marcante. Quase toda a variação vem da <b>sazonalidade</b> horária, e o <b>resíduo</b> concentra as paradas e variações de produção não repetitivas.', 'green')}
      </div></div>`},
 
-/* ---------- 08 ---------- */
-{sec:'Fundamentação', short:'Estacionariedade: ADF e KPSS',
- title:'Estacionariedade: os testes contam histórias diferentes',
- sub:'Resultados reais dos testes aplicados às seis séries de tipologia.',
- note:'ADF e KPSS contam partes complementares da história: não há raiz unitária simples, mas existe não estacionariedade associada a sazonalidade e mudanças de nível.',
- html:`<div class="row fill" style="flex:0 0 auto">
-     ${cardT('ADF', 'p &lt; 0,01 em <b>todas</b> as tipologias: rejeita raiz unitária.', 'dark', 'Augmented Dickey–Fuller. H0 = existe raiz unitária. Rejeitar significa que a série não precisa de diferenciação simples para ser estável.')}
-     ${cardT('KPSS', 'Rejeita estacionariedade em nível em <b>5 de 6</b> séries.', 'red', 'Kwiatkowski–Phillips–Schmidt–Shin. H0 = a série é estacionária em nível. Rejeitar aponta sazonalidade determinística ou mudança de patamar.')}
-     ${cardT('Conclusão operacional', 'Não é raiz unitária: é <b>sazonalidade determinística e mudança de nível</b>. Isso justifica d=1 no SARIMAX e a decomposição offset/amplitude/shape.', 'green')}
-   </div>
-   <div class="fillcol" style="margin-top:4px;justify-content:center">${tabelaEstacionariedade()}</div>`},
-
-/* ---------- 09 a 13 · FUNDAMENTAÇÃO DOS MODELOS ---------- */
+/* ---------- 13 a 13 · FUNDAMENTAÇÃO DOS MODELOS ---------- */
 {sec:'Fundamentação', short:'SARIMAX — princípio',
  title:'Fundamentação — SARIMAX',
  sub:'Modelo estatístico para dependência temporal, sazonalidade e regressoras externas.',
@@ -1592,7 +1625,7 @@ SLIDES = [
    papel:'Checkpoint de 200M parâmetros, contexto até 512 h e previsão rolling de 24 h, sem ajuste local.',
    arch:ARCH_TSFM})},
 
-/* ---------- 14 ---------- */
+/* ---------- 18 ---------- */
 {sec:'Fundamentação', short:'Cinco modelos · quatro famílias',
  title:'Cinco modelos · quatro famílias',
  sub:'A comparação cobre o espectro metodológico completo: estatístico → árvores → recorrente → atenção → fundacional.',
@@ -1606,7 +1639,7 @@ SLIDES = [
      ${cardT('O que não é', 'Não é uma proposta de nova arquitetura — é um <b>benchmark pareado</b> em um domínio pouco coberto.', 'green')}
    </div>`},
 
-/* ---------- 15 ---------- */
+/* ---------- 19 ---------- */
 {sec:'Fundamentação', short:'Exógenas: quando o mundo externo ajuda',
  title:'Exógenas: quando o mundo externo ajuda?',
  sub:'Frequência, defasagem e disponibilidade operacional importam tanto quanto a correlação.',
@@ -1635,7 +1668,7 @@ SLIDES = [
      ${figBtn('cenarios', 'Desempenho por cenário exógeno', 'Figura 04 do portfólio de resultados')}
      <span class="note" style="flex:1">Pares reduzidos (dois por cenário) mitigam multicolinearidade; a mesma dupla é aplicada a todas as tipologias para manter o pareamento.</span></div>`},
 
-/* ---------- 16 ---------- */
+/* ---------- 20 ---------- */
 {sec:'Fundamentação', short:'Como decidir se uma previsão é melhor',
  title:'Como decidir se uma previsão é melhor?',
  sub:'Número menor não basta: escala e dependência temporal podem mudar a conclusão.',
@@ -1658,7 +1691,7 @@ SLIDES = [
      </div>
    </div>`},
 
-/* ---------- 17 ---------- */
+/* ---------- 21 ---------- */
 {sec:'RSL', short:'RSL — protocolo',
  title:'Revisão Sistemática da Literatura — protocolo',
  sub:'Como a evidência foi localizada, filtrada e organizada.',
@@ -1689,7 +1722,7 @@ SLIDES = [
      </div>
    </div></div>`},
 
-/* ---------- 18 ---------- */
+/* ---------- 22 ---------- */
 {sec:'RSL', short:'RSL — técnicas dominantes',
  title:'Revisão Sistemática da Literatura — técnicas dominantes',
  sub:'A recorrência está madura; atenção e modelos fundacionais ainda são recentes.',
@@ -1719,7 +1752,7 @@ SLIDES = [
      ${cardT('Consequência para o desenho', 'Manter LSTM como representante maduro, incluir XGBoost, TFT e TimesFM como fronteira — sem descartar o baseline estatístico.', 'green')}
    </div></div>`},
 
-/* ---------- 19 ---------- */
+/* ---------- 23 ---------- */
 {sec:'RSL', short:'RSL — lacunas',
  title:'Revisão Sistemática da Literatura — lacunas',
  sub:'O problema não é falta de modelos; é falta de evidência no contexto industrial brasileiro.',
@@ -1731,7 +1764,7 @@ SLIDES = [
    </div>
    ${cardT('Lacuna combinada', 'indústria brasileira <b>+</b> granularidade horária <b>+</b> tipologias <b>+</b> clima/macroeconomia <b>+</b> comparação pareada — nenhum trabalho do corpus reúne os cinco elementos simultaneamente.', 'green')}`},
 
-/* ---------- 20 ---------- */
+/* ---------- 24 ---------- */
 {sec:'RSL', short:'RSL — posicionamento',
  title:'Revisão Sistemática da Literatura — posicionamento',
  sub:'Quais elementos aparecem isoladamente na literatura e quais são reunidos nesta dissertação.',
@@ -1752,7 +1785,7 @@ SLIDES = [
    ${cardT('Contribuição', 'A novidade não é criar outra arquitetura. É comparar famílias diferentes sob <b>a mesma base, o mesmo split, os mesmos cenários e um teste estatístico comum</b>.', 'green')}
    </div>`},
 
-/* ---------- 21 ---------- */
+/* ---------- 25 ---------- */
 {sec:'RSL', short:'RSL — da lacuna ao desenho',
  title:'Revisão Sistemática da Literatura — da lacuna ao desenho',
  sub:'Cada decisão metodológica responde a uma ausência observada na literatura.',
@@ -1770,7 +1803,7 @@ SLIDES = [
         <span class="badge">${r[2]}</span></div>`).join('')}
    </div>`},
 
-/* ---------- 22 ---------- */
+/* ---------- 26 ---------- */
 {sec:'Projeto', short:'Visão completa do experimento',
  title:'Projeto — visão completa do experimento',
  sub:'Do dado sensível ao resultado estatisticamente qualificado.',
@@ -1786,9 +1819,14 @@ SLIDES = [
      ${cardT('Diagnóstico estrutural', 'ADF, KPSS e STL ajudam a entender estacionariedade, sazonalidade e mudanças de nível <b>antes</b> da configuração dos modelos.', 'dark')}
      ${cardT('Regra de validade', 'Nenhuma transformação usa o alvo futuro. Todas as estatísticas dependentes da série são estimadas <b>no conjunto de treino</b>.', 'green', 'Escalonadores, médias móveis, shape intradiário e ordens do SARIMAX são estimados apenas com dados anteriores ao início do teste.')}
    </div>
-   <div class="chips" data-anim="fade">${figBtn('pipeline','Diagrama completo do pipeline','Figura da dissertação')}</div></div>`},
+   <div class="chips" data-anim="fade">
+     ${figBtn('pipeline','Diagrama completo do pipeline','Figura da dissertação')}
+     <span class="badge" data-tip="H1: TFT, XGBoost e TimesFM devem ser competitivos ou superiores em tipologias com forte estrutura intradiária.">H1 · famílias avançadas</span>
+     <span class="badge" data-tip="H2: o ganho das exógenas deve ser heterogêneo e depender de correlação com defasagem plausível.">H2 · efeito das exógenas</span>
+     <span class="badge" data-tip="H3: o SARIMAX híbrido deve permanecer competitivo em perfis regulares e sazonais.">H3 · baseline competitivo</span>
+   </div></div>`},
 
-/* ---------- 23 ---------- */
+/* ---------- 27 ---------- */
 {sec:'Projeto', short:'Base e pré-processamento',
  title:'Projeto — base e pré-processamento',
  sub:'Transformação da medição bruta em uma série horária auditável.',
@@ -1805,7 +1843,7 @@ SLIDES = [
            ['Bases auxiliares','diária · semanal · mensal, para diagnóstico']])}
    <div class="note" data-anim="fade" style="margin-top:8px">A série de cada tipologia é a <b>média horária dos consumidores do cluster</b> — por isso a magnitude do Tipo 1 (≈49 kW médios) difere em uma ordem de grandeza da do Tipo 2 (≈1,3 kW).</div>`},
 
-/* ---------- 24 ---------- */
+/* ---------- 28 ---------- */
 {sec:'Projeto', short:'Construção das seis tipologias',
  title:'Projeto — construção das seis tipologias',
  sub:'A clusterização separa comportamentos intradiários sem deixar a magnitude dominar.',
@@ -1825,7 +1863,7 @@ SLIDES = [
      ${figBtn('clusters','Perfis normalizados dos 87 consumidores','Figura de clusterização do notebook')}
      <span class="note" style="flex:1">Validação formal planejada: silhueta, Davies–Bouldin, Calinski–Harabasz, cotovelo e estabilidade entre inicializações.</span></div>`},
 
-/* ---------- 25 ---------- */
+/* ---------- 29 ---------- */
 {sec:'Projeto', short:'Exógenas e diagnóstico estrutural',
  title:'Projeto — exógenas e diagnóstico estrutural',
  sub:'Como as variáveis externas e a decomposição foram decididas.',
@@ -1858,7 +1896,7 @@ SLIDES = [
      </div>
    </div></div>`},
 
-/* ---------- 26 · SARIMAX EXECUTADO ---------- */
+/* ---------- 30 · SARIMAX EXECUTADO ---------- */
 {sec:'Projeto', short:'SARIMAX híbrido — execução',
  title:'SARIMAX híbrido <span style="font-size:16px;color:var(--gray);font-weight:500">· configuração executada</span>',
  sub:'Decomposição diária + modelo sazonal + reconstrução horária.',
@@ -1890,7 +1928,7 @@ SLIDES = [
    figKey:'camp_sarimax', figSub:'SARIMAX — melhor cenário por tipologia',
    nota:'Regime conservador: origem única, sem nenhuma realimentação com valores reais do teste.'})},
 
-/* ---------- 27 · LSTM EXECUTADO ---------- */
+/* ---------- 31 · LSTM EXECUTADO ---------- */
 {sec:'Projeto', short:'LSTM profunda — execução',
  title:'LSTM profunda <span style="font-size:16px;color:var(--gray);font-weight:500">· configuração executada</span>',
  sub:'Duas redes recorrentes para offset e amplitude; reconstrução por shape.',
@@ -1922,7 +1960,7 @@ SLIDES = [
    figKey:'camp_lstm', figSub:'LSTM — melhor cenário por tipologia',
    nota:'A camada bidirecional amplia o contexto dentro da janela; não observa dados futuros fora do treino.'})},
 
-/* ---------- 28 · XGBOOST EXECUTADO ---------- */
+/* ---------- 32 · XGBOOST EXECUTADO ---------- */
 {sec:'Projeto', short:'XGBoost horário — execução',
  title:'XGBoost horário <span style="font-size:16px;color:var(--gray);font-weight:500">· configuração executada</span>',
  sub:'Engenharia explícita de atributos + boosting recursivo na granularidade nativa.',
@@ -1952,7 +1990,7 @@ SLIDES = [
    figKey:'camp_xgboost', figSub:'XGBoost — melhor cenário por tipologia',
    nota:'Modelo individual por tipologia · origem única · 720 passos horários · saída truncada em zero.'})},
 
-/* ---------- 29 · TFT EXECUTADO ---------- */
+/* ---------- 33 · TFT EXECUTADO ---------- */
 {sec:'Projeto', short:'TFT global — execução',
  title:'Temporal Fusion Transformer <span style="font-size:16px;color:var(--gray);font-weight:500">· configuração executada</span>',
  sub:'Modelo global: seis tipologias aprendidas conjuntamente em cada cenário.',
@@ -1984,7 +2022,7 @@ SLIDES = [
    figKey:'camp_tft', figSub:'TFT — melhor cenário por tipologia',
    nota:'Avaliação rolling day-ahead: o contexto real é renovado no início de cada dia do horizonte de teste.'})},
 
-/* ---------- 30 · TIMESFM EXECUTADO ---------- */
+/* ---------- 34 · TIMESFM EXECUTADO ---------- */
 {sec:'Projeto', short:'TimesFM zero-shot — execução',
  title:'TimesFM 2.5-200M <span style="font-size:16px;color:var(--gray);font-weight:500">· configuração executada</span>',
  sub:'Modelo fundacional decoder-only · inferência zero-shot · backend PyTorch.',
@@ -2021,11 +2059,11 @@ SLIDES = [
    figKey:'camp_timesfm', figSub:'TimesFM — melhor cenário por tipologia',
    nota:'Sem vazamento: cada previsão usa somente o histórico observado até o início do bloco.'})},
 
-/* ---------- 31 · SELEÇÃO DA JANELA DE TESTE ---------- */
-{sec:'Projeto', short:'Como a janela de teste foi escolhida',
- title:'Projeto — como a janela de teste foi escolhida',
- sub:'A janela não foi arbitrada: é a que mais se parece com o ano inteiro, dentro de restrições declaradas de calendário.',
- note:'Ponto sensível para a banca: explicar que a janela de teste foi selecionada por um critério objetivo de representatividade, com treino estritamente anterior e sem dezembro.',
+/* ---------- 35 · SELEÇÃO DA JANELA DE TESTE ---------- */
+{sec:'Projeto', short:'Janela, split e validade experimental',
+ title:'Projeto — janela, split e validade experimental',
+ sub:'A janela foi escolhida por representatividade; o treino permanece no passado e a assimetria de protocolo é declarada.',
+ note:'Ponto sensível para a banca: explicar o critério objetivo da janela, a ausência de vazamento e que SARIMAX/LSTM/XGBoost usam origem única, enquanto TFT/TimesFM renovam o contexto a cada 24 h.',
  html:(()=>{
    const id = iflowNew([
      {t:'Janela candidata', d:'720 h deslizantes',
@@ -2076,40 +2114,13 @@ SLIDES = [
      <div class="chips" data-anim="fade">
        <span class="badge ok">sem vazamento · verificado por assert</span>
        <span class="badge">720 h de teste em todas as tipologias</span>
-       <span class="badge">dezembro excluído · férias coletivas</span>
-       <span class="badge no">limitação: janela única, sem repetição</span></div>
+       <span class="badge" data-tip="SARIMAX, LSTM e XGBoost produzem as 720 h sem atualizar a entrada com valores reais do horizonte.">origem única · 3 modelos</span>
+       <span class="badge" data-tip="TFT e TimesFM renovam o contexto real no início de cada bloco diário; não há lookahead, mas há assimetria de comparabilidade.">rolling 24 h · 2 modelos</span>
+       <span class="badge no">limitações · janela única + protocolos assimétricos</span></div>
    </div>`;
  })()},
 
-/* ---------- 32 ---------- */
-{sec:'Projeto', short:'Desenho experimental e validade',
- title:'Projeto — desenho experimental e validade',
- sub:'Mesmo split, 90 avaliações e limitações declaradas antes da leitura do ranking.',
- note:'As 90 avaliações compartilham split e métricas, mas não o mesmo regime de atualização; essa assimetria precisa qualificar qualquer ranking.',
- html:`<div class="fillcol" style="justify-content:space-evenly">
-   <div class="row" data-anim="scale" style="align-items:center;gap:14px;justify-content:center;flex:0 0 auto">
-     ${[['5','modelos'],['6','tipologias'],['3','cenários']].map((x,i)=>
-       `${i?'<span style="font-size:22px;color:#9FB6C7">×</span>':''}
-        <div style="text-align:center"><div style="font-size:34px;font-weight:700;color:var(--blue-dark);line-height:1">${x[0]}</div>
-        <div style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)">${x[1]}</div></div>`).join('')}
-     <span style="font-size:22px;color:#9FB6C7">=</span>
-     <div style="text-align:center;background:var(--pale);border:1px solid #CFE2EF;border-radius:10px;padding:8px 20px">
-       <div class="counter" data-to="90" data-dec="0" style="font-size:34px;font-weight:700;color:var(--blue);line-height:1">90</div>
-       <div style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-dark)">avaliações</div></div>
-   </div>
-   <div class="grid g3" style="flex:0 0 auto">
-     ${cardT('Split', 'Treino estritamente anterior + teste de <b>720 h</b>, idêntico para os cinco modelos — janela escolhida por representatividade (slide anterior).', 'dark')}
-     ${cardT('Sem vazamento', 'shift(1) nas janelas móveis e estatísticas estimadas apenas no treino.', 'green')}
-     ${cardT('Métrica e significância', 'RMSE primário + WAPE · Diebold–Mariano com HAC Newey–West e correção HLN.', 'cyan')}
-   </div>
-   <div class="row fill" style="margin-top:10px;flex:0 0 auto">
-     ${cardT('Origem única', 'SARIMAX · LSTM · XGBoost — sem atualização com valores reais dentro da janela de teste.', 'amber')}
-     ${cardT('Rolling 24 h', 'TFT · TimesFM — contexto real renovado no início de cada dia.', 'red', 'Não há lookahead nos dois regimes, mas o rolling recebe informação mais recente. A ameaça é de comparabilidade, não de contaminação do alvo.')}
-   </div>
-   <div class="note" data-anim="fade">Limites declarados: janela única, protocolos assimétricos, exógenas realizadas, ranking sensível à escala e semente única.</div>
-   </div>`},
-
-/* ---------- 32 ---------- */
+/* ---------- 36 ---------- */
 {sec:'Resultados preliminares', short:'Ranking global',
  title:'Resultados preliminares — ranking global',
  sub:'RMSE médio nas 18 combinações de cada modelo; menor é melhor.',
@@ -2134,7 +2145,7 @@ SLIDES = [
      ${card('Figura de apoio', `<div style="margin-top:2px">${figBtn('rankings','Ranking completo','Figura 03 do portfólio de resultados')}</div>`, 'amber')}
    </div></div>`},
 
-/* ---------- 33 ---------- */
+/* ---------- 37 ---------- */
 {sec:'Resultados preliminares', short:'Matriz de RMSE',
  title:'Resultados preliminares — matriz de RMSE',
  sub:'Cada célula usa o melhor cenário daquele modelo; o menor valor da linha define o campeão. Passe o mouse para ver o cenário vencedor.',
@@ -2145,21 +2156,21 @@ SLIDES = [
      ${cardT('Como ler', 'A comparação é válida <b>dentro de cada linha</b>. Comparar o RMSE do Tipo 1 (≈8–10) com o do Tipo 2 (≈0,5–0,8) não faz sentido: são escalas diferentes.', 'amber')}
    </div>`},
 
-/* ---------- 34 ---------- */
+/* ---------- 38 ---------- */
 {sec:'Resultados preliminares', short:'Curvas temporais I · Tipos 1–3',
  title:'Resultados preliminares — curvas temporais I',
  sub:'Carga real e previsões dos cinco modelos no melhor cenário · Tipos 1, 2 e 3.',
  note:'Nos Tipos 1 a 3, as curvas permitem observar não apenas o erro médio, mas também aderência a picos, vales e mudanças de regime.',
  html:curvas('semana_top', [0,1,2])},
 
-/* ---------- 35 ---------- */
+/* ---------- 39 ---------- */
 {sec:'Resultados preliminares', short:'Curvas temporais II · Tipos 4–6',
  title:'Resultados preliminares — curvas temporais II',
  sub:'Carga real e previsões dos cinco modelos no melhor cenário · Tipos 4, 5 e 6.',
  note:'Nos Tipos 4 a 6, a inspeção temporal mostra onde modelos com erros próximos produzem formas de previsão diferentes.',
  html:curvas('semana_bot', [3,4,5])},
 
-/* ---------- 36 ---------- */
+/* ---------- 40 ---------- */
 {sec:'Resultados preliminares', short:'Campeão, cenário e evidência',
  title:'Resultados preliminares — campeão, cenário e evidência',
  sub:'A vitória numérica é separada da diferença estatisticamente detectável.',
@@ -2171,7 +2182,7 @@ SLIDES = [
    </div>
    <div class="chips" data-anim="fade" style="margin-top:6px">${figBtn('dm','Matriz completa de Diebold–Mariano','Estatísticas DM e p-valores gerados pelo notebook')}</div>`},
 
-/* ---------- 37 ---------- */
+/* ---------- 41 ---------- */
 {sec:'Comentários finais', short:'O que já podemos afirmar',
  title:'O que já podemos afirmar',
  note:'A evidência parcial indica que a tipologia decide o melhor modelo, o TimesFM é competitivo sem treino local e o efeito das exógenas é heterogêneo.',
@@ -2182,7 +2193,7 @@ SLIDES = [
      ${cardN('04 · Contribuição', {txt:'Benchmark qualificado'}, 'Benchmark industrial brasileiro, segmentado por tipologia, pareado no mesmo split e <b>estatisticamente qualificado</b> por Diebold–Mariano.', 'cyan')}
    </div>`},
 
-/* ---------- 38 ---------- */
+/* ---------- 42 ---------- */
 {sec:'Comentários finais', short:'O que falta para concluir',
  title:'O que falta para uma conclusão definitiva',
  sub:'Prioridade científica: separar o efeito da arquitetura do efeito do protocolo.',
@@ -2197,14 +2208,14 @@ SLIDES = [
      ${cardT('Estado das hipóteses', 'H1 parcialmente apoiada · H2 heterogeneidade apoiada, mecanismo inconclusivo · H3 parcialmente apoiada (empate técnico no Tipo 6).', 'dark', 'As hipóteses são tratadas como parcialmente apoiadas ou inconclusivas, evitando transformar resultado preliminar em confirmação definitiva.')}
    </div>`},
 
-/* ---------- 39 ---------- */
+/* ---------- 43 ---------- */
 {sec:'Cronograma', short:'Cronograma até a defesa',
  title:'Cronograma',
  sub:'Da qualificação à defesa · fevereiro de 2027.',
  note:'O cronograma concentra primeiro os experimentos que afetam validade e, depois, a análise, redação, artigo e defesa prevista para fevereiro de 2027.',
  html:gantt()},
 
-/* ---------- 40 ---------- */
+/* ---------- 44 ---------- */
 {sec:'Produção científica', short:'Produção científica · agradecimento',
  title:'Produção científica',
  sub:'Artigos publicados e em publicação.',
@@ -2230,7 +2241,7 @@ SLIDES = [
      </div>
    </div>`},
 
-/* ---------- 41 · ENTREGÁVEIS ---------- */
+/* ---------- 45 · ENTREGÁVEIS ---------- */
 {sec:'Entregáveis', short:'Entregáveis da dissertação',
  title:'Entregáveis da dissertação',
  sub:'O que fica ao final do trabalho — produtos reutilizáveis, não apenas um texto.',
@@ -2251,6 +2262,25 @@ SLIDES = [
 
 /* ---------- inicialização ---------- */
 boot();
+
+/* modo de exportação: ?arch isola o diagrama de arquitetura do slide corrente
+   (usado para gerar as imagens da versão PowerPoint) */
+(function archExport(){
+  if (!/[?&]arch/.test(location.search)) return;
+  const box = document.querySelector('.slide.active .archbox');
+  if (!box) return;
+  document.body.innerHTML = '';
+  document.body.style.cssText = 'background:#fff;margin:0;overflow:hidden';
+  box.removeAttribute('data-anim');
+  box.style.cssText = 'width:1400px;height:452px;border:0;background:#fff;' +
+                      'padding:0;margin:0;opacity:1;transform:none;display:block';
+  const at = box.querySelector('.at'); if (at) at.remove();
+  const svg = box.querySelector('svg.arch');
+  svg.style.cssText = 'width:1400px;height:452px;display:block';
+  svg.querySelectorAll('.dim').forEach(e=>e.classList.remove('dim'));
+  svg.querySelectorAll('.on').forEach(e=>e.classList.remove('on'));
+  document.body.appendChild(box);
+})();
 
 /* atalho de apoio: ?fig=<chave> abre a figura direto (útil em perguntas da banca) */
 (function deepFig(){
