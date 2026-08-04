@@ -983,7 +983,7 @@ const ticksSemana = [0,24,48,72,96,119].map(i=>({i, label:i===119?'Sex 23h':['Se
 /* helpers de tabela */
 function matrizRMSE(){
   const mods = D.modelos;
-  let h = `<table class="matrix"><thead><tr><th>Tipologia</th>` +
+  let h = `<table class="matrix"><thead><tr><th>Tipologia · RMSE (kW)</th>` +
     mods.map(m=>`<th><span class="mhead"><span class="sw" style="background:${MC[m]}"></span>${m}</span></th>`).join('') +
     `<th>Campeão</th></tr></thead><tbody>`;
   for (let t=0;t<6;t++){
@@ -994,7 +994,7 @@ function matrizRMSE(){
     const best = linha.reduce((a,b)=>b.v<a.v?b:a);
     const max = Math.max(...linha.map(x=>x.v));
     h += `<tr><td>T${t+1} · ${TIPOS[t]}</td>` + linha.map(x=>
-      `<td class="${x.m===best.m?'win':''}" style="color:${MC[x.m]}" data-tip="${x.m} · Tipo ${t+1} — melhor cenário: ${CENLAB[x.cen]} · RMSE ${nf(x.v)}">
+      `<td class="${x.m===best.m?'win':''}" style="color:${MC[x.m]}" data-tip="${x.m} · Tipo ${t+1} — melhor cenário: ${CENLAB[x.cen]} · RMSE ${nf(x.v)} kW">
         <span style="color:var(--ink)">${nf(x.v)}</span><span class="bar" style="--v:${(x.v/max).toFixed(3)}"></span></td>`).join('') +
       `<td style="color:${MC[best.m]};font-weight:700">${best.m}</td></tr>`;
   }
@@ -1016,7 +1016,7 @@ function tabelaDM(){
       <td style="text-align:left"><span class="badge ${veredito[0]}" data-tip="Diebold–Mariano (HAC Newey–West + correção HLN) — ${det}">${veredito[1]}</span></td></tr>`;
   }).join('');
   return `<table class="matrix"><thead><tr><th>Tipologia</th><th style="text-align:right">Campeão</th>
-    <th style="text-align:right">Cenário</th><th>RMSE</th>
+    <th style="text-align:right">Cenário</th><th>RMSE (kW)</th>
     <th style="text-align:left">Diebold–Mariano (p&lt;0,05)</th></tr></thead><tbody>${linhas}</tbody></table>`;
 }
 
@@ -1344,7 +1344,7 @@ SLIDES = [
      </div>
    </div>
    <div class="row fill" style="flex:0 0 auto;align-items:center">
-     ${cardT('Motivação · heterogeneidade industrial', 'Na mesma classe tarifária convivem operações contínuas, picos em horários distintos e regimes regulares. Agregar tudo em uma única série pode <b>encobrir a dinâmica intradiária</b>.', 'green')}
+     ${cardT('Gap da literatura', 'Somente <b>22,45%</b> dos 49 estudos focam exclusivamente a indústria e apenas <b>14,29%</b> usam variáveis econômicas. Nenhum reúne indústria brasileira, tipologias, granularidade horária, exógenas e comparação pareada.', 'green', 'A lacuna é derivada da RSL apresentada nos slides 17–21.')}
      ${cardT('Motivação · influência de variáveis externas', 'Temperatura, juros e câmbio podem explicar parte da carga com <b>defasagens diferentes</b>. Incluí-los sem critério pode adicionar ruído; ignorá-los pode descartar informação útil.', 'amber', 'A dissertação avalia temperatura, dólar BCB, SELIC acumulada em 12 meses e câmbio médio, em cenários sem exógenas, diários e mensais.')}
    </div></div>`},
 
@@ -1425,10 +1425,10 @@ SLIDES = [
    </div></div>`},
 
 /* ---------- 14 · HETEROGENEIDADE NOS DADOS ---------- */
-{sec:'Fundamentação', short:'A heterogeneidade nos dados',
- title:'Fundamentação — a heterogeneidade aparece nos dados',
- sub:'A primeira observação da motivação, verificada na base real: seis perfis convivem na mesma classe tarifária.',
- note:'Agora sim o gráfico: depois de explicado o problema, mostrar que a heterogeneidade descrita na motivação é mensurável na base de 2011.',
+{sec:'Fundamentação', short:'Conceitos de perfil de carga',
+ title:'Fundamentação — conceitos de perfil de carga',
+ sub:'Tipologia, normalização e variabilidade: três conceitos necessários para interpretar as curvas industriais.',
+ note:'Definir os conceitos antes de interpretar os gráficos: tipologia descreve forma de consumo, normalização separa forma de magnitude e o coeficiente de variação mede dispersão relativa.',
  html:`<div class="row fill" style="flex:1;min-height:0;gap:12px">
    ${chart({title:'Seis tipologias, uma semana útil real', sub:'kW médios por hora · base 2011',
      tip:'Séries reais das seis tipologias na semana de 02/05/2011 (dias úteis). As escalas diferem em uma ordem de grandeza: o Tipo 1 opera em outro patamar.',
@@ -1440,16 +1440,16 @@ SLIDES = [
      yFmt:v=>v.toFixed(1), vFmt:v=>nf(v,2), bands:[{from:18,to:21,color:'#163E64'}]})}
  </div>
  <div class="row fill" style="flex:0 0 auto;align-items:center">
-   ${cardT('O que a esquerda mostra', 'Magnitudes muito diferentes: prever a média dos 87 consumidores seria prever uma curva que <b>nenhum deles</b> tem.', 'dark')}
-   ${cardT('O que a direita mostra', 'Formas distintas de assinatura intradiária — e um único traço comum: a queda entre <b>18 h e 21 h</b>, o horário de ponta.', 'cyan')}
-   ${cardT('Variabilidade medida', 'Coeficiente de variação horário de <b>0,31</b> (Tipo 3) a <b>1,10</b> (Tipo 2). Um único modelo precisa atravessar essa faixa inteira.', 'amber')}
+   ${cardT('Tipologia de carga', 'Grupo de consumidores com <b>forma intradiária semelhante</b>. Não é CNAE: setores diferentes podem operar com a mesma curva, e um mesmo setor pode ter regimes distintos.', 'dark')}
+   ${cardT('Normalização Min–Max', 'Reescala cada perfil entre 0 e 1. Assim, o agrupamento compara a <b>forma</b> da curva, sem deixar empresas de maior potência dominarem a distância.', 'cyan')}
+   ${cardT('Coeficiente de variação', 'Razão entre desvio-padrão e média: <b>CV = σ/μ</b>. Quanto maior, mais irregular é o perfil; na base, varia de 0,31 a 1,10.', 'amber')}
  </div>`},
 
 /* ---------- 11 ---------- */
-{sec:'Fundamentação', short:'Do sinal à previsão',
- title:'Do sinal à previsão',
- sub:'O que o modelo precisa aprender em uma série industrial — e como esses componentes aparecem nos dados reais.',
- note:'Uma série industrial mistura nível, tendência, sazonalidade e ruído; cada família de modelos representa esses componentes de maneira diferente.',
+{sec:'Fundamentação', short:'Componentes de uma série temporal',
+ title:'Fundamentação — componentes de uma série temporal',
+ sub:'Decompor a série ajuda a separar padrão estrutural, repetição periódica e variação não explicada.',
+ note:'Nível é o patamar médio; tendência é a direção de longo prazo; sazonalidade é o padrão que se repete; resíduo é o que permanece após retirar os componentes estruturais.',
  html:`${flow([['Nível','patamar de carga','O componente de baixa frequência: onde a operação se estabiliza.'],
               ['Tendência','mudança de regime','Alterações de produção, entrada e saída de linhas.'],
               ['Sazonalidade','hora / dia útil','Ciclo de 24 h e de 5 dias úteis, o sinal mais forte da série.'],
@@ -1626,17 +1626,17 @@ SLIDES = [
    arch:ARCH_TSFM})},
 
 /* ---------- 18 ---------- */
-{sec:'Fundamentação', short:'Cinco modelos · quatro famílias',
- title:'Cinco modelos · quatro famílias',
- sub:'A comparação cobre o espectro metodológico completo: estatístico → árvores → recorrente → atenção → fundacional.',
- note:'Os cinco modelos cobrem quatro famílias complementares; a comparação busca entender em qual perfil cada hipótese de modelagem funciona melhor.',
- html:`${flow([['SARIMAX','estatística'],['XGBoost','árvores'],['LSTM','profundo · recorrente'],['TFT','profundo · atenção'],['TimesFM','fundacional']],
+{sec:'Fundamentação', short:'Paradigmas de modelagem',
+ title:'Fundamentação — paradigmas de modelagem',
+ sub:'Cada família representa a dependência temporal de uma maneira diferente.',
+ note:'Este slide explica os paradigmas, sem tratar ainda da escolha experimental. A seleção dos cinco modelos e suas configurações pertence à seção Projeto.',
+ html:`${flow([['SARIMAX','dependência linear + sazonal'],['XGBoost','regras em atributos defasados'],['LSTM','memória sequencial'],['TFT','seleção + atenção'],['TimesFM','representação pré-treinada']],
               [MC.SARIMAX, MC.XGBoost, MC.LSTM, MC.TFT, MC.TimesFM])}
-   <div class="note" data-anim="fade" style="margin-top:6px">complexidade e transferência de representação →</div>
+   <div class="note" data-anim="fade" style="margin-top:6px">da estrutura definida pelo pesquisador à representação aprendida em grande escala →</div>
    <div class="grid g3" style="flex:1;align-content:start;margin-top:8px">
-     ${cardT('Hipótese de modelagem', 'Cada família assume algo diferente sobre a série: linearidade, tabularidade, memória sequencial ou representação transferida.', 'dark')}
-     ${cardT('Por que cinco', 'Menos que isso deixa uma família sem representante; mais que isso inviabiliza o pareamento sob o mesmo protocolo.', '')}
-     ${cardT('O que não é', 'Não é uma proposta de nova arquitetura — é um <b>benchmark pareado</b> em um domínio pouco coberto.', 'green')}
+     ${cardT('Estatística e árvores', 'O <b>SARIMAX</b> explicita relações lineares e sazonais; o <b>XGBoost</b> aprende regras não lineares a partir de defasagens e atributos de calendário.', 'dark')}
+     ${cardT('Redes profundas', 'A <b>LSTM</b> mantém memória recorrente; o <b>TFT</b> acrescenta seleção de variáveis, gating e atenção para múltiplas séries.', '')}
+     ${cardT('Modelo fundacional', 'O <b>TimesFM</b> transfere representações aprendidas em grandes coleções e pode prever uma nova série em regime zero-shot.', 'green')}
    </div>`},
 
 /* ---------- 19 ---------- */
@@ -1829,25 +1829,28 @@ SLIDES = [
 /* ---------- 27 ---------- */
 {sec:'Projeto', short:'Base e pré-processamento',
  title:'Projeto — base e pré-processamento',
- sub:'Transformação da medição bruta em uma série horária auditável.',
- note:'A base parte de 87 consumidores industriais e passa por limpeza, consolidação horária, filtros e anonimização antes de qualquer treinamento.',
+ sub:'Transformação da medição bruta em uma série horária auditável, com cobertura setorial documentada.',
+ note:'Separar três números: 87 consumidores é o universo canônico da dissertação; 43 organizações possuem classificação setorial auxiliar; a medição não contém código CNAE.',
  html:`<div class="row fill" style="flex:0 0 auto">
      ${cardN('Base canônica', {v:87, dec:0}, 'consumidores industriais · Grupo A · Santa Catarina · 2011 · medição a cada 15 min', 'dark', 'Número canônico enviado à banca. Nenhuma contagem alternativa deve ser apresentada.')}
      ${cardT('Pré-processamento', 'tipos (timestamp + float) · duplicidades (média empresa/data/hora) · recorte de dias úteis · filtros de potência nula e IQR · índice data + hora', '')}
-     ${cardT('Sigilo', 'Identificadores permanecem anonimizados; somente agregados por tipologia são apresentados.', 'red')}
+     ${cardT('Cobertura setorial', '<b>43 organizações</b> com classificação auxiliar em <b>10 categorias</b>. O código CNAE não é campo dos 12 arquivos mensais de medição.', 'red', 'A classificação auxiliar é usada apenas para descrever a diversidade setorial; não entra como variável dos modelos.')}
    </div>
    <div class="heading" data-anim="left" style="margin-top:8px">Produtos do pré-processamento</div>
    ${flow([['Perfil 87 × 24','média de cada consumidor por hora do dia'],
            ['Perfil normalizado','Min–Max linha a linha · clusterização por forma'],
            ['Série por tipologia','média horária do cluster · sem efeito do tamanho do grupo'],
            ['Bases auxiliares','diária · semanal · mensal, para diagnóstico']])}
-   <div class="note" data-anim="fade" style="margin-top:8px">A série de cada tipologia é a <b>média horária dos consumidores do cluster</b> — por isso a magnitude do Tipo 1 (≈49 kW médios) difere em uma ordem de grandeza da do Tipo 2 (≈1,3 kW).</div>`},
+   <div class="row fill" style="flex:0 0 auto;margin-top:8px;align-items:stretch">
+     ${cardT('Segmentos identificados', 'Outros 18 · Alimentos 6 · Madeira 5 · Metalurgia 4 · Plásticos 3 · Pesca 2 · Têxtil 2 · Bebidas 1 · Confecção 1 · Carnes 1.', 'cyan')}
+     ${cardT('CNAE e sigilo', '<b>8 divisões CNAE associáveis como proxy</b> (03, 10, 11, 13, 14, 16, 22 e 24); a contagem exata depende do cadastro complementar. Identificadores permanecem anonimizados.', 'amber', 'Os códigos CNAE foram associados conceitualmente aos segmentos identificados; não estão presentes na base de medição e não devem ser apresentados como cadastro original.')}
+   </div>`},
 
 /* ---------- 28 ---------- */
 {sec:'Projeto', short:'Construção das seis tipologias',
  title:'Projeto — construção das seis tipologias',
- sub:'A clusterização separa comportamentos intradiários sem deixar a magnitude dominar.',
- note:'A normalização por consumidor faz o k-Means agrupar por forma; os seis grupos tornam-se séries médias comparáveis por comportamento.',
+ sub:'Tipologia de carga não é CNAE: o agrupamento separa comportamento intradiário, não atividade econômica.',
+ note:'Os segmentos industriais aparecem distribuídos entre as tipologias. O k-Means usa somente a forma normalizada da curva; CNAE ou categoria setorial não entram no agrupamento.',
  html:`${flow([['87 × 24','perfil médio'],['Min–Max','linha a linha'],['k-Means','k=6 · seed 42 · n_init=10'],['6 grupos','assinaturas'],['Alvo','média horária']])}
    <div class="row fill" style="flex:1;min-height:0;margin-top:10px">
      ${chart({title:'As seis assinaturas resultantes', sub:'perfil médio 24 h normalizado · clique na legenda para isolar',
@@ -1861,7 +1864,7 @@ SLIDES = [
      </div></div>
    <div class="row" data-anim="fade" style="align-items:center;gap:10px;flex:0 0 auto">
      ${figBtn('clusters','Perfis normalizados dos 87 consumidores','Figura de clusterização do notebook')}
-     <span class="note" style="flex:1">Validação formal planejada: silhueta, Davies–Bouldin, Calinski–Harabasz, cotovelo e estabilidade entre inicializações.</span></div>`},
+     <span class="note" style="flex:1"><b>Cobertura auxiliar:</b> 10 categorias setoriais e 8 divisões CNAE associáveis; “Outros” reúne 18 casos sem código confirmado. A classificação descreve o dataset, mas não participa da clusterização.</span></div>`},
 
 /* ---------- 29 ---------- */
 {sec:'Projeto', short:'Exógenas e diagnóstico estrutural',
@@ -2147,13 +2150,13 @@ SLIDES = [
 
 /* ---------- 37 ---------- */
 {sec:'Resultados preliminares', short:'Matriz de RMSE',
- title:'Resultados preliminares — matriz de RMSE',
- sub:'Cada célula usa o melhor cenário daquele modelo; o menor valor da linha define o campeão. Passe o mouse para ver o cenário vencedor.',
- note:'A matriz mostra que TimesFM vence quatro perfis e TFT dois; os demais modelos não lideram numericamente, embora participem de empates técnicos.',
+ title:'Resultados preliminares — matriz de RMSE (kW)',
+ sub:'Cada célula expressa o erro quadrático médio na unidade original da carga; o menor RMSE (kW) da linha define o campeão.',
+ note:'RMSE está expresso em kW. A matriz mostra que TimesFM vence quatro perfis e TFT dois; os demais modelos não lideram numericamente, embora participem de empates técnicos.',
  html:`<div class="fillcol" style="justify-content:center">${matrizRMSE()}</div>
    <div class="row fill" style="flex:0 0 auto;margin-top:6px">
      ${cardT('Placar', '<b style="color:'+MC.TimesFM+'">TimesFM: 4 vitórias</b> · <b style="color:'+MC.TFT+'">TFT: 2 vitórias</b> · demais: empates técnicos em casos específicos.', 'dark')}
-     ${cardT('Como ler', 'A comparação é válida <b>dentro de cada linha</b>. Comparar o RMSE do Tipo 1 (≈8–10) com o do Tipo 2 (≈0,5–0,8) não faz sentido: são escalas diferentes.', 'amber')}
+     ${cardT('Como ler', 'Todos os valores estão em <b>kW</b>. A comparação é válida <b>dentro de cada linha</b>; comparar o RMSE do Tipo 1 (≈8–10 kW) com o do Tipo 2 (≈0,5–0,8 kW) não faz sentido porque as escalas diferem.', 'amber')}
    </div>`},
 
 /* ---------- 38 ---------- */
