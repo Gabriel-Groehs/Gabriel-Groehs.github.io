@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Qualificação · Previsão horária do consumo industrial de energia elétrica — Gabriel Alberto Groehs</title>
 <style>
 /* ============================================================
@@ -34,11 +34,15 @@ button{font-family:inherit}
 /* ============================================================
    PALCO
    ============================================================ */
-#viewport{position:fixed; inset:0; display:grid; place-items:center;
-  background:radial-gradient(120% 120% at 50% 0%, #123049 0%, #0A1A28 60%, #06121D 100%);}
+#viewport{
+  position:fixed; inset:0; overflow:hidden;
+  width:100vw; height:100vh; width:100dvw; height:100dvh;
+  background:radial-gradient(120% 120% at 50% 0%, #123049 0%, #0A1A28 60%, #06121D 100%);
+  overscroll-behavior:none; touch-action:pan-y;
+}
 #stage{
-  position:relative; width:var(--stage-w); height:var(--stage-h);
-  background:var(--paper); overflow:hidden; transform-origin:center center;
+  position:absolute; left:0; top:0; width:var(--stage-w); height:var(--stage-h);
+  background:var(--paper); overflow:hidden; transform-origin:0 0; will-change:transform;
   box-shadow:0 24px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06);
   border-radius:6px;
 }
@@ -68,8 +72,8 @@ button{font-family:inherit}
   color:var(--blue); display:flex; align-items:center; gap:9px; margin-bottom:7px;
 }
 .eyebrow::before{content:""; width:22px; height:2px; background:var(--cyan); border-radius:2px}
-h1.title{font-size:31px; line-height:1.14; font-weight:700; color:var(--blue-dark); margin:0 0 4px}
-p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000px; line-height:1.45}
+h1.title{font-size:33px; line-height:1.12; font-weight:700; color:var(--blue-dark); margin:0 0 5px}
+p.subtitle{font-size:15.3px; color:var(--gray); margin:0 0 16px; max-width:1020px; line-height:1.48}
 .head{flex:0 0 auto}
 .body{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:12px}
 
@@ -98,8 +102,8 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
 .fillcol{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:12px}
 
 .card{
-  background:var(--paper); border:1px solid var(--line); border-radius:10px;
-  padding:13px 15px 14px 17px; position:relative; overflow:hidden;
+  background:var(--paper); border:1px solid var(--line); border-radius:12px;
+  padding:15px 17px 16px 19px; position:relative; overflow:hidden;
   box-shadow:0 1px 2px rgba(22,62,100,.04);
   display:flex; flex-direction:column; justify-content:center;
   transition:transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease);
@@ -108,9 +112,9 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
   transform:scaleY(0); transform-origin:top; transition:transform .5s var(--ease) .12s}
 .slide.active .card::before{transform:scaleY(1)}
 .card:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(22,62,100,.13); border-color:#C3D6E5}
-.card h4{margin:0 0 6px; font-size:10.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--blue)}
-.card p{margin:0; font-size:12.6px; line-height:1.46; color:var(--ink)}
-.card .big{font-size:26px; font-weight:700; color:var(--blue-dark); line-height:1; margin:2px 0 5px; font-variant-numeric:tabular-nums}
+.card h4{margin:0 0 8px; font-size:11px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--blue)}
+.card p{margin:0; font-size:13.3px; line-height:1.5; color:var(--ink)}
+.card .big{font-size:30px; font-weight:700; color:var(--blue-dark); line-height:1; margin:2px 0 7px; font-variant-numeric:tabular-nums}
 .card.k-dark::before{background:var(--blue-dark)} .card.k-dark h4{color:var(--blue-dark)}
 .card.k-cyan::before{background:var(--cyan)} .card.k-cyan h4{color:#1E88AF}
 .card.k-green::before{background:var(--green)} .card.k-green h4{color:var(--green)}
@@ -121,10 +125,10 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
 .card.sm h4{font-size:9.8px; margin-bottom:4px}
 .card.sm p{font-size:11.7px; line-height:1.4}
 
-.heading{font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--blue-dark); margin:2px 0 8px}
-.note{font-size:11.6px; color:var(--gray); font-style:italic; line-height:1.45}
+.heading{font-size:11.4px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--blue-dark); margin:2px 0 9px}
+.note{font-size:12.1px; color:var(--gray); font-style:italic; line-height:1.48}
 .badge{display:inline-flex; align-items:center; gap:6px; background:var(--pale); color:var(--blue-dark);
-  border:1px solid #CFE2EF; border-radius:999px; padding:4px 11px; font-size:11px; font-weight:600}
+  border:1px solid #CFE2EF; border-radius:999px; padding:5px 12px; font-size:11.4px; font-weight:600}
 .badge.ok{background:#E8F5F1; border-color:#BFE2D8; color:var(--green)}
 .badge.no{background:#FBEDED; border-color:#EFD0D0; color:var(--red)}
 .chips{display:flex; flex-wrap:wrap; gap:7px}
@@ -139,9 +143,9 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
    ============================================================ */
 .flow{display:flex; align-items:stretch; gap:0; width:100%}
 .flow-step{
-  flex:1 1 0; min-width:0; position:relative; border-radius:10px; padding:11px 12px;
+  flex:1 1 0; min-width:0; position:relative; border-radius:12px; padding:13px 14px 14px;
   background:linear-gradient(180deg,#fff,var(--pale2)); border:1px solid var(--line);
-  display:flex; flex-direction:column; gap:3px; transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  display:flex; flex-direction:column; gap:4px; transition:transform .3s var(--ease), box-shadow .3s var(--ease);
 }
 .flow-step:hover{transform:translateY(-4px); box-shadow:0 12px 26px rgba(22,62,100,.15); z-index:3}
 .flow-step .n{
@@ -149,8 +153,8 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
   background:var(--accent,var(--blue)); color:#fff; font-size:10.5px; font-weight:700;
   display:grid; place-items:center; box-shadow:0 2px 6px rgba(0,0,0,.18);
 }
-.flow-step .t{font-size:11.4px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent,var(--blue)); margin-top:4px}
-.flow-step .d{font-size:11.4px; color:var(--gray); line-height:1.38}
+.flow-step .t{font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent,var(--blue)); margin-top:4px}
+.flow-step .d{font-size:12px; color:var(--gray); line-height:1.42}
 .flow-step::after{
   content:""; position:absolute; left:0; right:0; bottom:0; height:3px; border-radius:0 0 9px 9px;
   background:var(--accent,var(--blue)); transform:scaleX(0); transform-origin:left;
@@ -197,6 +201,48 @@ p.subtitle{font-size:14.5px; color:var(--gray); margin:0 0 14px; max-width:1000p
 .rsl-protocol-cards .card{flex:1 1 0; padding:15px 17px 16px 19px}
 .rsl-protocol-cards .card h4{font-size:11.2px}
 .rsl-protocol-cards .card p{font-size:13.2px; line-height:1.5}
+
+
+/* ---- refinamentos estéticos para slides textuais / síntese ---- */
+.scope-col .card{padding:12px 16px !important}
+.scope-col .card span:first-child{font-size:10.6px !important}
+.scope-col .card span:last-child{font-size:13.2px !important; line-height:1.45 !important}
+.scope-why .card{padding:16px 18px 17px 20px}
+.scope-why .card p{font-size:14px; line-height:1.52}
+.rsl-lacuna-grid{align-content:stretch !important; gap:12px !important}
+.rsl-lacuna-grid .card{padding:14px 18px 15px 18px !important; min-height:86px}
+.rsl-lacuna-grid .badge{justify-content:center; min-width:118px; padding:8px 12px; font-size:11.2px}
+.rsl-lacuna-grid .lacuna-text{font-size:14.2px; line-height:1.34; color:var(--gray)}
+.rsl-lacuna-grid .decisao-text{font-size:14.5px; line-height:1.34; color:var(--blue-dark); font-weight:600}
+.rsl-lacuna-grid .cap{font-size:10.2px; letter-spacing:.12em; text-transform:uppercase; display:block; font-weight:700; margin-bottom:3px}
+.project-overview{justify-content:space-between; gap:16px !important}
+.project-overview .flow-step{min-height:92px}
+.project-overview-support .card{min-height:104px; padding:16px 18px 17px 20px}
+.project-overview-support .card p{font-size:13.8px; line-height:1.52}
+.project-overview-grid .card{min-height:124px; padding:15px 17px 16px 19px}
+.project-overview-grid .card h4{font-size:11.2px}
+.project-overview-grid .card p{font-size:13.2px; line-height:1.5}
+.project-overview-grid .badge{margin-top:8px}
+.project-prep .row:first-child .card{min-height:128px}
+.project-prep .card{padding:16px 18px 17px 20px}
+.project-prep .card p{font-size:13.6px; line-height:1.5}
+.project-prep .card .big{font-size:44px; margin-bottom:8px}
+.project-prep .flow-step{min-height:90px}
+.project-prep .row:last-child .card{min-height:104px}
+.final-conclusion{justify-content:space-between; gap:14px}
+.final-conclusion .flow-step{min-height:88px}
+.final-conclusion .row .card{min-height:110px; padding:16px 18px 17px 20px}
+.final-conclusion .row .card p{font-size:13.8px; line-height:1.52}
+.pub-grid .card{min-height:142px; padding:18px 20px 19px 22px}
+.pub-grid .card p{font-size:15px !important; line-height:1.48 !important}
+.pub-layout .thanks-title{font-size:64px; font-weight:700; color:var(--blue-dark); letter-spacing:-.03em; line-height:1}
+.pub-layout .thanks-sub{font-size:18px; color:var(--gray); margin-top:12px; letter-spacing:.04em}
+.pub-layout .thanks-badges .badge{font-size:12px; padding:6px 12px}
+.deliverables-grid .card{min-height:188px; padding:18px 19px 19px 21px}
+.deliverables-grid .card h4{font-size:11.2px; margin-bottom:10px}
+.deliverables-grid .card p{font-size:13.5px; line-height:1.52}
+.deliverables-bottom .card{min-height:108px; padding:16px 18px 17px 20px}
+.deliverables-bottom .card p{font-size:13.8px; line-height:1.52}
 
 /* ---- fluxograma interativo (clique) ---- */
 .iflow{display:flex; flex-direction:column; gap:10px; flex:1 1 auto; min-height:0}
@@ -507,6 +553,22 @@ table.matrix td.win::after{content:"★"; position:absolute; right:2px; top:1px;
 #hud .clock{font-variant-numeric:tabular-nums; font-family:var(--mono); font-size:12px; color:#8FB8D2;
   background:rgba(255,255,255,.06); border-radius:7px; padding:5px 9px}
 #hud .clock.run{color:#7FD3F2}
+
+/* responsividade dos controles em telas menores */
+@media (max-width:760px){
+  #hud{
+    right:max(6px, env(safe-area-inset-right));
+    top:max(6px, env(safe-area-inset-top));
+    gap:4px;
+  }
+  #hud button{padding:4px 6px; font-size:9.5px; border-radius:6px}
+  #hud .clock{padding:4px 6px; font-size:10px}
+  #notes{max-height:46dvh; padding:11px 14px; font-size:12px}
+}
+@media (max-width:430px){
+  #hud button{padding:4px 5px; font-size:8.8px}
+  #hud .clock{font-size:9px}
+}
 
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:.01ms !important; transition-duration:.01ms !important}
@@ -940,13 +1002,40 @@ function stepOrGo(d){
   go(d);
 }
 
-/* ---------- escala do palco ---------- */
+/* ---------- escala responsiva do palco ----------
+   Mantém o slide 16:9 inteiro, centralizado e ajustado ao viewport visual.
+   Funciona melhor em tablet/smartphone, rotação e barras móveis do navegador. */
+const STAGE_W = 1280, STAGE_H = 720;
+let fitRAF = 0;
 function fit(){
-  const vp = document.getElementById('viewport');
-  const s = Math.min(vp.clientWidth/1280, vp.clientHeight/720);
-  stage.style.transform = `scale(${s})`;
+  cancelAnimationFrame(fitRAF);
+  fitRAF = requestAnimationFrame(()=>{
+    const vp = document.getElementById('viewport');
+    const vv = window.visualViewport;
+    const w = Math.max(1, vv ? vv.width  : window.innerWidth);
+    const h = Math.max(1, vv ? vv.height : window.innerHeight);
+
+    /* pequena margem apenas para não encostar nas bordas em telas minúsculas */
+    const margin = Math.min(w,h) < 600 ? 4 : 10;
+    const availW = Math.max(1, w - margin*2);
+    const availH = Math.max(1, h - margin*2);
+    const scale = Math.min(availW/STAGE_W, availH/STAGE_H);
+    const x = (w - STAGE_W*scale)/2;
+    const y = (h - STAGE_H*scale)/2;
+
+    /* O wrapper acompanha o viewport visual; o palco é posicionado deterministicamente. */
+    vp.style.width = w + 'px';
+    vp.style.height = h + 'px';
+    stage.style.transform = `translate3d(${x}px,${y}px,0) scale(${scale})`;
+  });
 }
-addEventListener('resize', fit);
+window.addEventListener('resize', fit, {passive:true});
+window.addEventListener('orientationchange', ()=>setTimeout(fit, 80), {passive:true});
+if (window.visualViewport){
+  window.visualViewport.addEventListener('resize', fit, {passive:true});
+  window.visualViewport.addEventListener('scroll', fit, {passive:true});
+}
+document.addEventListener('fullscreenchange', fit);
 
 /* ---------- tooltips "i" ---------- */
 const tip = document.getElementById('tip');
@@ -984,6 +1073,21 @@ stage.addEventListener('click', e=>{
   const r = stage.getBoundingClientRect();
   stepOrGo((e.clientX-r.left)/r.width > .34 ? 1 : -1);
 });
+
+/* gesto horizontal para navegação em tablet/smartphone */
+let touchX=0, touchY=0, touchInteractive=false;
+stage.addEventListener('touchstart', e=>{
+  if (!e.touches || e.touches.length!==1) return;
+  touchInteractive = !!e.target.closest('button,a,.legend,.chartbox,table,.figwrap,.iflow,.i');
+  touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+}, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if (touchInteractive || !e.changedTouches || e.changedTouches.length!==1) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  const dy = e.changedTouches[0].clientY - touchY;
+  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)*1.25) stepOrGo(dx < 0 ? 1 : -1);
+}, {passive:true});
+
 const toggle = id => document.getElementById(id).classList.toggle('on');
 function fs(){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
 
@@ -1001,7 +1105,7 @@ function timer(){
 
 /* ---------- visão geral ---------- */
 function buildOverview(){
-  document.getElementById('ovcount').textContent = SLIDES.length+' slides · 40 do roteiro + entregáveis';
+  document.getElementById('ovcount').textContent = SLIDES.length+' slides · 40 do roteiro + entregáveis + 2 reservas';
   document.getElementById('ovgrid').innerHTML = SLIDES.map((s,i)=>
     `<button class="ovitem" data-i="${i}"><span class="n">${String(i+1).padStart(2,'0')}</span>
       <span class="t">${s.short||s.title.replace(/<[^>]+>/g,'')}</span><span class="s">${esc(s.sec)}</span></button>`).join('');
@@ -1022,7 +1126,7 @@ function boot(){
   activate(h>0 && h<=SLIDES.length ? h-1 : 0);
 }
 ﻿/* ================================================================
-   OS 41 SLIDES  (40 do roteiro da qualificação + entregáveis)
+   OS 43 SLIDES  (40 do roteiro da qualificação + entregáveis + 2 reservas)
    ================================================================ */
 const S = D.series;
 const hLab = i => `${String(i%24).padStart(2,'0')}h`;
@@ -1845,16 +1949,16 @@ SLIDES = [
  title:'Revisão Sistemática da Literatura — da lacuna ao desenho',
  sub:'Cada decisão metodológica responde a uma ausência observada na literatura.',
  note:'Cada lacuna identificada gera uma decisão metodológica concreta; por isso a RSL está diretamente conectada ao projeto experimental.',
- html:`<div class="grid" style="grid-template-columns:1fr;gap:8px;flex:1;align-content:start">
+ html:`<div class="grid rsl-lacuna-grid" style="grid-template-columns:1fr;gap:12px;flex:1;align-content:stretch">
    ${[['Pouco foco industrial','Base real + seis tipologias','segmentação','dark'],
       ['Macroeconomia subutilizada','Três cenários de exógenas','cenários',''],
       ['Comparações pouco pareadas','Mesmo split e RMSE comum','pareamento','cyan'],
       ['Pouca significância estatística','Teste Diebold–Mariano','evidência','green'],
       ['TSFM ausente em carga','TimesFM zero-shot','transferência','amber']].map(r=>
-     `<div class="card ${r[3]?'k-'+r[3]:''}" data-anim="left" style="padding:9px 14px;display:grid;grid-template-columns:1fr 26px 1.15fr 130px;align-items:center;gap:12px">
-        <span style="font-size:12.6px;color:var(--gray)"><b style="color:var(--red);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;display:block">Lacuna</b>${r[0]}</span>
-        <svg viewBox="0 0 24 14" style="width:24px;height:14px;color:#9FB6C7"><path d="M1 7H17" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><polygon points="16,3 23,7 16,11" fill="currentColor"/></svg>
-        <span style="font-size:12.8px;color:var(--blue-dark);font-weight:600"><b style="color:var(--green);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;display:block;font-weight:700">Decisão</b>${r[1]}</span>
+     `<div class="card ${r[3]?'k-'+r[3]:''}" data-anim="left" style="display:grid;grid-template-columns:1.02fr 34px 1.15fr 150px;align-items:center;gap:14px;min-height:86px">
+        <span class="lacuna-text"><b class="cap" style="color:var(--red)">Lacuna</b>${r[0]}</span>
+        <svg viewBox="0 0 24 14" style="width:30px;height:18px;color:#9FB6C7;justify-self:center"><path d="M1 7H17" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><polygon points="16,3 23,7 16,11" fill="currentColor"/></svg>
+        <span class="decisao-text"><b class="cap" style="color:var(--green)">Decisão</b>${r[1]}</span>
         <span class="badge">${r[2]}</span></div>`).join('')}
    </div>`},
 
@@ -1863,22 +1967,22 @@ SLIDES = [
  title:'Projeto — visão completa do experimento',
  sub:'Do dado sensível ao resultado estatisticamente qualificado.',
  note:'O pipeline mantém a mesma lógica para todos: preparar, segmentar, enriquecer, modelar e avaliar sob regras explícitas de validade.',
- html:`<div class="spread">${flow([['Base','87 consumidores · 15 min · 2011','Medição de quarto de hora de consumidores industriais do Grupo A, Santa Catarina.'],
+ html:`<div class="spread project-overview" style="gap:15px">${flow([['Base','87 consumidores · 15 min · 2011','Medição de quarto de hora de consumidores industriais do Grupo A, Santa Catarina.'],
               ['Preparar','limpeza → 1 hora','Consolidação horária, remoção de duplicidades, filtros de potência nula e outliers por IQR.'],
               ['Tipologizar','Min–Max → k-Means k=6','A normalização por consumidor faz o agrupamento ocorrer por FORMA, não por tamanho.'],
               ['Enriquecer','clima + macro · 3 cenários'],
               ['Modelar','5 modelos · 4 famílias'],
               ['Avaliar','RMSE + DM · 90 avaliações']],
              ['var(--blue-deep)','var(--blue-dark)','var(--blue)','var(--blue-mid)','var(--cyan)','var(--green)'])}
-   <div class="row fill" style="flex:0 0 auto;align-items:center">
+   <div class="row fill project-overview-support" style="flex:0 0 auto;align-items:stretch">
      ${cardT('Diagnóstico estrutural', 'ADF, KPSS e STL ajudam a entender estacionariedade, sazonalidade e mudanças de nível <b>antes</b> da configuração dos modelos.', 'dark')}
      ${cardT('Regra de validade', 'Nenhuma transformação usa o alvo futuro. Todas as estatísticas dependentes da série são estimadas <b>no conjunto de treino</b>.', 'green', 'Escalonadores, médias móveis, shape intradiário e ordens do SARIMAX são estimados apenas com dados anteriores ao início do teste.')}
    </div>
-   <div class="chips" data-anim="fade">
-     ${figBtn('pipeline','Diagrama completo do pipeline','Figura da dissertação')}
-     <span class="badge" data-tip="H1: TFT, XGBoost e TimesFM devem ser competitivos ou superiores em tipologias com forte estrutura intradiária.">H1 · famílias avançadas</span>
-     <span class="badge" data-tip="H2: o ganho das exógenas deve ser heterogêneo e depender de correlação com defasagem plausível.">H2 · efeito das exógenas</span>
-     <span class="badge" data-tip="H3: o SARIMAX híbrido deve permanecer competitivo em perfis regulares e sazonais.">H3 · baseline competitivo</span>
+   <div class="grid g4 project-overview-grid" style="flex:0 0 auto;gap:11px">
+     ${card('Diagrama completo do pipeline', `<p>Figura-síntese do fluxo completo, útil para conectar a narrativa da base até a avaliação.</p><div style="margin-top:10px">${figBtn('pipeline','Abrir diagrama completo','Figura da dissertação')}</div>`, 'amber')}
+     ${cardT('H1 · Famílias avançadas', 'TFT, XGBoost e TimesFM tendem a ser competitivos em tipologias com <b>forte estrutura intradiária</b>.', 'dark', 'H1: TFT, XGBoost e TimesFM devem ser competitivos ou superiores em tipologias com forte estrutura intradiária.')}
+     ${cardT('H2 · Efeito das exógenas', 'O ganho das exógenas deve ser <b>heterogêneo</b> e depender de correlação com defasagem plausível.', 'cyan', 'H2: o ganho das exógenas deve ser heterogêneo e depender de correlação com defasagem plausível.')}
+     ${cardT('H3 · Baseline competitivo', 'O SARIMAX híbrido deve permanecer competitivo em perfis <b>regulares e sazonais</b>.', 'green', 'H3: o SARIMAX híbrido deve permanecer competitivo em perfis regulares e sazonais.')}
    </div></div>`},
 
 /* ---------- 27 ---------- */
@@ -1886,20 +1990,21 @@ SLIDES = [
  title:'Projeto — base e pré-processamento',
  sub:'Transformação da medição bruta em uma série horária auditável, com cobertura setorial documentada.',
  note:'Separar três números: 87 consumidores é o universo canônico da dissertação; 43 organizações possuem classificação setorial auxiliar; a medição não contém código CNAE.',
- html:`<div class="row fill" style="flex:0 0 auto">
+ html:`<div class="project-prep" style="display:flex;flex-direction:column;gap:12px;flex:1;min-height:0">
+   <div class="row fill" style="flex:0 0 auto;align-items:stretch">
      ${cardN('Base canônica', {v:87, dec:0}, 'consumidores industriais · Grupo A · Santa Catarina · 2011 · medição a cada 15 min', 'dark', 'Número canônico enviado à banca. Nenhuma contagem alternativa deve ser apresentada.')}
      ${cardT('Pré-processamento', 'tipos (timestamp + float) · duplicidades (média empresa/data/hora) · recorte de dias úteis · filtros de potência nula e IQR · índice data + hora', '')}
      ${cardT('Cobertura setorial', '<b>43 organizações</b> com classificação auxiliar em <b>10 categorias</b>. O código CNAE não é campo dos 12 arquivos mensais de medição.', 'red', 'A classificação auxiliar é usada apenas para descrever a diversidade setorial; não entra como variável dos modelos.')}
    </div>
-   <div class="heading" data-anim="left" style="margin-top:8px">Produtos do pré-processamento</div>
+   <div class="heading" data-anim="left" style="margin-top:2px">Produtos do pré-processamento</div>
    ${flow([['Perfil 87 × 24','média de cada consumidor por hora do dia'],
            ['Perfil normalizado','Min–Max linha a linha · clusterização por forma'],
            ['Série por tipologia','média horária do cluster · sem efeito do tamanho do grupo'],
            ['Bases auxiliares','diária · semanal · mensal, para diagnóstico']])}
-   <div class="row fill" style="flex:0 0 auto;margin-top:8px;align-items:stretch">
+   <div class="row fill" style="flex:0 0 auto;align-items:stretch">
      ${cardT('Segmentos identificados', 'Outros 18 · Alimentos 6 · Madeira 5 · Metalurgia 4 · Plásticos 3 · Pesca 2 · Têxtil 2 · Bebidas 1 · Confecção 1 · Carnes 1.', 'cyan')}
      ${cardT('CNAE e sigilo', '<b>8 divisões CNAE associáveis como proxy</b> (03, 10, 11, 13, 14, 16, 22 e 24); a contagem exata depende do cadastro complementar. Identificadores permanecem anonimizados.', 'amber', 'Os códigos CNAE foram associados conceitualmente aos segmentos identificados; não estão presentes na base de medição e não devem ser apresentados como cadastro original.')}
-   </div>`},
+   </div></div>`},
 
 /* ---------- 28 ---------- */
 {sec:'Projeto', short:'Construção das seis tipologias',
@@ -2256,15 +2361,15 @@ SLIDES = [
  title:'O que falta para uma conclusão definitiva',
  sub:'Prioridade científica: separar o efeito da arquitetura do efeito do protocolo.',
  note:'Antes da defesa, o protocolo deve ser equiparado e o ranking complementado por baseline ingênuo, métricas sem escala, sementes e ajuste de multiplicidade.',
- html:`${flow([['Equiparar protocolos','origem única para todos, rolling para todos — ou ambos','É a pendência de maior impacto: hoje TFT e TimesFM recebem contexto real mais recente que os demais.'],
+ html:`<div class="spread final-conclusion">${flow([['Equiparar protocolos','origem única para todos, rolling para todos — ou ambos','É a pendência de maior impacto: hoje TFT e TimesFM recebem contexto real mais recente que os demais.'],
               ['Baseline ingênuo','+ métricas sem escala (MASE, RMSSE)'],
               ['Granularidades','executar diária e semanal'],
               ['Robustez','múltiplas sementes + correção de Holm']],
              ['var(--red)','var(--amber)','var(--blue)','var(--green)'])}
-   <div class="row fill" style="flex:1;min-height:0;margin-top:12px;align-items:center">
+   <div class="row fill" style="flex:0 0 auto;min-height:0;margin-top:12px;align-items:stretch">
      ${cardT('Por que isso importa', 'Sem equiparar o protocolo, não é possível afirmar que a vantagem do TimesFM vem da <b>arquitetura</b> e não do <b>regime de atualização</b>.', 'red')}
      ${cardT('Estado das hipóteses', 'H1 parcialmente apoiada · H2 heterogeneidade apoiada, mecanismo inconclusivo · H3 parcialmente apoiada (empate técnico no Tipo 6).', 'dark', 'As hipóteses são tratadas como parcialmente apoiadas ou inconclusivas, evitando transformar resultado preliminar em confirmação definitiva.')}
-   </div>`},
+   </div></div>`},
 
 /* ---------- 43 ---------- */
 {sec:'Cronograma', short:'Cronograma até a defesa',
@@ -2278,33 +2383,34 @@ SLIDES = [
  title:'Produção científica',
  sub:'Artigos publicados e em publicação.',
  note:'As publicações mostram a continuidade da pesquisa: primeiro o mapeamento da literatura; depois a comparação aplicada às tipologias industriais.',
- html:`<div class="grid g2" style="flex:0 0 auto">
-     ${card('SEPOC 2025 · aceito', `<p style="font-size:14px;font-weight:600;color:var(--blue-dark);line-height:1.4">Electricity Load Forecasting: A Systematic Literature Mapping</p>
-       <p style="margin-top:6px;color:var(--gray)">Gabriel A. Groehs · Raimundo C. G. Teive</p>`, 'green')}
-     ${card('2026 · dados do evento a confirmar', `<p style="font-size:14px;font-weight:600;color:var(--blue-dark);line-height:1.4">Previsão de Carga Elétrica de Curto Prazo Considerando Métodos Estatísticos Tradicionais e de Aprendizado Profundo</p>
-       <p style="margin-top:6px;color:var(--gray)">Gabriel A. Groehs · Raimundo C. G. Teive</p>`, 'dark')}
+ html:`<div class="pub-layout" style="display:flex;flex-direction:column;gap:14px;flex:1;min-height:0">
+   <div class="grid g2 pub-grid" style="flex:0 0 auto;gap:14px">
+     ${card('SEPOC 2025 · aceito', `<p style="font-size:15px;font-weight:600;color:var(--blue-dark);line-height:1.46">Electricity Load Forecasting: A Systematic Literature Mapping</p>
+       <p style="margin-top:8px;color:var(--gray)">Gabriel A. Groehs · Raimundo C. G. Teive</p>`, 'green')}
+     ${card('Computer on the Beach 2026', `<p style="font-size:15px;font-weight:600;color:var(--blue-dark);line-height:1.46">Previsão de Carga Elétrica de Curto Prazo Considerando Métodos Estatísticos Tradicionais e de Aprendizado Profundo</p>
+       <p style="margin-top:8px;color:var(--gray)">Gabriel A. Groehs · Raimundo C. G. Teive</p>`, 'dark')}
    </div>
    <div style="flex:1;min-height:0;display:grid;place-items:center;position:relative">
      <svg viewBox="0 0 1100 150" preserveAspectRatio="none" aria-hidden="true"
-          style="position:absolute;inset:auto 0 0 0;height:132px;width:100%;opacity:.16">
+          style="position:absolute;inset:auto 0 0 0;height:144px;width:100%;opacity:.16">
        <path id="closingPulse" d="" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"/></svg>
      <div style="text-align:center;position:relative" data-anim="scale">
-       <div style="font-size:52px;font-weight:700;color:var(--blue-dark);letter-spacing:-.025em;line-height:1">Obrigado</div>
-       <div style="font-size:15px;color:var(--gray);margin-top:10px;letter-spacing:.05em">Perguntas</div>
-       <div style="margin-top:18px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap">
+       <div class="thanks-title">Obrigado</div>
+       <div class="thanks-sub">Perguntas</div>
+       <div class="thanks-badges" style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
          <span class="badge">Gabriel Alberto Groehs</span>
          <span class="badge">Orientador: Prof. Dr. Raimundo C. G. Teive</span>
          <span class="badge">PPGC · UNIVALI · 2026</span>
        </div>
      </div>
-   </div>`},
+   </div></div>`},
 
 /* ---------- 45 · ENTREGÁVEIS ---------- */
 {sec:'Entregáveis', short:'Entregáveis da dissertação',
  title:'Entregáveis da dissertação',
  sub:'O que fica ao final do trabalho — produtos reutilizáveis, não apenas um texto.',
  note:'Encerrar reforçando o que a dissertação entrega: base modelada, pipeline, benchmark, avaliação por cenários e uma pesquisa que atravessa do clássico ao estado da arte.',
- html:`<div class="grid g3" style="flex:1;min-height:0;gap:11px">
+ html:`<div class="grid g3 deliverables-grid" style="flex:1;min-height:0;gap:13px">
      ${cardN('01 · Dado', {txt:'Dataset modelado'}, 'Base industrial real transformada em séries horárias auditáveis, anonimizadas e segmentadas em seis tipologias de carga.', 'dark', '87 consumidores do Grupo A, medição de 15 min em 2011, consolidados em série horária por tipologia com bases auxiliares diária, semanal e mensal.')}
      ${cardN('02 · Método', {txt:'Pipeline reprodutível'}, 'Metodologia completa: limpeza, normalização, clusterização, enriquecimento exógeno, modelagem e avaliação — com sementes e configuração documentadas.', '', 'O pipeline é aplicável a qualquer base de medição horária, não apenas à utilizada nesta dissertação.')}
      ${cardN('03 · Comparação', {txt:'Benchmark pareado'}, 'Cinco modelos de quatro famílias avaliados sob a mesma base, o mesmo split e a mesma métrica — 90 avaliações reprodutíveis.', 'cyan')}
@@ -2312,9 +2418,92 @@ SLIDES = [
      ${cardN('05 · Estado da arte', {txt:'Clássico + vanguarda'}, 'Pesquisa que reúne modelos estatísticos consagrados e modelos de vanguarda, incluindo o primeiro uso mapeado de um modelo fundacional em previsão de carga.', 'amber')}
      ${cardN('06 · Literatura', {txt:'Mapeamento sistemático'}, 'Revisão sistemática de 49 artigos + 11 complementares em cinco bases, já convertida em produção científica publicada.', '')}
    </div>
-   <div class="row fill" style="flex:0 0 auto;margin-top:2px">
+   <div class="row fill deliverables-bottom" style="flex:0 0 auto;margin-top:4px;align-items:stretch">
      ${cardT('07 · Diretriz de aplicação', 'Recomendação por perfil de carga: qual família de modelo escolher, com qual cenário exógeno e com qual expectativa de erro — orientação prática para distribuidoras e consumidores livres.', 'green')}
      ${cardT('08 · Agenda de pesquisa', 'Lista explícita de limitações e pendências (equiparação de protocolos, baselines ingênuos, métricas sem escala, múltiplas sementes) que estrutura o trabalho seguinte.', 'red')}
+   </div>`},
+
+/* ---------- 46 · RESERVA — REPLICAÇÃO AMI ---------- */
+{sec:'Reserva', short:'Replicação em rede AMI heterogênea',
+ title:'Reserva — replicação em uma rede AMI heterogênea',
+ sub:'A mesma metodologia foi aplicada a uma base pública Mendeley de média e baixa tensão, com milhares de usuários finais.',
+ note:'Este estudo adicional demonstra portabilidade do pipeline. A execução utilizou a carga líquida agregada da rede; a aplicação por classe comercial ou residencial exige segmentar os medidores e reconciliar as previsões no nível do alimentador.',
+ html:`<div class="grid g4" style="flex:0 0 auto;gap:10px">
+     ${cardN('Base documentada', {txt:'≈ 6,8 mil'}, 'usuários finais monitorados entre <b>jan/2022 e set/2024</b>, próximos a Porsgrunn, Noruega.', 'dark', 'O README da base informa 6.862 consumidores. O recorte local contém 6.809 arquivos AMI em Parquet.')}
+     ${cardN('Volume processado', {txt:'157,5 milhões'}, 'de registros AMI de potência ativa e reativa, processados com Polars.', 'cyan', 'O notebook carregou exatamente 157.538.434 registros.')}
+     ${cardN('Série produzida', {txt:'24.096 h'}, 'de carga líquida agregada: potência ativa de saída menos potência ativa de entrada.', 'green')}
+     ${cardN('Teste comum', {txt:'4.786 h'}, 'em <i>holdout</i> cronológico de 20%, usando os mesmos instantes para todos os modelos.', 'amber')}
+   </div>
+   <div class="note" data-anim="fade" style="margin:7px 0 9px">Escopo executado: uma série agregada da rede. A heterogeneidade vem da mistura de milhares de usuários; o notebook não atribui um rótulo residencial/comercial individual a cada medidor.</div>
+   ${flow([['Medidores AMI','potências ativa e reativa'],
+              ['Carga líquida','saída − entrada'],
+              ['Agregação','série horária da rede'],
+              ['Atributos','lags, calendário, preço e clima'],
+              ['Benchmark','cinco famílias · mesmo teste'],
+              ['Aplicação','grupo, alimentador ou rede']],
+             ['var(--blue-dark)','var(--blue)','var(--cyan)','var(--amber)','var(--green)','var(--blue-dark)'])}
+   <div class="row fill" style="flex:1;min-height:0;margin-top:11px;align-items:stretch">
+     ${cardT('Resultado central', '<b>TimesFM zero-shot</b> liderou: RMSE 331,58 · MAPE 2,36% · R² 0,9905. Reduziu o RMSE em <b>15,76%</b> frente ao TFT com exógenas e em <b>41,85%</b> frente à persistência de uma hora.', 'green', 'Resultados armazenados no notebook ED III V0 e consolidados no artigo Short-Term Load Forecasting in an AMI Distribution Network.')}
+     ${cardT('Lição das exógenas', 'Preço e clima melhoraram <b>XGBoost em 5,73%</b> e <b>TFT em 3,82%</b>, mas pioraram SARIMAX, LSTM e TimesFM–Ridge. O ganho depende do mecanismo de fusão, da defasagem e do perfil — não apenas da disponibilidade da variável.', 'amber')}
+     ${cardT('Comercial e residencial', 'A metodologia é altamente transferível: segmentar medidores por classe, tarifa ou forma da curva; treinar e comparar modelos por perfil; depois <b>reconciliar</b> as previsões no alimentador. O comercial responde a horário de operação; o residencial, a rotina, clima e ocupação.', 'dark')}
+   </div>
+   <div class="chips" data-anim="fade" style="margin-top:7px">
+     <span class="badge">Mendeley Data · DOI 10.17632/jv3rz8k35r.1</span>
+     <span class="badge ok">Metodologia replicada em outro domínio</span>
+     <span class="badge">próximo passo: previsão por perfil e reconciliação hierárquica</span>
+   </div>`},
+
+/* ---------- 47 · RESERVA — PLANEJAMENTO DE NOVO TRANSFORMADOR ---------- */
+{sec:'Reserva', short:'Transformador e planejamento da rede',
+ title:'Reserva — planejamento, dimensionamento e alocação de novo transformador',
+ sub:'A previsão de demanda apoia a decisão sobre quando instalar, onde alocar e como especificar um novo transformador, equilibrando capacidade, confiabilidade e custo.',
+ note:'O planejamento elétrico converte crescimento de carga, perfil horário, criticidade operacional e contingência em potência nominal, localização, arquitetura de alimentação e margem de expansão.',
+ html:`<div class="row fill" style="flex:1;min-height:0;gap:14px;align-items:stretch">
+   <div class="card k-dark" data-anim="left" style="flex:1.06 1 0;padding:14px 17px 13px 19px;display:flex;flex-direction:column">
+     <div class="heading" style="margin:0 0 5px">Curva prevista de demanda simultânea</div>
+     <svg viewBox="0 0 650 235" style="width:100%;flex:1;min-height:0" role="img" aria-label="Curva horária com vale, demanda média e pico simultâneo">
+       <defs>
+         <linearGradient id="transformerFill" x1="0" y1="0" x2="0" y2="1">
+           <stop offset="0" stop-color="#39A9DB" stop-opacity=".36"/>
+           <stop offset="1" stop-color="#39A9DB" stop-opacity=".03"/>
+         </linearGradient>
+       </defs>
+       <line x1="48" y1="18" x2="48" y2="202" stroke="#AFC4D3" stroke-width="1.5"/>
+       <line x1="48" y1="202" x2="628" y2="202" stroke="#AFC4D3" stroke-width="1.5"/>
+       <line x1="48" y1="104" x2="628" y2="104" stroke="#E5A000" stroke-width="1.5" stroke-dasharray="7 5"/>
+       <line x1="48" y1="39" x2="628" y2="39" stroke="#C84A4A" stroke-width="1.2" stroke-dasharray="5 5" opacity=".8"/>
+       <path d="M48 183 C78 181,96 177,122 169 C149 160,164 133,190 121 C220 106,242 100,270 96 C299 91,318 76,345 65 C375 53,398 42,424 39 C455 35,477 62,505 73 C536 86,555 116,580 137 C601 153,614 169,628 176 L628 202 L48 202 Z" fill="url(#transformerFill)"/>
+       <path d="M48 183 C78 181,96 177,122 169 C149 160,164 133,190 121 C220 106,242 100,270 96 C299 91,318 76,345 65 C375 53,398 42,424 39 C455 35,477 62,505 73 C536 86,555 116,580 137 C601 153,614 169,628 176" fill="none" stroke="#006FAE" stroke-width="4" stroke-linecap="round"/>
+       <circle cx="424" cy="39" r="6" fill="#C84A4A"/><circle cx="48" cy="183" r="5" fill="#17324D"/>
+       <text x="438" y="31" font-size="13" font-weight="700" fill="#C84A4A">Dmáx · pico simultâneo</text>
+       <text x="500" y="97" font-size="12" font-weight="700" fill="#9A6A00">Pmédia</text>
+       <text x="58" y="176" font-size="12" font-weight="700" fill="#17324D">Dmín · vale</text>
+       <text x="11" y="25" font-size="11" fill="#6B7C89">kW</text>
+       <text x="596" y="224" font-size="11" fill="#6B7C89">hora</text>
+       <text x="45" y="219" font-size="10" fill="#6B7C89">0 h</text><text x="180" y="219" font-size="10" fill="#6B7C89">6 h</text>
+       <text x="324" y="219" font-size="10" fill="#6B7C89">12 h</text><text x="466" y="219" font-size="10" fill="#6B7C89">18 h</text><text x="606" y="219" font-size="10" fill="#6B7C89">24 h</text>
+     </svg>
+     <div class="chips" style="margin-top:4px">
+       <span class="badge">produção</span><span class="badge">climatização</span><span class="badge">utilidades</span>
+       <span class="badge">apoio operacional</span><span class="badge">expansão futura</span>
+     </div>
+   </div>
+   <div class="col-stretch" style="flex:.94 1 0;gap:9px">
+     ${cardT('1 · Planejamento da carga', 'Mapear <b>demanda atual, perfis horários, crescimento esperado e criticidade operacional</b>. A decisão do novo transformador começa antes da compra: começa no entendimento de como a carga se comporta.', 'dark')}
+     ${card('2 · Dimensionamento técnico', `<p style="font-size:12.8px;line-height:1.56"><b>FD = Dmáx / P<sub>instalada</sub></b> &nbsp;·&nbsp; <b>FC = P<sub>média</sub> / Dmáx</b><br><b>S<sub>base</sub> (kVA) = Dmáx (kW) / FP</b><br><b>S<sub>projeto</sub></b> = S<sub>base</sub> × margens de crescimento, temperatura, harmônicos e contingência.</p><p class="micro">O objetivo é especificar potência suficiente para o pico, com margem técnica, sem excesso estrutural de capacidade.</p>`, 'cyan')}
+     ${cardT('3 · Alocação e confiabilidade', 'Além do tamanho, importa <b>onde</b> o transformador será alocado e <b>como</b> ele será inserido na rede. Queda de tensão, perdas, seletividade, manutenção, cargas essenciais e eventual arquitetura <b>N−1</b> entram na decisão.', 'green')}
+   </div></div>
+   <div style="margin-top:10px">
+     ${flow([['Diagnóstico','inventário e perfil da carga'],
+                ['Previsão','picos, sazonalidade e expansão'],
+                ['Dimensionamento','kW → kVA com margens'],
+                ['Alocação','posição, alimentação e proteção'],
+                ['Implantação','confiabilidade e crescimento']],
+               ['var(--blue-dark)','var(--blue)','var(--cyan)','var(--green)','var(--amber)'])}
+   </div>
+   <div class="row fill" style="flex:0 0 auto;margin-top:9px">
+     ${cardT('Importância do bom planejamento', 'Planejar bem reduz risco de <b>subdimensionamento</b>, sobrecarga, atuação indevida da proteção e interrupções em horário crítico.', 'red')}
+     ${cardT('Benefício do correto dimensionamento e alocação', 'Uma especificação bem feita evita <b>sobredimensionamento</b>, reduz perdas, melhora a operação e preserva flexibilidade para expansão futura.', 'green')}
    </div>`},
 ];
 
