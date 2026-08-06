@@ -1523,21 +1523,21 @@ SLIDES = [
    <div>
      <div class="heading" data-anim="left">No setor industrial, a previsão ganha peso por três fatores</div>
      <div class="grid g3">
-       ${cardN('01 · Participação na carga', {txt:'≈ 35%'}, 'da <b>carga elétrica total do Brasil</b> é consumo industrial, segundo a EPE. É a maior fatia entre as classes de consumo.', 'dark', 'Empresa de Pesquisa Energética (EPE), 2025.')}
-       ${cardN('02 · Sensibilidade', {txt:'Turnos e ciclos'}, 'O consumo responde a <b>turnos produtivos</b>, <b>paradas programadas</b> e <b>ciclos econômicos</b>, o que não acontece nas outras classes.', '')}
-       ${cardN('03 · Volatilidade', {txt:'Intradiária'}, 'A variação da carga ao longo do dia é <b>maior</b> que a dos perfis residencial e comercial.', 'cyan')}
+       ${cardN('01 · Participação na carga', {txt:'≈ 35%'}, 'da <b>carga elétrica total do Brasil</b> é consumo industrial, segundo a EPE. É a maior fatia entre as classes.', 'dark', 'Empresa de Pesquisa Energética (EPE), 2025.')}
+       ${cardN('02 · Sensibilidade', {txt:'Turnos e ciclos'}, 'O consumo responde a <b>turnos, paradas programadas e ciclos econômicos</b>, o que não acontece nas outras classes.', '')}
+       ${cardN('03 · Volatilidade', {txt:'Intradiária'}, 'A variação ao longo do dia é <b>maior</b> que a dos perfis residencial e comercial.', 'cyan')}
      </div>
    </div>
    <div>
      <div class="heading" data-anim="left">As quatro lacunas que a revisão sistemática apontou</div>
      <div class="grid g4">
-       ${cardT('i · Setor industrial', 'Baixa representatividade frente aos perfis residencial e comercial. Só <b>22,45%</b> dos 49 artigos do corpus tratam exclusivamente da indústria.', 'green')}
-       ${cardT('ii · Macroeconomia', 'Subutilização de juros, câmbio, crédito e inflação como preditores. Apenas <b>14,29%</b> dos artigos usam alguma variável econômica.', 'amber')}
-       ${cardT('iii · Reprodutibilidade', 'Escassez de <i>benchmarks</i> reprodutíveis em <b>granularidade horária</b> para o contexto brasileiro.', 'cyan')}
-       ${cardT('iv · Comparação pareada', 'Ausência de comparação sistemática entre famílias de modelos sobre a <b>mesma base e a mesma janela de teste</b>.', 'dark')}
+       ${cardT('i · Setor industrial', 'Só <b>22,45%</b> dos 49 artigos do corpus tratam exclusivamente da indústria.', 'green', 'Baixa representatividade frente aos perfis residencial e comercial, que dominam a literatura de previsão de carga.')}
+       ${cardT('ii · Macroeconomia', 'Apenas <b>14,29%</b> usam alguma variável econômica como preditor.', 'amber', 'Juros, câmbio, crédito e inflação são subutilizados. Clima e calendário são muito mais comuns.')}
+       ${cardT('iii · Reprodutibilidade', 'Escassez de <i>benchmarks</i> reprodutíveis em <b>granularidade horária</b> no contexto brasileiro.', 'cyan')}
+       ${cardT('iv · Comparação pareada', 'Ausência de comparação sistemática entre famílias sobre a <b>mesma base e a mesma janela</b>.', 'dark')}
      </div>
    </div>
-   ${cardT('Motivação: a carga responde ao mundo externo, mas não de forma uniforme', 'Temperatura, radiação, juros e câmbio afetam a carga industrial com <b>defasagens que variam por tipologia</b>. Incluir exógenas sem critério introduz ruído; omiti-las despreza informação preditiva útil. Por isso a dissertação testa três cenários em vez de assumir uma resposta.', 'red', 'Segunda observação empírica da seção 1.2 Motivação. A dissertação avalia temperatura, dólar BCB, SELIC acumulada em 12 meses e câmbio médio.')}
+   ${cardT('Motivação: a carga responde ao mundo externo, mas não de forma uniforme', 'Temperatura, radiação, juros e câmbio afetam a carga industrial com <b>defasagens que variam por tipologia</b>. Por isso a dissertação testa três cenários, em vez de assumir uma resposta.', 'red', 'Segunda observação empírica da seção 1.2 Motivação: incluir exógenas sem critério introduz ruído, e omiti-las despreza informação preditiva útil. A dissertação avalia temperatura, dólar BCB, SELIC acumulada em 12 meses e câmbio médio.')}
    </div>`},
 
 /* ---------- 03 · PERGUNTAS E HIPÓTESES ---------- */
@@ -1845,8 +1845,8 @@ SLIDES = [
  sub:'A seleção não olha só o valor da correlação: olha a defasagem que a produz, a frequência da variável e a plausibilidade econômica.',
  note:'As exógenas foram organizadas por frequência: temperatura e dólar BCB no cenário diário; SELIC acumulada em 12 meses e câmbio no mensal. Abrir as duas figuras de melhor defasagem, a diária e a mensal, porque elas mostram a análise completa. Alertar que a análise mensal tem no máximo doze observações por tipologia e por isso é tratada como exploratória, sem teste de significância.',
  html:`<div class="row fill" style="flex:0 0 auto">
-     ${cardT('Cenário A · sem exógenas', 'Apenas a história da própria série. Calendário somente onde a arquitetura já o prevê.', 'dark')}
-     ${cardT('Cenário B · exógenas diárias', 'Temperatura (INMET) e dólar comercial USD/BRL (BCB), como <i>proxy</i> de pressão econômica de curto prazo.', '')}
+     ${cardT('Cenário A · sem exógenas', 'Apenas a história da própria série.', 'dark', 'Calendário somente onde a arquitetura já o prevê nativamente.')}
+     ${cardT('Cenário B · exógenas diárias', 'Temperatura (INMET) e dólar comercial USD/BRL (BCB).', '', 'O dólar entra como proxy de pressão econômica de curto prazo, com defasagem de 7 dias.')}
      ${cardT('Cenário C · exógenas mensais', 'SELIC acumulada em 12 meses e câmbio médio mensal.', 'cyan')}
    </div>
    <div class="row fill" style="flex:1;min-height:0;margin-top:7px;gap:13px">
@@ -1860,9 +1860,9 @@ SLIDES = [
             <span class="vl">${nf(b[1],2)}</span></div>`).join('')}</div>
      </div>
      <div class="col-stretch" style="flex:0 0 300px">
-       ${cardT('Onde a correlação aparece', 'Quase todas as candidatas fortes se concentram no <b>Tipo 5, pico manhã</b>. É evidência direta de que o efeito exógeno é <b>específico do perfil</b>, e não geral.', 'amber')}
-       ${cardT('Por que apenas dois pares', 'Radiação, temperatura e <i>degree-days</i> medem quase a mesma coisa. Manter dois regressores por cenário evita inflar o espaço de atributos e mitiga a multicolinearidade.', 'dark')}
-       ${cardT('Cautela na análise mensal', 'A base cobre só 2011, então a série mensal tem <b>no máximo 12 observações</b> por tipologia. Correlações altas aí são exploratórias: servem de triagem, não de evidência causal.', 'red', 'Conforme a leitura da Tabela 3 da qualificação: não há teste de significância nem controle de múltiplas comparações que sustente a expressão correlação significativa.')}
+       ${cardT('Onde a correlação aparece', 'Quase todas as candidatas fortes se concentram no <b>Tipo 5, pico manhã</b>. O efeito exógeno é <b>específico do perfil</b>, não geral.', 'amber')}
+       ${cardT('Por que apenas dois pares', 'Radiação, temperatura e <i>degree-days</i> medem quase a mesma coisa. Dois regressores por cenário mitigam a multicolinearidade.', 'dark', 'Manter listas extensas inflaria o espaço de atributos e tornaria os coeficientes instáveis. O mesmo par é aplicado a todas as tipologias, para preservar o pareamento.')}
+       ${cardT('Cautela na análise mensal', 'A série mensal tem <b>no máximo 12 observações</b> por tipologia. As correlações ali são exploratórias: triagem, não evidência causal.', 'red', 'Conforme a leitura da Tabela 3 da qualificação: não há teste de significância nem controle de múltiplas comparações que sustente a expressão correlação significativa. Nenhuma interpretação causal é atribuída a esses valores.')}
      </div>
    </div>
    <div class="chips" data-anim="fade" style="align-items:center;gap:9px;flex:0 0 auto;margin-top:6px">
@@ -1878,17 +1878,17 @@ SLIDES = [
  note:'A dissertação calcula MAE, MSE, RMSE, MAPE, sMAPE e R², além de acurácia e assertividade como índices complementares. O RMSE decide porque penaliza erros grandes, que no despacho têm custo assimétrico. O gráfico do Tipo 2 explica por que a acurácia aparece negativa nas tabelas: é artefato do MAPE em série de baixa magnitude, não um modelo pior que a ausência de previsão.',
  html:`<div class="row fill" style="flex:0 0 auto;gap:11px">
      ${card('Critério primário de decisão', `<div class="big" style="font-size:26px;margin:0 0 5px">RMSE</div>
-        <p style="font-size:12.9px;line-height:1.45">Penaliza <b>erros grandes</b> e mantém a unidade da carga (kW). É o critério porque, no despacho, sub e sobreestimativas de pico têm custos assimétricos.</p>
+        <p style="font-size:12.9px;line-height:1.45">Penaliza <b>erros grandes</b> e mantém a unidade da carga. No despacho, errar o pico para mais ou para menos tem custos assimétricos.</p>
         <p class="pf" style="font-family:var(--mono);font-size:11px;color:var(--blue-dark);background:var(--pale);border:1px solid #D3E4F0;border-radius:5px;padding:4px 8px;margin-top:6px;display:inline-block">RMSE = √( Σ(y − ŷ)² / n )</p>`, 'dark',
         'Depende da escala, logo só é comparável DENTRO de uma tipologia. Comparar o RMSE do Tipo 1 com o do Tipo 2 não faz sentido.')}
      ${card('Leitura percentual de apoio', `<div class="big" style="font-size:26px;margin:0 0 5px">1 − WAPE</div>
-        <p style="font-size:12.9px;line-height:1.45">A <b>assertividade</b> agrega os erros antes de dividir, então não explode quando a carga se aproxima de zero. É o que torna as tipologias comparáveis em percentual.</p>
+        <p style="font-size:12.9px;line-height:1.45">A <b>assertividade</b> agrega os erros antes de dividir, então não explode perto de zero. É o que torna as tipologias comparáveis em percentual.</p>
         <p class="pf" style="font-family:var(--mono);font-size:11px;color:var(--blue-dark);background:var(--pale);border:1px solid #D3E4F0;border-radius:5px;padding:4px 8px;margin-top:6px;display:inline-block">WAPE = Σ|y − ŷ| / Σ|y|</p>`, '',
         'Assert = (1 − WAPE) × 100. Índice complementar de aderência, não critério de decisão.')}
      ${card('Diferença detectável', `<div class="big" style="font-size:26px;margin:0 0 5px">Diebold–Mariano</div>
-        <p style="font-size:12.9px;line-height:1.45">Testa a hipótese nula de <b>igualdade de acurácia preditiva</b> entre dois modelos. Sem ele, um RMSE menor pode ser apenas ruído amostral.</p>
+        <p style="font-size:12.9px;line-height:1.45">Testa a nula de <b>igualdade de acurácia preditiva</b>. Sem ele, um RMSE menor pode ser apenas ruído amostral.</p>
         <p class="pf" style="font-family:var(--mono);font-size:11px;color:var(--blue-dark);background:var(--pale);border:1px solid #D3E4F0;border-radius:5px;padding:4px 8px;margin-top:6px;display:inline-block">DM = d̄ / √( Var(d̄) )</p>`, 'green',
-        'Variância de longo prazo por estimador HAC de Newey-West e correção de pequena amostra de Harvey, Leybourne e Newbold.')}
+        'Variância de longo prazo por estimador HAC de Newey-West e correção de pequena amostra de Harvey, Leybourne e Newbold. Detalhado no slide 36.')}
    </div>
    <div class="row fill" style="flex:1;min-height:0;margin-top:9px;gap:12px">
      ${chart({title:'Por que o MAPE falha no Tipo 2', sub:'carga real · semana útil de maio/2011',
@@ -1898,9 +1898,9 @@ SLIDES = [
        xTicks:ticksSemana, xLabel:dLab, yLabel:'kW', yMin:0, ySteps:3, vFmt:v=>nf(v,3)+' kW',
        bands:[{from:0,to:119,color:'#C94C4C',opacity:0}]})}
      <div class="col-stretch" style="flex:0 0 340px">
-       ${card('As outras métricas calculadas', `<p style="font-size:12.5px;line-height:1.45"><b>MAE</b> e <b>MSE</b> acompanham o RMSE na unidade da carga. O <b>MAPE</b> dá leitura percentual intuitiva, mas divide pelo valor real. O <b>sMAPE</b> corrige parte da assimetria colocando real e previsto no denominador. O <b>R²</b> indica a fração da variância explicada.</p>`, 'cyan',
+       ${card('As outras métricas calculadas', `<p style="font-size:12.5px;line-height:1.45"><b>MAE</b> e <b>MSE</b> acompanham o RMSE na unidade da carga. O <b>MAPE</b> dá leitura percentual, mas divide pelo valor real. O <b>sMAPE</b> corrige parte da assimetria. O <b>R²</b> indica a variância explicada.</p>`, 'cyan',
           'A acurácia (1 − MAPE) herda a instabilidade do MAPE, por isso entra como índice complementar e nunca como critério de decisão. O RMSE médio entre tipologias também é leitura auxiliar, porque as escalas não somam.')}
-       ${cardT('O que acontece no Tipo 2', 'A carga cai a <b>0,03 kW</b> na madrugada. Dividir por valores próximos de zero produz percentuais sem sentido, e é por isso que a acurácia do Tipo 2 aparece <b>negativa</b> nas tabelas. Nessa tipologia a leitura percentual passa a ser a assertividade.', 'red', 'Acurácia negativa é artefato da métrica percentual em série de baixa magnitude, não sinal de que o modelo é pior do que não prever nada.')}
+       ${cardT('O que acontece no Tipo 2', 'A carga cai a <b>0,03 kW</b> na madrugada. Dividir por valores próximos de zero é o que faz a acurácia do Tipo 2 aparecer <b>negativa</b> nas tabelas. Ali a leitura percentual passa a ser a assertividade.', 'red', 'Acurácia negativa é artefato da métrica percentual em série de baixa magnitude, não sinal de que o modelo é pior do que não prever nada.')}
      </div>
    </div>`},
 
@@ -2089,14 +2089,12 @@ SLIDES = [
    <div>
      <div class="heading" data-anim="left">Os três cenários e o que efetivamente entra em cada um</div>
      <div class="grid g3">
-       ${card('Cenário A · sem exógenas', `<div class="big" style="font-size:18px;margin:0 0 4px">apenas a série</div>
-          <p style="color:var(--gray)">Calendário somente onde a arquitetura já o prevê.</p>`, 'dark')}
-       ${card('Cenário B · exógenas diárias', `<div class="big" style="font-size:18px;margin:0 0 4px">temperatura <span style="color:#9FB6C7;font-weight:400">+</span> USD/BRL</div>
-          <p style="color:var(--gray)">INMET Florianópolis · dólar comercial BCB.</p>`, 'cyan',
-          'Temperatura é a candidata climática de maior correlação isolada (|r| = 0,62, Tipo 5); o dólar entra com defasagem de 7 dias (|r| = 0,55).')}
-       ${card('Cenário C · exógenas mensais', `<div class="big" style="font-size:18px;margin:0 0 4px">Selic 12 m <span style="color:#9FB6C7;font-weight:400">+</span> câmbio</div>
-          <p style="color:var(--gray)">Selic acumulada em 12 meses e câmbio médio mensal.</p>`, 'green',
-          'A Selic aparece com correlação de −0,58 no Tipo 5, compatível com a leitura de que juros altos reduzem a atividade industrial.')}
+       ${card('Cenário A · sem exógenas', `<div class="big" style="font-size:18px;margin:0">apenas a série</div>`, 'dark',
+          'Só a história da própria série. Calendário somente onde a arquitetura já o prevê nativamente.')}
+       ${card('Cenário B · exógenas diárias', `<div class="big" style="font-size:18px;margin:0">temperatura <span style="color:#9FB6C7;font-weight:400">+</span> USD/BRL</div>`, 'cyan',
+          'Temperatura do INMET Florianópolis e dólar comercial do BCB. A temperatura é a candidata climática de maior correlação isolada (|r| = 0,62 no Tipo 5) e o dólar entra com defasagem de 7 dias (|r| = 0,55).')}
+       ${card('Cenário C · exógenas mensais', `<div class="big" style="font-size:18px;margin:0">Selic 12 m <span style="color:#9FB6C7;font-weight:400">+</span> câmbio</div>`, 'green',
+          'Selic acumulada em 12 meses e câmbio médio mensal. A Selic aparece com correlação de −0,58 no Tipo 5, compatível com a leitura de que juros altos reduzem a atividade industrial.')}
      </div>
    </div>
    <div>
@@ -2110,10 +2108,10 @@ SLIDES = [
    <div>
      <div class="heading" data-anim="left">Diagnóstico estrutural que orientou a representação temporal</div>
      <div class="grid g4">
-       ${cardT('ADF · raiz unitária', 'A hipótese nula é <b>haver</b> raiz unitária, ou seja, não estacionariedade. Com p &lt; 0,01 em todas as tipologias, essa hipótese é <b>rejeitada</b>.', 'dark', 'Augmented Dickey-Fuller. Rejeitar a nula favorece a leitura de que a série é estacionária.')}
-       ${cardT('KPSS · estacionariedade', 'A hipótese nula é <b>oposta</b>: a série é estacionária em nível. O KPSS rejeita essa hipótese na maioria das séries, o que <b>contradiz</b> o ADF.', 'red', 'Kwiatkowski-Phillips-Schmidt-Shin. Os dois testes são complementares justamente porque partem de hipóteses nulas contrárias.')}
-       ${cardT('A divergência é informativa', 'Não há raiz unitária simples, mas há <b>sazonalidade determinística e mudanças de nível</b>. Por isso os testes entram como diagnóstico, e o <b>d = 1</b> vem da busca em grade pelo AIC.', 'amber', 'A ordem de diferenciação não foi fixada por teste isolado. A busca por menor AIC selecionou d = 1 em todas as seis tipologias.')}
-       ${cardT('STL e decomposição', 'A <b>STL</b> separa tendência, sazonalidade diária e resíduo com período de 24 h. SARIMAX e LSTM usam offset, amplitude e <i>shape</i> dos <b>60 dias finais do treino</b>.', 'green', 'O shape intradiário é fixado com os últimos 60 dias do conjunto de treino e reaplicado em todo o horizonte de teste.')}
+       ${cardT('ADF · raiz unitária', 'Nula: <b>há</b> raiz unitária. Com p &lt; 0,01 em todas as tipologias, é <b>rejeitada</b>.', 'dark', 'Augmented Dickey-Fuller. Rejeitar a nula favorece a leitura de que a série é estacionária.')}
+       ${cardT('KPSS · estacionariedade', 'Nula <b>oposta</b>: a série é estacionária em nível. O KPSS rejeita na maioria, o que <b>contradiz</b> o ADF.', 'red', 'Kwiatkowski-Phillips-Schmidt-Shin. Os dois testes são complementares justamente porque partem de hipóteses nulas contrárias.')}
+       ${cardT('A divergência é informativa', 'Não há raiz unitária simples, mas há <b>sazonalidade determinística e mudança de nível</b>. O <b>d = 1</b> vem da busca por AIC.', 'amber', 'Por isso os testes entram como diagnóstico complementar, e não como critério isolado. A busca em grade por menor AIC selecionou d = 1 nas seis tipologias.')}
+       ${cardT('STL e decomposição', 'A <b>STL</b> separa tendência, sazonalidade e resíduo em 24 h. SARIMAX e LSTM usam <i>shape</i> dos <b>60 dias finais do treino</b>.', 'green', 'O shape intradiário é fixado com os últimos 60 dias do conjunto de treino e reaplicado em todo o horizonte de teste. A STL mostra componentes sazonais bem definidos e resíduos pequenos nas tipologias regulares.')}
      </div>
      <div class="chips" data-anim="fade" style="margin-top:7px">
        ${figBtn('adf_kpss','p-valores de ADF e KPSS por tipologia','Figura 5 da qualificação')}
@@ -2417,38 +2415,37 @@ SLIDES = [
 {sec:'Comentários finais', short:'O que já podemos afirmar',
  title:'O que já podemos afirmar',
  sub:'Resposta parcial às perguntas de pesquisa e situação de cada hipótese, conforme a seção 6.3.1 da qualificação.',
- note:'Voltar às perguntas do slide 3 e responder uma a uma. Manter o cuidado da dissertação: PR1 tem resposta com ressalva, PR2 tem resposta parcial e PR3 está em execução. As hipóteses são parcialmente apoiadas, nunca confirmadas.',
+ note:'Voltar às perguntas do slide 3 e responder uma a uma. PR1: não há modelo universal, com predominância do TimesFM no agregado. O modelo fundacional vence quatro das seis tipologias e tem o menor RMSE médio, mas parte das vantagens não é estatisticamente detectável, o TFT vence os Tipos 1 e 6, e a leitura do agregado é sensível à escala. PR2: três das seis tipologias têm campeão com exógenas, mensais no Tipo 3 e diárias nos Tipos 4 e 6; os Tipos 1, 2 e 5 dispensam. O teste formal do ganho e a interpretação operacional ainda serão realizados. PR3: em execução, consolidada com as granularidades diária e semanal. As hipóteses são parcialmente apoiadas, nunca confirmadas.',
  html:`<div class="grid g3" style="flex:1;min-height:0;gap:11px">
-     ${cardN('PR1 · existe modelo universal?', {txt:'Não'}, 'com predominância do TimesFM no agregado. O modelo fundacional vence <b>quatro das seis</b> tipologias e tem o menor RMSE médio. Ainda assim, parte das vantagens <b>não é estatisticamente detectável</b>, o TFT vence os Tipos 1 e 6, e a leitura do agregado é sensível à escala.', 'dark')}
-     ${cardN('PR2 · as exógenas melhoram?', {txt:'De forma heterogênea'}, 'Três das seis tipologias têm campeão com exógenas: <b>mensais no Tipo 3</b> e <b>diárias nos Tipos 4 e 6</b>. Os Tipos 1, 2 e 5 dispensam exógenas. O teste formal do ganho e a interpretação operacional ainda serão realizados.', 'amber')}
-     ${cardN('PR3 · a granularidade muda?', {txt:'Em execução'}, 'A análise será consolidada com os experimentos em granularidade <b>diária e semanal</b>, previstos no cronograma, e a resposta completa integrará a dissertação.', 'cyan')}
+     ${cardN('PR1 · existe modelo universal?', {txt:'Não'}, 'O TimesFM predomina e vence <b>quatro das seis</b> tipologias, mas o TFT vence os Tipos 1 e 6.', 'dark', 'Parte das vantagens não é estatisticamente detectável, e a leitura do agregado é sensível à escala das tipologias.')}
+     ${cardN('PR2 · as exógenas melhoram?', {txt:'De forma heterogênea'}, 'Entram no campeão de <b>três das seis</b> tipologias: mensais no Tipo 3, diárias nos Tipos 4 e 6.', 'amber', 'Os Tipos 1, 2 e 5 dispensam exógenas. O teste formal do ganho e a interpretação operacional ainda serão realizados.')}
+     ${cardN('PR3 · a granularidade muda?', {txt:'Em execução'}, 'Depende dos experimentos <b>diário e semanal</b>, previstos no cronograma.', 'cyan', 'A resposta completa integrará a dissertação.')}
    </div>
    <div class="grid g3" style="flex:1;min-height:0;gap:11px;margin-top:9px">
-     ${cardT('H1 · parcialmente apoiada', 'O <b>TFT</b> vence os Tipos 1 e 6 e fica na fronteira, o que sustenta a parte da atenção. O <b>TimesFM</b> tem o menor RMSE médio, o que sustenta a parte fundacional. Já o <b>XGBoost</b> não vence nenhuma tipologia e só empata tecnicamente no Tipo 5, então a parte do <i>boosting</i> se sustenta como competitividade pontual, não como superioridade.', 'green')}
-     ${cardT('H2 · heterogeneidade apoiada, mecanismo inconclusivo', 'A primeira proposição é apoiada: o cenário campeão <b>varia por tipologia</b>. A segunda permanece inconclusiva, porque a correlação mensal foi calculada com no máximo doze observações, tratada como exploratória, e não se testou formalmente se o ganho preditivo acompanha a força da correlação.', 'green')}
-     ${cardT('H3 · parcialmente apoiada', 'O SARIMAX não vence nenhuma tipologia, mas participa do <b>empate técnico no Tipo 6</b>. Esse empate decorre em parte da baixa potência do teste ali, e não de paridade demonstrada. O SARIMAX se mantém como <b>linha de base interpretável e de baixo custo</b>, competitiva onde as diferenças não são detectáveis.', 'green')}
+     ${cardT('H1 · parcialmente apoiada', 'Atenção e fundacional se sustentam: o <b>TFT</b> fica na fronteira e o <b>TimesFM</b> tem o menor RMSE médio. O <b>XGBoost</b> não sustenta a parte do <i>boosting</i>.', 'green', 'O XGBoost não vence nenhuma tipologia pelo critério primário e só empata tecnicamente com o campeão no Tipo 5, o que caracteriza competitividade pontual e não superioridade.')}
+     ${cardT('H2 · heterogeneidade apoiada, mecanismo inconclusivo', 'O cenário campeão <b>varia por tipologia</b>, o que apoia a primeira proposição. A segunda segue inconclusiva.', 'green', 'A correlação mensal foi calculada com no máximo doze observações e tratada como exploratória. Não se testou formalmente se o ganho preditivo acompanha a força da correlação selecionada.')}
+     ${cardT('H3 · parcialmente apoiada', 'O SARIMAX não vence nenhuma tipologia, mas participa do <b>empate técnico no Tipo 6</b> e segue como linha de base interpretável e barata.', 'green', 'O empate decorre em parte da baixa potência do teste nessa tipologia, com autocorrelação dos resíduos e amostra reduzida elevando os p-valores, e não de paridade de desempenho demonstrada.')}
    </div>
-   ${cardT('O achado a destacar desta execução', 'Sem qualquer treinamento sobre os dados industriais, o <b>TimesFM em regime zero-shot</b> tem o menor RMSE médio e vence quatro das seis tipologias. O resultado é compatível com a hipótese de que representações temporais pré-treinadas em larga escala <b>se transferem</b> para o domínio de carga industrial, com potencial em cenários de escassez de dados ou de ausência de pipeline de re-treinamento. A confirmação depende da equiparação do protocolo de avaliação entre as famílias.', 'red', 'Parágrafo de destaque da seção 5.9 da qualificação. A ressalva de protocolo é obrigatória: TFT e TimesFM operam em rolling day-ahead.')}`},
+   ${cardT('O achado a destacar desta execução', 'Sem nenhum treinamento sobre os dados industriais, o <b>TimesFM zero-shot</b> tem o menor RMSE médio e vence quatro das seis tipologias. Representações temporais pré-treinadas em larga escala <b>se transferem</b> para carga industrial. Confirmar isso depende de equiparar o protocolo entre as famílias.', 'red', 'Parágrafo de destaque da seção 5.9 da qualificação. O potencial está em cenários de escassez de dados ou de ausência de pipeline de re-treinamento. A ressalva de protocolo é obrigatória, porque TFT e TimesFM operam em rolling day-ahead.')}`},
 
 /* ---------- 42 ---------- */
 {sec:'Comentários finais', short:'O que falta para concluir',
  title:'O que falta para uma conclusão definitiva',
  sub:'A prioridade científica é separar o efeito da arquitetura do efeito do protocolo. As demais pendências dimensionam e estabilizam o ganho medido.',
- note:'Assumir as limitações como agenda declarada. A equiparação de protocolos é a principal pendência metodológica identificada na qualificação: hoje TFT e TimesFM renovam o contexto real a cada 24 h, enquanto SARIMAX, LSTM e XGBoost produzem previsão de origem única. Não é vazamento, porque só o passado é observado, mas é uma diferença de regime que pode favorecer os dois primeiros.',
+ note:'Assumir as limitações como agenda declarada. A equiparação de protocolos é a principal pendência metodológica da qualificação: hoje TFT e TimesFM renovam o contexto real a cada 24 h, enquanto SARIMAX, LSTM e XGBoost produzem previsão de origem única. Não é vazamento, porque só o passado é observado, mas é uma diferença de regime que pode favorecer os dois primeiros. Enquanto ela existir, a vantagem do TimesFM não pode ser lida como superioridade intrínseca de arquitetura.',
  html:`<div class="card k-red" data-anim style="flex:0 0 auto;padding:14px 19px 15px 21px">
-     <h4 style="color:var(--red)">Pendência metodológica principal · assimetria de protocolo</h4>
-     <p style="font-size:14.2px;line-height:1.44;color:var(--blue-dark);margin-top:5px">SARIMAX, LSTM e XGBoost produzem previsão multi-passo de <b>origem única</b>, sem realimentação de valores reais no horizonte. TFT e TimesFM operam em <b>rolling day-ahead</b>, renovando o contexto com o histórico real a cada 24 h. Nenhum modelo observa o alvo do horizonte, então não há <i>lookahead</i>, mas a diferença de regime dá acesso a contexto mais recente aos modelos de atenção e fundacional.</p></div>
+     <h4 style="color:var(--red)">Pendência principal · assimetria de protocolo${info('Nenhum modelo observa o alvo do horizonte, então não há lookahead. Mas a diferença de regime dá acesso a contexto mais recente aos modelos de atenção e fundacional, e isso precisa ser ponderado na atribuição das diferenças de desempenho.')}</h4>
+     <p style="font-size:14.2px;line-height:1.44;color:var(--blue-dark);margin-top:5px">SARIMAX, LSTM e XGBoost preveem em <b>origem única</b>. TFT e TimesFM operam em <b>rolling day-ahead</b>, renovando o contexto real a cada 24 h. Sem equiparar isso, não dá para afirmar que a vantagem do TimesFM vem da <b>arquitetura</b>, e não do <b>regime de atualização</b>.</p></div>
    <div class="grid g4" style="flex:1;min-height:0;gap:11px;margin-top:10px">
-     ${cardN('01 · Equiparar protocolos', {txt:'Prioridade'}, 'Uniformizar o regime de previsão entre todas as famílias, com <b>origem única para todos</b> ou <b>rolling para todos</b>, de modo a isolar o efeito do protocolo da capacidade intrínseca de cada modelo.', 'red')}
-     ${cardN('02 · Baselines ingênuos', {txt:'Piso de referência'}, 'Incluir <b>persistência</b> e <i>seasonal naive</i> de 24 h e da mesma hora do último dia útil. Sem um piso, não é possível dimensionar o ganho real dos modelos.', 'amber')}
-     ${cardN('03 · Métricas sem escala', {txt:'NRMSE · MASE'}, 'O ranking global por RMSE médio é <b>sensível à escala</b> das tipologias. Métricas independentes de escala e o <b>posto médio por tipologia</b> complementarão a avaliação.', '')}
-     ${cardN('04 · Granularidades', {txt:'Diária e semanal'}, 'Consolidar os experimentos que faltam para <b>responder integralmente à PR3</b> sobre o efeito da granularidade no ranking relativo dos modelos.', 'cyan')}
+     ${cardN('01 · Equiparar protocolos', {txt:'Prioridade'}, 'Uniformizar o regime entre todas as famílias, com origem única para todos ou <i>rolling</i> para todos.', 'red', 'É o que isola o efeito do protocolo da capacidade intrínseca de cada modelo, e é o trabalho prioritário até a defesa.')}
+     ${cardN('02 · Baselines ingênuos', {txt:'Piso de referência'}, 'Incluir <b>persistência</b> e <i>seasonal naive</i>. Sem piso, não dá para dimensionar o ganho.', 'amber', 'Persistência de 24 h e da mesma hora do último dia útil, como no estudo AMI, onde quatro configurações treinadas ficaram abaixo da persistência de uma hora.')}
+     ${cardN('03 · Métricas sem escala', {txt:'NRMSE · MASE'}, 'O RMSE médio é <b>sensível à escala</b> das tipologias. Entram métricas sem escala e posto médio.', '', 'O posto médio por tipologia evita que o Tipo 1, de magnitude muito maior, domine sozinho o ranking agregado.')}
+     ${cardN('04 · Granularidades', {txt:'Diária e semanal'}, 'Consolidar os experimentos que faltam para <b>responder integralmente à PR3</b>.', 'cyan', 'Atividade A6 do cronograma, sobre o efeito da granularidade no ranking relativo dos modelos.')}
    </div>
-   <div class="row fill" style="flex:1;min-height:0;gap:11px;margin-top:10px">
-     ${cardT('05 · Robustez estatística', 'A significância atual é <b>preliminar</b>: sem ajuste para múltiplas comparações e sem repetição em múltiplas janelas. Entram múltiplas sementes, correção de Holm e validação por <i>rolling origin</i>.', 'green')}
-     ${cardT('06 · Base anual única', 'A base cobre apenas <b>2011</b>, o que restringe a análise de sazonalidade interanual e de robustez a mudanças de regime econômico, além de limitar a generalização temporal, geográfica e setorial.', 'dark')}
-     ${cardT('07 · Exógenas do TimesFM', 'As covariáveis do modelo fundacional entram por <b>regressão in-context</b> (Ridge sobre resíduo), e não pela fusão nativa das demais arquiteturas. A comparação do efeito exógeno não é perfeitamente pareada nesse ponto.', 'amber', 'Limitação de dependências: o módulo nativo de covariáveis do TimesFM requer JAX.')}
-     ${cardT('Por que isso importa', 'Sem equiparar o protocolo, não é possível afirmar que a vantagem do TimesFM vem da <b>arquitetura</b> e não do <b>regime de atualização</b>. Até lá, a vantagem não deve ser lida como superioridade intrínseca.', 'red')}
+   <div class="grid g3" style="flex:1;min-height:0;gap:11px;margin-top:10px">
+     ${cardT('05 · Robustez estatística', 'A significância atual é <b>preliminar</b>. Entram múltiplas sementes, correção de Holm e validação por <i>rolling origin</i>.', 'green', 'Hoje não há ajuste para múltiplas comparações nem repetição em múltiplas janelas de teste.')}
+     ${cardT('06 · Base anual única', 'A base cobre apenas <b>2011</b>, o que limita a generalização temporal, geográfica e setorial.', 'dark', 'Restringe também a análise de sazonalidade interanual e de robustez a mudanças de regime econômico.')}
+     ${cardT('07 · Exógenas do TimesFM', 'Entram por <b>regressão in-context</b>, e não pela fusão nativa das demais arquiteturas.', 'amber', 'Ridge sobre o resíduo. É limitação de dependências, porque o módulo nativo de covariáveis do TimesFM requer JAX. A comparação do efeito exógeno não é perfeitamente pareada nesse ponto.')}
    </div>`},
 
 /* ---------- 43 ---------- */
