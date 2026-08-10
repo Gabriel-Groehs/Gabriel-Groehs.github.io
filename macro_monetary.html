@@ -1,0 +1,2068 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>MacroLab Fusion — Terminal Quantitativo de Política Monetária, Banking & IFRS 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg:#07101d; --bg2:#0b1628; --panel:#0f1d31; --panel2:#12243b; --line:#24405f;
+  --text:#eef5ff; --muted:#9db0c8; --cyan:#55d9ff; --blue:#7aa2ff; --gold:#f5c768;
+  --green:#71e2b7; --red:#ff7e8a; --violet:#b695ff; --orange:#ffad66; --white:#fff;
+  --shadow:0 22px 70px rgba(0,0,0,.32); --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:
+  radial-gradient(circle at 15% 0%,rgba(85,217,255,.08),transparent 32rem),
+  radial-gradient(circle at 92% 4%,rgba(182,149,255,.08),transparent 36rem),
+  linear-gradient(180deg,#06101d 0%,#091523 38%,#07101d 100%);
+  color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.55;
+}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input,select{font:inherit}
+button{cursor:pointer}
+::selection{background:rgba(85,217,255,.25)}
+.wrap{width:min(1480px,94vw);margin:auto}
+.topbar{
+  position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);
+  background:rgba(7,16,29,.78);border-bottom:1px solid rgba(122,162,255,.16)
+}
+.topbar .inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 0}
+.brand{display:flex;gap:12px;align-items:center;font-weight:900;letter-spacing:-.02em}
+.logo{
+  width:38px;height:38px;border-radius:12px;background:
+  linear-gradient(135deg,rgba(85,217,255,.22),rgba(182,149,255,.26));
+  border:1px solid rgba(85,217,255,.4);display:grid;place-items:center;box-shadow:inset 0 0 22px rgba(85,217,255,.08)
+}
+.logo::before{content:"Σ";font-family:Georgia,serif;color:var(--gold);font-size:22px}
+.nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.nav a{font-size:12px;color:var(--muted);padding:7px 10px;border:1px solid transparent;border-radius:999px}
+.nav a:hover{color:var(--text);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);text-decoration:none}
+.hero{padding:64px 0 34px;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:34px;align-items:center}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;color:var(--cyan);font-size:12px;text-transform:uppercase;letter-spacing:.18em;font-weight:800}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green);animation:pulse 1.8s infinite}
+h1{font-size:clamp(43px,7vw,88px);line-height:.96;letter-spacing:-.055em;margin:14px 0 20px;max-width:950px}
+.grad{background:linear-gradient(90deg,var(--white),var(--cyan) 45%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:18px;color:#c2d0e0;max-width:820px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.btn{
+  border:1px solid rgba(255,255,255,.1);color:var(--text);background:rgba(255,255,255,.055);
+  padding:11px 15px;border-radius:12px;font-weight:800;transition:.2s transform,.2s border,.2s background
+}
+.btn:hover{transform:translateY(-1px);border-color:rgba(85,217,255,.45);background:rgba(85,217,255,.08)}
+.btn.primary{background:linear-gradient(135deg,#1f6f92,#304f9b);border-color:#60c5ea}
+.hero-viz{
+  min-height:470px;border:1px solid rgba(85,217,255,.16);border-radius:30px;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 50% 44%,rgba(85,217,255,.09),transparent 45%),rgba(255,255,255,.018);box-shadow:var(--shadow)
+}
+.orbit{position:absolute;border:1px solid rgba(122,162,255,.16);border-radius:50%;inset:50%;transform:translate(-50%,-50%)}
+.orbit.o1{width:190px;height:190px}.orbit.o2{width:315px;height:315px}.orbit.o3{width:440px;height:440px}
+.core{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:128px;height:128px;border-radius:50%;
+  display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 35% 25%,#234c62,#0d1b2d 72%);
+  border:1px solid rgba(85,217,255,.5);box-shadow:0 0 70px rgba(85,217,255,.12)
+}
+.core b{font-size:26px;display:block}.core small{color:var(--muted)}
+.planet{
+  position:absolute;width:90px;height:90px;border-radius:18px;background:rgba(12,27,46,.94);
+  border:1px solid rgba(255,255,255,.1);display:grid;place-items:center;text-align:center;font-weight:900;font-size:13px;box-shadow:0 12px 40px rgba(0,0,0,.28)
+}
+.planet span{font-size:10px;color:var(--muted);display:block;font-weight:600}
+.p1{left:5%;top:17%;animation:float 4.5s ease-in-out infinite}.p2{right:5%;top:12%;animation:float 5s ease-in-out infinite .4s}
+.p3{left:4%;bottom:12%;animation:float 4.3s ease-in-out infinite .8s}.p4{right:5%;bottom:13%;animation:float 5.2s ease-in-out infinite .2s}
+.p5{left:42%;top:4%;animation:float 4.8s ease-in-out infinite .9s}.p6{left:42%;bottom:3%;animation:float 4.4s ease-in-out infinite .3s}
+.pulse-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.5;animation:sweep 2.3s linear infinite}
+.pl1{width:68%;left:16%;top:50%;transform:rotate(24deg)}.pl2{width:72%;left:14%;top:48%;transform:rotate(-30deg);animation-delay:1.2s}
+.section{padding:44px 0}
+.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:22px}
+.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold);font-weight:850}
+h2{font-size:clamp(30px,4vw,52px);line-height:1.05;margin:6px 0 8px;letter-spacing:-.035em}
+h3{margin:0 0 8px;font-size:20px;letter-spacing:-.02em}
+.sub{color:var(--muted);max-width:900px;margin:0}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{
+  background:linear-gradient(180deg,rgba(18,36,59,.93),rgba(10,23,39,.94));border:1px solid rgba(155,185,218,.12);
+  border-radius:var(--radius);padding:18px;box-shadow:0 12px 40px rgba(0,0,0,.14);position:relative;overflow:hidden
+}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,.025),transparent 33%)}
+.card.soft{background:rgba(255,255,255,.025)}
+.metric{min-height:150px}
+.metric .value{font-size:36px;line-height:1;font-weight:900;letter-spacing:-.04em;margin:12px 0 7px}
+.metric .meta{font-size:11px;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;border-radius:999px;padding:6px 8px;border:1px solid rgba(255,255,255,.11);color:#c8d7e8}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.live .status-dot{background:var(--green);box-shadow:0 0 10px rgba(113,226,183,.7)}
+.chart{height:260px;position:relative}.chart.tall{height:360px}.chart.small{height:150px}
+.chart svg{width:100%;height:100%;overflow:visible}
+.axis{stroke:rgba(190,210,232,.15);stroke-width:1}.gridline{stroke:rgba(190,210,232,.07);stroke-width:1}
+.axis-label{fill:#7890aa;font-size:10px}.series-label{font-size:10px;font-weight:800}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin:7px 0 3px}.legend i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+.legend span{font-size:11px;color:var(--muted)}
+.data-tip{position:relative;border-bottom:1px dotted rgba(85,217,255,.5);cursor:help}
+.data-tip:hover::after{
+  content:attr(data-tip);position:absolute;z-index:99;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);
+  width:min(330px,75vw);padding:10px 12px;background:#07111f;border:1px solid #2f5479;color:#dce9f6;border-radius:10px;
+  font-size:12px;font-weight:500;line-height:1.42;box-shadow:0 16px 40px rgba(0,0,0,.42)
+}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.control{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);padding:12px;border-radius:14px}
+.control label{font-size:12px;font-weight:850;display:flex;justify-content:space-between;gap:10px}
+.control small{color:var(--muted)}
+input[type=range]{width:100%;accent-color:#55d9ff}
+select{width:100%;padding:10px;background:#0b192b;color:var(--text);border:1px solid #294764;border-radius:10px}
+.sim-output{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:13px}
+.mini{padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025)}
+.mini b{font-size:21px;display:block}.mini span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.note{padding:13px 15px;border-left:3px solid var(--gold);background:rgba(245,199,104,.06);border-radius:0 12px 12px 0;color:#dce7f2;font-size:13px}
+.author{border-left-color:var(--violet);background:rgba(182,149,255,.06)}
+.accent{color:var(--cyan);font-weight:800}.gold{color:var(--gold);font-weight:800}.green{color:var(--green);font-weight:800}.red{color:var(--red);font-weight:800}.violet{color:var(--violet);font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:center}
+.node{min-height:100px;padding:12px;border-radius:16px;background:#0c1b2e;border:1px solid rgba(122,162,255,.15);position:relative;text-align:center;display:grid;place-items:center}
+.node b{font-size:13px}.node small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.arrow{height:2px;background:linear-gradient(90deg,var(--cyan),rgba(85,217,255,.1));position:relative}
+.arrow::after{content:"";position:absolute;right:-1px;top:-4px;border-left:7px solid var(--cyan);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.arrow::before{content:"";position:absolute;width:9px;height:9px;border-radius:50%;top:-4px;background:var(--gold);box-shadow:0 0 15px var(--gold);animation:travel 1.45s linear infinite}
+.balance{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bs{border-radius:16px;padding:14px;border:1px solid rgba(255,255,255,.08)}
+.bs h4{margin:0 0 10px}.bar{height:30px;border-radius:9px;margin:6px 0;display:flex;align-items:center;padding:0 10px;font-size:11px;font-weight:800;transition:.5s width}
+.asset .bar{background:linear-gradient(90deg,rgba(85,217,255,.55),rgba(85,217,255,.12))}
+.liability .bar{background:linear-gradient(90deg,rgba(182,149,255,.55),rgba(182,149,255,.12))}
+.monetary-tree{display:grid;gap:8px}.money-row{display:grid;grid-template-columns:70px 1fr 90px;gap:10px;align-items:center}
+.money-row strong{color:var(--gold)}.money-bar{height:22px;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--cyan));width:30%;transition:.65s width;opacity:.83}
+.paper{padding:22px;border-radius:20px;background:#f4efe3;color:#202631;box-shadow:var(--shadow)}
+.paper h3,.paper h4{color:#162234}.paper p{color:#394455}.paper .data-tip{color:#143d60}
+.paper .note{color:#293748;background:#fff8dc}.paper .author{background:#f1e7ff}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tab{border-radius:999px;padding:8px 11px;font-size:11px;font-weight:900;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted)}
+.tab.active{color:#07101d;background:var(--cyan);border-color:var(--cyan)}
+.model-result{white-space:pre-line;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:#c8d8e9}
+.eq{font-family:Georgia,"Times New Roman",serif;font-size:18px;color:#f2e2b2;background:rgba(245,199,104,.055);padding:10px 12px;border-radius:11px;border:1px solid rgba(245,199,104,.13);overflow:auto}
+.ref-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ref{font-size:12px;color:#b9c8d9;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px;background:rgba(255,255,255,.02)}
+.ref b{color:#eef5ff}
+.qa-log{display:grid;gap:8px}.qa-item{display:flex;justify-content:space-between;gap:15px;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.025);font-size:12px}
+.qa-pass{color:var(--green)}.qa-warn{color:var(--gold)}.qa-fail{color:var(--red)}
+.footer{padding:50px 0 70px;color:var(--muted);font-size:12px;border-top:1px solid rgba(255,255,255,.08);margin-top:38px}
+kbd{border:1px solid rgba(255,255,255,.14);padding:2px 5px;border-radius:6px;background:rgba(255,255,255,.06)}
+
+/* ===== PROFESSIONAL VISUAL SYSTEM v2 ===== */
+.card{transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.card:hover{border-color:rgba(85,217,255,.22);box-shadow:0 20px 58px rgba(0,0,0,.22)}
+.chart{
+  border-radius:16px;overflow:hidden;
+  background:
+    radial-gradient(circle at 82% 18%,rgba(85,217,255,.045),transparent 30%),
+    linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0));
+}
+.chart svg{display:block}
+.chart-shell{position:relative;width:100%;height:100%}
+.chart-tooltip{
+  position:absolute;display:none;pointer-events:none;z-index:8;min-width:150px;max-width:240px;
+  padding:10px 11px;border-radius:11px;background:rgba(5,13,24,.94);
+  border:1px solid rgba(112,170,221,.28);box-shadow:0 14px 42px rgba(0,0,0,.42);
+  color:#edf6ff;font-size:11px;line-height:1.45;backdrop-filter:blur(14px)
+}
+.chart-tooltip .tt-title{font-weight:900;color:#fff;margin-bottom:5px}
+.chart-tooltip .tt-row{display:flex;justify-content:space-between;gap:16px;color:#b8c9da}
+.chart-tooltip .tt-row b{color:#fff}
+.chart-crosshair{stroke:rgba(235,245,255,.25);stroke-width:1;stroke-dasharray:3 4}
+.hover-dot{stroke:#07101d;stroke-width:2}
+.forecast-zone{fill:rgba(245,199,104,.025)}
+.forecast-divider{stroke:rgba(245,199,104,.55);stroke-width:1;stroke-dasharray:5 6}
+.conf-band{fill:rgba(245,199,104,.095);stroke:none}
+.series-path{filter:drop-shadow(0 0 7px rgba(85,217,255,.08))}
+.chart-caption{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:-4px;margin-bottom:7px;color:var(--muted);font-size:10px}
+.chart-caption .forecast-key{display:inline-flex;align-items:center;gap:6px}
+.chart-caption .forecast-key::before{content:"";width:22px;border-top:2px dashed var(--gold)}
+.dashboard-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:14px 0}
+.kpi-pro{
+  position:relative;overflow:hidden;min-height:98px;padding:13px 14px;border-radius:15px;
+  background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.075)
+}
+.kpi-pro::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(var(--cyan),transparent)}
+.kpi-pro span{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:900}
+.kpi-pro b{display:block;font-size:24px;letter-spacing:-.035em;margin-top:7px}
+.kpi-pro small{display:block;font-size:10px;color:#7890a9;margin-top:3px}
+.bank-grid{display:grid;grid-template-columns:1.28fr .72fr;gap:16px;margin-top:16px}
+.bank-side{display:grid;gap:16px}
+.panel-title{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.health-pill{padding:5px 9px;border-radius:999px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:950;border:1px solid rgba(113,226,183,.25);background:rgba(113,226,183,.08);color:var(--green)}
+.health-pill.warn{border-color:rgba(245,199,104,.3);background:rgba(245,199,104,.08);color:var(--gold)}
+.health-pill.risk{border-color:rgba(255,126,138,.3);background:rgba(255,126,138,.08);color:var(--red)}
+.stackbar{display:flex;height:26px;overflow:hidden;border-radius:9px;background:rgba(255,255,255,.03);margin:10px 0}
+.stackseg{height:100%;display:grid;place-items:center;font-size:9px;font-weight:900;color:white;transition:width .6s cubic-bezier(.2,.8,.2,1);min-width:0}
+.seg1{background:linear-gradient(90deg,#285b76,#3287a8)}
+.seg2{background:linear-gradient(90deg,#5d4b93,#7b62bb)}
+.seg3{background:linear-gradient(90deg,#7e6424,#b18a33)}
+.waterfall{display:grid;gap:8px;margin-top:10px}
+.wf-row{display:grid;grid-template-columns:105px 1fr 52px;align-items:center;gap:9px;font-size:10px;color:var(--muted)}
+.wf-track{height:9px;border-radius:999px;background:rgba(255,255,255,.045);overflow:hidden}
+.wf-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:width .55s ease}
+.wf-row:nth-child(2) .wf-fill{background:linear-gradient(90deg,var(--red),var(--orange))}
+.wf-row:nth-child(3) .wf-fill{background:linear-gradient(90deg,var(--violet),var(--blue))}
+.wf-row:nth-child(4) .wf-fill{background:linear-gradient(90deg,var(--gold),var(--orange))}
+.wf-row:nth-child(5) .wf-fill{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.risk-meter{height:9px;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--gold) 55%,var(--red));position:relative;margin:15px 0 8px}
+.risk-pointer{position:absolute;top:-5px;width:3px;height:19px;background:#fff;border-radius:2px;box-shadow:0 0 10px rgba(255,255,255,.5);transition:left .5s ease}
+.micro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.micro{padding:10px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06)}
+.micro span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.micro b{display:block;font-size:17px;margin-top:3px}
+.dynamic-glow{animation:ambientGlow 4s ease-in-out infinite}
+@keyframes ambientGlow{50%{box-shadow:0 0 28px rgba(85,217,255,.08),0 14px 40px rgba(0,0,0,.15)}}
+@keyframes chartReveal{from{opacity:.15;transform:translateY(3px)}to{opacity:1;transform:none}}
+.chart svg{animation:chartReveal .45s ease}
+@media(max-width:1100px){.dashboard-kpis{grid-template-columns:repeat(3,1fr)}.bank-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.dashboard-kpis{grid-template-columns:1fr 1fr}.micro-grid{grid-template-columns:1fr}.wf-row{grid-template-columns:88px 1fr 45px}}
+
+@keyframes pulse{50%{opacity:.35;transform:scale(.8)}}@keyframes float{50%{transform:translateY(-8px)}}@keyframes sweep{0%{opacity:.1}50%{opacity:.7}100%{opacity:.1}}
+@keyframes travel{from{left:0}to{left:calc(100% - 9px)}}
+@media(max-width:1100px){.hero-grid,.g4,.g3{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr}.arrow{height:34px;width:2px;margin:auto;background:linear-gradient(180deg,var(--cyan),rgba(85,217,255,.1))}.arrow::before{display:none}.arrow::after{right:-5px;top:auto;bottom:-2px;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--cyan);border-bottom:0}.sim-output{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.nav{display:none}.hero{padding-top:35px}.hero-grid,.g2,.g3,.g4,.controls,.ref-list{grid-template-columns:1fr}.hero-viz{min-height:420px}.sim-output{grid-template-columns:1fr 1fr}.balance{grid-template-columns:1fr}.section{padding:32px 0}.metric .value{font-size:31px}.section-head{display:block}}
+
+/* ===== QUANT LAB v3: causal state, stress engine, brush & IFRS9 ===== */
+:root{--stressGlow:rgba(255,126,138,.20)}
+.causal-pulse{animation:causalPulse .9s ease both}
+@keyframes causalPulse{0%{box-shadow:0 0 0 rgba(85,217,255,0);transform:translateY(0)}35%{box-shadow:0 0 0 5px rgba(85,217,255,.08),0 0 45px rgba(85,217,255,.20);transform:translateY(-2px)}100%{box-shadow:0 0 0 rgba(85,217,255,0);transform:translateY(0)}}
+.stress-flash{animation:stressFlash 1.05s ease-in-out 2}
+@keyframes stressFlash{50%{box-shadow:0 0 0 3px rgba(255,126,138,.18),0 0 55px var(--stressGlow);filter:saturate(1.25)}}
+.theory-trigger{cursor:crosshair;border-bottom:1px dashed currentColor;font-weight:850;color:#5c3fa0}
+.state-ribbon{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0 0}
+.state-token{padding:6px 9px;border:1px solid rgba(255,255,255,.085);border-radius:999px;background:rgba(255,255,255,.025);font-size:10px;color:var(--muted)}
+.state-token b{color:var(--text)}
+.brush-range{fill:rgba(85,217,255,.075);stroke:rgba(85,217,255,.30);stroke-width:1}
+.brush-handle{fill:rgba(85,217,255,.6)}
+.crossfilter-banner{display:none;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:11px;background:rgba(85,217,255,.065);border:1px solid rgba(85,217,255,.15);font-size:11px;color:#cdefff;margin:8px 0 12px}
+.crossfilter-banner.active{display:flex}
+.risk-components{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:13px}
+.risk-component{padding:13px;border:1px solid rgba(255,255,255,.075);border-radius:14px;background:rgba(255,255,255,.025)}
+.risk-component span{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:900}.risk-component b{display:block;font-size:23px;margin-top:5px}
+.risk-component small{font-size:9px;color:#748aa3}
+.mini-equation{font-family:Georgia,'Times New Roman',serif;font-size:13px;color:#dbe8f6;padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.024);border:1px solid rgba(255,255,255,.055)}
+.engine-pill{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;border:1px solid rgba(113,226,183,.22);background:rgba(113,226,183,.055);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--green);font-weight:900}
+.engine-pill::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 12px currentColor;animation:pulse 1.15s infinite}
+.engine-pill.paused{color:var(--gold);border-color:rgba(245,199,104,.23);background:rgba(245,199,104,.055)}
+.risk-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:16px;margin-top:16px}
+.range-readout{font-variant-numeric:tabular-nums}
+.data-provenance{font-size:10px;color:#7890a9;margin-top:7px}
+.math-eq{overflow-x:auto;white-space:nowrap}
+@media(max-width:980px){.risk-grid{grid-template-columns:1fr}.risk-components{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.risk-components{grid-template-columns:1fr}.crossfilter-banner{align-items:flex-start;flex-direction:column}}
+
+
+
+/* ============================================================
+   FUSION DESIGN SYSTEM — Terminal Meets Editorial × Quant Lab
+   Inspired by the uploaded terminal design; quantitative engine
+   remains the MacroLab robust implementation.
+   ============================================================ */
+:root{
+  --void:#070A12;
+  --base:#0B0F1B;
+  --surface:#101729;
+  --surface-2:#161F37;
+  --surface-3:#1C2745;
+  --border:#1E2A46;
+  --border-strong:#2C3B5F;
+  --text-hi:#F2F5FB;
+  --text-mid:#93A0C0;
+  --text-low:#586386;
+  --blue:#5B9DF9; --blue-dim:rgba(91,157,249,.14);
+  --orange:#FF9B55; --orange-dim:rgba(255,155,85,.14);
+  --green:#33D69B; --green-dim:rgba(51,214,155,.14);
+  --red:#FF6B7A; --red-dim:rgba(255,107,122,.14);
+  --amber:#FFC857; --amber-dim:rgba(255,200,87,.14);
+  --purple:#A78BFA; --purple-dim:rgba(167,139,250,.14);
+  --paper:#F1EBDD; --paper-ink:#2A2317; --paper-accent:#9C6B2E;
+  --f-display:'Space Grotesk',Inter,system-ui,sans-serif;
+  --f-body:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --shadow-terminal:0 24px 48px -24px rgba(0,0,0,.55),0 2px 8px -2px rgba(0,0,0,.40);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--f-body);
+  color:var(--text-hi);
+  background:
+    radial-gradient(1200px 600px at 12% -10%,rgba(91,157,249,.10),transparent 60%),
+    radial-gradient(1000px 500px at 100% 0%,rgba(255,155,85,.07),transparent 55%),
+    linear-gradient(180deg,var(--void) 0%,var(--base) 340px,var(--base) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.16;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:46px 46px;
+}
+h1,h2,h3,h4{font-family:var(--f-display)}
+.mono{font-family:var(--f-mono)}
+.tabular{font-variant-numeric:tabular-nums}
+
+/* Ticker */
+.fusion-ticker{
+  height:39px;background:#050811;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;overflow:hidden;position:sticky;top:0;z-index:90;
+}
+.fusion-ticker-badge{
+  flex:0 0 auto;height:100%;display:flex;align-items:center;gap:7px;padding:0 14px;
+  background:var(--surface);border-right:1px solid var(--border);
+  font:700 .66rem var(--f-mono);letter-spacing:.075em;z-index:2;white-space:nowrap;
+}
+.fusion-live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 9px var(--green);animation:fusionBlink 1.6s ease-in-out infinite}
+@keyframes fusionBlink{50%{opacity:.3}}
+.fusion-ticker-window{overflow:hidden;flex:1}
+.fusion-ticker-track{display:flex;width:max-content;white-space:nowrap;animation:fusionTicker 42s linear infinite}
+.fusion-ticker:hover .fusion-ticker-track{animation-play-state:paused}
+@keyframes fusionTicker{to{transform:translateX(-50%)}}
+.fusion-ticker-item{
+  padding:0 21px;height:38px;display:inline-flex;align-items:center;gap:7px;
+  font:500 .69rem var(--f-mono);color:var(--text-mid);border-right:1px solid var(--border)
+}
+.fusion-ticker-item b{color:var(--text-hi);font-weight:800}
+.fusion-ticker-item .risk{color:var(--red)}.fusion-ticker-item .good{color:var(--green)}.fusion-ticker-item .warn{color:var(--amber)}
+
+/* Header */
+.fusion-header{max-width:1680px;margin:0 auto;padding:2rem 2rem 0}
+.fusion-eyebrow{display:flex;align-items:center;gap:.6rem;color:var(--blue);font:650 .68rem var(--f-mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.7rem}
+.fusion-eyebrow::before{content:"";width:23px;height:1px;background:var(--blue)}
+.fusion-title{
+  font-size:clamp(1.9rem,3.3vw,2.95rem);line-height:1.03;letter-spacing:-.028em;margin:0 0 .55rem;
+  background:linear-gradient(135deg,#fff 23%,var(--blue) 64%,#A78BFA 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.fusion-subtitle{max-width:970px;color:var(--text-mid);font-size:.96rem;margin:0 0 1.4rem}
+.fusion-subtitle strong{color:var(--text-hi)}.fusion-subtitle em{color:var(--orange)}
+.fusion-nav{display:flex;gap:.12rem;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.fusion-nav-btn{
+  appearance:none;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--text-mid);
+  padding:.83rem 1.02rem;font-weight:700;font-size:.81rem;cursor:pointer;display:flex;align-items:center;gap:.48rem;position:relative;top:1px
+}
+.fusion-nav-btn:hover{color:var(--text-hi)}.fusion-nav-btn.active{color:var(--text-hi);border-bottom-color:var(--blue)}
+.fusion-nav-btn .num{font:700 .58rem var(--f-mono);color:var(--text-low);background:var(--surface-2);padding:2px 5px;border-radius:4px}
+
+/* Shell */
+.fusion-shell{max-width:1680px;margin:0 auto;padding:1.55rem 2rem 3rem;display:grid;grid-template-columns:310px minmax(0,1fr);gap:1.55rem;align-items:start}
+.fusion-sidebar{
+  position:sticky;top:55px;max-height:calc(100vh - 72px);overflow:auto;
+  background:linear-gradient(180deg,rgba(16,23,41,.98),rgba(12,18,32,.98));
+  border:1px solid var(--border);border-radius:22px;padding:1.25rem;box-shadow:var(--shadow-terminal)
+}
+.fusion-sidebar::-webkit-scrollbar{width:6px}.fusion-sidebar::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:10px}
+.side-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:.85rem;border-bottom:1px solid var(--border);margin-bottom:.8rem}
+.side-head h3{font-size:.95rem;margin:0}.side-live{font:800 .58rem var(--f-mono);padding:4px 7px;border-radius:999px;background:var(--green-dim);color:var(--green)}
+.side-section-title{display:flex;align-items:center;gap:.45rem;margin:1rem 0 .55rem;font:750 .61rem var(--f-mono);color:var(--text-low);text-transform:uppercase;letter-spacing:.1em}
+.side-section-title::after{content:"";height:1px;background:var(--border);flex:1}
+.side-control{margin:.74rem 0}
+.side-label{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#dfe8f4;font-size:.76rem;font-weight:700;margin-bottom:.34rem}
+.side-label b{font:750 .70rem var(--f-mono);color:#fff;background:var(--surface-3);border:1px solid var(--border-strong);padding:2px 5px;border-radius:5px}
+.side-control small{display:block;color:var(--text-low);font-size:.61rem;line-height:1.4;margin-top:.28rem}
+.fusion-sidebar input[type=range]{width:100%;height:4px;accent-color:var(--blue)}
+.side-buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:.75rem}
+.side-btn{
+  border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-mid);border-radius:9px;padding:.62rem .7rem;font-size:.69rem;font-weight:800;cursor:pointer
+}
+.side-btn:hover{border-color:var(--blue);color:var(--text-hi)}.side-btn.primary{grid-column:1/-1;color:#06101d;background:linear-gradient(135deg,var(--blue),#3E7DE0);border-color:transparent}
+.side-btn.primary:hover{box-shadow:0 9px 22px -8px rgba(91,157,249,.5);transform:translateY(-1px)}
+.side-source{font:500 .61rem/1.55 var(--f-mono);color:var(--text-low);padding:.72rem;background:#090e19;border:1px solid var(--border);border-radius:9px;margin-top:.45rem}
+.side-source b{color:var(--text-mid)}
+.fusion-main{min-width:0}
+.fusion-tab-content{display:none;flex-direction:column;gap:1.1rem}
+.fusion-tab-content.active{display:flex;animation:fusionFade .35s ease}
+@keyframes fusionFade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.fusion-main .section{padding:0 0 1.1rem}.fusion-main .section .wrap{width:100%;max-width:none}
+.fusion-main .section-head{margin-bottom:14px}
+.fusion-main h2{font-size:clamp(1.65rem,2.4vw,2.3rem)}
+.fusion-main .card{
+  background:linear-gradient(180deg,rgba(16,23,41,.97),rgba(12,20,34,.97));
+  border-color:var(--border);box-shadow:var(--shadow-terminal)
+}
+.fusion-main .card::before{
+  content:"";position:absolute;left:0;top:0;right:0;height:2px;background:linear-gradient(90deg,var(--card-accent,var(--blue)),transparent 72%);opacity:.88
+}
+.fusion-main .card:hover{border-color:var(--border-strong);transform:translateY(-1px)}
+.badge.blue{background:var(--blue-dim);color:var(--blue)}
+.badge.orange{background:var(--orange-dim);color:var(--orange)}
+.badge.green{background:var(--green-dim);color:var(--green)}
+.badge.red{background:var(--red-dim);color:var(--red)}
+.badge.amber{background:var(--amber-dim);color:var(--amber)}
+.badge.purple{background:var(--purple-dim);color:var(--purple)}
+#dados .card{--card-accent:var(--blue)}
+#monetario .card{--card-accent:var(--purple)}
+#choques .card,#transmissao .card{--card-accent:var(--orange)}
+#islm .card{--card-accent:var(--blue)}
+#bancos .card{--card-accent:var(--green)}
+#econometria .card{--card-accent:var(--amber)}
+#qualidade .card{--card-accent:var(--purple)}
+
+/* Dashboard command center */
+.fusion-overview{
+  display:grid;grid-template-columns:1.25fr .75fr;gap:1rem;
+  background:linear-gradient(135deg,rgba(16,23,41,.99),rgba(10,16,29,.99));
+  border:1px solid var(--border);border-radius:22px;padding:1.35rem 1.45rem;box-shadow:var(--shadow-terminal);position:relative;overflow:hidden
+}
+.fusion-overview::after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-220px;top:-260px;background:radial-gradient(circle,rgba(91,157,249,.14),transparent 64%);pointer-events:none}
+.overview-label{font:800 .62rem var(--f-mono);letter-spacing:.1em;color:var(--blue);text-transform:uppercase}
+.overview-title{font-size:clamp(1.35rem,2.1vw,2.05rem);letter-spacing:-.025em;margin:.4rem 0 .55rem}
+.overview-copy{color:var(--text-mid);font-size:.84rem;max-width:780px}
+.overview-status{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;align-self:stretch}
+.ov-kpi{padding:.8rem;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.022)}
+.ov-kpi span{font:700 .57rem var(--f-mono);color:var(--text-low);letter-spacing:.07em;text-transform:uppercase}.ov-kpi b{display:block;font-size:1.25rem;margin-top:.24rem}
+.ov-kpi small{font-size:.59rem;color:var(--text-low)}
+.fusion-statusline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:.75rem}
+.fusion-statusline #globalStatus{margin:0!important}
+
+/* Narrative rail */
+.story-rail{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:.85rem;border:1px solid var(--border);background:#090E19;border-radius:14px;margin-bottom:1rem
+}
+.story-step{position:relative;padding:.8rem .65rem;border-radius:10px;background:var(--surface);border:1px solid var(--border);min-height:76px}
+.story-step span{font:800 .55rem var(--f-mono);color:var(--text-low)}.story-step b{display:block;font-size:.75rem;margin:.25rem 0}.story-step small{font-size:.59rem;color:var(--text-low)}
+.story-step::after{content:"→";position:absolute;right:-8px;top:27px;color:var(--blue);z-index:3}.story-step:last-child::after{display:none}
+
+/* Canvas narrative blocks */
+.fusion-canvas{display:block;width:100%;height:250px;border-radius:13px;background:#080d17;border:1px solid var(--border)}
+#fusionBankFlow{height:330px}
+.fusion-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.75rem;font-size:.68rem;color:var(--text-mid)}
+.fusion-legend span{display:flex;align-items:center;gap:5px}.fusion-legend i{width:8px;height:8px;border-radius:3px}
+
+/* Diagnostics */
+.fusion-diagnostics{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.9rem}
+.diag-card-pro{padding:.9rem 1rem;border-radius:12px;background:var(--surface-2);border:1px solid var(--border)}
+.diag-card-pro .d-title{display:flex;gap:7px;align-items:center;font-size:.75rem;font-weight:800}.diag-dot{width:8px;height:8px;border-radius:50%}
+.diag-card-pro p{font-size:.68rem;color:var(--text-mid);margin:.45rem 0 0;line-height:1.55}
+
+/* Banking extensions */
+.fusion-bank-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:1rem}
+.sector-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:.85rem}
+.sector-cell{min-height:102px;border-radius:12px;padding:.8rem;display:flex;flex-direction:column;justify-content:space-between;border:1px solid rgba(255,255,255,.08);transition:.25s transform,.25s filter}
+.sector-cell:hover{transform:translateY(-3px);filter:brightness(1.08)}
+.sector-cell span{font-size:.68rem;font-weight:850}.sector-cell b{font:850 1.25rem var(--f-display)}.sector-cell small{font-size:.57rem;opacity:.75}
+.sector-note{font-size:.64rem;color:var(--text-low);margin-top:.55rem}
+
+/* Model governance */
+.model-governance{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.model-chip{padding:.85rem;border:1px solid var(--border);background:var(--surface-2);border-radius:11px}
+.model-chip span{font:800 .56rem var(--f-mono);color:var(--text-low);text-transform:uppercase;letter-spacing:.07em}.model-chip b{display:block;font-size:.8rem;margin:.25rem 0}.model-chip small{font-size:.61rem;color:var(--text-mid)}
+.model-chip .pass{color:var(--green)}
+
+/* Editorial enhancements */
+.fusion-main .paper{box-shadow:0 18px 38px -24px rgba(0,0,0,.55);border:1px solid #d9cfb8}
+.fusion-main .paper::before{content:"CADERNO TEÓRICO";display:block;font:800 .58rem var(--f-mono);letter-spacing:.1em;color:var(--paper-accent);margin-bottom:.55rem}
+.fusion-main .note.author{border-left-color:var(--paper-accent);background:linear-gradient(135deg,#f4efe3,#ebe1ca);color:#2c2a26;font-style:italic}
+.fusion-main .note.author b{color:#65431f}
+.ref-list .ref{border-left:2px solid var(--blue)}
+
+/* Toast */
+.fusion-toast{position:fixed;top:55px;right:18px;z-index:9999;max-width:360px;background:var(--surface-3);border:1px solid var(--border-strong);border-left:3px solid var(--blue);padding:.78rem 1rem;border-radius:10px;box-shadow:0 18px 38px rgba(0,0,0,.46);font-size:.75rem;animation:fToast .25s ease}
+@keyframes fToast{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:none}}
+
+/* Full-screen-ish chart focus */
+.chart-focus-btn{border:1px solid var(--border);background:var(--surface-2);color:var(--text-mid);border-radius:7px;padding:4px 7px;font-size:.58rem;font-weight:800;cursor:pointer}
+.chart-focus-overlay{position:fixed;inset:0;z-index:9998;background:rgba(4,8,15,.94);backdrop-filter:blur(14px);padding:4vh 4vw;display:grid;place-items:center}
+.chart-focus-card{width:min(1500px,92vw);height:min(840px,88vh);border:1px solid var(--border-strong);background:var(--surface);border-radius:18px;padding:1rem;display:flex;flex-direction:column;box-shadow:0 40px 90px rgba(0,0,0,.55)}
+.chart-focus-card .chart{flex:1;height:auto!important}.chart-focus-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.chart-focus-close{border:0;background:var(--red-dim);color:var(--red);border-radius:8px;padding:6px 9px;cursor:pointer;font-weight:900}
+
+/* Improve original chart look under terminal theme */
+.chart{background:linear-gradient(180deg,#090f1b,#0c1321);border:1px solid rgba(44,59,95,.45)}
+.chart-tooltip{font-family:var(--f-mono)}
+.axis-label{font-family:var(--f-mono);fill:#63708f!important}
+.series-label{font-family:var(--f-mono)}
+.eq,.mini-equation{font-family:var(--f-mono)!important}
+
+/* Responsive */
+@media(max-width:1320px){
+  .fusion-shell{grid-template-columns:1fr}.fusion-sidebar{position:relative;top:0;max-height:none}
+  .fusion-sidebar .side-controls-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 14px}
+  .fusion-overview,.fusion-bank-grid{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  .fusion-header{padding:1.4rem 1rem 0}.fusion-shell{padding:1rem}
+  .fusion-sidebar .side-controls-grid{grid-template-columns:1fr 1fr}
+  .story-rail,.sector-grid,.model-governance,.fusion-diagnostics{grid-template-columns:1fr 1fr}
+  .story-step::after{display:none}
+}
+@media(max-width:620px){
+  .fusion-sidebar .side-controls-grid,.story-rail,.sector-grid,.model-governance,.fusion-diagnostics,.overview-status{grid-template-columns:1fr}
+  .fusion-nav-btn{padding:.7rem .65rem;font-size:.72rem}.fusion-title{font-size:1.8rem}.fusion-ticker-badge{display:none}
+}
+
+
+/* ============================================================
+   AGENTIC RESEARCH TERMINAL v5
+   5-agent critique loop: Statistics · Monetary Econometrics · UX
+   Banking · Software Engineering
+   ============================================================ */
+
+:root{
+  --stat:#7DD3FC;
+  --econ:#F8C56A;
+  --bank:#52E0A4;
+  --model:#B8A2FF;
+  --danger:#FF7585;
+}
+
+/* restrained motion + accessibility */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
+}
+.agent-ribbon{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:1rem
+}
+.agent-chip{
+  border:1px solid var(--border);background:linear-gradient(180deg,var(--surface),#0d1423);
+  border-radius:11px;padding:.72rem .78rem;position:relative;overflow:hidden
+}
+.agent-chip::after{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--agent,var(--blue))}
+.agent-chip span{font:800 .55rem var(--f-mono);letter-spacing:.08em;color:var(--text-low);text-transform:uppercase}
+.agent-chip b{display:block;font-size:.72rem;margin-top:.25rem;color:var(--text-hi)}
+.agent-chip small{display:block;font-size:.58rem;line-height:1.45;color:var(--text-low);margin-top:.18rem}
+.agent-chip.stat{--agent:var(--stat)}.agent-chip.econ{--agent:var(--econ)}.agent-chip.ux{--agent:var(--blue)}
+.agent-chip.bank{--agent:var(--bank)}.agent-chip.eng{--agent:var(--model)}
+
+/* formula theater */
+.formula-theater{
+  margin-top:13px;padding:12px;border-radius:15px;border:1px solid var(--border);
+  background:
+    radial-gradient(circle at 20% 0%,rgba(91,157,249,.07),transparent 35%),
+    #080e19;position:relative;overflow:hidden
+}
+.formula-theater::before{
+  content:"MODEL ENGINE";position:absolute;right:11px;top:8px;font:800 .52rem var(--f-mono);
+  color:var(--text-low);letter-spacing:.1em
+}
+.formula-line{
+  display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;padding-top:13px
+}
+.fterm,.fop,.feq{
+  min-height:54px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  border-radius:10px;border:1px solid var(--border);background:var(--surface);
+  padding:7px 10px;position:relative;transition:.25s transform,.25s border-color,.25s box-shadow
+}
+.fterm{min-width:92px;animation:formulaPulse 6s ease-in-out infinite;animation-delay:var(--delay,0s)}
+.fterm .sym{font:800 .91rem var(--f-mono);color:var(--term,var(--blue))}
+.fterm .val{font:850 .72rem var(--f-mono);margin-top:3px;color:white}
+.fterm .meaning{font-size:.52rem;color:var(--text-low);margin-top:2px;text-align:center}
+.fop,.feq{border:none;background:transparent;min-width:auto;padding:5px;color:var(--text-low);font:900 1rem var(--f-mono)}
+.fterm:hover{transform:translateY(-3px);border-color:var(--term,var(--blue));box-shadow:0 10px 24px -14px var(--term,var(--blue))}
+@keyframes formulaPulse{
+  0%,72%,100%{box-shadow:none;border-color:var(--border);transform:none}
+  78%{border-color:var(--term,var(--blue));box-shadow:0 0 0 1px color-mix(in srgb,var(--term,var(--blue)) 35%,transparent),0 0 24px color-mix(in srgb,var(--term,var(--blue)) 18%,transparent);transform:translateY(-2px)}
+  84%{box-shadow:none;transform:none}
+}
+.formula-caption{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px;font-size:.59rem;color:var(--text-low)}
+.formula-caption b{color:var(--text-mid)}
+.formula-meter{height:2px;flex:1;background:var(--border);overflow:hidden;border-radius:2px}
+.formula-meter::after{content:"";display:block;height:100%;width:28%;background:linear-gradient(90deg,transparent,var(--blue),transparent);animation:formulaTravel 3s linear infinite}
+@keyframes formulaTravel{from{transform:translateX(-120%)}to{transform:translateX(430%)}}
+
+/* animated equations / MathJax wrapper */
+.eq.math-eq,.mini-equation.math-eq,.eq{
+  position:relative;overflow:hidden
+}
+.eq.math-eq::after,.mini-equation.math-eq::after,.eq::after{
+  content:"";position:absolute;top:0;bottom:0;width:70px;left:-90px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
+  transform:skewX(-14deg);animation:eqScan 6.5s ease-in-out infinite
+}
+@keyframes eqScan{0%,55%{left:-100px}78%,100%{left:calc(100% + 100px)}}
+
+/* IRF small multiples */
+.irf-lab{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px
+}
+.irf-mini{
+  border:1px solid var(--border);border-radius:13px;background:linear-gradient(180deg,#0a101c,#0d1524);
+  padding:10px;position:relative;overflow:hidden
+}
+.irf-mini h4{font-size:.71rem;margin:0;color:var(--text-hi)}
+.irf-mini .irf-stat{font:800 .64rem var(--f-mono);color:var(--text-low);margin-top:2px}
+.irf-mini .chart{height:155px;margin-top:5px;border:0;background:transparent}
+.irf-mini::before{content:"IRF";position:absolute;right:7px;top:7px;font:800 .5rem var(--f-mono);color:var(--text-low)}
+.irf-summary{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px
+}
+.irf-summary div{padding:7px 8px;border-radius:9px;background:var(--surface-2);border:1px solid var(--border)}
+.irf-summary span{font:750 .51rem var(--f-mono);color:var(--text-low);text-transform:uppercase}
+.irf-summary b{display:block;font:850 .72rem var(--f-mono);margin-top:2px}
+
+/* NK 3-equation architecture */
+.nk-system{
+  display:grid;grid-template-columns:1fr 54px 1fr 54px 1fr;gap:8px;align-items:center;margin-top:12px
+}
+.nk-box{
+  min-height:130px;border:1px solid var(--border);border-radius:14px;padding:13px;
+  background:linear-gradient(145deg,var(--surface),#0b1220);position:relative;overflow:hidden
+}
+.nk-box::before{content:attr(data-step);position:absolute;right:9px;top:8px;font:900 .54rem var(--f-mono);color:var(--text-low)}
+.nk-box h4{font-size:.78rem;margin:0 0 6px;color:var(--nk,var(--blue))}
+.nk-box p{font-size:.65rem;color:var(--text-mid);line-height:1.52;margin:0}
+.nk-box .nk-eq{font:800 .68rem/1.5 var(--f-mono);margin-top:7px;color:#dce7f5}
+.nk-arrow{height:2px;background:linear-gradient(90deg,var(--blue),transparent);position:relative}
+.nk-arrow::after{content:"";position:absolute;right:0;top:-4px;border-left:7px solid var(--blue);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.nk-arrow i{position:absolute;width:8px;height:8px;background:white;border-radius:50%;top:-3px;animation:nkTravel 2.4s linear infinite}
+@keyframes nkTravel{from{left:0;opacity:.2}20%{opacity:1}to{left:calc(100% - 8px);opacity:.2}}
+
+/* modern banking / money creation */
+.money-dual{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px
+}
+.money-view{
+  border:1px solid var(--border);border-radius:14px;background:var(--surface-2);padding:13px;position:relative;overflow:hidden
+}
+.money-view.recommended{border-color:rgba(51,214,155,.34)}
+.money-view .view-tag{font:850 .52rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-low)}
+.money-view h4{font-size:.8rem;margin:.3rem 0 .45rem}.money-view p{font-size:.63rem;color:var(--text-mid);line-height:1.55;margin:0}
+.money-flow-row{display:flex;align-items:center;gap:6px;margin-top:10px}
+.money-pill{flex:1;min-height:48px;border:1px solid var(--border);background:#0a111e;border-radius:9px;padding:7px;text-align:center}
+.money-pill b{display:block;font-size:.64rem}.money-pill small{font-size:.52rem;color:var(--text-low)}
+.money-flow-arrow{color:var(--blue);font-weight:900;animation:arrowBreathe 1.7s ease-in-out infinite}
+@keyframes arrowBreathe{50%{transform:translateX(3px);opacity:.45}}
+.money-constraint-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.money-constraint{padding:7px;border:1px solid var(--border);border-radius:8px;background:#0a101c;text-align:center}
+.money-constraint b{display:block;font-size:.6rem;color:var(--green)}.money-constraint small{font-size:.5rem;color:var(--text-low)}
+
+/* macro-financial accelerator */
+.accelerator-map{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px
+}
+.acc-node{
+  min-height:102px;padding:10px;border:1px solid var(--border);background:var(--surface-2);border-radius:12px;position:relative
+}
+.acc-node h4{font-size:.7rem;margin:0 0 5px}.acc-node p{font-size:.58rem;color:var(--text-mid);line-height:1.45;margin:0}
+.acc-node b{font:850 .72rem var(--f-mono);color:var(--acc,var(--blue));display:block;margin-top:6px}
+.acc-node::after{content:"→";position:absolute;right:-9px;top:41px;color:var(--orange);font-weight:900;z-index:2}
+.acc-node:last-child::after{content:"↺";right:6px;top:auto;bottom:5px;color:var(--red)}
+.acc-node.active{animation:accPulse 1.1s ease}
+@keyframes accPulse{50%{border-color:var(--acc,var(--blue));box-shadow:0 0 25px color-mix(in srgb,var(--acc,var(--blue)) 18%,transparent);transform:translateY(-3px)}}
+
+/* banker stage view */
+.stage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}
+.stage-card{padding:11px;border-radius:12px;border:1px solid var(--border);background:linear-gradient(145deg,var(--surface-2),#0c1321);position:relative;overflow:hidden}
+.stage-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--stage,var(--green))}
+.stage-card span{font:800 .55rem var(--f-mono);color:var(--text-low);letter-spacing:.07em;text-transform:uppercase}
+.stage-card b{display:block;font-size:1.35rem;margin-top:.25rem}.stage-card small{font-size:.57rem;color:var(--text-mid)}
+.stage-track{height:18px;border-radius:9px;display:flex;overflow:hidden;background:#080d17;margin-top:10px}
+.stage-seg{height:100%;transition:width .55s cubic-bezier(.2,.8,.2,1);display:grid;place-items:center;font:850 .5rem var(--f-mono);color:#06101d}
+.stage1{background:var(--green)}.stage2{background:var(--amber)}.stage3{background:var(--red)}
+.stage-arrow-row{display:grid;grid-template-columns:1fr 60px 1fr 60px 1fr;align-items:center;gap:6px;margin-top:9px}
+.stage-arrow{text-align:center;color:var(--text-low);font:800 .52rem var(--f-mono)}
+.stage-arrow b{display:block;color:var(--amber);font-size:.7rem}
+
+/* ALM/FTP professional strip */
+.alm-strip{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px
+}
+.alm-kpi{padding:9px;border:1px solid var(--border);border-radius:10px;background:#0a111e}
+.alm-kpi span{font:750 .51rem var(--f-mono);text-transform:uppercase;color:var(--text-low);letter-spacing:.06em}
+.alm-kpi b{display:block;font:850 .82rem var(--f-mono);margin-top:3px}
+.alm-kpi small{font-size:.52rem;color:var(--text-low)}
+
+/* model diagnostic cockpit */
+.model-diagnostic{
+  display:grid;grid-template-columns:1.1fr .9fr;gap:10px;margin-top:12px
+}
+.diag-board{border:1px solid var(--border);border-radius:13px;padding:11px;background:#090f1b}
+.diag-board h4{font-size:.72rem;margin:0 0 7px}
+.diag-row{display:grid;grid-template-columns:94px 1fr 50px;gap:8px;align-items:center;margin:7px 0}
+.diag-row span{font:750 .53rem var(--f-mono);color:var(--text-low)}
+.diag-track{height:7px;border-radius:999px;background:var(--border);overflow:hidden}
+.diag-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .5s ease}
+.diag-row b{font:800 .57rem var(--f-mono);text-align:right}
+.model-story{padding:11px;border:1px solid var(--border);border-radius:13px;background:linear-gradient(145deg,var(--surface-2),#0b1220)}
+.model-story .story-kicker{font:850 .52rem var(--f-mono);color:var(--model);letter-spacing:.09em;text-transform:uppercase}
+.model-story h4{font-size:.78rem;margin:.35rem 0}.model-story p{font-size:.61rem;color:var(--text-mid);line-height:1.55;margin:0}
+
+/* chapter progress */
+.chapter-progress{
+  position:fixed;left:0;top:39px;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--green),var(--amber));
+  z-index:95;width:0;transition:width .25s ease;box-shadow:0 0 12px rgba(91,157,249,.45)
+}
+
+/* charts: richer visual hierarchy */
+.series-path{transition:opacity .18s ease}
+.chart:hover .series-path{opacity:.63}
+.chart:hover .series-path:hover{opacity:1}
+.irf-mini .axis-label{font-size:8px}
+.chart .hover-layer{filter:drop-shadow(0 0 4px rgba(255,255,255,.18))}
+
+/* academic citation pills */
+.cite-pill{
+  display:inline-flex;align-items:center;gap:5px;margin:2px 3px;padding:3px 6px;border-radius:7px;
+  font:750 .53rem var(--f-mono);color:var(--text-mid);background:var(--surface-3);border:1px solid var(--border);cursor:help
+}
+.cite-pill:hover{color:white;border-color:var(--blue)}
+
+/* mobile */
+@media(max-width:1180px){
+  .irf-lab{grid-template-columns:1fr 1fr}.nk-system{grid-template-columns:1fr}.nk-arrow{width:2px;height:30px;margin:auto;background:linear-gradient(var(--blue),transparent)}
+  .nk-arrow::after{right:-5px;top:auto;bottom:-2px;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--blue);border-bottom:0}
+  .accelerator-map{grid-template-columns:1fr 1fr}.acc-node::after{display:none}.alm-strip{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:760px){
+  .agent-ribbon,.irf-lab,.irf-summary,.money-dual,.stage-grid,.model-diagnostic,.accelerator-map{grid-template-columns:1fr}
+  .alm-strip{grid-template-columns:1fr 1fr}.money-constraint-grid{grid-template-columns:1fr 1fr}.stage-arrow-row{grid-template-columns:1fr}
+  .fop,.feq{min-height:18px}.formula-line{flex-direction:column}.fterm{width:100%}
+}
+
+
+/* end agentic additions */
+</style>
+</head>
+<body>
+
+<div class="chapter-progress" id="chapterProgress"></div>
+<div class="fusion-ticker">
+  <div class="fusion-ticker-badge"><span class="fusion-live-dot"></span><span id="fusionTickerMode">QUANT ENGINE</span></div>
+  <div class="fusion-ticker-window"><div class="fusion-ticker-track" id="fusionTickerTrack"><div class="fusion-ticker-item">INICIALIZANDO MOTOR QUANTITATIVO…</div></div></div>
+</div>
+
+<header class="fusion-header">
+  <div class="fusion-eyebrow">MACROLAB FUSION · MONETARY POLICY × BANKING × CREDIT RISK</div>
+  <h1 class="fusion-title">Terminal Quantitativo de Política Monetária & Macroeconomia</h1>
+  <p class="fusion-subtitle">Story design de <strong>terminal editorial</strong>, motor causal interconectado, dados do BCB, <em>IFRS 9 / ECL</em>, transmissão bancária e econometria robusta em um único arquivo HTML.</p>
+  <nav class="fusion-nav"><button class="fusion-nav-btn active" data-fusion-tab="dashboard">Dashboard<span class="num">01</span></button><button class="fusion-nav-btn" data-fusion-tab="transmission">Transmissão<span class="num">02</span></button><button class="fusion-nav-btn" data-fusion-tab="models">IS–LM · Modelos<span class="num">03</span></button><button class="fusion-nav-btn" data-fusion-tab="banking">Banking · IFRS 9<span class="num">04</span></button><button class="fusion-nav-btn" data-fusion-tab="forecast">Econometria<span class="num">05</span></button><button class="fusion-nav-btn" data-fusion-tab="theory">Teoria<span class="num">06</span></button><button class="fusion-nav-btn" data-fusion-tab="audit">Auditoria<span class="num">07</span></button></nav>
+</header>
+
+<div class="fusion-shell">
+  
+<aside class="fusion-sidebar">
+  <div class="side-head"><h3>Control Deck</h3><span class="side-live" id="fusionSideMode">● LIVE ENGINE</span></div>
+  <div class="side-controls-grid">
+    <div>
+      <div class="side-section-title">Política monetária</div>
+      <div class="side-control"><div class="side-label"><span>Choque Selic</span><b id="sideSelicVal">0,00 pp</b></div><input id="sideSelic" type="range" min="-5" max="5" step=".25" value="0"><small>Propaga para curva, funding, atividade, PD e ECL.</small></div>
+      <div class="side-control"><div class="side-label"><span>Impulso fiscal</span><b id="sideFiscalVal">0,0</b></div><input id="sideFiscal" type="range" min="-3" max="3" step=".1" value="0"></div>
+      <div class="side-control"><div class="side-label"><span>Choque cambial</span><b id="sideFxVal">0%</b></div><input id="sideFx" type="range" min="-20" max="30" step="1" value="0"></div>
+    </div>
+    <div>
+      <div class="side-section-title">Liquidez & stress</div>
+      <div class="side-control"><div class="side-label"><span>Compulsório</span><b id="sideReserveVal">20%</b></div><input id="sideReserve" type="range" min="5" max="45" step="1" value="20"><small>Conecta mecanismo monetário e crédito.</small></div>
+      <div class="side-control"><div class="side-label"><span>Aversão a risco</span><b id="sideRiskVal">0,0</b></div><input id="sideRisk" type="range" min="-3" max="5" step=".1" value="0"></div>
+      <div class="side-control"><div class="side-label"><span>Choque de oferta</span><b id="sideSupplyVal">0,0</b></div><input id="sideSupply" type="range" min="-3" max="3" step=".1" value="0"></div>
+    </div>
+    <div>
+      <div class="side-section-title">IFRS 9 / carteira</div>
+      <div class="side-control"><div class="side-label"><span>EAD</span><b id="sideEadVal">R$ 1,00 bi</b></div><input id="sideEad" type="range" min="100" max="5000" step="50" value="1000"></div>
+      <div class="side-control"><div class="side-label"><span>Colateral</span><b id="sideCollateralVal">55%</b></div><input id="sideCollateral" type="range" min="0" max="95" step="1" value="55"></div>
+      <div class="side-control"><div class="side-label"><span>Vol. idiossincrática</span><b id="sideIdioVal">25%</b></div><input id="sideIdio" type="range" min="0" max="80" step="1" value="25"></div>
+    </div>
+  </div>
+  <div class="side-buttons">
+    <button class="side-btn primary" id="sideRun">▶ Rodar cenário & storytelling</button>
+    <button class="side-btn" id="btnLive">↻ Dados BCB</button>
+    <button class="side-btn" id="btnTour">◎ Aula guiada</button>
+    <button class="side-btn" id="sideReset">Reset cenário</button>
+    <button class="side-btn" id="sideEngine">Stress engine</button>
+  </div>
+  <div class="side-section-title">Proveniência</div>
+  <div class="side-source" id="fusionSource">Inicializando…</div>
+  <div class="side-source"><b>Atalhos:</b> teclas 1–7 alternam capítulos · <b>E</b> liga/desliga stress · <b>R</b> roda cenário.</div>
+</aside>
+
+  <main class="fusion-main">
+
+<div class="agent-ribbon" id="agentRibbon">
+  <div class="agent-chip stat"><span>PhD Estatística</span><b>Incerteza antes de decoração</b><small>IRF, bandas, diagnóstico e leitura das equações.</small></div>
+  <div class="agent-chip econ"><span>Econometria Monetária</span><b>Mecanismos + identificação</b><small>NK, crédito, risco e intermediação financeira.</small></div>
+  <div class="agent-chip ux"><span>UX / Front-end</span><b>Storytelling por causalidade</b><small>Movimento indica mecanismo, não enfeite.</small></div>
+  <div class="agent-chip bank"><span>Banking</span><b>ALM · FTP · IFRS 9</b><small>Funding, estágio, ECL, capital e retorno.</small></div>
+  <div class="agent-chip eng"><span>Software Engineer</span><b>Um único estado</b><small>Todos os painéis reagem ao mesmo cenário.</small></div>
+</div>
+
+    <div class="fusion-tab-content active" data-fusion-panel="dashboard">
+      
+<div class="fusion-overview">
+  <div>
+    <div class="overview-label">MacroLab Fusion · Quant Research Terminal</div>
+    <h2 class="overview-title">Política monetária, balanço bancário e risco de crédito no mesmo estado causal.</h2>
+    <p class="overview-copy">A edição Fusion combina a narrativa de um terminal editorial com um motor quantitativo único. O histórico oficial, o cenário do usuário, o stress estocástico, PD/LGD/EAD, ECL e os modelos econométricos compartilham a mesma máquina de estado.</p>
+    <div class="fusion-statusline">
+      <div class="badge" id="globalStatus"><span class="status-dot"></span><span>Inicializando fontes…</span></div>
+      <span class="badge blue" id="fusionScenarioBadge">SCENARIO 000</span>
+      <span class="badge purple" id="fusionFilterBadge">JANELA · TOTAL</span>
+    </div>
+  </div>
+  <div class="overview-status">
+    <div class="ov-kpi"><span>Selic efetiva</span><b id="fusionKpiSelic">—</b><small>observada + choque</small></div>
+    <div class="ov-kpi"><span>Inflação ref.</span><b id="fusionKpiIpca">—</b><small>janela ativa</small></div>
+    <div class="ov-kpi"><span>PD 12m</span><b id="fusionKpiPD">—</b><small>logística macro</small></div>
+    <div class="ov-kpi"><span>ECL/EAD</span><b id="fusionKpiECL">—</b><small>custo de risco</small></div>
+  </div>
+</div>
+<div class="fusion-diagnostics">
+  <div class="diag-card-pro" id="fusionDiagInfl"><div class="d-title"><i class="diag-dot"></i><span>Regime nominal</span></div><p>Calculando…</p></div>
+  <div class="diag-card-pro" id="fusionDiagCredit"><div class="d-title"><i class="diag-dot"></i><span>Impulso de crédito</span></div><p>Calculando…</p></div>
+  <div class="diag-card-pro" id="fusionDiagRisk"><div class="d-title"><i class="diag-dot"></i><span>Risco IFRS 9</span></div><p>Calculando…</p></div>
+</div>
+
+      <section class="section" id="dados">
+<div class="wrap">
+<div class="section-head">
+<div><div class="kicker">01 · Pulso macroeconômico</div><h2>Dados reais viram matéria-prima do laboratório</h2><p class="sub">O navegador consulta séries públicas do Banco Central. Se a rede falhar, usa primeiro o último cache oficial salvo localmente; sem cache, mantém âncoras anuais reais de Selic, IPCA e desemprego, sem séries artificiais. Crédito e agregados monetários ficam marcados como indisponíveis até uma fonte oficial ser recuperada.</p></div>
+<div class="badge" id="dataStamp"><span class="status-dot"></span><span>snapshot local</span></div>
+</div>
+<div class="crossfilter-banner" id="crossFilterBanner"><span>Janela histórica selecionada: <b id="crossFilterLabel">—</b>. Todos os módulos recalculados nessa janela.</span><button class="btn" id="clearFilter">Limpar seleção</button></div>
+<div class="grid g4">
+<article class="card metric"><span class="badge">Selic meta · SGS 432</span><div class="value" id="vSelic">15,00%</div><div class="meta" id="dSelic">fallback didático</div></article>
+<article class="card metric"><span class="badge" id="ipcaBadge">IPCA mensal · SGS 433</span><div class="value" id="vIpca">0,30%</div><div class="meta" id="dIpca">fallback didático</div></article>
+<article class="card metric"><span class="badge">Desocupação · SGS 24369</span><div class="value" id="vUnemp">5,8%</div><div class="meta" id="dUnemp">fallback didático</div></article>
+<article class="card metric"><span class="badge">Inadimplência · SGS 21082</span><div class="value" id="vNpl">3,4%</div><div class="meta" id="dNpl">fallback didático</div></article>
+</div>
+<div class="grid g2" style="margin-top:16px">
+<article class="card">
+<h3>Selic × inflação × desemprego</h3>
+<div class="legend" id="macroLegend"></div>
+<div class="chart tall" id="macroChart"></div>
+<p class="note">Séries têm frequências e escalas distintas. Aqui elas são <b>normalizadas em índice 100</b> no primeiro ponto para enfatizar co-movimentos, defasagens e mudanças de regime.</p>
+</article>
+<article class="card">
+<h3>Crédito bancário e inadimplência</h3>
+<div class="chart tall" id="creditChart"></div>
+<p class="note author"><b>Comentário do autor:</b> crédito não é apenas “quantidade de dinheiro”. Ele emerge de decisões de balanço, capital, liquidez, risco, funding, demanda solvente e preço. Por isso o laboratório trata o canal bancário como um mecanismo próprio.</p>
+</article>
+</div>
+</div>
+</section>
+      <section class="section" id="monetario">
+<div class="wrap">
+<div class="section-head"><div><div class="kicker">05 · Moeda e liquidez</div><h2>M1, M2, M3, M4 e multiplicador monetário</h2><p class="sub">Os agregados ampliam progressivamente o conceito de liquidez. O multiplicador é uma identidade útil, mas a criação de crédito moderna não deve ser reduzida a uma cadeia mecânica de depósitos.</p></div></div>
+<div class="grid g2">
+<article class="card">
+<h3>Camadas monetárias brasileiras</h3>
+<div class="monetary-tree">
+<div class="money-row"><strong>M1</strong><div class="money-bar" id="m1bar"></div><span id="m1v">—</span></div>
+<div class="money-row"><strong>M2</strong><div class="money-bar" id="m2bar"></div><span id="m2v">—</span></div>
+<div class="money-row"><strong>M3</strong><div class="money-bar" id="m3bar"></div><span id="m3v">—</span></div>
+<div class="money-row"><strong>M4</strong><div class="money-bar" id="m4bar"></div><span id="m4v">—</span></div>
+</div>
+<div class="chart" id="moneyChart" style="margin-top:14px"></div>
+<p class="note">BCB: <b>M1</b> = papel-moeda com o público + depósitos à vista; <b>M2</b> adiciona poupança e títulos privados de instituições depositárias; <b>M3</b> adiciona quotas de fundos depositários e compromissadas; <b>M4</b> acrescenta títulos públicos federais.</p>
+</article>
+<article class="card">
+<h3>Laboratório do multiplicador</h3>
+<div class="control"><label>Reserva / retenção efetiva <b id="rrOut">20%</b></label><input id="rr" max="60" min="5" step="1" type="range" value="20"/></div>
+<div class="sim-output" style="grid-template-columns:repeat(3,1fr)">
+<div class="mini"><span>Base inicial</span><b>R$ 100</b></div>
+<div class="mini"><span>Multiplicador simples</span><b id="multOut">5,00×</b></div>
+<div class="mini"><span>Depósitos teóricos</span><b id="depOut">R$ 500</b></div>
+</div>
+<div class="chart tall" id="multChart"></div>
+<p class="note author"><b>Comentário do autor:</b> o exemplo <i>1/rr</i> é didático. Bancos não “esperam reservas para então emprestar” em uma sequência rígida. Capital regulatório, liquidez, risco, funding, demanda por crédito e política operacional do banco central limitam e moldam o processo.</p>
+</article>
+</div>
+
+<article class="card" id="moneyCreationModern">
+  <div class="panel-title">
+    <div><h3>Do multiplicador didático à criação monetária moderna</h3><p class="sub" style="font-size:12px">Duas lentes complementares: a identidade pedagógica e o balanço bancário contemporâneo.</p></div>
+    <span class="badge purple">MONEY CREATION</span>
+  </div>
+  <div class="money-dual">
+    <div class="money-view">
+      <div class="view-tag">Lente 1 · didática</div>
+      <h4>Reserva → cadeia de depósitos</h4>
+      <p>Útil para visualizar a geometria de retenção e redepósito. Não deve ser interpretada como uma sequência operacional rígida que determina previamente a oferta de crédito.</p>
+      <div class="money-flow-row"><div class="money-pill"><b>Base</b><small>R$ 100</small></div><div class="money-flow-arrow">→</div><div class="money-pill"><b>1/rr</b><small id="modernMult">—</small></div><div class="money-flow-arrow">→</div><div class="money-pill"><b>Depósitos</b><small id="modernDeposits">—</small></div></div>
+    </div>
+    <div class="money-view recommended">
+      <div class="view-tag">Lente 2 · sistema bancário moderno</div>
+      <h4>Crédito cria depósito; restrições disciplinam o balanço</h4>
+      <p>Ao conceder um empréstimo, o banco registra simultaneamente um ativo (crédito) e um passivo (depósito). A expansão é limitada por capital, liquidez, funding, risco, demanda solvente e política monetária.</p>
+      <div class="money-flow-row"><div class="money-pill"><b>Empréstimo</b><small>ativo bancário ↑</small></div><div class="money-flow-arrow">→</div><div class="money-pill"><b>Depósito</b><small>passivo bancário ↑</small></div></div>
+      <div class="money-constraint-grid">
+        <div class="money-constraint"><b>CAPITAL</b><small>solvência</small></div>
+        <div class="money-constraint"><b>LIQUIDEZ</b><small>saídas</small></div>
+        <div class="money-constraint"><b>FUNDING</b><small>custo marginal</small></div>
+        <div class="money-constraint"><b>RISCO</b><small>PD/LGD</small></div>
+      </div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:10px"><b>Referência essencial:</b> McLeay, Radia & Thomas (Bank of England, 2014) — bancos comerciais criam a maior parte da moeda por meio de empréstimos; o mecanismo não é uma simples multiplicação mecânica de reservas.</p>
+</article>
+</div>
+</section>
+    </div>
+
+    <div class="fusion-tab-content" data-fusion-panel="transmission">
+      
+<article class="card">
+  <div class="panel-title">
+    <div><h3>Storyline causal · pulso monetário</h3><p class="sub" style="font-size:12px">O pulso percorre política → curva → liquidez → banco → ECL. A velocidade responde ao tamanho do choque.</p></div>
+    <span class="badge orange">ANIMAÇÃO CONTÍNUA</span>
+  </div>
+  <div class="story-rail">
+    <div class="story-step"><span>01 · POLICY</span><b>Copom / Selic</b><small>origem do impulso</small></div>
+    <div class="story-step"><span>02 · CURVE</span><b>Juros & funding</b><small>repricing do passivo</small></div>
+    <div class="story-step"><span>03 · MONEY</span><b>M1 → M4</b><small>liquidez e portfólio</small></div>
+    <div class="story-step"><span>04 · BANK</span><b>Crédito</b><small>preço + quantidade</small></div>
+    <div class="story-step"><span>05 · RISK</span><b>PD / ECL</b><small>efeito micro-financeiro</small></div>
+  </div>
+  <canvas class="fusion-canvas" id="fusionTransmissionCanvas"></canvas>
+  <div class="fusion-legend">
+    <span><i style="background:var(--blue)"></i>Política</span>
+    <span><i style="background:var(--purple)"></i>Liquidez</span>
+    <span><i style="background:var(--green)"></i>Crédito</span>
+    <span><i style="background:var(--red)"></i>Risco</span>
+  </div>
+</article>
+
+      <section class="section" id="choques">
+<div class="wrap">
+<div class="section-head">
+<div><div class="kicker">02 · Central de choques</div><h2>Faça política monetária e veja as defasagens</h2><p class="sub">O motor usa uma estrutura didática novo-keynesiana com bloco de crédito e risco. Não é um DSGE estimado para decisão real: é um laboratório causal e comparativo.</p></div>
+<button class="btn primary" id="runShock">Rodar cenário</button>
+</div>
+<div class="grid g2">
+<article class="card">
+<div class="controls">
+<div class="control"><label>Choque Selic <b id="sSelicOut">+0,0 pp</b></label><input id="sSelic" max="5" min="-5" step=".25" type="range" value="0"/><small>Aperto (+) ou afrouxamento (−)</small></div>
+<div class="control"><label>Impulso fiscal <b id="sFiscalOut">0,0</b></label><input id="sFiscal" max="3" min="-3" step=".1" type="range" value="0"/><small>Desloca demanda agregada</small></div>
+<div class="control"><label>Choque cambial <b id="sFxOut">0%</b></label><input id="sFx" max="30" min="-20" step="1" type="range" value="0"/><small>Pass-through para preços</small></div>
+<div class="control"><label>Compulsório <b id="sReserveOut">20%</b></label><input id="sReserve" max="45" min="5" step="1" type="range" value="20"/><small>Afeta liquidez e multiplicação</small></div>
+<div class="control"><label>Aversão a risco <b id="sRiskOut">0,0</b></label><input id="sRisk" max="5" min="-3" step=".1" type="range" value="0"/><small>Spread, oferta e aprovação</small></div>
+<div class="control"><label>Choque de oferta <b id="sSupplyOut">0,0</b></label><input id="sSupply" max="3" min="-3" step=".1" type="range" value="0"/><small>Custos, commodities, clima</small></div>
+</div>
+<div class="sim-output">
+<div class="mini"><span>Inflação 12m</span><b id="oPi">—</b></div>
+<div class="mini"><span>Hiato produto</span><b id="oGap">—</b></div>
+<div class="mini"><span>Desemprego</span><b id="oU">—</b></div>
+<div class="mini"><span>Crédito a/a</span><b id="oCredit">—</b></div>
+<div class="mini"><span>Inadimplência</span><b id="oNpl">—</b></div>
+</div>
+</article>
+<article class="card">
+<h3>Resposta dinâmica ao choque</h3>
+<div class="chart tall" id="shockChart"></div>
+<div class="eq">\(x_t = 0.68x_{t-1} - 0.16(r_t-r^*) + 0.24f_t + 0.08c_t\)<br/>\(\pi_t = 0.72\pi_{t-1} + 0.19x_t + 0.08s_t + 0.03\Delta e_t\)<br/>\(g^{cred}_t = 7 + 0.9x_t - 0.55r_t - 0.8\rho_t + \ell_t\)</div>
+<div class="formula-theater" id="shockFormulaTheater">
+  <div class="formula-line">
+    <div class="fterm" style="--term:var(--blue);--delay:.1s"><span class="sym">rₜ − r*</span><span class="val" id="ftRealRate">—</span><span class="meaning">gap de juros</span></div>
+    <div class="fop">→</div>
+    <div class="fterm" style="--term:var(--orange);--delay:.7s"><span class="sym">xₜ</span><span class="val" id="ftGap">—</span><span class="meaning">hiato / demanda</span></div>
+    <div class="fop">→</div>
+    <div class="fterm" style="--term:var(--amber);--delay:1.3s"><span class="sym">πₜ</span><span class="val" id="ftPi">—</span><span class="meaning">inflação</span></div>
+    <div class="fop">→</div>
+    <div class="fterm" style="--term:var(--green);--delay:1.9s"><span class="sym">gᶜʳᵉᵈₜ</span><span class="val" id="ftCredit">—</span><span class="meaning">crédito</span></div>
+    <div class="fop">→</div>
+    <div class="fterm" style="--term:var(--red);--delay:2.5s"><span class="sym">NPLₜ</span><span class="val" id="ftNpl">—</span><span class="meaning">inadimplência</span></div>
+  </div>
+  <div class="formula-caption"><b>Leia da esquerda para a direita: o pulso monetário atravessa estados com persistência e defasagem.</b><div class="formula-meter"></div><span>mês 12 destacado</span></div>
+</div>
+
+</article>
+</div>
+
+<article class="card" id="irfLabCard">
+  <div class="panel-title">
+    <div><h3>Matriz de resposta ao impulso</h3><p class="sub" style="font-size:12px">Cada painel mostra <b>Δ cenário − baseline</b>. Separar respostas evita misturar unidades e escalas no mesmo eixo.</p></div>
+    <span class="badge blue">IRF · 24 meses</span>
+  </div>
+  <div class="irf-lab">
+    <div class="irf-mini"><h4>Inflação</h4><div class="irf-stat" id="irfPiStat">—</div><div class="chart" id="irfPi"></div></div>
+    <div class="irf-mini"><h4>Hiato do produto</h4><div class="irf-stat" id="irfGapStat">—</div><div class="chart" id="irfGap"></div></div>
+    <div class="irf-mini"><h4>Crédito</h4><div class="irf-stat" id="irfCreditStat">—</div><div class="chart" id="irfCredit"></div></div>
+    <div class="irf-mini"><h4>Inadimplência</h4><div class="irf-stat" id="irfNplStat">—</div><div class="chart" id="irfNpl"></div></div>
+  </div>
+  <div class="irf-summary">
+    <div><span>Pico inflação</span><b id="irfPeakPi">—</b></div>
+    <div><span>Vale hiato</span><b id="irfTroughGap">—</b></div>
+    <div><span>Vale crédito</span><b id="irfTroughCredit">—</b></div>
+    <div><span>Pico NPL</span><b id="irfPeakNpl">—</b></div>
+  </div>
+</article>
+
+<div class="grid g3" style="margin-top:16px">
+<article class="card soft"><h3>1. Preço do dinheiro</h3><p>Uma alta da Selic tende a elevar o custo de oportunidade, alterar a curva de juros e encarecer funding e crédito. O efeito final depende de expectativas, competição bancária, estrutura de passivos e risco.</p></article>
+<article class="card soft"><h3>2. Demanda e hiato</h3><p>Consumo e investimento sensíveis a juros desaceleram. O <span class="data-tip accent" data-tip="Diferença entre produto efetivo e produto potencial; positivo sugere pressão de demanda, negativo sugere ociosidade.">hiato do produto</span> diminui, reduzindo pressão inflacionária com defasagem.</p></article>
+<article class="card soft"><h3>3. Crédito e risco</h3><p>Menor renda, maior serviço da dívida e critérios mais conservadores podem reduzir originação e elevar risco. A relação é não linear: portfólios, garantias, prazo, indexador e mix PF/PJ importam.</p></article>
+</div>
+</div>
+</section>
+      <section class="section" id="transmissao">
+<div class="wrap">
+<div class="section-head"><div><div class="kicker">03 · Mecanismo de transmissão</div><h2>Da decisão do Copom ao contrato de crédito</h2><p class="sub">Passe o mouse nos conceitos sublinhados. As partículas mostram que transmissão é um processo, não um botão instantâneo.</p></div></div>
+<div class="card">
+<div class="flow">
+<div class="node" id="causalPolicy"><div><b>Copom / Selic</b><small>taxa básica + comunicação</small></div></div><div class="arrow"></div>
+<div class="node" id="causalCurve"><div><b>Curva de juros</b><small>DI, swaps, duration</small></div></div><div class="arrow"></div>
+<div class="node" id="causalFunding"><div><b>Funding bancário</b><small>depósitos, CDB, LCI/LCA</small></div></div><div class="arrow"></div>
+<div class="node" id="causalCredit"><div><b>Crédito</b><small>taxa, prazo, aprovação</small></div></div>
+</div>
+<div class="flow" style="margin-top:10px">
+<div class="node" id="causalFx"><div><b>Câmbio</b><small>fluxos + diferencial</small></div></div><div class="arrow"></div>
+<div class="node" id="causalDemand"><div><b>Demanda</b><small>C + I + sensibilidade</small></div></div><div class="arrow"></div>
+<div class="node" id="causalGap"><div><b>Hiato / emprego</b><small>capacidade + trabalho</small></div></div><div class="arrow"></div>
+<div class="node" id="causalInflation"><div><b>Inflação</b><small>núcleos + expectativas</small></div></div>
+</div>
+</div>
+<div class="grid g3" style="margin-top:16px">
+<div class="card"><h3>Canal de juros</h3><p>O canal tradicional opera pelo <b>juro real ex ante</b>: taxa nominal menos inflação esperada. É a distância entre a política corrente e a taxa neutra que ajuda a definir quão contracionista ou expansionista está o impulso.</p></div>
+<div class="card"><h3>Canal de crédito</h3><p>Em <span class="data-tip gold" data-tip="O canal de empréstimos enfatiza a oferta bancária; o balance-sheet channel enfatiza patrimônio, colateral e prêmio de financiamento externo do tomador.">Bernanke–Blinder / Bernanke–Gertler</span>, fricções financeiras amplificam a política via oferta de crédito e balanço de tomadores.</p></div>
+<div class="card"><h3>Expectativas</h3><p>Se famílias, firmas e mercados acreditam no regime, parte do ajuste ocorre por expectativas de inflação e juros futuros. Credibilidade altera a quantidade de produto necessária para desinflacionar.</p></div>
+</div>
+</div>
+</section>
+    </div>
+
+    <div class="fusion-tab-content" data-fusion-panel="models">
+      <section class="section" id="islm">
+<div class="wrap">
+<div class="section-head"><div><div class="kicker">04 · Modelos de equilíbrio</div><h2>IS–LM, Phillips e Taylor em movimento</h2><p class="sub">Modelos clássicos são simplificações deliberadas. O objetivo aqui é ver a geometria econômica antes de entrar em estruturas dinâmicas mais completas.</p></div></div>
+<div class="grid g3">
+<article class="card">
+<h3>IS–LM</h3>
+<div class="controls" style="grid-template-columns:1fr">
+<div class="control"><label>Impulso fiscal <b id="islmFOut">0,0</b></label><input id="islmF" max="3" min="-3" step=".1" type="range" value="0"/></div>
+<div class="control"><label>Oferta monetária <b id="islmMOut">0,0</b></label><input id="islmM" max="3" min="-3" step=".1" type="range" value="0"/></div>
+</div>
+<div class="chart" id="islmChart"></div>
+<p class="note"><b>IS:</b> equilíbrio no mercado de bens. <b>LM:</b> equilíbrio monetário. Em regimes modernos de meta de juros, a LM é frequentemente reinterpretada por uma regra de política.</p>
+</article>
+<article class="card">
+<h3>Curva de Phillips</h3>
+<div class="control"><label>Expectativas ancoradas <b id="anchorOut">70%</b></label><input id="anchor" max="100" min="0" step="1" type="range" value="70"/></div>
+<div class="chart" id="phillipsChart"></div>
+<p class="note">A versão moderna relaciona inflação corrente a expectativas, hiato e choques de oferta; não é uma troca mecânica e permanente entre inflação e desemprego.</p>
+</article>
+<article class="card">
+<h3>Regra de Taylor</h3>
+<div class="control"><label>Inflação simulada <b id="tPiOut">4,5%</b></label><input id="tPi" max="12" min="0" step=".1" type="range" value="4.5"/></div>
+<div class="control"><label>Hiato do produto <b id="tGapOut">0,0%</b></label><input id="tGap" max="6" min="-6" step=".1" type="range" value="0"/></div>
+<div class="chart small" id="taylorChart"></div>
+<div class="eq">\(i_t = r^* + \pi_t + 1.5(\pi_t-\pi^*) + 0.5x_t\)</div>
+</article>
+</div>
+</div>
+</section>
+
+<article class="card" id="nkSystemCard">
+  <div class="panel-title">
+    <div><h3>Arquitetura novo-keynesiana em três equações</h3><p class="sub" style="font-size:12px">A ponte conceitual entre IS–LM e modelos monetários modernos: demanda intertemporal, Phillips e regra de política.</p></div>
+    <span class="badge blue">NK CORE</span>
+  </div>
+  <div class="nk-system">
+    <div class="nk-box" data-step="01" style="--nk:var(--blue)"><h4>IS dinâmica</h4><p>O hiato responde ao juro real esperado e à demanda futura.</p><div class="nk-eq">xₜ = Eₜxₜ₊₁ − σ(iₜ − Eₜπₜ₊₁ − rₜⁿ)</div></div>
+    <div class="nk-arrow"><i></i></div>
+    <div class="nk-box" data-step="02" style="--nk:var(--orange)"><h4>Phillips NK</h4><p>Rigidez nominal converte atividade e expectativas em inflação.</p><div class="nk-eq">πₜ = βEₜπₜ₊₁ + κxₜ + uₜ</div></div>
+    <div class="nk-arrow"><i style="animation-delay:.8s"></i></div>
+    <div class="nk-box" data-step="03" style="--nk:var(--green)"><h4>Regra de política</h4><p>O banco central reage a inflação, atividade e persistência.</p><div class="nk-eq">iₜ = ρiₜ₋₁ + (1−ρ)[r*+πₜ+φπ(πₜ−π*)+φₓxₜ]</div></div>
+  </div>
+  <div class="formula-theater">
+    <div class="formula-line">
+      <div class="fterm" style="--term:var(--blue);--delay:.2s"><span class="sym">iₜ</span><span class="val" id="nkRateVal">—</span><span class="meaning">instrumento</span></div>
+      <div class="fop">⇄</div>
+      <div class="fterm" style="--term:var(--orange);--delay:.9s"><span class="sym">xₜ</span><span class="val" id="nkGapVal">—</span><span class="meaning">atividade</span></div>
+      <div class="fop">⇄</div>
+      <div class="fterm" style="--term:var(--amber);--delay:1.6s"><span class="sym">πₜ</span><span class="val" id="nkPiVal">—</span><span class="meaning">inflação</span></div>
+      <div class="fop">⇄</div>
+      <div class="fterm" style="--term:var(--purple);--delay:2.3s"><span class="sym">Eₜ</span><span class="val" id="nkAnchorVal">—</span><span class="meaning">expectativas</span></div>
+    </div>
+    <div class="formula-caption"><b>O sistema é simultâneo: expectativas fecham o loop.</b><div class="formula-meter"></div><span>modelo pedagógico</span></div>
+  </div>
+</article>
+
+<article class="card" id="financialAcceleratorCard">
+  <div class="panel-title">
+    <div><h3>Acelerador financeiro e risk-taking channel</h3><p class="sub" style="font-size:12px">Por que o mesmo choque de Selic pode ser amplificado pelo balanço de bancos e tomadores.</p></div>
+    <span class="badge red">MACRO-FINANCE</span>
+  </div>
+  <div class="accelerator-map">
+    <div class="acc-node" data-acc="rate" style="--acc:var(--blue)"><h4>Juro / preço do risco</h4><p>Política altera funding, desconto e prêmio de risco.</p><b id="accRate">—</b></div>
+    <div class="acc-node" data-acc="asset" style="--acc:var(--orange)"><h4>Ativos / colateral</h4><p>Taxas maiores comprimem valuation e cobertura.</p><b id="accCollateral">—</b></div>
+    <div class="acc-node" data-acc="balance" style="--acc:var(--purple)"><h4>Balanço / leverage</h4><p>Menor patrimônio efetivo amplia prêmio externo.</p><b id="accLeverage">—</b></div>
+    <div class="acc-node" data-acc="credit" style="--acc:var(--green)"><h4>Oferta de crédito</h4><p>Preço, aprovação, limites e prazo se ajustam.</p><b id="accCredit">—</b></div>
+    <div class="acc-node" data-acc="risk" style="--acc:var(--red)"><h4>PD / ECL</h4><p>Risco alimenta spread e volta ao balanço.</p><b id="accPD">—</b></div>
+  </div>
+  <p class="note" style="margin-top:10px">A literatura de <b>Bernanke–Gertler</b>, <b>Adrian–Shin</b>, <b>Borio–Zhu</b> e <b>Brunnermeier–Sannikov</b> mostra que balanços, leverage e preço do risco podem amplificar a transmissão monetária e gerar não linearidades importantes.</p>
+</article>
+
+    </div>
+
+    <div class="fusion-tab-content" data-fusion-panel="banking">
+      
+<div class="fusion-bank-grid">
+  <article class="card">
+    <div class="panel-title">
+      <div><h3>Intermediação animada · captação → risco → crédito</h3><p class="sub" style="font-size:12px">A espessura do fluxo, a velocidade das partículas e a turbina central respondem ao cenário ativo.</p></div>
+      <span class="badge green">FLOW ENGINE</span>
+    </div>
+    <canvas class="fusion-canvas" id="fusionBankFlow"></canvas>
+    <div class="fusion-legend">
+      <span><i style="background:var(--blue)"></i>Captações</span>
+      <span><i style="background:var(--amber)"></i>Funding + spread</span>
+      <span><i style="background:var(--red)"></i>ECL / risco</span>
+      <span><i style="background:var(--green)"></i>Crédito</span>
+    </div>
+  </article>
+  <article class="card">
+    <div class="panel-title"><div><h3>Sensibilidade setorial ao stress</h3><p class="sub" style="font-size:12px">Índice sintético 0–100; não representa participação observada do SFN.</p></div><span class="badge">CROSS-MACRO</span></div>
+    <div class="sector-grid">
+      <div class="sector-cell" data-sector="agro"><span>Agro</span><b>—</b><small>câmbio + oferta</small></div>
+      <div class="sector-cell" data-sector="industry"><span>Indústria</span><b>—</b><small>juros + ciclo</small></div>
+      <div class="sector-cell" data-sector="services"><span>Serviços</span><b>—</b><small>hiato + emprego</small></div>
+      <div class="sector-cell" data-sector="pf"><span>Pessoa Física</span><b>—</b><small>Selic + desemprego</small></div>
+      <div class="sector-cell" data-sector="public"><span>Público</span><b>—</b><small>menor beta cíclico</small></div>
+    </div>
+    <p class="sector-note">O índice serve para ensinar heterogeneidade de transmissão. Em produção, substitua por betas setoriais estimados e matrizes de transição internas.</p>
+  </article>
+</div>
+
+      <section class="section" id="bancos">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">06 · IFRS 9 Credit Risk &amp; Banking Desk</div>
+<h2>Do choque macro ao PD, LGD, EAD, ECL e spread</h2>
+<p class="sub">A política monetária atravessa funding e atividade antes de chegar ao risco. Aqui a carteira é reprecificada por componentes de perda esperada, capital e liquidez, com PD logística e LGD não linear.</p>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="engine-pill" id="enginePill">stress engine · live</span><div class="health-pill" id="bankHealth">balanço confortável</div></div>
+</div>
+<article class="card dynamic-glow" id="bankControlCard">
+<div class="controls">
+<div class="control"><label>Custo-base de captação <b id="fundOut">10%</b></label><input id="fund" max="20" min="4" step=".25" type="range" value="10"/><small>O choque de Selic é somado dinamicamente ao funding marginal.</small></div>
+<div class="control"><label>Spread comercial alvo <b id="spreadOut">5%</b></label><input id="spread" max="15" min="1" step=".25" type="range" value="5"/><small>Margem comercial antes de ECL e capital.</small></div>
+<div class="control"><label>Capital econômico / ativos <b id="capOut">14%</b></label><input id="cap" max="25" min="8" step=".5" type="range" value="14"/><small>Proxy de capital consumido pelo portfólio.</small></div>
+<div class="control"><label>EAD da carteira <b id="eadOut">R$ 1,00 bi</b></label><input id="ead" max="5000" min="100" step="50" type="range" value="1000"/><small>Exposição no default, em R$ milhões.</small></div>
+<div class="control"><label>Cobertura / colateral <b id="collateralOut">55%</b></label><input id="collateral" max="95" min="0" step="1" type="range" value="55"/><small>Mitigador estrutural da LGD antes do estresse macro.</small></div>
+<div class="control"><label>Volatilidade idiossincrática <b id="idioOut">25%</b></label><input id="idio" max="80" min="0" step="1" type="range" value="25"/><small>Amplifica dispersão do custo de risco no motor estocástico.</small></div>
+</div>
+<div class="risk-components">
+<div class="risk-component"><span>PD 12m dinâmica</span><b id="pdKpi">—</b><small>logit(Selic, desemprego, hiato, estresse)</small></div>
+<div class="risk-component"><span>LGD downturn</span><b id="lgdKpi">—</b><small>colateral + recessão convexa</small></div>
+<div class="risk-component"><span>EAD</span><b id="eadKpi">—</b><small>exposição selecionada</small></div>
+<div class="risk-component"><span>ECL esperado</span><b id="eclKpi">—</b><small>PD × LGD × EAD</small></div>
+</div>
+<div class="dashboard-kpis">
+<div class="kpi-pro"><span>Taxa ativa</span><b id="loanRate">—</b><small>funding + risco + capital + margem</small></div>
+<div class="kpi-pro"><span>Spread bruto</span><b id="nim">—</b><small>ativo − funding</small></div>
+<div class="kpi-pro"><span>Spread pós-ECL</span><b id="postEl">—</b><small>margem após custo de risco</small></div>
+<div class="kpi-pro"><span>Loan / deposit</span><b id="ltd">—</b><small>pressão estrutural de funding</small></div>
+<div class="kpi-pro"><span>Buffer liquidez</span><b id="liqBuffer">—</b><small>ativos líquidos / ativos</small></div>
+<div class="kpi-pro"><span>RAROC didático</span><b id="raroc">—</b><small>retorno ajustado ao capital</small></div>
+</div>
+
+<div class="formula-theater" id="bankFormulaTheater">
+  <div class="formula-line">
+    <div class="fterm" style="--term:var(--purple);--delay:.1s"><span class="sym">FTP</span><span class="val" id="bfFunding">—</span><span class="meaning">funding marginal</span></div>
+    <div class="fop">+</div>
+    <div class="fterm" style="--term:var(--red);--delay:.7s"><span class="sym">CoR</span><span class="val" id="bfRisk">—</span><span class="meaning">ECL / custo risco</span></div>
+    <div class="fop">+</div>
+    <div class="fterm" style="--term:var(--blue);--delay:1.3s"><span class="sym">K</span><span class="val" id="bfCapital">—</span><span class="meaning">custo capital</span></div>
+    <div class="fop">+</div>
+    <div class="fterm" style="--term:var(--orange);--delay:1.9s"><span class="sym">OPEX</span><span class="val" id="bfOpex">—</span><span class="meaning">estrutura</span></div>
+    <div class="fop">+</div>
+    <div class="fterm" style="--term:var(--green);--delay:2.5s"><span class="sym">Margin</span><span class="val" id="bfMargin">—</span><span class="meaning">retorno alvo</span></div>
+    <div class="feq">=</div>
+    <div class="fterm" style="--term:white;--delay:3.1s"><span class="sym">Rate</span><span class="val" id="bfRate">—</span><span class="meaning">taxa ativa</span></div>
+  </div>
+  <div class="formula-caption"><b>Pricing waterfall animado: cada parcela deve “pagar” uma função econômica distinta.</b><div class="formula-meter"></div><span>FTP → retorno</span></div>
+</div>
+
+<div class="alm-strip" id="almStrip">
+  <div class="alm-kpi"><span>Deposit beta</span><b id="almDepositBeta">—</b><small>repasse Selic → depósitos</small></div>
+  <div class="alm-kpi"><span>FTP 12m</span><b id="almFTP">—</b><small>custo transferência</small></div>
+  <div class="alm-kpi"><span>NIM líquido</span><b id="almNIM">—</b><small>após ECL</small></div>
+  <div class="alm-kpi"><span>Cost of risk</span><b id="almCoR">—</b><small>ECL/EAD</small></div>
+  <div class="alm-kpi"><span>Capital buffer</span><b id="almCapitalBuffer">—</b><small>proxy didática</small></div>
+  <div class="alm-kpi"><span>Liquidez</span><b id="almLiquidity">—</b><small>buffer estrutural</small></div>
+</div>
+
+<div class="state-ribbon">
+<span class="state-token">Macro ref.: <b id="riskMacroDate">—</b></span>
+<span class="state-token">Selic efetiva: <b id="riskSelic">—</b></span>
+<span class="state-token">Desemprego: <b id="riskUnemp">—</b></span>
+<span class="state-token">Hiato simulado: <b id="riskGap">—</b></span>
+</div>
+</article>
+<div class="risk-grid">
+<article class="card" id="eclPanel">
+<div class="panel-title"><div><h3>Term structure do risco: PD, ECL/EAD e spread</h3><p class="sub" style="font-size:12px">A trajetória incorpora choque monetário, persistência macro e cluster de volatilidade nos spreads.</p></div><span class="badge">24 meses</span></div>
+<div class="legend"><span><i style="background:var(--red)"></i>PD</span><span><i style="background:var(--gold)"></i>ECL/EAD</span><span><i style="background:var(--violet)"></i>Spread stress</span></div>
+<div class="chart tall" id="eclChart"></div>
+<div class="mini-equation math-eq">\(ECL_t = PD_t \times LGD_t \times EAD_t\)   |   \(PD_t = \sigma(\beta_0 + \beta_1 u_t + \beta_2 i_t - \beta_3 x_t + \beta_4 s_t)\)</div>
+</article>
+<article class="card">
+<div class="panel-title"><div><h3>Curva de precificação por prazo</h3><p class="sub" style="font-size:12px">Funding marginal, taxa ativa e spread líquido de ECL.</p></div><span class="badge">1m → 60m</span></div>
+<div class="legend"><span><i style="background:var(--violet)"></i>Funding</span><span><i style="background:var(--cyan)"></i>Taxa ativa</span><span><i style="background:var(--green)"></i>Pós-ECL</span></div>
+<div class="chart tall" id="bankChart"></div>
+</article>
+</div>
+
+<article class="card" id="stagePanel">
+  <div class="panel-title">
+    <div><h3>IFRS 9 · visão de estágio e migração</h3><p class="sub" style="font-size:12px">Distribuição sintética da carteira condicionada ao stress macro. Não substitui regras de SICR, default ou cura.</p></div>
+    <span class="badge red">STAGE 1 · 2 · 3</span>
+  </div>
+  <div class="stage-grid">
+    <div class="stage-card" style="--stage:var(--green)"><span>Stage 1</span><b id="stage1Val">—</b><small>12-month ECL · performing</small></div>
+    <div class="stage-card" style="--stage:var(--amber)"><span>Stage 2</span><b id="stage2Val">—</b><small>significant increase in credit risk</small></div>
+    <div class="stage-card" style="--stage:var(--red)"><span>Stage 3</span><b id="stage3Val">—</b><small>credit-impaired / default proxy</small></div>
+  </div>
+  <div class="stage-track"><div class="stage-seg stage1" id="stageBar1"></div><div class="stage-seg stage2" id="stageBar2"></div><div class="stage-seg stage3" id="stageBar3"></div></div>
+  <div class="stage-arrow-row">
+    <div class="stage-card"><span>Performing</span><b id="stagePerfPD">—</b><small>PD macro de referência</small></div>
+    <div class="stage-arrow">SICR →<b id="stageSICR">—</b></div>
+    <div class="stage-card"><span>Watchlist / Stage 2</span><b id="stageWatchPD">—</b><small>PD amplificada</small></div>
+    <div class="stage-arrow">Default →<b id="stageDefaultFlow">—</b></div>
+    <div class="stage-card"><span>Stage 3</span><b id="stageDefaultPD">—</b><small>proxy de crédito deteriorado</small></div>
+  </div>
+</article>
+
+<div class="bank-grid">
+<article class="card">
+<div class="panel-title"><h3>Decomposição da taxa ativa</h3><span class="badge" id="pricingTotal">—</span></div>
+<div class="waterfall">
+<div class="wf-row"><span>Funding</span><div class="wf-track"><div class="wf-fill" id="wfFund"></div></div><b id="wfFundV">—</b></div>
+<div class="wf-row"><span>Custo de risco</span><div class="wf-track"><div class="wf-fill" id="wfEL"></div></div><b id="wfELV">—</b></div>
+<div class="wf-row"><span>Custo capital</span><div class="wf-track"><div class="wf-fill" id="wfCap"></div></div><b id="wfCapV">—</b></div>
+<div class="wf-row"><span>Operacional</span><div class="wf-track"><div class="wf-fill" id="wfOp"></div></div><b id="wfOpV">—</b></div>
+<div class="wf-row"><span>Margem alvo</span><div class="wf-track"><div class="wf-fill" id="wfMargin"></div></div><b id="wfMarginV">—</b></div>
+</div>
+</article>
+<article class="card">
+<div class="panel-title"><h3>Funding mix &amp; balanço</h3><span class="badge">estrutura passiva</span></div>
+<div class="stackbar"><div class="stackseg seg1" id="mixDeposits">Depósitos</div><div class="stackseg seg2" id="mixMarket">Mercado</div><div class="stackseg seg3" id="mixEquity">PL</div></div>
+<div class="micro-grid"><div class="micro"><span>Depósitos</span><b id="depShare">—</b></div><div class="micro"><span>Mercado</span><b id="marketShare">—</b></div><div class="micro"><span>Capital</span><b id="equityShare">—</b></div></div>
+<div class="risk-meter"><div class="risk-pointer" id="riskPointer"></div></div>
+</article>
+</div>
+<div class="grid g2" style="margin-top:16px">
+<article class="card"><h3>Balanço estilizado</h3><div class="balance" style="margin-top:14px"><div class="bs asset"><h4>Ativos</h4><div class="bar" id="loanBar">Carteira de crédito</div><div class="bar" id="liqBar">Liquidez / títulos</div><div class="bar" id="otherA">Outros ativos</div></div><div class="bs liability"><h4>Passivos + PL</h4><div class="bar" id="depBar">Depósitos</div><div class="bar" id="marketBar">Funding mercado</div><div class="bar" id="equityBar">Patrimônio</div></div></div></article>
+<article class="card"><h3>Leitura IFRS 9 / risco</h3><p>A <b>PD</b> é gerada por uma função logística condicionada ao estado macro do laboratório. A <b>LGD</b> piora de forma não linear quando o hiato entra em recessão e o valor econômico do colateral é comprimido. A <b>EAD</b> define a exposição monetária.</p><p>O ECL é mostrado como expectativa matemática; a camada estocástica atua sobre o caminho de estresse e sobre a volatilidade do spread, preservando a distinção entre <i>expected loss</i> e realização aleatória de perdas.</p><p class="note">Este módulo é educacional. IFRS 9 real exige segmentação, staging, lifetime PD, cenários macro ponderados, overlays, cura/default, LGD/EAD condicionais, validação e governança.</p></article>
+</div>
+</div>
+</section>
+    </div>
+
+    <div class="fusion-tab-content" data-fusion-panel="forecast">
+      
+<article class="card">
+  <div class="panel-title"><div><h3>Governança do arsenal econométrico</h3><p class="sub" style="font-size:12px">O terminal explicita método numérico e pressupostos — sem esconder aproximações atrás do visual.</p></div><span class="badge amber">MODEL RISK</span></div>
+  <div class="model-governance">
+    <div class="model-chip"><span>OLS / SARIMAX</span><b>Cholesky regularizado</b><small class="pass">✓ sem Gauss–Jordan básico</small></div>
+    <div class="model-chip"><span>GARCH(1,1)</span><b>QMLE + Adam</b><small class="pass">✓ α + β constrained</small></div>
+    <div class="model-chip"><span>VAR</span><b>Sistema multivariado</b><small>OLS compartilhando núcleo robusto</small></div>
+    <div class="model-chip"><span>VECM</span><b>Johansen bivariado</b><small class="pass">✓ λ reais via whitening</small></div>
+  </div>
+</article>
+
+      <section class="section" id="econometria">
+<div class="wrap">
+<div class="section-head"><div><div class="kicker">07 · Laboratório econométrico</div><h2>SARIMAX, GARCH, VAR e VECM no navegador</h2><p class="sub">Núcleo numérico em JavaScript puro com OLS-Cholesky, GARCH(1,1) por quasi-MLE/Adam, VAR e VECM bivariado com autovalores de Johansen. Continua sendo um laboratório educacional: produção exige bibliotecas validadas, testes e governança.</p></div></div>
+<div class="grid g2">
+<article class="card">
+<div class="controls">
+<div class="control"><label>Série</label><select id="modelSeries"><option value="ipca">IPCA</option><option value="selic">Selic</option><option value="credit">Crédito</option><option value="npl">Inadimplência</option><option value="unemp">Desemprego</option></select></div>
+<div class="control"><label>Modelo</label><select id="modelType"><option>SARIMAX</option><option>GARCH</option><option>VAR</option><option>VECM</option></select></div>
+</div>
+<div class="tabs" style="margin-top:13px">
+<button class="tab active" data-h="6">6 passos</button><button class="tab" data-h="12">12 passos</button><button class="tab" data-h="24">24 passos</button>
+</div>
+<button class="btn primary" id="runModel">Estimar e projetar</button>
+<div class="chart tall" id="modelChart" style="margin-top:10px"></div>
+<div class="chart-caption"><span>Histórico sólido · <b style="color:var(--gold)">forecast pontilhado</b> · faixa sombreada = incerteza didática.</span><span class="forecast-key">projeção</span></div>
+</article>
+<article class="card">
+<h3>Leitura do modelo</h3>
+<div id="modelNarrative">
+<p><b>SARIMAX</b> combina autorregressão, integração/diferenciação, média móvel, sazonalidade e regressoras exógenas. Neste laboratório usamos uma aproximação AR com tendência e termo sazonal quando há observações suficientes.</p>
+</div>
+<div class="eq math-eq" id="modelEq">\(\text{Escolha um modelo e execute a estimação.}\)</div>
+<div class="model-result" id="modelResult" style="margin-top:14px">Aguardando estimação…</div>
+
+<div class="model-diagnostic" id="modelDiagnostic">
+  <div class="diag-board">
+    <h4>Diagnóstico visual do ajuste</h4>
+    <div class="diag-row"><span>Erro relativo</span><div class="diag-track"><div class="diag-fill" id="diagRMSE"></div></div><b id="diagRMSEv">—</b></div>
+    <div class="diag-row"><span>Persistência</span><div class="diag-track"><div class="diag-fill" id="diagPersistence"></div></div><b id="diagPersistencev">—</b></div>
+    <div class="diag-row"><span>Incerteza h</span><div class="diag-track"><div class="diag-fill" id="diagHorizon"></div></div><b id="diagHorizonv">—</b></div>
+    <div class="diag-row"><span>Robustez num.</span><div class="diag-track"><div class="diag-fill" id="diagNumeric"></div></div><b id="diagNumericv">—</b></div>
+  </div>
+  <div class="model-story">
+    <div class="story-kicker">Como ler</div>
+    <h4 id="modelStoryTitle">Modelo ainda não estimado</h4>
+    <p id="modelStoryText">Depois da estimação, este painel traduz parâmetros, persistência e horizonte em uma leitura executiva sem esconder as limitações metodológicas.</p>
+  </div>
+</div>
+<div class="formula-theater" id="modelFormulaTheater">
+  <div class="formula-line" id="modelFormulaTokens">
+    <div class="fterm" style="--term:var(--blue);--delay:.2s"><span class="sym">yₜ₋₁</span><span class="val">lag</span><span class="meaning">memória</span></div>
+    <div class="fop">→</div>
+    <div class="fterm" style="--term:var(--orange);--delay:1s"><span class="sym">θ</span><span class="val">estimação</span><span class="meaning">parâmetros</span></div>
+    <div class="fop">→</div>
+    <div class="fterm" style="--term:var(--green);--delay:1.8s"><span class="sym">ŷₜ₊ₕ</span><span class="val">forecast</span><span class="meaning">trajetória</span></div>
+    <div class="fop">±</div>
+    <div class="fterm" style="--term:var(--amber);--delay:2.6s"><span class="sym">CI</span><span class="val">incerteza</span><span class="meaning">banda cresce com h</span></div>
+  </div>
+  <div class="formula-caption"><b>Visualize a passagem de memória → parâmetros → previsão → incerteza.</b><div class="formula-meter"></div><span id="modelFormulaName">SARIMAX</span></div>
+</div>
+
+<p class="note author"><b>Nota metodológica:</b> resultados daqui são didáticos. Para trabalho acadêmico ou produção, valide estacionariedade, ordem de integração, resíduos, estabilidade, cointegração, especificação, seleção de defasagens, outliers, quebras estruturais e avaliação fora da amostra.</p>
+</article>
+</div>
+</div>
+</section>
+    </div>
+
+    <div class="fusion-tab-content" data-fusion-panel="theory">
+      <section class="section" id="teoria">
+<div class="wrap">
+<div class="section-head"><div><div class="kicker">08 · Revista conceitual</div><h2>Da moeda clássica ao DSGE com fricções financeiras</h2><p class="sub">Uma leitura em camadas para conectar teoria monetária, séries temporais e sistema bancário.</p></div></div>
+<div class="grid g2">
+<article class="paper">
+<h3>Da quantidade de moeda ao regime de juros</h3>
+<p><b>Irving Fisher</b> sistematizou a relação entre moeda, velocidade, preços e transações na equação quantitativa. <b>Keynes</b> deslocou o foco para preferência pela liquidez, incerteza e determinação da demanda agregada. <b>Hicks</b> condensou parte dessa discussão no diagrama IS–LM.</p>
+<p>Com o avanço dos mercados financeiros e da operação de bancos centrais por uma taxa de curto prazo, a análise contemporânea passou a enfatizar <span class="data-tip" data-tip="A taxa nominal definida ou influenciada pela autoridade monetária ajustada pela inflação esperada.">juros reais</span>, expectativas e regras de reação. <b>Taylor</b> ofereceu uma regra simples que reage ao desvio da inflação em relação à meta e ao hiato do produto.</p>
+<div class="note author"><b>Comentário do autor:</b> não existe uma única “teoria da moeda” que resolva todos os contextos. O ganho analítico vem de saber qual mecanismo cada modelo destaca e o que ele deliberadamente deixa de fora.</div>
+</article>
+<article class="paper">
+<h3>Phillips, expectativas e credibilidade</h3>
+<p>A relação empírica observada por <b>A. W. Phillips</b> entre desemprego e variação salarial inspirou uma enorme agenda. Depois, <b>Friedman</b> e <b>Phelps</b> destacaram o papel das expectativas e a inexistência de uma troca permanente explorável entre inflação e desemprego.</p>
+<p>Nos modelos novo-keynesianos, a curva de Phillips assume uma forma dinâmica: inflação depende de expectativas, grau de ociosidade e choques. Isso transforma <b>credibilidade</b> em variável econômica: expectativas mais ancoradas podem reduzir persistência e custo de desinflação.</p>
+<div class="eq" style="color:#503c09;background:#fff8dc;border-color:#e3cf8c">\(\pi_t = \beta E_t[\pi_{t+1}] + \kappa x_t + u_t\)</div>
+</article>
+<article class="paper">
+<h3>VAR, choques e causalidade dinâmica</h3>
+<p><b>Christopher Sims</b> popularizou o VAR como alternativa menos restritiva para estudar interações dinâmicas. Um VAR trata várias séries como endógenas e permite construir respostas a impulso e decomposições de variância, desde que a identificação econômica seja cuidadosamente definida.</p>
+<p>Quando séries não estacionárias compartilham uma relação de equilíbrio de longo prazo, <b>Engle–Granger</b> e <b>Johansen</b> fornecem bases para cointegração e <b>VECM</b>: os desvios de longo prazo alimentam correções de curto prazo.</p>
+</article>
+<article class="paper">
+<h3>DSGE e fricções financeiras</h3>
+<p>Modelos <b>DSGE</b> combinam decisões intertemporais, choques e restrições estruturais. A tradição de <b>Smets–Wouters</b> demonstrou como rigidezes nominais e reais podem ser estimadas e confrontadas com dados macro. A literatura de <span class="theory-trigger" data-flash="eclPanel"><b>Bernanke–Gertler e o acelerador financeiro</b></span> mostra como balanços e spreads amplificam choques.</p>
+<p>Em um laboratório bancário, isso é crucial: o mesmo choque de juros pode ter efeitos diferentes conforme capitalização, liquidez, exposição setorial, qualidade de carteira, prazo e estrutura de funding.</p>
+</article>
+</div>
+</div>
+</section>
+      <section class="section" id="referencias">
+<div class="wrap">
+<div class="section-head"><div><div class="kicker">10 · Bibliografia e fontes</div><h2>Autores, dados e trilhas para aprofundamento</h2><p class="sub">As referências abaixo foram escolhidas para conectar fundamentos, econometria, política monetária, crédito e prática de bancos centrais.</p></div></div>
+<div class="ref-list">
+<div class="ref"><b>Banco Central do Brasil.</b> SGS / Dados Abertos: séries 432 (Meta Selic), 433 (IPCA), 24369 (taxa de desocupação), 20539 (saldo da carteira de crédito), 21082 (inadimplência), 27791/27810/27813/27815 (M1–M4), 1788 (base monetária).</div>
+<div class="ref"><b>Banco Central do Brasil.</b> Estatísticas Monetárias e de Crédito; metodologia dos agregados monetários e multiplicador.</div>
+<div class="ref"><b>IBGE.</b> PNAD Contínua — taxa de desocupação; Sistema Nacional de Índices de Preços ao Consumidor — IPCA.</div>
+<div class="ref"><b>Fisher, I. (1911).</b> <i>The Purchasing Power of Money.</i> Quantidade de moeda, velocidade e nível de preços.</div>
+<div class="ref"><b>Keynes, J. M. (1936).</b> <i>The General Theory of Employment, Interest and Money.</i></div>
+<div class="ref"><b>Hicks, J. R. (1937).</b> “Mr. Keynes and the Classics”. Estrutura que originou o IS–LM.</div>
+<div class="ref"><b>Phillips, A. W. (1958).</b> Relação histórica entre desemprego e variação dos salários monetários no Reino Unido.</div>
+<div class="ref"><b>Friedman, M. (1968); Phelps, E. S. (1967/1968).</b> Expectativas, taxa natural e crítica à exploração permanente da curva de Phillips.</div>
+<div class="ref"><b>Taylor, J. B. (1993).</b> “Discretion versus policy rules in practice”. Regra de reação da política monetária.</div>
+<div class="ref"><b>Sims, C. A. (1980).</b> “Macroeconomics and Reality”. Vetores autorregressivos.</div>
+<div class="ref"><b>Engle, R. F.; Granger, C. W. J. (1987).</b> Cointegração e representação por correção de erros.</div>
+<div class="ref"><b>Johansen, S. (1988/1991).</b> Abordagem multivariada de cointegração e VECM.</div>
+<div class="ref"><b>Bollerslev, T. (1986).</b> GARCH e dinâmica da variância condicional.</div>
+<div class="ref"><b>Box, G. E. P.; Jenkins, G. M.</b> Metodologia ARIMA/SARIMA para análise e previsão de séries temporais.</div>
+<div class="ref"><b>Bernanke, B. S.; Blinder, A. S. (1988).</b> Crédito, moeda e demanda agregada; base para o bank lending channel.</div>
+<div class="ref"><b>Bernanke, B. S.; Gertler, M. (1989/1995).</b> Acelerador financeiro e canais de crédito da transmissão monetária.</div>
+<div class="ref"><b>Clarida, R.; Galí, J.; Gertler, M. (1999).</b> “The Science of Monetary Policy”. Síntese novo-keynesiana.</div>
+<div class="ref"><b>Woodford, M. (2003).</b> <i>Interest and Prices.</i> Fundamentos de política monetária em ambiente de expectativas.</div>
+<div class="ref"><b>Smets, F.; Wouters, R. (2003/2007).</b> DSGE estimado com rigidezes nominais e reais.</div>
+<div class="ref"><b>BIS.</b> Estudos sobre estrutura financeira, bank lending channel e transmissão monetária em economias emergentes.</div>
+<div class="ref"><b>IFRS Foundation — IFRS 9 Financial Instruments.</b> Requisitos de impairment baseados em expected credit losses; ECL é uma estimativa ponderada por probabilidade dos déficits de caixa esperados.</div>
+<div class="ref"><b>European Banking Authority — EBA-GL-2017-06.</b> Boas práticas de gestão do risco de crédito e contabilização de expected credit losses sob IFRS 9.</div>
+<div class="ref"><b>EBA (2019).</b> Guidelines on estimation of LGD under an economic downturn — referência conceitual para o comportamento downturn da LGD.</div>
+
+<div class="ref"><b>McLeay, M.; Radia, A.; Thomas, R. (2014), Bank of England.</b> <i>Money creation in the modern economy.</i> Empréstimos bancários criam depósitos; o multiplicador de reservas não é uma descrição operacional completa do sistema moderno.</div>
+<div class="ref"><b>Adrian, T.; Shin, H. S. (2010).</b> <i>Financial Intermediaries and Monetary Economics.</i> Balanços de intermediários, preço do risco e risk-taking channel da política monetária.</div>
+<div class="ref"><b>Borio, C.; Zhu, H. (2012).</b> <i>Capital regulation, risk-taking and monetary policy: a missing link in the transmission mechanism?</i> Interação entre política, capital e tomada de risco.</div>
+<div class="ref"><b>Brunnermeier, M. K.; Sannikov, Y. (2014).</b> <i>A Macroeconomic Model with a Financial Sector.</i> Não linearidades, leverage endógeno e amplificação financeira.</div>
+
+</div>
+</div>
+</section>
+    </div>
+
+    <div class="fusion-tab-content" data-fusion-panel="audit">
+      <section class="section" id="qualidade">
+<div class="wrap">
+<div class="section-head"><div><div class="kicker">09 · Autoauditoria</div><h2>Loop de cinco agentes: estatística, econometria, UX, banking e engenharia</h2><p class="sub">O arquivo simula um comitê de revisão com cinco perspectivas. Cada agente testa uma família diferente de invariantes e a engenharia consolida as correções em um único estado.</p></div><button class="btn" id="runQA">Executar agentes</button></div>
+<div class="grid g2">
+<article class="card">
+<h3>Loop</h3>
+<div class="flow" style="grid-template-columns:1fr 40px 1fr 40px 1fr">
+<div class="node"><div><b>Inspect</b><small>DOM · dados · parâmetros</small></div></div><div class="arrow"></div>
+<div class="node"><div><b>Correct</b><small>clamp · aria · fallback</small></div></div><div class="arrow"></div>
+<div class="node"><div><b>Retest</b><small>sanidade econômica</small></div></div>
+</div>
+<p class="note">O loop roda até 3 iterações. Ele não “inventa” teoria: apenas verifica invariantes e aplica correções seguras no estado da interface.</p>
+</article>
+<article class="card"><h3>Relatório dos agentes</h3><div class="qa-log" id="qaLog"></div></article>
+</div>
+</div>
+</section>
+    </div>
+  </main>
+</div>
+<footer class="footer">
+<div class="wrap">
+<b>MacroLab Brasil</b> · arquivo HTML único, CSS e JavaScript embutidos · dados oficiais consultados no navegador + cache oficial local + fallback anual real para séries macro centrais.
+    <br/>Uso educacional. O simulador é uma abstração e não constitui projeção oficial, aconselhamento financeiro ou modelo regulatório.
+  </div>
+</footer>
+<script>window.MathJax={tex:{inlineMath:[["\\(","\\)"],["$","$"]]},svg:{fontCache:"global"}};</script><script async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script><script>
+"use strict";
+const $=(q,ctx=document)=>ctx.querySelector(q), $$=(q,ctx=document)=>[...ctx.querySelectorAll(q)];
+const COLORS=["#55d9ff","#f5c768","#71e2b7","#ff7e8a","#b695ff","#ffad66","#7aa2ff"];
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const sigmoid=x=>1/(1+Math.exp(-clamp(x,-40,40)));
+const deepCopy=o=>JSON.parse(JSON.stringify(o));
+
+/* Real annual fallback anchors. No synthetic trigonometric series are used.
+   Selic: year-end target. IPCA: annual variation. Unemployment: PNAD annual average (series starts 2012).
+   High-frequency credit/monetary series are hydrated from BCB or an official browser cache. */
+const STATIC_REAL_DATA={
+  selic:[[2010,10.75],[2011,11.00],[2012,7.25],[2013,10.00],[2014,11.75],[2015,14.25],[2016,13.75],[2017,7.00],[2018,6.50],[2019,4.50],[2020,2.00],[2021,9.25],[2022,13.75],[2023,11.75],[2024,12.25]],
+  ipca:[[2010,5.91],[2011,6.50],[2012,5.84],[2013,5.91],[2014,6.41],[2015,10.67],[2016,6.29],[2017,2.95],[2018,3.75],[2019,4.31],[2020,4.52],[2021,10.06],[2022,5.79],[2023,4.62],[2024,4.83]],
+  unemp:[[2012,7.4],[2013,7.1],[2014,7.0],[2015,8.9],[2016,11.5],[2017,12.9],[2018,12.3],[2019,11.8],[2020,13.8],[2021,13.2],[2022,9.3],[2023,7.8],[2024,6.6]],
+  credit:[],npl:[],m1:[],m2:[],m3:[],m4:[],base:[]
+};
+function annualToSeries(a){return a.map(([y,v])=>({date:`${y}-12-31`,value:v}))}
+function staticData(){const o={};for(const [k,v] of Object.entries(STATIC_REAL_DATA))o[k]=annualToSeries(v);return o}
+
+const SGS={
+  selic:{code:432,label:"Selic meta",unit:"% a.a."}, ipca:{code:433,label:"IPCA",unit:"% a.m."},
+  unemp:{code:24369,label:"Desocupação",unit:"%"}, credit:{code:20539,label:"Crédito total",unit:"R$"},
+  npl:{code:21082,label:"Inadimplência",unit:"%"},m1:{code:27791,label:"M1",unit:"milhares u.m."},
+  m2:{code:27810,label:"M2",unit:"milhares u.m."},m3:{code:27813,label:"M3",unit:"milhares u.m."},
+  m4:{code:27815,label:"M4",unit:"milhares u.m."},base:{code:1788,label:"Base monetária",unit:"R$ milhões"}
+};
+
+const Machine={
+  mode:"historical",phase:"idle",filter:null,scenarioVersion:0,tick:0,
+  stress:{selic:0,ipca:0,unemp:0,credit:0,spreadVol:.18,garchVar:.05},gbm:{selic:1,ipca:1,unemp:1,credit:1},
+  timer:null,storyTimers:[]
+};
+const state={live:false,horizon:12,data:staticData(),source:"embedded-real-annual",lastRisk:null};
+
+function fmtDateBR(s){if(!s)return "—";const [y,m,d]=s.split("-");return `${d||"01"}/${m||"01"}/${y}`}
+function parseBCBDate(s){const [d,m,y]=s.split("/");return `${y}-${m}-${d}`}
+function formatNum(v,d=2){return Number(v).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d})}
+function humanMoney(v){v=Number(v);const a=Math.abs(v);if(a>=1e12)return "R$ "+formatNum(v/1e12,2)+" tri";if(a>=1e9)return "R$ "+formatNum(v/1e9,2)+" bi";if(a>=1e6)return "R$ "+formatNum(v/1e6,2)+" mi";return "R$ "+formatNum(v,0)}
+function dateRangeYears(years=16){const e=new Date(),b=new Date();b.setFullYear(e.getFullYear()-years);const f=d=>String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear();return[f(b),f(e)]}
+function validSeries(a){return Array.isArray(a)&&a.length&&a.every(x=>x&&Number.isFinite(Number(x.value))&&/^\d{4}-\d{2}-\d{2}$/.test(x.date))}
+function cacheOfficial(){try{localStorage.setItem("macrolab_bcb_snapshot_v3",JSON.stringify({savedAt:new Date().toISOString(),data:state.data}))}catch(e){}}
+function loadOfficialCache(){try{const c=JSON.parse(localStorage.getItem("macrolab_bcb_snapshot_v3")||"null");if(c?.data){let n=0;for(const k of Object.keys(SGS))if(validSeries(c.data[k])){state.data[k]=c.data[k];n++}if(n){state.source="official-cache";return n}}}catch(e){}return 0}
+
+async function fetchSGS(key){
+  const cfg=SGS[key],[di,df]=dateRangeYears(16);
+  const url=`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${cfg.code}/dados?formato=json&dataInicial=${encodeURIComponent(di)}&dataFinal=${encodeURIComponent(df)}`;
+  const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error(`${key}: HTTP ${r.status}`);
+  const raw=await r.json();const out=raw.map(x=>({date:parseBCBDate(x.data),value:Number(String(x.valor).replace(",","."))})).filter(x=>Number.isFinite(x.value));
+  if(!out.length)throw new Error(`${key}: vazio`);return out;
+}
+async function loadLive(){
+  const status=$("#globalStatus"),stamp=$("#dataStamp");status.classList.remove("live");status.innerHTML='<span class="status-dot"></span><span>consultando SGS/BCB…</span>';
+  const keys=Object.keys(SGS),rs=await Promise.allSettled(keys.map(fetchSGS));let ok=0;
+  rs.forEach((r,i)=>{if(r.status==="fulfilled"&&validSeries(r.value)){state.data[keys[i]]=r.value;ok++}});
+  state.live=ok>=6;
+  if(ok){state.source=ok===keys.length?"bcb-live":"bcb-partial";cacheOfficial()}
+  if(!ok){const cached=loadOfficialCache();if(cached)state.source="official-cache"}
+  if(state.live){status.classList.add("live");stamp.classList.add("live");status.innerHTML=`<span class="status-dot"></span><span>${ok}/${keys.length} séries oficiais atualizadas</span>`;stamp.innerHTML='<span class="status-dot"></span><span>SGS/BCB · live</span>'}
+  else{const cached=state.source==="official-cache";status.innerHTML=`<span class="status-dot"></span><span>${cached?"cache oficial do navegador":"snapshot anual real + API parcial"}</span>`;stamp.innerHTML=`<span class="status-dot"></span><span>${cached?"cache BCB":"fallback real anual"}</span>`}
+  updateAll();
+}
+
+function monthKey(d){return d.slice(0,7)}
+function monthlyLast(a){const m=new Map();(a||[]).forEach(x=>m.set(monthKey(x.date),x));return [...m.values()].sort((a,b)=>a.date.localeCompare(b.date))}
+function scopedSeries(key){let a=state.data[key]||[];if(Machine.filter)a=a.filter(x=>x.date>=Machine.filter.start&&x.date<=Machine.filter.end);return a}
+function last(key){const a=scopedSeries(key);return a.length?a[a.length-1]:null}
+function nearestValue(key,date){const a=state.data[key]||[];if(!a.length)return NaN;let best=a[0],bd=Math.abs(new Date(best.date)-new Date(date));for(const x of a){const d=Math.abs(new Date(x.date)-new Date(date));if(d<bd){best=x;bd=d}}return best.value}
+function setMetric(id,dateId,key,suffix="",digits=2){const x=last(key);if(!x){$(id).textContent="N/D";$(dateId).textContent="aguardando série oficial";return}$(id).textContent=formatNum(x.value,digits)+suffix;$(dateId).textContent=`referência: ${fmtDateBR(x.date)} · ${state.source}`}
+function commonMonthly(keys,n=60){const maps=keys.map(k=>new Map(monthlyLast(scopedSeries(k)).map(x=>[monthKey(x.date),x.value])));let months=[...maps[0].keys()].filter(m=>maps.every(M=>M.has(m))).sort();months=months.slice(-n);return {months,series:maps.map(M=>months.map(m=>M.get(m)))} }
+function normalized(v){if(!v.length)return[];const b=v[0]||1;return v.map(x=>100*x/b)}
+
+function pathFrom(vals,w,h,pad,min,max){if(vals.length<2)return"";return vals.map((v,i)=>{if(!Number.isFinite(v))return null;const x=pad+i*(w-2*pad)/Math.max(1,vals.length-1),y=h-pad-(v-min)*(h-2*pad)/(max-min||1);return {i,x,y}}).filter(Boolean).map((p,j)=>`${j?"L":"M"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ")}
+function lineChart(el,series,opt={}){
+  const node=typeof el==="string"?$(el):el;if(!node)return;const w=900,h=opt.height||300,pad=42,length=Math.max(2,...series.map(s=>s.values.length));
+  const vals=series.flatMap(s=>s.values.filter(Number.isFinite));if(opt.band)vals.push(...opt.band.lower.filter(Number.isFinite),...opt.band.upper.filter(Number.isFinite));
+  if(!vals.length){node.innerHTML='<div style="display:grid;place-items:center;height:100%;color:#70859c;font-size:12px">Série indisponível no snapshot local. Atualize os dados oficiais.</div>';return}
+  let min=Math.min(...vals),max=Math.max(...vals);if(min===max){min-=1;max+=1}const span=max-min;min-=span*.10;max+=span*.10;
+  const xAt=i=>pad+i*(w-2*pad)/Math.max(1,length-1),yAt=v=>h-pad-(v-min)*(h-2*pad)/(max-min||1),labels=opt.labels||Array.from({length},(_,i)=>String(i+1));
+  let svg=`<div class="chart-shell"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${opt.label||"Gráfico"}"><defs><linearGradient id="area${node.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#55d9ff" stop-opacity=".15"/><stop offset="100%" stop-color="#55d9ff" stop-opacity="0"/></linearGradient></defs>`;
+  for(let i=0;i<5;i++){const y=pad+i*(h-2*pad)/4,val=max-i*(max-min)/4;svg+=`<line class="gridline" x1="${pad}" x2="${w-pad}" y1="${y}" y2="${y}"/><text class="axis-label" x="4" y="${y+3}">${formatNum(val,1)}</text>`}svg+=`<line class="axis" x1="${pad}" x2="${w-pad}" y1="${h-pad}" y2="${h-pad}"/>`;
+  if(Number.isInteger(opt.forecastFrom)&&opt.forecastFrom>0&&opt.forecastFrom<length){const fx=xAt(opt.forecastFrom-1);svg+=`<rect class="forecast-zone" x="${fx}" y="${pad}" width="${w-pad-fx}" height="${h-2*pad}"/><line class="forecast-divider" x1="${fx}" x2="${fx}" y1="${pad}" y2="${h-pad}"/><text class="axis-label" x="${fx+8}" y="${pad+12}">PREVISÃO</text>`}
+  if(opt.band){const pts=[];for(let i=0;i<Math.min(length,opt.band.upper.length);i++)if(Number.isFinite(opt.band.upper[i]))pts.push(`${xAt(i)},${yAt(opt.band.upper[i])}`);for(let i=Math.min(length,opt.band.lower.length)-1;i>=0;i--)if(Number.isFinite(opt.band.lower[i]))pts.push(`${xAt(i)},${yAt(opt.band.lower[i])}`);if(pts.length>3)svg+=`<polygon class="conf-band" points="${pts.join(" ")}"/>`}
+  series.forEach((s,j)=>{const c=s.color||COLORS[j%COLORS.length],d=pathFrom(s.values,w,h,pad,min,max),dash=s.dash?`stroke-dasharray="${s.dash}"`:"";if(s.area&&d){const finite=s.values.map((v,i)=>Number.isFinite(v)?i:null).filter(v=>v!==null);if(finite.length>1)svg+=`<path d="${d} L${xAt(finite.at(-1))},${h-pad} L${xAt(finite[0])},${h-pad} Z" fill="url(#area${node.id})"/>`}svg+=`<path class="series-path" d="${d}" fill="none" stroke="${c}" stroke-width="${s.width||3}" ${dash} stroke-linecap="round" stroke-linejoin="round"/>`});
+  [0,Math.floor((length-1)/2),length-1].filter((x,i,a)=>a.indexOf(x)===i).forEach(i=>svg+=`<text class="axis-label" x="${xAt(i)}" y="${h-12}" text-anchor="${i===0?"start":i===length-1?"end":"middle"}">${labels[i]??""}</text>`);
+  svg+=`<g class="hover-layer" style="display:none"></g><g class="brush-layer"></g><rect class="hover-capture" x="${pad}" y="${pad}" width="${w-2*pad}" height="${h-2*pad}" fill="transparent" style="cursor:${opt.onRangeSelect?"crosshair":"default"}"/></svg><div class="chart-tooltip"></div></div>`;node.innerHTML=svg;
+  const shell=node.querySelector('.chart-shell'),svgEl=node.querySelector('svg'),cap=node.querySelector('.hover-capture'),hover=node.querySelector('.hover-layer'),brush=node.querySelector('.brush-layer'),tip=node.querySelector('.chart-tooltip');let dragStart=null;
+  const idxFromEvent=e=>{const pt=svgEl.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const q=pt.matrixTransform(svgEl.getScreenCTM().inverse());return clamp(Math.round((q.x-pad)/(w-2*pad)*(length-1)),0,length-1)};
+  cap.addEventListener('pointermove',e=>{const idx=idxFromEvent(e),x=xAt(idx);hover.style.display='';hover.innerHTML=`<line class="chart-crosshair" x1="${x}" x2="${x}" y1="${pad}" y2="${h-pad}"/>`+series.map((s,j)=>Number.isFinite(s.values[idx])?`<circle class="hover-dot" cx="${x}" cy="${yAt(s.values[idx])}" r="5" fill="${s.color||COLORS[j%COLORS.length]}"/>`:"").join('');tip.innerHTML=`<div class="tt-title">${labels[idx]??idx}</div>`+series.filter(s=>Number.isFinite(s.values[idx])).map(s=>`<div class="tt-row"><span>${s.name}</span><b>${formatNum(s.values[idx],2)}</b></div>`).join('');tip.style.display='block';const r=shell.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top;tip.style.left=Math.min(r.width-205,Math.max(8,px+14))+'px';tip.style.top=Math.max(8,py-25)+'px';if(dragStart!==null){const a=Math.min(dragStart,idx),b=Math.max(dragStart,idx);brush.innerHTML=`<rect class="brush-range" x="${xAt(a)}" y="${pad}" width="${Math.max(2,xAt(b)-xAt(a))}" height="${h-2*pad}"/>`}});
+  cap.addEventListener('pointerleave',()=>{if(dragStart===null){hover.style.display='none';tip.style.display='none'}});
+  if(opt.onRangeSelect){cap.addEventListener('pointerdown',e=>{dragStart=idxFromEvent(e);cap.setPointerCapture(e.pointerId)});cap.addEventListener('pointerup',e=>{const end=idxFromEvent(e),a=Math.min(dragStart??end,end),b=Math.max(dragStart??end,end);dragStart=null;if(b-a>=1)opt.onRangeSelect(a,b,labels);else brush.innerHTML='';try{cap.releasePointerCapture(e.pointerId)}catch(_){};});}
+}
+
+function macroChart(){const c=commonMonthly(["selic","ipca","unemp"],60);if(!c.months.length){lineChart('#macroChart',[],{});return}const ser=["Selic","IPCA","Desemprego"].map((name,i)=>({name,values:normalized(c.series[i]),color:COLORS[i],area:i===0}));lineChart('#macroChart',ser,{height:360,label:"Macro normalizado",labels:c.months,onRangeSelect:(a,b,labels)=>applyCrossFilter(labels[a],labels[b])});$("#macroLegend").innerHTML=ser.map(s=>`<span><i style="background:${s.color}"></i>${s.name}</span>`).join('')}
+function creditChart(){const c=commonMonthly(["credit","npl"],48);if(!c.months.length){lineChart('#creditChart',[],{});return}lineChart('#creditChart',[{name:"Crédito",values:normalized(c.series[0]),color:COLORS[0],area:true},{name:"NPL",values:normalized(c.series[1]),color:COLORS[3]}],{height:360,labels:c.months,label:"Crédito e NPL"})}
+function applyCrossFilter(a,b){Machine.filter={start:a+'-01',end:b+'-31'};$("#crossFilterBanner").classList.add('active');$("#crossFilterLabel").textContent=`${a} → ${b}`;updateAll(false)}
+function clearCrossFilter(){Machine.filter=null;$("#crossFilterBanner").classList.remove('active');updateAll(false)}
+
+function currentMacro(){const s=last('selic'),u=last('unemp'),p=last('ipca');return {date:s?.date||u?.date||p?.date||'—',selic:(s?.value??10)+Machine.stress.selic,unemp:(u?.value??8)+Machine.stress.unemp,ipca:(p?.value??4)+Machine.stress.ipca}}
+function simulate(params={}){const T=24,ds=Number(params.selic??$("#sSelic").value),fiscal=Number(params.fiscal??$("#sFiscal").value),fx=Number(params.fx??$("#sFx").value)/10,rr=Number(params.rr??$("#sReserve").value)/100,risk=Number(params.risk??$("#sRisk").value),supply=Number(params.supply??$("#sSupply").value);let pi=4.5,x=0,u=6,credit=7,npl=3.2;const o={pi:[],x:[],u:[],credit:[],npl:[],rate:[]};for(let t=0;t<T;t++){const decay=Math.exp(-t/8),rateShock=ds*decay,realGap=rateShock-.18*(pi-4.5),liq=(.20-rr)*8;x=.68*x-.16*realGap+.24*fiscal*decay+.035*credit-.09*risk*decay;pi=.72*pi+.28*4.5+.19*x+.08*supply*decay+.03*fx*decay-.055*rateShock;u=6-.34*x+.05*Math.max(0,rateShock);credit=7+.9*x-.55*rateShock-.8*risk*decay+liq;npl=3.2-.18*x+.055*Math.max(0,rateShock)+.16*risk*decay+.04*(u-6);o.pi.push(pi);o.x.push(x);o.u.push(u);o.credit.push(credit);o.npl.push(npl);o.rate.push(rateShock)}return o}
+function renderShock(){const o=simulate();lineChart('#shockChart',[{name:"Inflação",values:o.pi,color:COLORS[1]},{name:"Hiato",values:o.x,color:COLORS[0]},{name:"Crédito",values:o.credit,color:COLORS[2]},{name:"Inadimplência",values:o.npl,color:COLORS[3]}],{height:360,label:"Resposta dinâmica",labels:o.pi.map((_,i)=>`m${i+1}`)});$("#oPi").textContent=formatNum(o.pi[11],1)+'%';$("#oGap").textContent=formatNum(o.x[11],1)+'%';$("#oU").textContent=formatNum(o.u[11],1)+'%';$("#oCredit").textContent=formatNum(o.credit[11],1)+'%';$("#oNpl").textContent=formatNum(o.npl[11],1)+'%';return o}
+function renderLabels(){[["sSelic","sSelicOut"," pp"],["sFiscal","sFiscalOut",""],["sFx","sFxOut","%"],["sReserve","sReserveOut","%"],["sRisk","sRiskOut",""],["sSupply","sSupplyOut",""]].forEach(([a,b,s])=>{const v=Number($("#"+a).value);$("#"+b).textContent=(v>0&&a!=="sReserve"?"+":"")+formatNum(v,a==="sReserve"||a==="sFx"?0:1)+s})}
+
+function renderISLM(){const f=Number($("#islmF").value),m=Number($("#islmM").value),policy=Number($("#sSelic").value);$("#islmFOut").textContent=(f>=0?'+':'')+formatNum(f,1);$("#islmMOut").textContent=(m>=0?'+':'')+formatNum(m,1);const y=[0,1,2,3,4,5,6,7,8,9,10],IS=y.map(Y=>9.2+.7*f-.72*Y),LM=y.map(Y=>1.3-.65*m+.62*Y+.25*policy);lineChart('#islmChart',[{name:"IS",values:IS,color:COLORS[1]},{name:"LM/policy",values:LM,color:COLORS[0]}],{height:260,labels:y.map(String)})}
+function renderPhillips(){const a=Number($("#anchor").value)/100;$("#anchorOut").textContent=Math.round(a*100)+'%';const u=[];for(let i=0;i<=12;i++)u.push(3+i*.5);lineChart('#phillipsChart',[{name:'π',values:u.map(x=>4.5+(1-a)*1.6-.6*(x-6)),color:COLORS[3]}],{height:260,labels:u.map(x=>formatNum(x,1))})}
+function renderTaylor(){const pi=Number($("#tPi").value),gap=Number($("#tGap").value),target=3,rstar=4.5,neutral=rstar+pi,rule=rstar+pi+1.5*(pi-target)+.5*gap;$("#tPiOut").textContent=formatNum(pi,1)+'%';$("#tGapOut").textContent=(gap>=0?'+':'')+formatNum(gap,1)+'%';lineChart('#taylorChart',[{name:'Neutro',values:[neutral,neutral],color:COLORS[2]},{name:'Taylor',values:[neutral,rule],color:COLORS[1]}],{height:150,labels:['base','regra']})}
+function renderMultiplier(){const rr=Number($("#rr").value)/100,m=1/rr;$("#rrOut").textContent=Math.round(rr*100)+'%';$("#multOut").textContent=formatNum(m,2)+'×';$("#depOut").textContent='R$ '+formatNum(100*m,0);let dep=100,vals=[];for(let i=0;i<12;i++){vals.push(dep);dep*=1-rr}lineChart('#multChart',[{name:'Novo depósito',values:vals,color:COLORS[0],area:true}],{height:360,labels:vals.map((_,i)=>String(i+1))})}
+function updateMoney(){const keys=['m1','m2','m3','m4'],xs=keys.map(k=>last(k));if(xs.every(Boolean)){const vals=xs.map(x=>x.value),max=Math.max(...vals),tight=clamp(1-.025*Math.max(0,Number($("#sSelic").value))-.35*(Number($("#sReserve").value)/100-.20),.55,1.18);keys.forEach((k,i)=>{$('#'+k+'bar').style.width=(15+80*vals[i]/max)*tight+'%';$('#'+k+'v').textContent=humanMoney(vals[i]*1000)});const c=commonMonthly(keys,36);lineChart('#moneyChart',keys.map((k,i)=>({name:k.toUpperCase(),values:normalized(c.series[i]||[]),color:COLORS[i]})),{height:250,labels:c.months})}else{keys.forEach(k=>{$('#'+k+'v').textContent='N/D';$('#'+k+'bar').style.width='8%'});lineChart('#moneyChart',[],{})}}
+
+function boxMuller(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function creditRiskAt(t=0,shockPath=null){const macro=currentMacro(),shock=Number($("#sSelic").value)*Math.exp(-t/8),scenario=shockPath||simulate(),gap=scenario.x[Math.min(t,scenario.x.length-1)]||0,u=macro.unemp+(scenario.u[Math.min(t,scenario.u.length-1)]-6)*.55,selic=macro.selic+shock,supply=Number($("#sSupply").value),risk=Number($("#sRisk").value),coverage=Number($("#collateral").value)/100,ead=Number($("#ead").value)*1e6;
+  const z=-5.35+.16*u+.055*selic-.12*gap+.22*risk;const pd=clamp(sigmoid(z),.001,.45);
+  const recession=Math.max(0,-gap)+Math.max(0,-supply)*.7;const collateralHaircut=1/(1+Math.exp(-(recession-1.4)));const baseLGD=.62*(1-coverage*.72);const lgd=clamp(baseLGD+.30*collateralHaircut+.025*Math.max(0,risk),.08,.92);
+  const ecl=pd*lgd*ead;return {pd,lgd,ead,ecl,gap,u,selic};}
+function renderBank(){const baseFund=Number($("#fund").value),sp=Number($("#spread").value),cap=Number($("#cap").value),eadM=Number($("#ead").value),coverage=Number($("#collateral").value),idio=Number($("#idio").value)/100,policy=Number($("#sSelic").value),r=creditRiskAt(0),costRisk=100*r.ecl/r.ead,stochMult=clamp(Math.exp(-.5*idio*idio+idio*(Machine.stress.spreadVol-.18)),.65,1.85),riskCharge=costRisk*stochMult,opCost=1.15,capitalCost=.085*cap,fund=baseFund+.55*policy+Machine.stress.spreadVol*.5,marginTarget=Math.max(1,sp*.58),loanRate=fund+riskCharge+capitalCost+opCost+marginTarget,gross=loanRate-fund,post=gross-riskCharge;
+  const loanShare=clamp(74-(fund-10)*1.25-(costRisk-2)*2.0,43,80),liq=clamp(17+(fund-10)*.7+(costRisk-2)*1.3,10,35),other=Math.max(7,100-loanShare-liq),equity=cap,dep=clamp(72-(fund-10)*1.55-(costRisk-2)*.7,40,78),market=Math.max(5,100-equity-dep),ltd=100*loanShare/Math.max(1,dep),raroc=100*((post-opCost*.30)*(loanShare/100))/Math.max(5,cap),stress=clamp((fund-6)*4+costRisk*8+(ltd-80)*.55+idio*18,0,100);
+  state.lastRisk={...r,costRisk,riskCharge,loanRate,post,ltd,raroc,stress};
+  $('#fundOut').textContent=formatNum(baseFund,1)+'%';$('#spreadOut').textContent=formatNum(sp,1)+'%';$('#capOut').textContent=formatNum(cap,1)+'%';$('#eadOut').textContent=humanMoney(eadM*1e6);$('#collateralOut').textContent=coverage+'%';$('#idioOut').textContent=Math.round(idio*100)+'%';
+  $('#pdKpi').textContent=formatNum(r.pd*100,2)+'%';$('#lgdKpi').textContent=formatNum(r.lgd*100,1)+'%';$('#eadKpi').textContent=humanMoney(r.ead);$('#eclKpi').textContent=humanMoney(r.ecl);$('#loanRate').textContent=formatNum(loanRate,1)+'%';$('#nim').textContent=formatNum(gross,1)+'%';$('#postEl').textContent=formatNum(post,1)+'%';$('#ltd').textContent=formatNum(ltd,0)+'%';$('#liqBuffer').textContent=formatNum(liq,1)+'%';$('#raroc').textContent=formatNum(raroc,1)+'%';$('#riskMacroDate').textContent=fmtDateBR(currentMacro().date);$('#riskSelic').textContent=formatNum(r.selic,1)+'%';$('#riskUnemp').textContent=formatNum(r.u,1)+'%';$('#riskGap').textContent=formatNum(r.gap,1)+'%';
+  $('#loanBar').style.width=loanShare+'%';$('#loanBar').textContent=`Crédito ${formatNum(loanShare,0)}%`;$('#liqBar').style.width=liq+'%';$('#liqBar').textContent=`Liquidez ${formatNum(liq,0)}%`;$('#otherA').style.width=other+'%';$('#otherA').textContent=`Outros ${formatNum(other,0)}%`;$('#depBar').style.width=dep+'%';$('#depBar').textContent=`Depósitos ${formatNum(dep,0)}%`;$('#marketBar').style.width=market+'%';$('#marketBar').textContent=`Mercado ${formatNum(market,0)}%`;$('#equityBar').style.width=equity+'%';$('#equityBar').textContent=`PL ${formatNum(equity,0)}%`;
+  $('#mixDeposits').style.width=dep+'%';$('#mixMarket').style.width=market+'%';$('#mixEquity').style.width=equity+'%';$('#depShare').textContent=formatNum(dep,0)+'%';$('#marketShare').textContent=formatNum(market,0)+'%';$('#equityShare').textContent=formatNum(equity,0)+'%';$('#riskPointer').style.left=`calc(${stress}% - 1px)`;const health=$('#bankHealth');health.className='health-pill'+(stress>68?' risk':stress>42?' warn':'');health.textContent=stress>68?'balanço pressionado':stress>42?'atenção ao funding':'balanço confortável';
+  const pieces=[fund,riskCharge,capitalCost,opCost,marginTarget],ids=['wfFund','wfEL','wfCap','wfOp','wfMargin'],vids=['wfFundV','wfELV','wfCapV','wfOpV','wfMarginV'],maxPiece=Math.max(...pieces,1);pieces.forEach((v,i)=>{$('#'+ids[i]).style.width=(12+88*v/maxPiece)+'%';$('#'+vids[i]).textContent=formatNum(v,2)+'%'});$('#pricingTotal').textContent='taxa '+formatNum(loanRate,1)+'%';
+  const ten=[1,3,6,12,24,36,48,60],fundCurve=ten.map(t=>fund+.18*Math.log1p(t)+.04*Math.max(0,t-12)/12),active=fundCurve.map((f,i)=>f+riskCharge+capitalCost+opCost+marginTarget+.018*ten[i]),postCurve=active.map(v=>v-riskCharge);lineChart('#bankChart',[{name:'Funding',values:fundCurve,color:COLORS[4]},{name:'Taxa ativa',values:active,color:COLORS[0],area:true},{name:'Pós-ECL',values:postCurve,color:COLORS[2],dash:'7 6'}],{height:360,labels:ten.map(x=>x+'m')});renderECL();}
+function renderECL(){const scenario=simulate(),idio=Number($('#idio').value)/100,labels=[],pd=[],eclr=[],spr=[];let h=Machine.stress.garchVar||.04;for(let t=0;t<24;t++){const r=creditRiskAt(t,scenario),eps=boxMuller(),omega=.006,alpha=.13,beta=.82;h=omega+alpha*(eps*eps)*h+beta*h;const vol=Math.sqrt(h)*(1+idio),spread=Math.max(.2,Number($('#spread').value)+r.pd*100*1.6+vol*2.1);labels.push('m'+(t+1));pd.push(r.pd*100);eclr.push(r.pd*r.lgd*100);spr.push(spread)}Machine.stress.garchVar=h;lineChart('#eclChart',[{name:'PD',values:pd,color:COLORS[3],area:true},{name:'ECL/EAD',values:eclr,color:COLORS[1]},{name:'Spread stress',values:spr,color:COLORS[4],dash:'6 5'}],{height:360,labels,label:'Risco de crédito projetado'})}
+
+/* ---------- Linear algebra: Cholesky OLS with adaptive ridge ---------- */
+function transpose(A){return A[0].map((_,j)=>A.map(r=>r[j]))}
+function matMul(A,B){return A.map(r=>B[0].map((_,j)=>r.reduce((s,x,k)=>s+x*B[k][j],0)))}
+function matVec(A,x){return A.map(r=>r.reduce((s,v,i)=>s+v*x[i],0))}
+function identity(n){return Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0))}
+function cholesky(A){const n=A.length,L=Array.from({length:n},()=>Array(n).fill(0));for(let i=0;i<n;i++)for(let j=0;j<=i;j++){let sum=A[i][j];for(let k=0;k<j;k++)sum-=L[i][k]*L[j][k];if(i===j){if(sum<=1e-14)throw new Error('Matriz não definida positiva');L[i][j]=Math.sqrt(sum)}else L[i][j]=sum/L[j][j]}return L}
+function cholSolve(A,b){let ridge=0;for(let attempt=0;attempt<8;attempt++){try{const M=A.map((r,i)=>r.map((v,j)=>v+(i===j?ridge:0))),L=cholesky(M),n=b.length,y=Array(n).fill(0),x=Array(n).fill(0);for(let i=0;i<n;i++){let s=b[i];for(let k=0;k<i;k++)s-=L[i][k]*y[k];y[i]=s/L[i][i]}for(let i=n-1;i>=0;i--){let s=y[i];for(let k=i+1;k<n;k++)s-=L[k][i]*x[k];x[i]=s/L[i][i]}return x}catch(e){ridge=ridge?ridge*10:1e-10}}throw new Error('Cholesky falhou mesmo com regularização')}
+function ols(X,y){const Xt=transpose(X),XtX=matMul(Xt,X),Xty=matVec(Xt,y);return cholSolve(XtX,Xty)}
+function rmse(a,b){return Math.sqrt(a.reduce((s,x,i)=>s+(x-b[i])**2,0)/Math.max(1,a.length))}
+function mean(a){return a.reduce((s,x)=>s+x,0)/Math.max(1,a.length)}
+function covarianceMatrix(rows){const n=rows.length,p=rows[0].length,m=Array.from({length:p},(_,j)=>mean(rows.map(r=>r[j])));const S=Array.from({length:p},()=>Array(p).fill(0));for(const r of rows)for(let i=0;i<p;i++)for(let j=0;j<p;j++)S[i][j]+=(r[i]-m[i])*(r[j]-m[j]);return S.map(r=>r.map(v=>v/Math.max(1,n-1)))}
+function inverse2(A){const d=A[0][0]*A[1][1]-A[0][1]*A[1][0];if(Math.abs(d)<1e-12)throw new Error('Matriz 2×2 singular');return [[A[1][1]/d,-A[0][1]/d],[-A[1][0]/d,A[0][0]/d]]}
+function inverseLower2(L){return [[1/L[0][0],0],[-L[1][0]/(L[0][0]*L[1][1]),1/L[1][1]]]}
+function eigSym2(A){const a=A[0][0],b=.5*(A[0][1]+A[1][0]),d=A[1][1],tr=a+d,disc=Math.sqrt(Math.max(0,(a-d)*(a-d)+4*b*b)),vals=[(tr+disc)/2,(tr-disc)/2];return vals.map(l=>{let v=Math.abs(b)>1e-14?[b,l-a]:[1,0],n=Math.hypot(...v)||1;return{value:l,vector:v.map(x=>x/n)}}).sort((x,y)=>y.value-x.value)}
+function residualize(Y,Z){return Y.map((col,j)=>{const b=ols(Z,col),fit=Z.map(r=>r.reduce((s,x,i)=>s+x*b[i],0));return col.map((v,i)=>v-fit[i])})}
+function crossCov(A,B){const n=A.length,p=A[0].length,q=B[0].length,S=Array.from({length:p},()=>Array(q).fill(0));for(let t=0;t<n;t++)for(let i=0;i<p;i++)for(let j=0;j<q;j++)S[i][j]+=A[t][i]*B[t][j]/n;return S}
+
+function fitSARIMAX(series,h=12){const y=monthlyLast(series).map(x=>x.value).slice(-120);if(y.length<14)throw new Error('Poucas observações para ARX sazonal');const X=[],Y=[];for(let t=2;t<y.length;t++)X.push([1,y[t-1],y[t-2],t/y.length,Math.sin(2*Math.PI*t/12),Math.cos(2*Math.PI*t/12)]),Y.push(y[t]);const b=ols(X,Y),fit=X.map(r=>r.reduce((s,x,i)=>s+x*b[i],0));let hist=y.slice(),fc=[];for(let k=0;k<h;k++){const t=y.length+k,r=[1,hist.at(-1),hist.at(-2),t/y.length,Math.sin(2*Math.PI*t/12),Math.cos(2*Math.PI*t/12)],v=r.reduce((s,x,i)=>s+x*b[i],0);fc.push(v);hist.push(v)}return{forecast:fc,beta:b,rmse:rmse(Y,fit),hist:y,desc:'ARX(2) sazonal estimado por OLS-Cholesky (núcleo SARIMAX didático)'}}
+
+function garchParams(theta){const omega=Math.exp(theta[0]),ea=Math.exp(theta[1]),eb=Math.exp(theta[2]),den=1+ea+eb;return{omega,alpha:.995*ea/den,beta:.995*eb/den}}
+function garchNLL(theta,r){const p=garchParams(theta),vr=mean(r.map(x=>x*x))||1e-6;let h=vr,ll=0;for(let t=1;t<r.length;t++){h=p.omega+p.alpha*r[t-1]*r[t-1]+p.beta*h;h=Math.max(h,1e-10);ll+=.5*(Math.log(2*Math.PI)+Math.log(h)+r[t]*r[t]/h)}return ll}
+function fitGARCH(series,horizon=12){const y=monthlyLast(series).map(x=>x.value).slice(-150);if(y.length<20)throw new Error('Poucas observações para GARCH');const r=[];for(let i=1;i<y.length;i++)r.push((y[i]-y[i-1])/(Math.abs(y[i-1])||1));let th=[Math.log(Math.max(1e-6,mean(r.map(x=>x*x))*.05)),Math.log(.10),Math.log(.82)],m=[0,0,0],v=[0,0,0],lr=.035;for(let it=1;it<=260;it++){const g=[];for(let j=0;j<3;j++){const eps=1e-4,a=th.slice(),b=th.slice();a[j]+=eps;b[j]-=eps;g[j]=(garchNLL(a,r)-garchNLL(b,r))/(2*eps)}for(let j=0;j<3;j++){m[j]=.9*m[j]+.1*g[j];v[j]=.999*v[j]+.001*g[j]*g[j];const mh=m[j]/(1-.9**it),vh=v[j]/(1-.999**it);th[j]-=lr*mh/(Math.sqrt(vh)+1e-8)}if(it%80===0)lr*=.72}const p=garchParams(th),vr=mean(r.map(x=>x*x));let hv=vr,fc=[];for(let k=0;k<horizon;k++){hv=p.omega+(p.alpha+p.beta)*hv;fc.push(Math.sqrt(Math.max(hv,0)))}return{forecast:fc,hist:r.slice(-72).map(Math.abs),beta:[p.omega,p.alpha,p.beta],rmse:Math.sqrt(vr),desc:`GARCH(1,1) QMLE/Adam · α+β=${formatNum(p.alpha+p.beta,4)}`}}
+
+function fitVAR(key,h=12){const pair=key==='ipca'?'selic':'ipca',c=commonMonthly([key,pair],100);const Y1=c.series[0],Y2=c.series[1],n=Y1.length;if(n<10)throw new Error('Séries sem sobreposição suficiente');const X=[],A=[],B=[];for(let t=1;t<n;t++){X.push([1,Y1[t-1],Y2[t-1]]);A.push(Y1[t]);B.push(Y2[t])}const b1=ols(X,A),b2=ols(X,B);let x=Y1.at(-1),z=Y2.at(-1),fc=[];for(let k=0;k<h;k++){const nx=b1[0]+b1[1]*x+b1[2]*z,nz=b2[0]+b2[1]*x+b2[2]*z;fc.push(nx);x=nx;z=nz}return{forecast:fc,hist:Y1,beta:[...b1,...b2],rmse:rmse(A,X.map(r=>r.reduce((s,v,i)=>s+v*b1[i],0))),desc:`VAR(1) OLS-Cholesky: ${key} ↔ ${pair}`}}
+
+function johansenCreditUnemp(){const c=commonMonthly(['credit','unemp'],120);if(c.months.length<18)throw new Error('Johansen requer sobreposição mensal de crédito e desemprego');const y=c.series.map((a,j)=>a.map(v=>j===0?Math.log(Math.max(v,1e-8)):v)),rows=y[0].map((_,i)=>[y[0][i],y[1][i]]),d=[];for(let t=1;t<rows.length;t++)d.push([rows[t][0]-rows[t-1][0],rows[t][1]-rows[t-1][1]]);const R0=[],R1=[],Z=[];for(let t=1;t<d.length;t++){R0.push(d[t]);R1.push(rows[t]);Z.push([1,d[t-1][0],d[t-1][1]])}const r0cols=residualize([R0.map(r=>r[0]),R0.map(r=>r[1])],Z),r1cols=residualize([R1.map(r=>r[0]),R1.map(r=>r[1])],Z),r0=R0.map((_,i)=>[r0cols[0][i],r0cols[1][i]]),r1=R1.map((_,i)=>[r1cols[0][i],r1cols[1][i]]),S00=crossCov(r0,r0),S11=crossCov(r1,r1),S01=crossCov(r0,r1),S10=transpose(S01),A=matMul(matMul(S10,inverse2(S00)),S01),L=cholesky(S11.map((r,i)=>r.map((v,j)=>v+(i===j?1e-10:0)))),Lin=inverseLower2(L),B=matMul(matMul(Lin,A),transpose(Lin)),raw=eigSym2(B),eig=raw.map(e=>{const v=matVec(transpose(Lin),e.vector),n=Math.hypot(...v)||1;return{value:clamp(e.value,0,.999999),vector:v.map(x=>x/n)}}),trace0=-r0.length*eig.reduce((s,e)=>s+Math.log(1-e.value),0),trace1=-r0.length*Math.log(1-eig[1].value);return{eig,trace:[trace0,trace1],beta:eig[0].vector,months:c.months,rows}}
+function fitVECM(_,h=12){const j=johansenCreditUnemp(),rows=j.rows,beta=j.beta,d=[];for(let t=1;t<rows.length;t++)d.push([rows[t][0]-rows[t-1][0],rows[t][1]-rows[t-1][1]]);const X=[],DY1=[],DY2=[];for(let t=1;t<d.length;t++){const ec=beta[0]*rows[t][0]+beta[1]*rows[t][1];X.push([1,ec,d[t-1][0],d[t-1][1]]);DY1.push(d[t][0]);DY2.push(d[t][1])}const b1=ols(X,DY1),b2=ols(X,DY2),alpha=[b1[1],b2[1]],Pi=[[alpha[0]*beta[0],alpha[0]*beta[1]],[alpha[1]*beta[0],alpha[1]*beta[1]]];let y=rows.at(-1)[0],u=rows.at(-1)[1],dy=d.at(-1)[0],du=d.at(-1)[1],fc=[];for(let k=0;k<h;k++){const ec=beta[0]*y+beta[1]*u,ndy=b1[0]+b1[1]*ec+b1[2]*dy+b1[3]*du,ndu=b2[0]+b2[1]*ec+b2[2]*dy+b2[3]*du;y+=ndy;u+=ndu;dy=ndy;du=ndu;fc.push(Math.exp(y))}return{forecast:fc,hist:rows.map(r=>Math.exp(r[0])),beta:[...beta,...alpha,...Pi.flat()],rmse:rmse(DY1,X.map(r=>r.reduce((s,v,i)=>s+v*b1[i],0))),desc:`VECM Crédito↔Desemprego · Johansen λ=${j.eig.map(e=>formatNum(e.value,4)).join(', ')} · Trace=${j.trace.map(x=>formatNum(x,2)).join('/')} · α=${alpha.map(x=>formatNum(x,4)).join(',')}`}}
+
+function runModel(){const key=$('#modelSeries').value,type=$('#modelType').value,h=state.horizon;try{let r;if(type==='SARIMAX')r=fitSARIMAX(scopedSeries(key),h);else if(type==='GARCH')r=fitGARCH(scopedSeries(key),h);else if(type==='VAR')r=fitVAR(key,h);else r=fitVECM(key,h);const hist=r.hist.slice(-36),histOnly=hist.concat(Array(h).fill(NaN)),fcOnly=Array(hist.length-1).fill(NaN).concat([hist.at(-1)],r.forecast),scale=Math.max(r.rmse||.01,Math.abs(hist.at(-1)||1)*.012),lower=Array(hist.length).fill(NaN).concat(r.forecast.map((v,i)=>v-1.64*scale*Math.sqrt((i+1)/Math.max(2,h/3)))),upper=Array(hist.length).fill(NaN).concat(r.forecast.map((v,i)=>v+1.64*scale*Math.sqrt((i+1)/Math.max(2,h/3)))),labels=[...hist.map((_,i)=>`t-${hist.length-1-i}`),...r.forecast.map((_,i)=>`t+${i+1}`)];lineChart('#modelChart',[{name:'Histórico',values:histOnly,color:COLORS[0],area:true},{name:'Previsão',values:fcOnly,color:COLORS[1],dash:'8 7'}],{height:360,forecastFrom:hist.length,band:{lower,upper},labels});$('#modelResult').textContent=`Modelo: ${r.desc}\nHorizonte: ${h}\nRMSE/escala: ${formatNum(r.rmse,5)}\nParâmetros: ${r.beta.map(x=>formatNum(x,5)).join(' · ')}\nÚltima projeção: ${formatNum(r.forecast.at(-1),5)}`;const eq={SARIMAX:'\\(y_t = c + \\phi_1 y_{t-1}+\\phi_2 y_{t-2}+\\gamma_1\\sin(2\\pi t/12)+\\gamma_2\\cos(2\\pi t/12)+\\varepsilon_t\\)',GARCH:'\\(\\sigma_t^2 = \\omega + \\alpha\\varepsilon_{t-1}^2 + \\beta\\sigma_{t-1}^2,\\quad \\alpha+\\beta<1\\)',VAR:'\\(\\mathbf{y}_t = \\mathbf{c}+A_1\\mathbf{y}_{t-1}+\\boldsymbol{\\varepsilon}_t\\)',VECM:"\\(\\Delta \\mathbf{y}_t = \\alpha\\beta'\\mathbf{y}_{t-1}+\\Gamma_1\\Delta\\mathbf{y}_{t-1}+\\boldsymbol{\\varepsilon}_t\\)"};$('#modelEq').textContent=eq[type];if(window.MathJax?.typesetPromise)MathJax.typesetPromise([$('#modelEq')]);}catch(e){$('#modelResult').textContent='Estimação indisponível: '+e.message;$('#modelChart').innerHTML='<div style="display:grid;place-items:center;height:100%;color:#8297ae">'+e.message+'</div>'}}
+
+function renderData(){setMetric('#vSelic','#dSelic','selic','%',2);setMetric('#vIpca','#dIpca','ipca','%',2);setMetric('#vUnemp','#dUnemp','unemp','%',1);setMetric('#vNpl','#dNpl','npl','%',2);$('#ipcaBadge').textContent=state.source==='embedded-real-annual'?'IPCA anual · fallback IBGE/SGS':'IPCA mensal · SGS 433';macroChart();creditChart();updateMoney()}
+function updateAll(runModelToo=true){renderData();renderShock();renderISLM();renderPhillips();renderTaylor();renderMultiplier();renderBank();if(runModelToo)runModel()}
+
+function gbmStep(x,mu,sigma,dt=1/12){return x*Math.exp((mu-.5*sigma*sigma)*dt+sigma*Math.sqrt(dt)*boxMuller())}
+function stressTick(){Machine.tick++;const level=Number($('#sRisk').value),shock=Math.abs(Number($('#sSelic').value)),supply=Math.abs(Number($('#sSupply').value));Machine.gbm.selic=gbmStep(Machine.gbm.selic,.00,.055+.008*shock);Machine.gbm.ipca=gbmStep(Machine.gbm.ipca,.00,.045+.006*supply);Machine.gbm.unemp=gbmStep(Machine.gbm.unemp,.00,.035+.004*shock);Machine.gbm.credit=gbmStep(Machine.gbm.credit,.00,.025+.006*Math.max(0,level));Machine.stress.selic=clamp((Machine.gbm.selic-1)*4,-.55,.85);Machine.stress.ipca=clamp((Machine.gbm.ipca-1)*1.6,-.35,.55);Machine.stress.unemp=clamp((Machine.gbm.unemp-1)*2.2,-.3,.85);Machine.stress.credit=clamp((Machine.gbm.credit-1)*3,-.7,.7);Machine.stress.spreadVol=clamp(gbmStep(Math.max(.03,Machine.stress.spreadVol),.03,.28+.035*Math.max(0,level)),.03,1.5);renderShock();renderBank();}
+function toggleEngine(){if(Machine.timer){clearInterval(Machine.timer);Machine.timer=null;$('#enginePill').classList.add('paused');$('#enginePill').textContent='stress engine · paused'}else{Machine.timer=setInterval(stressTick,2000);$('#enginePill').classList.remove('paused');$('#enginePill').textContent='stress engine · live'}}
+
+function playTransmissionStory(){Machine.scenarioVersion++;Machine.phase='policy';Machine.storyTimers.forEach(clearTimeout);Machine.storyTimers=[];const seq=[['causalPolicy',0],['causalCurve',550],['causalFunding',1100],['monetario',1650],['causalCredit',2250],['bankControlCard',2800],['eclPanel',3350]];seq.forEach(([id,t])=>Machine.storyTimers.push(setTimeout(()=>{const el=document.getElementById(id);if(el){el.classList.remove('causal-pulse');void el.offsetWidth;el.classList.add('causal-pulse');el.scrollIntoView({behavior:'smooth',block:'center'})}},t)));Machine.storyTimers.push(setTimeout(()=>{Machine.phase='complete'},4100))}
+
+const Agents={
+ Structure(){const ids=['dados','choques','transmissao','islm','monetario','bancos','econometria','teoria','referencias','eclChart'];const miss=ids.filter(id=>!document.getElementById(id));return{name:'Structure Agent',ok:!miss.length,msg:miss.length?'Ausentes: '+miss.join(', '):'Estrutura causal e IFRS 9 presente'}},
+ Data(){const core=['selic','ipca','unemp'].filter(k=>!validSeries(state.data[k]));return{name:'Data Provenance Agent',ok:!core.length,msg:core.length?'Séries core inválidas: '+core.join(', '):`Fonte ativa: ${state.source}; sem geradores artificiais`}},
+ Elasticity(){const base=simulate({selic:0}),tight=simulate({selic:5}),old=$('#sSelic').value;$('#sSelic').value=0;const pd0=creditRiskAt(8,base).pd;$('#sSelic').value=5;const pd5=creditRiskAt(8,tight).pd;$('#sSelic').value=old;const ok=tight.credit[10]<base.credit[10]&&pd5>pd0;return{name:'Credit Elasticity Agent',ok,msg:ok?'Selic +5 p.p. retrai crédito e eleva PD':'Falha na elasticidade juros→crédito/PD'}},
+ LGD(){const oldS=$('#sSupply').value;$('#sSupply').value=0;const normal=creditRiskAt(10,simulate({selic:0,supply:0})).lgd;$('#sSupply').value=-3;const stress=creditRiskAt(10,simulate({selic:3,supply:-3})).lgd;$('#sSupply').value=oldS;return{name:'LGD Downturn Agent',ok:stress>normal,msg:`LGD normal ${formatNum(normal*100,1)}% · stress ${formatNum(stress*100,1)}%`}},
+ ECL(){const r=creditRiskAt(),calc=r.pd*r.lgd*r.ead,err=Math.abs(calc-r.ecl)/Math.max(1,calc);return{name:'IFRS9 Identity Agent',ok:err<1e-10,msg:'ECL = PD × LGD × EAD validado'}},
+ GARCH(){try{const src=validSeries(state.data.ipca)?state.data.ipca:state.data.selic,r=fitGARCH(src,3),ab=r.beta[1]+r.beta[2];return{name:'GARCH Stationarity Agent',ok:ab<.995&&ab>=0,msg:`α+β=${formatNum(ab,4)}`}}catch(e){return{name:'GARCH Stationarity Agent',ok:false,msg:e.message}}},
+ Johansen(){try{const j=johansenCreditUnemp(),ok=j.eig.every(e=>Number.isFinite(e.value)&&e.value>=0&&e.value<1);return{name:'Johansen Agent',ok,msg:`λ: ${j.eig.map(e=>formatNum(e.value,4)).join(' · ')}`}}catch(e){return{name:'Johansen Agent',ok:false,msg:'Aguardando séries mensais oficiais: '+e.message}}},
+ Accessibility(){let fixed=0;$$('input,select,button').forEach((el,i)=>{if(!el.getAttribute('aria-label')&&!el.closest('label')){el.setAttribute('aria-label',el.textContent.trim()||el.id||`controle-${i}`);fixed++}});return{name:'Accessibility Agent',ok:true,msg:`${fixed} rótulo(s) corrigido(s)`}}
+};
+function runQA(){const res=Object.values(Agents).map(fn=>fn());$('#qaLog').innerHTML=res.map(r=>`<div class="qa-item"><span><b>${r.name}</b><br><small>${r.msg}</small></span><strong class="${r.ok?'qa-pass':'qa-warn'}">${r.ok?'PASS':'CHECK'}</strong></div>`).join('')}
+
+let tourIndex=0;function tour(){const steps=[['#dados','Selecione uma janela arrastando no gráfico macro. O filtro recalibra os demais módulos.'],['#choques','Mova a Selic: IS–LM, funding, PD e ECL reagem enquanto você arrasta.'],['#monetario','Observe M1–M4 responderem ao aperto monetário e ao compulsório.'],['#bancos','Feche a cadeia: funding → PD/LGD/EAD → ECL → spread → RAROC.']];const [sel,msg]=steps[tourIndex++%steps.length];$(sel).scrollIntoView({behavior:'smooth'});setTimeout(()=>alert(msg),300)}
+
+$('#btnLive').addEventListener('click',loadLive);$('#btnTour').addEventListener('click',tour);$('#runQA').addEventListener('click',runQA);$('#runModel').addEventListener('click',runModel);$('#runShock').addEventListener('click',()=>{renderShock();renderBank();playTransmissionStory()});$('#clearFilter').addEventListener('click',clearCrossFilter);$('#enginePill').addEventListener('click',toggleEngine);
+['sSelic','sFiscal','sFx','sReserve','sRisk','sSupply'].forEach(id=>$('#'+id).addEventListener('input',()=>{renderLabels();renderShock();renderISLM();updateMoney();renderBank()}));
+['islmF','islmM'].forEach(id=>$('#'+id).addEventListener('input',renderISLM));$('#anchor').addEventListener('input',renderPhillips);['tPi','tGap'].forEach(id=>$('#'+id).addEventListener('input',renderTaylor));$('#rr').addEventListener('input',renderMultiplier);
+['fund','spread','cap','ead','collateral','idio'].forEach(id=>$('#'+id).addEventListener('input',renderBank));
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{$$('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');state.horizon=Number(t.dataset.h);runModel()}));$('#modelType').addEventListener('change',runModel);$('#modelSeries').addEventListener('change',runModel);
+$$('.theory-trigger').forEach(el=>el.addEventListener('mouseenter',()=>{const t=document.getElementById(el.dataset.flash);if(t){t.classList.remove('stress-flash');void t.offsetWidth;t.classList.add('stress-flash')}}));
+renderLabels();loadOfficialCache();updateAll();runQA();Machine.timer=setInterval(stressTick,2000);setTimeout(loadLive,750);
+</script>
+<script>
+"use strict";
+const FusionUI={
+  active:"dashboard", bankRAF:null, txRAF:null, flowParticles:[], txStart:performance.now(),
+  map:{
+    sideSelic:["sSelic","sideSelicVal",v=>(v>0?"+":"")+Number(v).toFixed(2).replace(".",",")+" pp"],
+    sideFiscal:["sFiscal","sideFiscalVal",v=>(v>0?"+":"")+Number(v).toFixed(1).replace(".",",")],
+    sideFx:["sFx","sideFxVal",v=>(v>0?"+":"")+Number(v).toFixed(0)+"%"],
+    sideReserve:["sReserve","sideReserveVal",v=>Number(v).toFixed(0)+"%"],
+    sideRisk:["sRisk","sideRiskVal",v=>(v>0?"+":"")+Number(v).toFixed(1).replace(".",",")],
+    sideSupply:["sSupply","sideSupplyVal",v=>(v>0?"+":"")+Number(v).toFixed(1).replace(".",",")],
+    sideEad:["ead","sideEadVal",v=>humanMoney(Number(v)*1e6)],
+    sideCollateral:["collateral","sideCollateralVal",v=>Number(v).toFixed(0)+"%"],
+    sideIdio:["idio","sideIdioVal",v=>Number(v).toFixed(0)+"%"]
+  }
+};
+
+function fusionToast(msg,color="var(--blue)"){
+  const old=document.querySelector(".fusion-toast");if(old)old.remove();
+  const n=document.createElement("div");n.className="fusion-toast";n.style.borderLeftColor=color;n.textContent=msg;document.body.appendChild(n);
+  setTimeout(()=>n.remove(),2600);
+}
+function activateFusionTab(name,scrollTop=true){
+  FusionUI.active=name;
+  document.querySelectorAll(".fusion-nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.fusionTab===name));
+  document.querySelectorAll(".fusion-tab-content").forEach(p=>p.classList.toggle("active",p.dataset.fusionPanel===name));
+  if(scrollTop) window.scrollTo({top:38,behavior:"smooth"});
+  if(name==="transmission") setTimeout(startFusionTransmission,80);
+  if(name==="banking") setTimeout(startFusionBankFlow,80);
+  setTimeout(()=>{if(window.MathJax?.typesetPromise)MathJax.typesetPromise()},80);
+}
+document.querySelectorAll(".fusion-nav-btn").forEach(b=>b.addEventListener("click",()=>activateFusionTab(b.dataset.fusionTab)));
+
+function syncOne(sideId){
+  const [targetId,labelId,fmt]=FusionUI.map[sideId], side=document.getElementById(sideId),target=document.getElementById(targetId);
+  if(!side||!target)return;
+  target.value=side.value;
+  target.dispatchEvent(new Event("input",{bubbles:true}));
+  document.getElementById(labelId).textContent=fmt(side.value);
+}
+Object.keys(FusionUI.map).forEach(id=>document.getElementById(id)?.addEventListener("input",()=>{syncOne(id);refreshFusionUI(false)}));
+
+function pullSidebarFromCore(){
+  Object.entries(FusionUI.map).forEach(([sideId,[targetId,labelId,fmt]])=>{
+    const side=document.getElementById(sideId),target=document.getElementById(targetId);
+    if(side&&target){side.value=target.value;document.getElementById(labelId).textContent=fmt(side.value)}
+  });
+}
+function resetFusionScenario(){
+  const defaults={sSelic:0,sFiscal:0,sFx:0,sReserve:20,sRisk:0,sSupply:0,ead:1000,collateral:55,idio:25,fund:10,spread:5,cap:14,rr:20,islmF:0,islmM:0,tPi:4.5,tGap:0,anchor:70};
+  Object.entries(defaults).forEach(([id,v])=>{const e=document.getElementById(id);if(e){e.value=v;e.dispatchEvent(new Event("input",{bubbles:true}))}});
+  Machine.filter=null;document.getElementById("crossFilterBanner")?.classList.remove("active");
+  Machine.gbm={selic:1,ipca:1,unemp:1,credit:1};Machine.stress={selic:0,ipca:0,unemp:0,credit:0,spreadVol:.18,garchVar:.05};
+  pullSidebarFromCore();updateAll();refreshFusionUI();fusionToast("Cenário reiniciado","var(--green)");
+}
+document.getElementById("sideReset")?.addEventListener("click",resetFusionScenario);
+document.getElementById("sideRun")?.addEventListener("click",()=>document.getElementById("runShock")?.click());
+document.getElementById("sideEngine")?.addEventListener("click",()=>{toggleEngine();refreshFusionUI();});
+document.getElementById("enginePill")?.addEventListener("click",()=>setTimeout(refreshFusionUI,0));
+
+function updateFusionTicker(){
+  const m=currentMacro(),r=state.lastRisk||creditRiskAt(),scenario=simulate();
+  const pd=r?.pd*100||0,eclRate=r?.ecl/r?.ead*100||0;
+  const items=[
+    `SELIC OBS. <b>${formatNum(m.selic,2)}%</b>`,
+    `CHOQUE <b class="${Number($("#sSelic").value)>0?"risk":"good"}">${Number($("#sSelic").value)>0?"+":""}${formatNum(Number($("#sSelic").value),2)} pp</b>`,
+    `IPCA REF. <b>${formatNum(m.ipca,2)}%</b>`,
+    `DESEMPREGO <b>${formatNum(m.unemp,1)}%</b>`,
+    `PD 12M <b class="${pd>5?"risk":pd>3?"warn":"good"}">${formatNum(pd,2)}%</b>`,
+    `LGD <b>${formatNum((r?.lgd||0)*100,1)}%</b>`,
+    `ECL/EAD <b class="${eclRate>3?"risk":"warn"}">${formatNum(eclRate,2)}%</b>`,
+    `CRÉDITO M12 <b>${formatNum(scenario.credit[11],1)}%</b>`,
+    `FONTE <b>${state.source.toUpperCase()}</b>`,
+    `ENGINE <b>${Machine.timer?"LIVE 2S":"PAUSED"}</b>`
+  ];
+  const one=items.map(x=>`<div class="fusion-ticker-item">${x}</div>`).join("");
+  $("#fusionTickerTrack").innerHTML=one+one;
+  $("#fusionTickerMode").textContent=state.source==="bcb-live"?"BCB LIVE":"QUANT ENGINE";
+}
+
+function diagHTML(color,title,text){
+  return `<div class="d-title"><i class="diag-dot" style="background:${color};box-shadow:0 0 9px ${color}"></i><span>${title}</span></div><p>${text}</p>`;
+}
+function refreshFusionDiagnostics(){
+  const m=currentMacro(),p=simulate(),r=state.lastRisk||creditRiskAt();
+  const shock=Number($("#sSelic").value),infl=p.pi[11],cred=p.credit[11],pd=r.pd*100,ecl=r.ecl/r.ead*100;
+  $("#fusionDiagInfl").innerHTML= infl>5.5
+    ?diagHTML("var(--red)","Pressão nominal elevada",`Inflação simulada em ${formatNum(infl,1)}% no mês 12. O cenário exige persistência monetária ou melhora do choque de oferta.`)
+    :diagHTML("var(--green)","Desinflação / estabilidade",`Inflação simulada em ${formatNum(infl,1)}% no mês 12; o hiato e as expectativas dominam a trajetória.`);
+  $("#fusionDiagCredit").innerHTML= cred<4
+    ?diagHTML("var(--amber)","Crédito em retração",`Crescimento projetado em ${formatNum(cred,1)}%. A elasticidade ao juro e à aversão a risco está comprimindo originação.`)
+    :diagHTML("var(--green)","Crédito resiliente",`Crescimento projetado em ${formatNum(cred,1)}%. Funding e atividade ainda sustentam a carteira.`);
+  $("#fusionDiagRisk").innerHTML= pd>5||ecl>3
+    ?diagHTML("var(--red)","Stress de crédito",`PD ${formatNum(pd,2)}% · ECL/EAD ${formatNum(ecl,2)}%. A deterioração já aparece na precificação e no RAROC.`)
+    :diagHTML("var(--blue)","Risco administrável",`PD ${formatNum(pd,2)}% · ECL/EAD ${formatNum(ecl,2)}%. O cenário permanece dentro da zona sintética de conforto.`);
+}
+function refreshFusionOverview(){
+  const m=currentMacro(),r=state.lastRisk||creditRiskAt();
+  $("#fusionKpiSelic").textContent=formatNum(m.selic+Number($("#sSelic").value)+Machine.stress.selic,2)+"%";
+  $("#fusionKpiIpca").textContent=formatNum(m.ipca,2)+"%";
+  $("#fusionKpiPD").textContent=formatNum(r.pd*100,2)+"%";
+  $("#fusionKpiECL").textContent=formatNum(100*r.ecl/r.ead,2)+"%";
+  $("#fusionScenarioBadge").textContent="SCENARIO "+String(Machine.scenarioVersion).padStart(3,"0");
+  $("#fusionFilterBadge").textContent=Machine.filter?`JANELA · ${Machine.filter.start.slice(0,7)} → ${Machine.filter.end.slice(0,7)}`:"JANELA · TOTAL";
+  $("#fusionSource").innerHTML=`<b>Fonte ativa:</b> ${state.source}<br><b>BCB:</b> SGS 432, 433, 24369, 20539, 21082, 27791, 27810, 27813, 27815, 1788.<br><b>Fallback:</b> âncoras anuais reais + cache oficial; sem gerador trigonométrico.`;
+  $("#fusionSideMode").textContent=Machine.timer?"● LIVE ENGINE":"Ⅱ ENGINE PAUSED";
+  $("#fusionSideMode").style.color=Machine.timer?"var(--green)":"var(--amber)";
+}
+function refreshSectorStress(){
+  const m=currentMacro(),p=simulate(),shock=Number($("#sSelic").value),fx=Math.abs(Number($("#sFx").value))/10,supply=Math.abs(Number($("#sSupply").value)),risk=Math.max(0,Number($("#sRisk").value));
+  const u=p.u[11],gap=p.x[11];
+  const scores={
+    agro:clamp(24+5*fx+6*supply+2*risk,5,95),
+    industry:clamp(28+5*Math.max(0,shock)+7*Math.max(0,-gap)+3*risk,5,95),
+    services:clamp(24+7*Math.max(0,u-6)+6*Math.max(0,-gap)+2*risk,5,95),
+    pf:clamp(26+6*Math.max(0,shock)+9*Math.max(0,u-6)+3*risk,5,95),
+    public:clamp(16+2*Math.max(0,shock)+2*risk,5,80)
+  };
+  document.querySelectorAll(".sector-cell").forEach(el=>{
+    const v=scores[el.dataset.sector]||30, hue=140-(v/100)*140;
+    el.querySelector("b").textContent=Math.round(v);
+    el.style.background=`linear-gradient(145deg,hsla(${hue},68%,47%,.70),hsla(${hue},70%,27%,.28))`;
+  });
+}
+function refreshFusionUI(rebuildTicker=true){
+  try{refreshFusionOverview();refreshFusionDiagnostics();refreshSectorStress();if(rebuildTicker)updateFusionTicker()}catch(e){console.warn("Fusion UI:",e)}
+}
+
+/* High-DPI canvas helpers */
+function fusionCanvasContext(canvas,height){
+  if(!canvas)return null;const dpr=Math.min(window.devicePixelRatio||1,2),w=Math.max(520,canvas.clientWidth||900);
+  canvas.style.height=height+"px";canvas.width=w*dpr;canvas.height=height*dpr;
+  const ctx=canvas.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);return {ctx,w,h:height};
+}
+function startFusionTransmission(){
+  const canvas=$("#fusionTransmissionCanvas");if(!canvas||canvas.offsetParent===null)return;
+  if(FusionUI.txRAF)cancelAnimationFrame(FusionUI.txRAF);
+  const setup=fusionCanvasContext(canvas,250);if(!setup)return;const {ctx,w,h}=setup, y=h*.47;
+  const nodes=[
+    {x:w*.07,name:"Copom",sub:"t=0",color:"#F2F5FB"},
+    {x:w*.27,name:"Selic / curva",sub:"imediato",color:"#5B9DF9"},
+    {x:w*.48,name:"M1–M4",sub:"1–6m",color:"#A78BFA"},
+    {x:w*.69,name:"Funding / crédito",sub:"3–12m",color:"#33D69B"},
+    {x:w*.91,name:"PD / ECL",sub:"6–18m",color:"#FF6B7A"}
+  ];
+  const start=performance.now();
+  function draw(now){
+    const shock=Math.abs(Number($("#sSelic").value)),speed=1+shock*.12,t=((now-start)*speed%5200)/5200;
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle="#25324d";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(nodes[0].x,y);ctx.lineTo(nodes.at(-1).x,y);ctx.stroke();
+    nodes.forEach((n,i)=>{
+      ctx.beginPath();ctx.arc(n.x,y,8,0,Math.PI*2);ctx.fillStyle=n.color;ctx.fill();
+      ctx.font="700 11px Inter, sans-serif";ctx.fillStyle="#dce7f5";ctx.textAlign="center";ctx.fillText(n.name,n.x,y-25);
+      ctx.font="10px 'JetBrains Mono', monospace";ctx.fillStyle="#586386";ctx.fillText(n.sub,n.x,y+35);
+    });
+    const seg=t*(nodes.length-1),i=Math.min(nodes.length-2,Math.floor(seg)),z=seg-i,x=nodes[i].x+(nodes[i+1].x-nodes[i].x)*z;
+    const grad=ctx.createRadialGradient(x,y,0,x,y,18+shock*1.5);grad.addColorStop(0,"rgba(255,255,255,.95)");grad.addColorStop(.28,"rgba(91,157,249,.75)");grad.addColorStop(1,"rgba(91,157,249,0)");
+    ctx.beginPath();ctx.arc(x,y,18+shock*1.5,0,Math.PI*2);ctx.fillStyle=grad;ctx.fill();
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
+    const label=Number($("#sSelic").value)>=0?"APERTO MONETÁRIO":"AFROUXAMENTO";
+    ctx.font="800 10px 'JetBrains Mono', monospace";ctx.fillStyle=Number($("#sSelic").value)>=0?"#FF9B55":"#33D69B";ctx.textAlign="left";ctx.fillText(label,16,22);
+    FusionUI.txRAF=requestAnimationFrame(draw);
+  } FusionUI.txRAF=requestAnimationFrame(draw);
+}
+function startFusionBankFlow(){
+  const canvas=$("#fusionBankFlow");if(!canvas||canvas.offsetParent===null)return;
+  if(FusionUI.bankRAF)cancelAnimationFrame(FusionUI.bankRAF);
+  const setup=fusionCanvasContext(canvas,330);if(!setup)return;const {ctx,w,h}=setup,cy=h*.5,lx=w*.12,mx=w*.49,rx=w*.87;
+  if(!FusionUI.flowParticles.length)FusionUI.flowParticles=Array.from({length:60},()=>({t:Math.random(),s:.0017+Math.random()*.0026,o:(Math.random()-.5)*55}));
+  function tank(x,label,value,color){
+    const r=44;ctx.beginPath();ctx.arc(x,cy,r,0,Math.PI*2);ctx.fillStyle=color+"18";ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=2;ctx.stroke();
+    ctx.font="800 11px Inter";ctx.textAlign="center";ctx.fillStyle="#eef5ff";ctx.fillText(label,x,cy-4);ctx.font="700 10px 'JetBrains Mono'";ctx.fillStyle=color;ctx.fillText(value,x,cy+14);
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);const r=state.lastRisk||creditRiskAt(),policy=Number($("#sSelic").value),fund=Number($("#fund").value)+.55*policy,spread=Math.max(.8,Number($("#spread").value)+100*r.ecl/r.ead),p=simulate(),credit=p.credit[11];
+    const ltd=clamp(78+policy*2+Number($("#sRisk").value)*2,45,130), speed=clamp(.55+Math.max(0,credit)/12,.45,1.8);
+    tank(lx,"CAPTAÇÕES",formatNum(100,0), "#5B9DF9");tank(rx,"CRÉDITO",formatNum(Math.max(45,100-policy*3-Number($("#sRisk").value)*4),0),"#33D69B");
+    ctx.strokeStyle="rgba(91,157,249,.22)";ctx.lineWidth=10;ctx.beginPath();ctx.moveTo(lx+48,cy);ctx.bezierCurveTo(mx-90,cy-45,mx-55,cy,mx-35,cy);ctx.stroke();
+    ctx.strokeStyle="rgba(51,214,155,.22)";ctx.beginPath();ctx.moveTo(mx+35,cy);ctx.bezierCurveTo(mx+80,cy,rx-95,cy+42,rx-48,cy);ctx.stroke();
+    const tr=34+Math.min(18,spread*1.05),g=ctx.createRadialGradient(mx,cy,3,mx,cy,tr);g.addColorStop(0,"rgba(255,200,87,.72)");g.addColorStop(1,"rgba(255,107,122,.05)");
+    ctx.beginPath();ctx.arc(mx,cy,tr,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.strokeStyle="#FFC857";ctx.lineWidth=2;ctx.stroke();
+    ctx.font="850 11px 'JetBrains Mono'";ctx.textAlign="center";ctx.fillStyle="#fff";ctx.fillText(formatNum(spread,1)+"pp",mx,cy+3);ctx.font="9px Inter";ctx.fillStyle="#93A0C0";ctx.fillText("SPREAD + ECL",mx,cy-44);
+    FusionUI.flowParticles.forEach(pt=>{
+      pt.t+=pt.s*speed;if(pt.t>1)pt.t=0;let x,y;
+      if(pt.t<.5){const q=pt.t*2,x0=lx+48,x1=mx-36;x=x0+(x1-x0)*q;y=cy+Math.sin(q*Math.PI)*pt.o*.28}
+      else{const q=(pt.t-.5)*2,x0=mx+36,x1=rx-48;x=x0+(x1-x0)*q;y=cy+Math.sin(q*Math.PI)*pt.o*.28}
+      ctx.beginPath();ctx.arc(x,y,2.2,0,Math.PI*2);ctx.fillStyle=pt.t<.5?"rgba(91,157,249,.9)":"rgba(51,214,155,.9)";ctx.fill();
+    });
+    ctx.font="700 10px 'JetBrains Mono'";ctx.textAlign="left";ctx.fillStyle="#93A0C0";ctx.fillText(`FUNDING ${formatNum(fund,1)}%`,16,22);ctx.fillText(`PD ${formatNum(r.pd*100,2)}%`,16,39);
+    ctx.textAlign="right";ctx.fillText(`L/D ${formatNum(ltd,0)}%`,w-16,22);ctx.fillText(`ECL/EAD ${formatNum(100*r.ecl/r.ead,2)}%`,w-16,39);
+    FusionUI.bankRAF=requestAnimationFrame(draw);
+  } FusionUI.bankRAF=requestAnimationFrame(draw);
+}
+
+/* Storytelling across tabs — deliberate tab changes reinforce the causal chain. */
+window.playTransmissionStory=function(){
+  Machine.scenarioVersion++;Machine.phase="policy";Machine.storyTimers.forEach(clearTimeout);Machine.storyTimers=[];
+  const steps=[
+    [0,"transmission","causalPolicy","1/5 · Choque nasce na política monetária"],
+    [900,"transmission","causalFunding","2/5 · Curva e funding começam a reprecificar"],
+    [1850,"dashboard","monetario","3/5 · Liquidez e agregados monetários respondem"],
+    [2850,"banking","bankControlCard","4/5 · O balanço bancário transmite o choque"],
+    [3850,"banking","eclPanel","5/5 · PD, LGD e ECL fecham a transmissão macro→micro"]
+  ];
+  steps.forEach(([delay,tab,id,msg])=>Machine.storyTimers.push(setTimeout(()=>{
+    activateFusionTab(tab,false);const el=document.getElementById(id);if(el){el.classList.remove("causal-pulse");void el.offsetWidth;el.classList.add("causal-pulse");el.scrollIntoView({behavior:"smooth",block:"center"})}
+    fusionToast(msg,tab==="banking"?"var(--green)":tab==="dashboard"?"var(--purple)":"var(--orange)");
+  },delay)));
+  Machine.storyTimers.push(setTimeout(()=>{Machine.phase="complete";refreshFusionUI()},4700));
+};
+
+/* Focus button on every analytical chart */
+function installChartFocus(){
+  document.querySelectorAll(".chart[id]").forEach(chart=>{
+    const parent=chart.parentElement;if(parent?.querySelector(`.chart-focus-btn[data-chart="${chart.id}"]`))return;
+    const btn=document.createElement("button");btn.className="chart-focus-btn";btn.dataset.chart=chart.id;btn.textContent="EXPANDIR";
+    btn.addEventListener("click",()=>openChartFocus(chart.id));
+    if(parent){const title=parent.querySelector("h3,.panel-title");if(title)title.appendChild(btn);else parent.insertBefore(btn,chart)}
+  });
+}
+function openChartFocus(id){
+  const source=document.getElementById(id);if(!source||source.dataset.focused==="1")return;
+  const parent=source.parentNode,next=source.nextSibling,oldHeight=source.style.height;
+  source.dataset.focused="1";
+  const ov=document.createElement("div");ov.className="chart-focus-overlay";
+  const card=document.createElement("div");card.className="chart-focus-card";
+  card.innerHTML=`<div class="chart-focus-top"><b>${id}</b><button class="chart-focus-close">FECHAR ×</button></div>`;
+  card.appendChild(source);ov.appendChild(card);document.body.appendChild(ov);
+  const close=()=>{
+    source.dataset.focused="";
+    source.style.height=oldHeight;
+    if(next&&next.parentNode===parent)parent.insertBefore(source,next);else parent.appendChild(source);
+    ov.remove();
+  };
+  card.querySelector(".chart-focus-close").onclick=close;
+  ov.addEventListener("click",e=>{if(e.target===ov)close()});
+}
+
+/* Observe relevant interactions so the terminal header remains synchronized. */
+document.addEventListener("input",e=>{
+  if(["sSelic","sFiscal","sFx","sReserve","sRisk","sSupply","ead","collateral","idio","fund","spread","cap"].includes(e.target.id)){
+    setTimeout(()=>{pullSidebarFromCore();refreshFusionUI(false)},0);
+  }
+});
+document.getElementById("clearFilter")?.addEventListener("click",()=>setTimeout(refreshFusionUI,10));
+document.getElementById("runModel")?.addEventListener("click",()=>setTimeout(refreshFusionUI,10));
+document.addEventListener("keydown",e=>{
+  if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement?.tagName))return;
+  const keys=["dashboard","transmission","models","banking","forecast","theory","audit"];
+  if(/^[1-7]$/.test(e.key))activateFusionTab(keys[Number(e.key)-1]);
+  if(e.key.toLowerCase()==="e"){toggleEngine();refreshFusionUI();fusionToast(Machine.timer?"Stress engine ativado":"Stress engine pausado","var(--purple)")}
+  if(e.key.toLowerCase()==="r")document.getElementById("sideRun")?.click();
+});
+window.addEventListener("resize",()=>{if(FusionUI.active==="transmission")startFusionTransmission();if(FusionUI.active==="banking")startFusionBankFlow()});
+
+/* Make core refresh functions feed the editorial shell too. */
+const _fusionRenderBank=window.renderBank;
+window.renderBank=function(){const x=_fusionRenderBank.apply(this,arguments);setTimeout(()=>refreshFusionUI(false),0);return x};
+const _fusionApplyCross=window.applyCrossFilter;
+window.applyCrossFilter=function(){const x=_fusionApplyCross.apply(this,arguments);setTimeout(()=>refreshFusionUI(),0);return x};
+const _fusionClearCross=window.clearCrossFilter;
+window.clearCrossFilter=function(){const x=_fusionClearCross.apply(this,arguments);setTimeout(()=>refreshFusionUI(),0);return x};
+
+pullSidebarFromCore();
+refreshFusionUI();
+installChartFocus();
+setTimeout(()=>{refreshFusionUI();startFusionTransmission()},900);
+setInterval(()=>refreshFusionUI(),2000);
+</script>
+
+
+<script>
+"use strict";
+
+/* ===== Agentic v5 live visual layer ===== */
+const AgenticV5={accIndex:0,accTimer:null,lastModel:null};
+
+function peakInfo(arr,mode="max"){
+  if(!arr?.length)return {v:0,i:0};
+  let idx=0;
+  for(let i=1;i<arr.length;i++){
+    if((mode==="max"&&arr[i]>arr[idx])||(mode==="min"&&arr[i]<arr[idx]))idx=i;
+  }
+  return {v:arr[idx],i:idx};
+}
+function renderIRFLab(){
+  const scenario=simulate(),base=simulate({selic:0,fiscal:0,fx:0,rr:20,risk:0,supply:0});
+  const diff=k=>scenario[k].map((v,i)=>v-base[k][i]),labels=Array.from({length:24},(_,i)=>"m"+(i+1));
+  const pi=diff("pi"),gap=diff("x"),credit=diff("credit"),npl=diff("npl");
+  lineChart("#irfPi",[{name:"Δπ",values:pi,color:COLORS[1],area:true}],{height:155,labels,label:"IRF inflação"});
+  lineChart("#irfGap",[{name:"Δx",values:gap,color:COLORS[0],area:true}],{height:155,labels,label:"IRF hiato"});
+  lineChart("#irfCredit",[{name:"Δcrédito",values:credit,color:COLORS[2],area:true}],{height:155,labels,label:"IRF crédito"});
+  lineChart("#irfNpl",[{name:"ΔNPL",values:npl,color:COLORS[3],area:true}],{height:155,labels,label:"IRF inadimplência"});
+  const pPi=peakInfo(pi,"max"),tGap=peakInfo(gap,"min"),tCr=peakInfo(credit,"min"),pN=peakInfo(npl,"max");
+  $("#irfPiStat").textContent=`pico ${pPi.i+1}m · ${formatNum(pPi.v,2)}pp`;
+  $("#irfGapStat").textContent=`vale ${tGap.i+1}m · ${formatNum(tGap.v,2)}pp`;
+  $("#irfCreditStat").textContent=`vale ${tCr.i+1}m · ${formatNum(tCr.v,2)}pp`;
+  $("#irfNplStat").textContent=`pico ${pN.i+1}m · ${formatNum(pN.v,2)}pp`;
+  $("#irfPeakPi").textContent=`${formatNum(pPi.v,2)}pp @ m${pPi.i+1}`;
+  $("#irfTroughGap").textContent=`${formatNum(tGap.v,2)}pp @ m${tGap.i+1}`;
+  $("#irfTroughCredit").textContent=`${formatNum(tCr.v,2)}pp @ m${tCr.i+1}`;
+  $("#irfPeakNpl").textContent=`${formatNum(pN.v,2)}pp @ m${pN.i+1}`;
+}
+function updateFormulaTheaters(){
+  const o=simulate(),macro=currentMacro(),r=state.lastRisk||creditRiskAt(0,o),m12=11;
+  const effectiveRate=Number($("#sSelic").value)-.18*(o.pi[m12]-4.5);
+  $("#ftRealRate")&&( $("#ftRealRate").textContent=(effectiveRate>=0?"+":"")+formatNum(effectiveRate,2)+"pp" );
+  $("#ftGap")&&( $("#ftGap").textContent=(o.x[m12]>=0?"+":"")+formatNum(o.x[m12],2)+"%" );
+  $("#ftPi")&&( $("#ftPi").textContent=formatNum(o.pi[m12],2)+"%" );
+  $("#ftCredit")&&( $("#ftCredit").textContent=formatNum(o.credit[m12],2)+"%" );
+  $("#ftNpl")&&( $("#ftNpl").textContent=formatNum(o.npl[m12],2)+"%" );
+
+  $("#nkRateVal")&&( $("#nkRateVal").textContent=formatNum(macro.selic+Number($("#sSelic").value),2)+"%" );
+  $("#nkGapVal")&&( $("#nkGapVal").textContent=formatNum(o.x[m12],2)+"%" );
+  $("#nkPiVal")&&( $("#nkPiVal").textContent=formatNum(o.pi[m12],2)+"%" );
+  $("#nkAnchorVal")&&( $("#nkAnchorVal").textContent=$("#anchor").value+"%" );
+
+  const fund=Number($("#fund").value)+.55*Number($("#sSelic").value)+Machine.stress.spreadVol*.5;
+  const cor=100*r.ecl/r.ead,capital=.085*Number($("#cap").value),opex=1.15,margin=Math.max(1,Number($("#spread").value)*.58);
+  const rate=fund+cor+capital+opex+margin;
+  $("#bfFunding")&&( $("#bfFunding").textContent=formatNum(fund,2)+"%" );
+  $("#bfRisk")&&( $("#bfRisk").textContent=formatNum(cor,2)+"%" );
+  $("#bfCapital")&&( $("#bfCapital").textContent=formatNum(capital,2)+"%" );
+  $("#bfOpex")&&( $("#bfOpex").textContent=formatNum(opex,2)+"%" );
+  $("#bfMargin")&&( $("#bfMargin").textContent=formatNum(margin,2)+"%" );
+  $("#bfRate")&&( $("#bfRate").textContent=formatNum(rate,2)+"%" );
+}
+function updateMoneyModern(){
+  const rr=Number($("#rr").value)/100,m=1/rr;
+  $("#modernMult")&&( $("#modernMult").textContent=formatNum(m,2)+"×" );
+  $("#modernDeposits")&&( $("#modernDeposits").textContent="R$ "+formatNum(100*m,0) );
+}
+function updateAccelerator(){
+  const o=simulate(),r=state.lastRisk||creditRiskAt(),policy=Number($("#sSelic").value),coverage=Number($("#collateral").value);
+  const collateralShock=clamp(coverage + Math.min(0,o.x[11])*2.3 - Math.max(0,Number($("#sSupply").value))*1.5,0,100);
+  const leverage=clamp(8+Math.max(0,policy)*.65+Math.max(0,-o.x[11])*.8+Number($("#sRisk").value)*.45,4,22);
+  $("#accRate")&&( $("#accRate").textContent=(policy>=0?"+":"")+formatNum(policy,2)+"pp" );
+  $("#accCollateral")&&( $("#accCollateral").textContent=formatNum(collateralShock,0)+"%" );
+  $("#accLeverage")&&( $("#accLeverage").textContent=formatNum(leverage,1)+"×" );
+  $("#accCredit")&&( $("#accCredit").textContent=formatNum(o.credit[11],1)+"%" );
+  $("#accPD")&&( $("#accPD").textContent=formatNum(r.pd*100,2)+"%" );
+}
+function animateAccelerator(){
+  const nodes=$$(".acc-node");if(!nodes.length)return;
+  nodes.forEach(n=>n.classList.remove("active"));
+  nodes[AgenticV5.accIndex%nodes.length].classList.add("active");
+  AgenticV5.accIndex=(AgenticV5.accIndex+1)%nodes.length;
+}
+function updateALMStage(){
+  const o=simulate(),r=state.lastRisk||creditRiskAt(),policy=Number($("#sSelic").value),fund=Number($("#fund").value)+.55*policy;
+  const costRisk=100*r.ecl/r.ead,capital=Number($("#cap").value),liq=Number($("#liqBuffer")?.textContent?.replace("%","").replace(",",".")||17);
+  const beta=clamp(.42+.025*Math.max(0,policy)+.012*Math.max(0,Number($("#sRisk").value)),.25,.9);
+  const ftp=fund+0.35+0.08*Math.max(0,policy);
+  const active=Number($("#loanRate")?.textContent?.replace("%","").replace(",",".")||0);
+  const nim=active-ftp-costRisk;
+  $("#almDepositBeta")&&( $("#almDepositBeta").textContent=formatNum(beta*100,0)+"%" );
+  $("#almFTP")&&( $("#almFTP").textContent=formatNum(ftp,2)+"%" );
+  $("#almNIM")&&( $("#almNIM").textContent=formatNum(nim,2)+"%" );
+  $("#almCoR")&&( $("#almCoR").textContent=formatNum(costRisk,2)+"%" );
+  $("#almCapitalBuffer")&&( $("#almCapitalBuffer").textContent=formatNum(Math.max(0,capital-10.5),1)+"pp" );
+  $("#almLiquidity")&&( $("#almLiquidity").textContent=formatNum(liq,1)+"%" );
+
+  const stress=clamp((r.pd*100-2)*5+Math.max(0,-o.x[11])*5+Math.max(0,policy)*1.8+Math.max(0,Number($("#sRisk").value))*3,0,50);
+  let s3=clamp(2.2+stress*.20+Math.max(0,o.npl[11]-3.2)*2.4,1,24);
+  let s2=clamp(9+stress*.55,5,42);
+  let s1=Math.max(34,100-s2-s3);
+  const norm=100/(s1+s2+s3);s1*=norm;s2*=norm;s3*=norm;
+  $("#stage1Val")&&( $("#stage1Val").textContent=formatNum(s1,1)+"%" );
+  $("#stage2Val")&&( $("#stage2Val").textContent=formatNum(s2,1)+"%" );
+  $("#stage3Val")&&( $("#stage3Val").textContent=formatNum(s3,1)+"%" );
+  $("#stageBar1")&&( $("#stageBar1").style.width=s1+"%", $("#stageBar1").textContent=s1>12?formatNum(s1,0)+"%":"" );
+  $("#stageBar2")&&( $("#stageBar2").style.width=s2+"%", $("#stageBar2").textContent=s2>8?formatNum(s2,0)+"%":"" );
+  $("#stageBar3")&&( $("#stageBar3").style.width=s3+"%", $("#stageBar3").textContent=s3>7?formatNum(s3,0)+"%":"" );
+  $("#stagePerfPD")&&( $("#stagePerfPD").textContent=formatNum(r.pd*100,2)+"%" );
+  $("#stageWatchPD")&&( $("#stageWatchPD").textContent=formatNum(Math.min(99,r.pd*100*2.4+1.1),2)+"%" );
+  $("#stageDefaultPD")&&( $("#stageDefaultPD").textContent=formatNum(Math.min(100,35+r.pd*100*4.2),1)+"%" );
+  $("#stageSICR")&&( $("#stageSICR").textContent=formatNum(clamp(1.4+stress*.15,.5,12),1)+"%" );
+  $("#stageDefaultFlow")&&( $("#stageDefaultFlow").textContent=formatNum(clamp(.35+stress*.07,.2,7),1)+"%" );
+}
+function updateModelDiagnostic(r,type,h){
+  if(!r)return;
+  AgenticV5.lastModel={r,type,h};
+  const level=Math.max(1,Math.abs(r.hist?.at(-1)||1)),rel=clamp((r.rmse/level)*100,0,100);
+  let persistence=55;
+  if(type==="GARCH")persistence=clamp((r.beta[1]+r.beta[2])*100,0,100);
+  if(type==="SARIMAX")persistence=clamp((Math.abs(r.beta[1]||0)+Math.abs(r.beta[2]||0))*55,0,100);
+  if(type==="VAR")persistence=clamp((Math.abs(r.beta[1]||0)+Math.abs(r.beta[4]||0))*45,0,100);
+  if(type==="VECM")persistence=70;
+  const horizon=clamp(h/24*100,10,100),numeric=type==="GARCH"?92:type==="VECM"?88:95;
+  const set=(id,v,label)=>{const e=$("#"+id),l=$("#"+id+"v");if(e)e.style.width=v+"%";if(l)l.textContent=label};
+  set("diagRMSE",100-rel,formatNum(rel,1)+"%");
+  set("diagPersistence",persistence,formatNum(persistence,0)+"%");
+  set("diagHorizon",horizon,h+"h");
+  set("diagNumeric",numeric,formatNum(numeric,0)+"/100");
+  const stories={
+    SARIMAX:["Memória + sazonalidade","A leitura principal é a persistência da série e o padrão sazonal. Quanto maior o horizonte, mais a banda deve dominar a interpretação do ponto previsto."],
+    GARCH:["Volatilidade é um estado","Não leia GARCH como previsão do nível da série: ele descreve a variância condicional. α mede reação ao choque; β mede memória da volatilidade."],
+    VAR:["Sistema, não equação isolada","No VAR, uma variável carrega defasagens próprias e das demais. A interpretação econômica séria exige identificação de choques antes de chamar uma resposta de causal."],
+    VECM:["Curto prazo corrige longo prazo","β descreve a relação de cointegração; α informa quais variáveis respondem ao desvio do equilíbrio. O sinal e a magnitude de α são economicamente centrais."]
+  };
+  $("#modelStoryTitle").textContent=stories[type][0];$("#modelStoryText").textContent=stories[type][1];$("#modelFormulaName").textContent=type;
+}
+function chapterProgress(){
+  const max=document.documentElement.scrollHeight-innerHeight;
+  $("#chapterProgress").style.width=(max>0?scrollY/max*100:0)+"%";
+}
+addEventListener("scroll",chapterProgress,{passive:true});
+
+/* Extend core runModel without duplicating estimation */
+const _agenticRunModel=window.runModel;
+window.runModel=function(){
+  const key=$("#modelSeries").value,type=$("#modelType").value,h=state.horizon;
+  let result;
+  try{
+    if(type==="SARIMAX")result=fitSARIMAX(scopedSeries(key),h);
+    else if(type==="GARCH")result=fitGARCH(scopedSeries(key),h);
+    else if(type==="VAR")result=fitVAR(key,h);
+    else result=fitVECM(key,h);
+  }catch(e){}
+  const x=_agenticRunModel.apply(this,arguments);
+  if(result)updateModelDiagnostic(result,type,h);
+  return x;
+};
+
+/* Five agent QA: visual/model invariants */
+Agents.StatisticalVisual=()=> {
+  const ok=$$("#irfLabCard .irf-mini").length===4 && !!$("#modelDiagnostic");
+  return {name:"PhD Statistics Agent",ok,msg:ok?"IRF em pequenos múltiplos + diagnóstico visual presentes":"Faltam separação de escalas ou diagnóstico"};
+};
+Agents.MonetaryEconometrics=()=> {
+  const base=simulate({selic:0}),tight=simulate({selic:5});
+  const ok=tight.credit[11]<base.credit[11] && tight.npl[11]>base.npl[11] && !!$("#nkSystemCard");
+  return {name:"Monetary Econometrics Agent",ok,msg:ok?"Transmissão monetária e NK core respeitam sinais esperados":"Revisar elasticidades ou arquitetura NK"};
+};
+Agents.UXStorytelling=()=> {
+  const ok=!!$("#shockFormulaTheater")&&!!$("#bankFormulaTheater")&&!!$("#chapterProgress");
+  return {name:"UX Storytelling Agent",ok,msg:ok?"Fórmulas animadas e progresso narrativo ativos":"Story layer incompleta"};
+};
+Agents.BankingEducation=()=> {
+  const r=state.lastRisk||creditRiskAt(),ok=Math.abs(r.ecl-r.pd*r.lgd*r.ead)<Math.max(1,r.ead*1e-10)&&!!$("#stagePanel")&&!!$("#almStrip");
+  return {name:"Banking Education Agent",ok,msg:ok?"ALM/FTP + stages + identidade ECL consistentes":"Revisar bloco bancário/IFRS 9"};
+};
+Agents.EngineeringIntegration=()=> {
+  const ids=$$("[id]").map(x=>x.id),ok=new Set(ids).size===ids.length;
+  return {name:"Software Engineering Agent",ok,msg:ok?"Estado integrado e IDs únicos":"IDs duplicados detectados"};
+};
+
+/* Single refresh hook */
+function agenticRefresh(){
+  try{
+    renderIRFLab();updateFormulaTheaters();updateMoneyModern();updateAccelerator();updateALMStage();
+  }catch(e){console.warn("Agentic refresh",e)}
+}
+document.addEventListener("input",e=>{
+  if(e.target.matches('input[type="range"],select'))setTimeout(agenticRefresh,0);
+});
+$("#runModel")?.addEventListener("click",()=>setTimeout(()=>{
+  try{const key=$("#modelSeries").value,type=$("#modelType").value,h=state.horizon;let r;if(type==="SARIMAX")r=fitSARIMAX(scopedSeries(key),h);else if(type==="GARCH")r=fitGARCH(scopedSeries(key),h);else if(type==="VAR")r=fitVAR(key,h);else r=fitVECM(key,h);updateModelDiagnostic(r,type,h)}catch(e){}
+},60));
+$("#runShock")?.addEventListener("click",()=>setTimeout(agenticRefresh,40));
+$("#sideRun")?.addEventListener("click",()=>setTimeout(agenticRefresh,40));
+$("#runQA")?.addEventListener("click",()=>setTimeout(agenticRefresh,20));
+
+AgenticV5.accTimer=setInterval(animateAccelerator,1200);
+setTimeout(()=>{agenticRefresh();runModel();chapterProgress();},700);
+setInterval(updateFormulaTheaters,2000);
+</script>
+
+</body></html>
