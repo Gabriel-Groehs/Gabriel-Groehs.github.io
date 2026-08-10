@@ -719,9 +719,465 @@ h1,h2,h3,h4{font-family:var(--f-display)}
 
 
 /* end agentic additions */
+
+/* ============================================================
+   LIGHT BLUE RESEARCH EDITION
+   Editorial clarity inspired by the RSL / PD Lifetime reference.
+   Default theme is light; Terminal theme remains available.
+   ============================================================ */
+body.light-edition{
+  --void:#F2F6FB;
+  --base:#F6F9FD;
+  --surface:#FFFFFF;
+  --surface-2:#F4F8FD;
+  --surface-3:#EAF2FB;
+  --border:#DCE6F1;
+  --border-strong:#BFD1E5;
+  --text-hi:#14243A;
+  --text-mid:#51677F;
+  --text-low:#8293A7;
+
+  --blue:#3478C7;
+  --blue-dim:rgba(52,120,199,.10);
+  --orange:#D98243;
+  --orange-dim:rgba(217,130,67,.10);
+  --green:#238E70;
+  --green-dim:rgba(35,142,112,.10);
+  --red:#C84F61;
+  --red-dim:rgba(200,79,97,.10);
+  --amber:#B98524;
+  --amber-dim:rgba(185,133,36,.11);
+  --purple:#7863C6;
+  --purple-dim:rgba(120,99,198,.10);
+
+  --paper:#FFFDF7;
+  --paper-ink:#263547;
+  --paper-accent:#8B6337;
+
+  color:var(--text-hi);
+  background:
+    radial-gradient(900px 440px at 8% -7%,rgba(52,120,199,.095),transparent 66%),
+    radial-gradient(760px 420px at 100% 0%,rgba(120,99,198,.055),transparent 60%),
+    linear-gradient(180deg,#F8FBFF 0%,#F4F8FC 340px,#F7FAFD 100%);
+  background-attachment:fixed;
+}
+body.light-edition::before{
+  opacity:.42;
+  background-image:
+    linear-gradient(rgba(52,120,199,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(52,120,199,.022) 1px,transparent 1px);
+  background-size:52px 52px;
+}
+body.light-edition ::selection{background:#CFE2F7;color:#13243A}
+body.light-edition ::-webkit-scrollbar-track{background:#F2F6FA}
+body.light-edition ::-webkit-scrollbar-thumb{background:#C3D1E0}
+body.light-edition ::-webkit-scrollbar-thumb:hover{background:#8FB1D6}
+
+/* ticker — clean institutional bar */
+body.light-edition .fusion-ticker{
+  background:rgba(255,255,255,.96);
+  border-bottom:1px solid #D8E3EF;
+  box-shadow:0 4px 18px rgba(41,73,105,.055);
+  backdrop-filter:blur(14px);
+}
+body.light-edition .fusion-ticker-badge{
+  background:#F2F7FD;
+  color:#274A70;
+  border-right:1px solid #D8E3EF;
+}
+body.light-edition .fusion-ticker-item{
+  color:#6C7F94;
+  border-right:1px solid #E4EBF3;
+}
+body.light-edition .fusion-ticker-item b{color:#20364F}
+body.light-edition .fusion-live-dot{background:#2D9B7A;box-shadow:0 0 0 4px rgba(45,155,122,.11)}
+
+/* header like a research microsite */
+body.light-edition .fusion-header{
+  padding-top:2.25rem;
+}
+body.light-edition .fusion-eyebrow{color:#3478C7}
+body.light-edition .fusion-title{
+  background:linear-gradient(135deg,#172C45 20%,#2F70B7 67%,#6357A6 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  letter-spacing:-.035em;
+}
+body.light-edition .fusion-subtitle{
+  color:#60748B;
+  max-width:1050px;
+}
+body.light-edition .fusion-subtitle strong{color:#1F3651}
+body.light-edition .fusion-subtitle em{color:#A95F2D}
+body.light-edition .fusion-nav{border-bottom-color:#D9E3EE}
+body.light-edition .fusion-nav-btn{color:#72849A}
+body.light-edition .fusion-nav-btn:hover{color:#254B73;background:#F2F7FD}
+body.light-edition .fusion-nav-btn.active{
+  color:#245F9D;
+  border-bottom-color:#3478C7;
+  background:linear-gradient(180deg,transparent,#F3F8FE);
+}
+body.light-edition .fusion-nav-btn .num{
+  color:#7692AE;background:#EDF4FB;border:1px solid #DCE7F1
+}
+
+/* main layout — wider, airier */
+body.light-edition .fusion-shell{gap:1.8rem}
+body.light-edition .fusion-sidebar{
+  background:rgba(255,255,255,.97);
+  border:1px solid #DCE6F0;
+  box-shadow:0 18px 46px -30px rgba(32,61,91,.34),0 4px 16px rgba(46,79,112,.055);
+}
+body.light-edition .side-head{border-bottom-color:#E3EAF2}
+body.light-edition .side-head h3{color:#1E344D}
+body.light-edition .side-live{background:#EAF7F2;color:#267A62}
+body.light-edition .side-section-title{color:#7B8EA4}
+body.light-edition .side-section-title::after{background:#E3EAF1}
+body.light-edition .side-label{color:#344B64}
+body.light-edition .side-label b{
+  color:#24547F;background:#F0F6FC;border-color:#D8E5F1
+}
+body.light-edition .side-control small{color:#8999AA}
+body.light-edition .fusion-sidebar input[type=range]{
+  accent-color:#3478C7;
+}
+body.light-edition .side-btn{
+  border-color:#D9E4EF;background:#F7FAFD;color:#60768D
+}
+body.light-edition .side-btn:hover{
+  border-color:#8DB2D8;color:#2F679E;background:#EEF6FE
+}
+body.light-edition .side-btn.primary{
+  color:white;background:linear-gradient(135deg,#3478C7,#5A8EC5);
+  box-shadow:0 7px 18px rgba(52,120,199,.16)
+}
+body.light-edition .side-source{
+  color:#74869A;background:#F8FBFE;border-color:#E0E8F1
+}
+body.light-edition .side-source b{color:#39536D}
+
+/* top overview */
+body.light-edition .fusion-overview{
+  background:
+    radial-gradient(circle at 91% 3%,rgba(52,120,199,.075),transparent 37%),
+    linear-gradient(135deg,#FFFFFF,#F8FBFF);
+  border-color:#D9E5F0;
+  box-shadow:0 22px 50px -35px rgba(36,72,106,.35),0 5px 18px rgba(36,72,106,.045);
+}
+body.light-edition .fusion-overview::after{
+  background:radial-gradient(circle,rgba(52,120,199,.085),transparent 68%)
+}
+body.light-edition .overview-label{color:#3478C7}
+body.light-edition .overview-title{color:#162B43}
+body.light-edition .overview-copy{color:#60758A}
+body.light-edition .ov-kpi{
+  background:#FBFDFF;border-color:#E0E8F1
+}
+body.light-edition .ov-kpi span{color:#8494A5}
+body.light-edition .ov-kpi b{color:#203952}
+body.light-edition .ov-kpi small{color:#94A2B1}
+
+/* all major cards */
+body.light-edition .fusion-main .card,
+body.light-edition .card{
+  background:linear-gradient(180deg,#FFFFFF,#FCFDFE);
+  border-color:#DCE6F0;
+  box-shadow:0 16px 38px -29px rgba(34,68,100,.31),0 3px 10px rgba(46,79,112,.035);
+}
+body.light-edition .fusion-main .card:hover,
+body.light-edition .card:hover{
+  border-color:#BFD2E5;
+  box-shadow:0 21px 42px -29px rgba(34,68,100,.36),0 5px 16px rgba(46,79,112,.055);
+}
+body.light-edition .fusion-main .card::before{
+  opacity:.7;height:2px;
+}
+body.light-edition .kicker{color:#507FAF}
+body.light-edition .sub{color:#6C7E91}
+body.light-edition h2,body.light-edition h3{color:#172D46}
+body.light-edition p{color:inherit}
+
+/* agent ribbon becomes subtle editorial labels */
+body.light-edition .agent-chip{
+  background:#FFFFFF;border-color:#DFE7EF;
+  box-shadow:0 7px 18px -15px rgba(40,72,104,.35)
+}
+body.light-edition .agent-chip span{color:#8898A9}
+body.light-edition .agent-chip b{color:#2B425A}
+body.light-edition .agent-chip small{color:#8394A5}
+
+/* status / diagnostics */
+body.light-edition .diag-card-pro{
+  background:#FFFFFF;border-color:#DEE7F0
+}
+body.light-edition .diag-card-pro .d-title{color:#2A4058}
+body.light-edition .diag-card-pro p{color:#75879A}
+
+/* chart system */
+body.light-edition .chart{
+  background:
+    radial-gradient(circle at 82% 18%,rgba(52,120,199,.035),transparent 30%),
+    linear-gradient(180deg,#FCFEFF,#F8FBFE);
+  border:1px solid #E0E8F1;
+}
+body.light-edition .gridline{stroke:#E4EBF2!important}
+body.light-edition .axis{stroke:#CCD8E4!important}
+body.light-edition .axis-label{fill:#7B8DA1!important}
+body.light-edition .series-label{font-weight:800}
+body.light-edition .forecast-zone{fill:rgba(52,120,199,.028)}
+body.light-edition .forecast-divider{stroke:rgba(52,120,199,.40)}
+body.light-edition .conf-band{fill:rgba(52,120,199,.105)}
+body.light-edition .chart-crosshair{stroke:rgba(40,67,94,.28)}
+body.light-edition .hover-dot{stroke:#FFFFFF}
+body.light-edition .chart-tooltip{
+  background:rgba(255,255,255,.98);
+  border-color:#CBD9E7;
+  box-shadow:0 17px 36px rgba(36,67,97,.17);
+  color:#263F58;
+}
+body.light-edition .chart-tooltip .tt-title{color:#17314B}
+body.light-edition .chart-tooltip .tt-row{color:#6D8093}
+body.light-edition .chart-tooltip .tt-row b{color:#253E58}
+body.light-edition .chart-caption{color:#7D8FA1}
+body.light-edition .chart-focus-btn{
+  background:#F4F8FC;border-color:#D8E4EF;color:#55738F
+}
+
+/* formula/equation layer — academic blue */
+body.light-edition .formula-theater{
+  background:
+    radial-gradient(circle at 18% 0%,rgba(52,120,199,.055),transparent 38%),
+    linear-gradient(180deg,#F7FAFE,#F2F7FC);
+  border-color:#D7E4F0;
+}
+body.light-edition .formula-theater::before{color:#91A0B0}
+body.light-edition .fterm{
+  background:#FFFFFF;border-color:#DCE6F0;
+  box-shadow:0 5px 14px rgba(47,85,119,.03)
+}
+body.light-edition .fterm .val{color:#233F5B}
+body.light-edition .fterm .meaning{color:#8293A6}
+body.light-edition .fop,body.light-edition .feq{color:#91A2B2}
+body.light-edition .formula-caption{color:#8494A6}
+body.light-edition .formula-caption b{color:#60758A}
+body.light-edition .formula-meter{background:#DDE7F0}
+body.light-edition .eq,
+body.light-edition .mini-equation{
+  color:#284C71!important;
+  background:#F3F8FE!important;
+  border-color:#D9E6F2!important;
+}
+body.light-edition .eq::after,
+body.light-edition .mini-equation::after{
+  background:linear-gradient(90deg,transparent,rgba(52,120,199,.07),transparent)
+}
+
+/* story / flow */
+body.light-edition .story-rail{
+  background:#F7FAFD;border-color:#DEE7F0
+}
+body.light-edition .story-step{
+  background:#FFFFFF;border-color:#DEE7F0
+}
+body.light-edition .story-step span{color:#8A9AAC}
+body.light-edition .story-step b{color:#2A425A}
+body.light-edition .story-step small{color:#8999AA}
+body.light-edition .fusion-canvas{
+  background:linear-gradient(180deg,#F9FCFF,#F3F8FD);
+  border-color:#DCE7F1;
+}
+body.light-edition .fusion-legend{color:#687D92}
+
+/* NK / accelerator */
+body.light-edition .nk-box,
+body.light-edition .acc-node{
+  background:linear-gradient(145deg,#FFFFFF,#F6F9FD);
+  border-color:#DBE6F0
+}
+body.light-edition .nk-box p,body.light-edition .acc-node p{color:#708397}
+body.light-edition .nk-box .nk-eq{color:#335878}
+body.light-edition .acc-node h4{color:#263F58}
+
+/* money creation */
+body.light-edition .money-view{
+  background:#F8FBFE;border-color:#DCE6F0
+}
+body.light-edition .money-view.recommended{
+  border-color:#A8D7C8;background:#F5FBF8
+}
+body.light-edition .money-view .view-tag{color:#8092A5}
+body.light-edition .money-view h4{color:#25415D}
+body.light-edition .money-view p{color:#6B7F94}
+body.light-edition .money-pill{
+  background:#FFFFFF;border-color:#DCE6F0
+}
+body.light-edition .money-pill b{color:#31516E}
+body.light-edition .money-pill small{color:#8797A7}
+body.light-edition .money-constraint{
+  background:#FFFFFF;border-color:#DEE8F1
+}
+
+/* banking */
+body.light-edition .kpi-pro,
+body.light-edition .micro,
+body.light-edition .alm-kpi,
+body.light-edition .stage-card{
+  background:linear-gradient(145deg,#FFFFFF,#F7FAFD);
+  border-color:#DCE6F0
+}
+body.light-edition .kpi-pro span,
+body.light-edition .micro span,
+body.light-edition .alm-kpi span,
+body.light-edition .stage-card span{color:#8293A5}
+body.light-edition .kpi-pro b,
+body.light-edition .micro b,
+body.light-edition .alm-kpi b,
+body.light-edition .stage-card b{color:#29455F}
+body.light-edition .kpi-pro small,
+body.light-edition .alm-kpi small,
+body.light-edition .stage-card small{color:#8999A9}
+body.light-edition .bs{border-color:#DCE6EF;background:#FBFDFF}
+body.light-edition .bs h4{color:#29445E}
+body.light-edition .asset .bar{
+  background:linear-gradient(90deg,rgba(52,120,199,.35),rgba(52,120,199,.08));
+  color:#264F74
+}
+body.light-edition .liability .bar{
+  background:linear-gradient(90deg,rgba(120,99,198,.28),rgba(120,99,198,.07));
+  color:#514580
+}
+body.light-edition .waterfall .wf-track{background:#E9EFF5}
+body.light-edition .stackbar{background:#EAF0F6}
+
+/* models */
+body.light-edition .model-chip,
+body.light-edition .diag-board,
+body.light-edition .model-story{
+  background:#F8FBFE;border-color:#DCE6F0
+}
+body.light-edition .model-chip span,
+body.light-edition .diag-row span{color:#8596A8}
+body.light-edition .model-chip b,
+body.light-edition .diag-board h4,
+body.light-edition .model-story h4{color:#29435D}
+body.light-edition .model-chip small,
+body.light-edition .model-story p{color:#718499}
+body.light-edition .diag-track{background:#E4EBF2}
+
+/* QA */
+body.light-edition .qa-item{
+  background:#F7FAFD;border:1px solid #E0E8F1;color:#526B83
+}
+body.light-edition .node{
+  background:#F7FAFE;border-color:#DCE7F1;color:#2C4965
+}
+body.light-edition .node small{color:#8495A8}
+
+/* editorial theory: reference-like paper feel */
+body.light-edition .paper{
+  background:#FFFDF9;
+  color:#2B3C4D;
+  border:1px solid #E5E0D5;
+  box-shadow:0 14px 32px -26px rgba(55,72,89,.25)
+}
+body.light-edition .paper h3,body.light-edition .paper h4{color:#233B52}
+body.light-edition .paper p{color:#516171}
+body.light-edition .paper .note{background:#FFF9E9;color:#445463}
+body.light-edition .note{
+  background:#F4F8FC;color:#536C84;border-left-color:#5C8DBD
+}
+body.light-edition .note.author{
+  background:linear-gradient(135deg,#FFFDF7,#F8F3E8);
+  color:#4D4A43;border-left-color:#A27A48
+}
+body.light-edition .note.author b{color:#6F4E29}
+body.light-edition .ref{
+  background:#FFFFFF!important;
+  color:#61758A!important;
+  border-color:#DDE6EF!important;
+  border-left-color:#4E83B6!important
+}
+body.light-edition .ref b{color:#29465F!important}
+body.light-edition .cite-pill{
+  background:#F1F6FB;border-color:#DCE6EF;color:#627990
+}
+
+/* footer */
+body.light-edition .footer{
+  color:#78899A;border-top-color:#DCE5EE
+}
+
+/* badges */
+body.light-edition .badge{
+  background:#F1F6FB;border-color:#D9E5F0;color:#5E7690
+}
+body.light-edition .badge.blue{background:#EDF5FD;color:#2F6FAE}
+body.light-edition .badge.green{background:#EEF8F4;color:#287C66}
+body.light-edition .badge.red{background:#FFF1F3;color:#AD4858}
+body.light-edition .badge.orange{background:#FFF4EC;color:#A96332}
+body.light-edition .badge.amber{background:#FFF8E8;color:#956C20}
+body.light-edition .badge.purple{background:#F4F1FD;color:#6755AB}
+
+/* control styling */
+body.light-edition .control{
+  background:#F8FBFE;border-color:#DEE7F0
+}
+body.light-edition .control label{color:#344D65}
+body.light-edition .control small{color:#8294A7}
+body.light-edition select{
+  background:#FFFFFF;color:#2B465F;border-color:#D7E3EE
+}
+body.light-edition input[type=range]{accent-color:#3478C7}
+
+/* focus overlay stays high-contrast so the chart remains readable */
+body.light-edition .chart-focus-overlay{
+  background:rgba(238,244,250,.94);
+  backdrop-filter:blur(14px)
+}
+body.light-edition .chart-focus-card{
+  background:#FFFFFF;border-color:#C8D8E7;
+  box-shadow:0 35px 80px rgba(42,70,98,.20)
+}
+body.light-edition .chart-focus-top{color:#29445D}
+
+/* theme control */
+.theme-switch{
+  width:100%;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:.60rem .72rem;margin-top:.55rem;border-radius:10px;
+  border:1px solid var(--border);background:var(--surface-2);
+  color:var(--text-mid);font-size:.68rem;font-weight:800;cursor:pointer
+}
+.theme-switch .theme-icon{
+  width:22px;height:22px;border-radius:7px;display:grid;place-items:center;
+  background:var(--blue-dim);color:var(--blue);font-size:.72rem
+}
+body.light-edition .theme-switch{
+  background:#F5F9FD;border-color:#DCE6F0;color:#536D86
+}
+body.light-edition .theme-switch:hover{background:#EEF6FD;border-color:#AFC8E1}
+
+/* lower overall density / cleaner reference feel */
+body.light-edition .fusion-main{gap:1.25rem}
+body.light-edition .section{padding-bottom:1.35rem}
+body.light-edition .card{border-radius:17px}
+body.light-edition .section-head{padding:0 .1rem}
+body.light-edition .metric{min-height:138px}
+body.light-edition .metric .value{color:#1D3B58}
+body.light-edition .metric .meta{color:#8496A8}
+
+/* clearer shadow-free table cells where present */
+body.light-edition table{color:#42586F}
+body.light-edition th{color:#31506C}
+body.light-edition td{border-color:#E2E9F0}
+
+/* warning and heat areas remain intentionally colored */
+body.light-edition .health-pill{background:#ECF8F4;color:#287B64;border-color:#BFE2D6}
+body.light-edition .health-pill.warn{background:#FFF8E9;color:#8A681F;border-color:#E9D79E}
+body.light-edition .health-pill.risk{background:#FFF0F2;color:#A94756;border-color:#E8BDC4}
+
 </style>
 </head>
-<body>
+<body class="light-edition">
 
 <div class="chapter-progress" id="chapterProgress"></div>
 <div class="fusion-ticker">
@@ -730,7 +1186,7 @@ h1,h2,h3,h4{font-family:var(--f-display)}
 </div>
 
 <header class="fusion-header">
-  <div class="fusion-eyebrow">MACROLAB FUSION · MONETARY POLICY × BANKING × CREDIT RISK</div>
+  <div class="fusion-eyebrow">MACROLAB · LIGHT BLUE RESEARCH EDITION · MONETARY POLICY × BANKING × CREDIT RISK</div>
   <h1 class="fusion-title">Terminal Quantitativo de Política Monetária & Macroeconomia</h1>
   <p class="fusion-subtitle">Story design de <strong>terminal editorial</strong>, motor causal interconectado, dados do BCB, <em>IFRS 9 / ECL</em>, transmissão bancária e econometria robusta em um único arquivo HTML.</p>
   <nav class="fusion-nav"><button class="fusion-nav-btn active" data-fusion-tab="dashboard">Dashboard<span class="num">01</span></button><button class="fusion-nav-btn" data-fusion-tab="transmission">Transmissão<span class="num">02</span></button><button class="fusion-nav-btn" data-fusion-tab="models">IS–LM · Modelos<span class="num">03</span></button><button class="fusion-nav-btn" data-fusion-tab="banking">Banking · IFRS 9<span class="num">04</span></button><button class="fusion-nav-btn" data-fusion-tab="forecast">Econometria<span class="num">05</span></button><button class="fusion-nav-btn" data-fusion-tab="theory">Teoria<span class="num">06</span></button><button class="fusion-nav-btn" data-fusion-tab="audit">Auditoria<span class="num">07</span></button></nav>
@@ -770,6 +1226,12 @@ h1,h2,h3,h4{font-family:var(--f-display)}
   <div class="side-section-title">Proveniência</div>
   <div class="side-source" id="fusionSource">Inicializando…</div>
   <div class="side-source"><b>Atalhos:</b> teclas 1–7 alternam capítulos · <b>E</b> liga/desliga stress · <b>R</b> roda cenário.</div>
+
+<button class="theme-switch" id="themeSwitch" type="button" aria-label="Alternar tema claro e terminal">
+  <span style="display:flex;align-items:center;gap:8px"><span class="theme-icon" id="themeIcon">☀</span><span id="themeLabel">Tema claro editorial</span></span>
+  <span class="mono" id="themeState">CLARO</span>
+</button>
+
 </aside>
 
   <main class="fusion-main">
@@ -2063,6 +2525,37 @@ $("#runQA")?.addEventListener("click",()=>setTimeout(agenticRefresh,20));
 AgenticV5.accTimer=setInterval(animateAccelerator,1200);
 setTimeout(()=>{agenticRefresh();runModel();chapterProgress();},700);
 setInterval(updateFormulaTheaters,2000);
+</script>
+
+
+<script>
+"use strict";
+(function(){
+  const body=document.body;
+  const btn=document.getElementById("themeSwitch");
+  const label=document.getElementById("themeLabel");
+  const state=document.getElementById("themeState");
+  const icon=document.getElementById("themeIcon");
+
+  function applyTheme(light){
+    body.classList.toggle("light-edition",light);
+    if(label)label.textContent=light?"Tema claro editorial":"Tema terminal escuro";
+    if(state)state.textContent=light?"CLARO":"TERMINAL";
+    if(icon)icon.textContent=light?"☀":"◐";
+    try{localStorage.setItem("macrolab-theme",light?"light":"terminal")}catch(e){}
+    setTimeout(()=>{
+      if(typeof updateAll==="function")updateAll();
+      if(typeof agenticRefresh==="function")agenticRefresh();
+      if(typeof refreshFusionUI==="function")refreshFusionUI();
+      if(typeof startFusionTransmission==="function" && FusionUI?.active==="transmission")startFusionTransmission();
+      if(typeof startFusionBankFlow==="function" && FusionUI?.active==="banking")startFusionBankFlow();
+    },30);
+  }
+
+  /* This edition intentionally opens in light mode. */
+  applyTheme(true);
+  btn?.addEventListener("click",()=>applyTheme(!body.classList.contains("light-edition")));
+})();
 </script>
 
 </body></html>
