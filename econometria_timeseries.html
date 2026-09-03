@@ -1,0 +1,2288 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Econometria de Séries Temporais — Atlas Técnico Interativo</title>
+<meta name="description" content="Companion técnico interativo da obra Econometria de Séries Temporais, de Rodrigo De Losso da Silveira Bueno. Simulações, fórmulas navegáveis e visualizações quantitativas. Idealizado e revisado por Gabriel Groehs.">
+<meta name="author" content="Gabriel Groehs">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   Paleta derivada da identidade cromática da obra: violeta
+   profundo, azul-gelo e traçado ciano de série temporal.
+   ============================================================ */
+:root{
+  --void:#0C0616;
+  --deep:#160A28;
+  --panel:#1F0F36;
+  --panel-2:#2A1548;
+  --line:#3B2263;
+  --line-soft:#2C1A4A;
+  --cyan:#5CC8F2;
+  --cyan-deep:#2C7FA8;
+  --ice:#9FB9D4;
+  --paper:#EDE6F5;
+  --amber:#E9A75C;
+  --rose:#E4699A;
+  --mint:#5FD6A8;
+  --violet:#9C6BE8;
+
+  --f-display:"Bricolage Grotesque",system-ui,sans-serif;
+  --f-text:"Newsreader",Georgia,serif;
+  --f-data:"IBM Plex Mono",ui-monospace,monospace;
+
+  --rail:274px;
+  --measure:70ch;
+  --r-s:4px; --r-m:10px; --r-l:18px;
+  --ease:cubic-bezier(.22,.8,.3,1);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+body{
+  margin:0;background:var(--void);color:var(--paper);
+  font-family:var(--f-text);font-size:18px;line-height:1.68;font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(1100px 620px at 78% -12%, rgba(92,200,242,.10), transparent 62%),
+    radial-gradient(900px 700px at 8% 4%, rgba(156,107,232,.12), transparent 60%);
+  background-attachment:fixed;
+}
+::selection{background:rgba(92,200,242,.30)}
+a{color:var(--cyan);text-underline-offset:3px;text-decoration-thickness:.06em}
+a:hover{color:#93DDFA}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:2px}
+
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:800;line-height:1.06;letter-spacing:-.022em;margin:0}
+h2{font-size:clamp(1.85rem,3.6vw,2.9rem)}
+h3{font-size:clamp(1.22rem,2vw,1.55rem);font-weight:600;letter-spacing:-.012em}
+h4{font-size:1.02rem;font-weight:600;letter-spacing:.005em}
+p{margin:0 0 1.05em}
+strong{font-weight:500;color:#fff}
+
+/* ============================================================
+   ESTRUTURA
+   ============================================================ */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:90;
+  background:linear-gradient(90deg,var(--violet),var(--cyan));box-shadow:0 0 12px rgba(92,200,242,.6)}
+
+.topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:80;display:flex;align-items:center;
+  gap:14px;padding:0 18px;background:rgba(12,6,22,.78);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-soft)}
+.topbar .mark{font-family:var(--f-display);font-weight:800;font-size:.94rem;letter-spacing:-.01em;white-space:nowrap}
+.topbar .mark span{color:var(--cyan)}
+.topbar nav{margin-left:auto;display:flex;gap:20px;font-family:var(--f-display);font-size:.83rem;font-weight:600}
+.topbar nav a{color:var(--ice);text-decoration:none}
+.topbar nav a:hover{color:var(--paper)}
+@media(max-width:900px){.topbar nav{display:none}}
+.burger{margin-left:auto;display:none;background:none;border:1px solid var(--line);color:var(--paper);
+  border-radius:var(--r-s);padding:7px 11px;font-family:var(--f-display);font-size:.8rem;font-weight:600;cursor:pointer}
+@media(max-width:1100px){.burger{display:block}}
+
+.shell{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:0;padding-top:56px}
+@media(max-width:1100px){.shell{grid-template-columns:minmax(0,1fr)}}
+
+.rail{position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;padding:26px 16px 60px 22px;
+  border-right:1px solid var(--line-soft);scrollbar-width:thin}
+@media(max-width:1100px){
+  .rail{position:fixed;top:56px;left:0;width:min(320px,84vw);background:var(--deep);z-index:75;
+    transform:translateX(-102%);transition:transform .28s var(--ease);border-right:1px solid var(--line)}
+  .rail.open{transform:none}
+}
+.rail h5{font-family:var(--f-display);font-size:.7rem;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--cyan-deep);margin:0 0 12px}
+.rail ol{list-style:none;margin:0 0 26px;padding:0}
+.rail li{margin:0}
+.rail a{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:baseline;
+  padding:6px 8px;border-radius:var(--r-s);color:var(--ice);text-decoration:none;
+  font-family:var(--f-display);font-size:.83rem;font-weight:400;line-height:1.3}
+.rail a b{font-family:var(--f-data);font-size:.72rem;color:var(--cyan-deep);font-weight:500}
+.rail a:hover{background:var(--panel);color:var(--paper)}
+.rail a.active{background:var(--panel-2);color:#fff}
+.rail a.active b{color:var(--cyan)}
+
+main{min-width:0;padding-bottom:80px}
+section{padding:76px 0;border-bottom:1px solid var(--line-soft);scroll-margin-top:70px}
+.wrap{width:min(1180px,calc(100% - 48px));margin-inline:auto}
+@media(max-width:640px){.wrap{width:calc(100% - 32px)}}
+.prose{max-width:var(--measure)}
+.prose p{color:#DCD2E9}
+
+/* eyebrow de capítulo — carrega número + estágio, não é rótulo decorativo */
+.chap-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:8px}
+.chap-num{font-family:var(--f-data);font-size:.78rem;font-weight:600;color:var(--void);
+  background:var(--cyan);padding:3px 9px;border-radius:var(--r-s)}
+.chap-stage{font-family:var(--f-display);font-size:.74rem;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--violet)}
+.lede{font-size:1.16rem;line-height:1.6;color:#C9BEDA;max-width:64ch;margin-top:14px}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;padding:0;border-bottom:1px solid var(--line)}
+.hero-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+.hero-inner{position:relative;display:grid;grid-template-columns:1.35fr .65fr;gap:52px;align-items:center;
+  width:min(1180px,calc(100% - 48px));margin-inline:auto;padding:96px 0 74px;min-height:min(88vh,760px)}
+@media(max-width:960px){.hero-inner{grid-template-columns:1fr;padding:64px 0 54px;gap:38px}}
+.hero h1{font-size:clamp(2.7rem,7.4vw,5.4rem);letter-spacing:-.038em;line-height:.92}
+.hero h1 em{display:block;font-style:normal;color:var(--cyan)}
+.hero .sub{font-family:var(--f-display);font-weight:600;font-size:clamp(.95rem,1.6vw,1.12rem);
+  color:var(--ice);margin-top:20px;letter-spacing:-.01em}
+.hero .byline{margin-top:26px;font-size:.94rem;color:#B6A9C9;line-height:1.5}
+.hero .byline b{color:var(--paper);font-weight:500}
+.kicker{display:inline-block;font-family:var(--f-data);font-size:.72rem;letter-spacing:.1em;
+  color:var(--cyan);border:1px solid var(--cyan-deep);border-radius:100px;padding:5px 13px;margin-bottom:22px}
+
+/* objeto-livro original (não reproduz a arte de capa da editora) */
+.tome{perspective:1400px;justify-self:center}
+.tome-body{width:min(300px,72vw);aspect-ratio:.71;position:relative;transform-style:preserve-3d;
+  transform:rotateY(-19deg) rotateX(5deg);transition:transform .5s var(--ease)}
+.tome-face{position:absolute;inset:0;border-radius:3px 7px 7px 3px;overflow:hidden;
+  background:linear-gradient(155deg,#3A1B63,#1C0B34 62%);border:1px solid #4B2A78;
+  box-shadow:-16px 26px 60px rgba(0,0,0,.62), inset 14px 0 22px -18px rgba(0,0,0,.9)}
+.tome-face::before{content:"";position:absolute;left:0;top:0;bottom:0;width:16px;
+  background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,0))}
+.tome-txt{position:absolute;left:26px;right:20px;top:34px;font-family:var(--f-display);font-weight:800;
+  font-size:clamp(1.5rem,4.6vw,2.05rem);line-height:.94;letter-spacing:-.035em;color:#8FD7F7}
+.tome-txt small{display:block;font-size:.44em;font-weight:600;color:#CBB9E6;letter-spacing:-.01em;margin-top:10px}
+.tome-plot{position:absolute;left:0;right:0;bottom:0;height:52%}
+.tome-foot{position:absolute;left:26px;bottom:16px;font-family:var(--f-data);font-size:.58rem;color:#9A86BC;letter-spacing:.05em}
+.tome-caption{margin-top:16px;text-align:center;font-size:.76rem;color:#8E7FA6;font-family:var(--f-display);max-width:300px}
+
+.hero-metrics{display:flex;flex-wrap:wrap;gap:0;margin-top:38px;border-top:1px solid var(--line);width:min(640px,100%)}
+.hero-metrics div{flex:1 1 96px;padding:14px 16px 12px 0}
+.hero-metrics b{display:block;font-family:var(--f-display);font-size:1.7rem;font-weight:800;color:var(--paper);letter-spacing:-.03em}
+.hero-metrics span{font-family:var(--f-display);font-size:.72rem;color:var(--ice);letter-spacing:.02em}
+
+/* ============================================================
+   COMPONENTES
+   ============================================================ */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:860px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+
+.card{background:linear-gradient(168deg,var(--panel),rgba(22,10,40,.6));border:1px solid var(--line-soft);
+  border-radius:var(--r-m);padding:20px 20px 18px}
+.card h4{margin-bottom:7px;color:#fff}
+.card p{font-size:.94rem;line-height:1.55;color:#C4B8D6;margin:0}
+.card .tag{font-family:var(--f-data);font-size:.68rem;color:var(--cyan-deep);display:block;margin-bottom:9px}
+
+.lab{background:
+    linear-gradient(180deg,rgba(42,21,72,.85),rgba(18,9,32,.9));
+  border:1px solid var(--line);border-radius:var(--r-l);padding:24px;margin:30px 0}
+@media(max-width:640px){.lab{padding:16px;border-radius:var(--r-m)}}
+.lab-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;margin-bottom:6px}
+.lab-head h3{color:#fff}
+.lab-kind{font-family:var(--f-data);font-size:.68rem;color:var(--cyan);border:1px solid var(--cyan-deep);
+  padding:2px 8px;border-radius:100px;white-space:nowrap}
+.lab-note{font-size:.9rem;color:#B3A6C6;max-width:78ch;margin:0 0 16px}
+.plot{width:100%;position:relative}
+.plot canvas{position:absolute;inset:0;display:block;width:100%;height:100%;border-radius:var(--r-s)}
+@media(max-width:700px){
+  .plot{aspect-ratio:4/3!important}
+  .plot[data-plot="acf"],.plot[data-plot="irf"],.plot[data-plot="stat"],
+  .plot[data-plot="vecm"],.plot[data-plot="garch"],.plot[data-plot="bn"]{aspect-ratio:5/7!important}
+}
+.readout{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.readout div{flex:1 1 130px;background:rgba(12,6,22,.55);border:1px solid var(--line-soft);
+  border-radius:var(--r-s);padding:9px 12px}
+.readout span{display:block;font-family:var(--f-display);font-size:.68rem;color:var(--ice);letter-spacing:.02em}
+.readout b{font-family:var(--f-data);font-size:1.05rem;font-weight:600;color:var(--cyan)}
+.readout b.warn{color:var(--amber)} .readout b.bad{color:var(--rose)} .readout b.good{color:var(--mint)}
+
+/* sliders como instrumentos quantitativos */
+.controls{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:18px}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+  font-family:var(--f-display);font-size:.8rem;font-weight:600;color:#D3C7E4;margin-bottom:5px}
+.ctl label i{font-style:normal;font-family:var(--f-data);font-size:.86rem;color:var(--cyan);font-weight:500}
+.ctl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;cursor:pointer;margin:0}
+.ctl input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:99px;
+  background:linear-gradient(90deg,var(--cyan-deep),var(--line))}
+.ctl input[type=range]::-moz-range-track{height:4px;border-radius:99px;background:var(--line)}
+.ctl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:var(--cyan);border:3px solid var(--void);margin-top:-6.5px;box-shadow:0 0 0 1px var(--cyan-deep)}
+.ctl input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--cyan);
+  border:3px solid var(--void);box-shadow:0 0 0 1px var(--cyan-deep)}
+.ctl .meta{display:flex;justify-content:space-between;font-family:var(--f-data);font-size:.63rem;color:#7E6E97}
+.ctl .hint{font-size:.78rem;color:#9E90B4;margin-top:3px;line-height:1.4}
+.btn{font-family:var(--f-display);font-weight:600;font-size:.8rem;background:var(--panel-2);
+  color:var(--paper);border:1px solid var(--line);border-radius:var(--r-s);padding:7px 14px;cursor:pointer}
+.btn:hover{background:var(--line);color:#fff}
+.btn[aria-pressed=true]{background:var(--cyan);color:var(--void);border-color:var(--cyan)}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+
+/* ============================================================
+   MATEMÁTICA
+   ============================================================ */
+.eq{font-family:var(--f-text);font-size:1.16rem;line-height:2;color:#fff;letter-spacing:.01em}
+.eq .v{font-style:italic}
+.eq .op{color:var(--ice);padding:0 .18em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:-.55em;text-align:center;margin:0 .2em}
+.frac .n{border-bottom:1px solid currentColor;padding:0 .35em;line-height:1.35}
+.frac .d{padding:0 .35em;line-height:1.35}
+.sqrt{border-top:1px solid currentColor;padding:0 .2em}
+.eqbox{position:relative;width:100%;text-align:left;background:rgba(12,6,22,.55);
+  border:1px solid var(--line-soft);border-left:3px solid var(--cyan-deep);
+  border-radius:var(--r-s);padding:18px 46px 18px 20px;margin:18px 0;cursor:pointer;
+  transition:border-color .2s var(--ease),background .2s var(--ease);overflow-x:auto}
+.eqbox:hover{border-color:var(--line);border-left-color:var(--cyan);background:rgba(42,21,72,.5)}
+.eqbox .eqname{display:block;font-family:var(--f-display);font-size:.74rem;font-weight:600;
+  color:var(--cyan-deep);margin-bottom:8px;letter-spacing:.02em}
+.eqbox::after{content:"inspecionar";position:absolute;right:12px;bottom:9px;font-family:var(--f-data);
+  font-size:.6rem;color:#6E5C8A;letter-spacing:.06em}
+.eqbox:hover::after{color:var(--cyan)}
+
+/* tooltip enciclopédico */
+.term{border-bottom:1px dotted var(--cyan-deep);cursor:help;color:#DCEEF9}
+.tip{position:fixed;z-index:120;max-width:330px;background:#150A28;border:1px solid var(--line);
+  border-radius:var(--r-m);padding:13px 15px;font-size:.86rem;line-height:1.5;color:#D4C8E4;
+  box-shadow:0 22px 50px rgba(0,0,0,.65);opacity:0;transform:translateY(5px);
+  transition:opacity .16s,transform .16s;pointer-events:none}
+.tip.show{opacity:1;transform:none}
+.tip b{display:block;font-family:var(--f-display);color:var(--cyan);font-size:.82rem;margin-bottom:4px}
+
+/* modal inspector */
+.modal{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-bg{position:absolute;inset:0;background:rgba(6,3,12,.8);backdrop-filter:blur(5px)}
+.modal-box{position:relative;width:min(760px,100%);max-height:86vh;overflow-y:auto;background:var(--deep);
+  border:1px solid var(--line);border-radius:var(--r-l);padding:30px}
+@media(max-width:640px){.modal-box{padding:20px}}
+.modal-box h3{color:#fff;margin-bottom:4px;padding-right:40px}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--panel-2);border:1px solid var(--line);
+  color:var(--paper);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1}
+.modal .kind{font-family:var(--f-data);font-size:.7rem;color:var(--cyan-deep);letter-spacing:.05em}
+.modal h5{font-family:var(--f-display);font-size:.74rem;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--violet);margin:24px 0 8px}
+.symtab{width:100%;border-collapse:collapse;font-size:.9rem}
+.symtab td{padding:7px 10px 7px 0;border-bottom:1px solid var(--line-soft);vertical-align:top;color:#C7BAD9}
+.symtab td:first-child{width:78px;font-family:var(--f-text);font-style:italic;color:var(--cyan);font-size:1.05rem}
+.modal ul{margin:0;padding-left:19px;color:#C7BAD9;font-size:.94rem}
+.modal li{margin-bottom:6px}
+
+/* ============================================================
+   MAPA / FLUXO / NARRATIVA
+   ============================================================ */
+.spine{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:28px 0 34px;
+  font-family:var(--f-display);font-size:.73rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.spine span{padding:7px 12px;border:1px solid var(--line);border-radius:100px;color:var(--ice);
+  background:rgba(31,15,54,.6);white-space:nowrap}
+.spine span.on{color:var(--void);background:var(--cyan);border-color:var(--cyan)}
+.spine i{color:var(--cyan-deep);font-style:normal;font-size:.9rem}
+
+.mapgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+.mapcard{display:block;text-decoration:none;background:linear-gradient(165deg,var(--panel),rgba(18,9,32,.72));
+  border:1px solid var(--line-soft);border-radius:var(--r-m);padding:18px;position:relative;
+  transition:border-color .2s var(--ease),transform .2s var(--ease)}
+.mapcard:hover{border-color:var(--cyan-deep);transform:translateY(-2px)}
+.mapcard.pillar{border-color:var(--line);box-shadow:inset 0 0 0 1px rgba(92,200,242,.12)}
+.mapcard .n{font-family:var(--f-data);font-size:.72rem;color:var(--cyan)}
+.mapcard h4{color:#fff;margin:6px 0 8px;font-size:1.06rem}
+.mapcard p{font-size:.86rem;color:#B0A2C4;margin:0 0 10px;line-height:1.5}
+.mapcard .keys{display:flex;flex-wrap:wrap;gap:5px}
+.mapcard .keys em{font-style:normal;font-family:var(--f-data);font-size:.63rem;color:#9A86BC;
+  border:1px solid var(--line-soft);border-radius:3px;padding:2px 6px}
+.mapcard .load{position:absolute;top:16px;right:16px;font-family:var(--f-data);font-size:.6rem;color:#6E5C8A}
+
+.flow{display:flex;flex-wrap:nowrap;gap:0;overflow-x:auto;padding:16px 2px 20px;scrollbar-width:thin}
+.flow-node{flex:0 0 auto;min-width:158px;max-width:200px;background:var(--panel);border:1px solid var(--line-soft);
+  border-radius:var(--r-m);padding:14px;transition:all .35s var(--ease);opacity:.42}
+.flow-node.lit{opacity:1;border-color:var(--cyan);box-shadow:0 0 22px -6px rgba(92,200,242,.55)}
+.flow-node b{display:block;font-family:var(--f-display);font-size:.9rem;color:#fff;margin-bottom:5px}
+.flow-node span{font-size:.79rem;color:#AA9CC0;line-height:1.42;display:block}
+.flow-link{flex:0 0 34px;align-self:center;height:1px;background:var(--line);position:relative}
+.flow-link::after{content:"";position:absolute;top:-2.5px;left:0;width:6px;height:6px;border-radius:50%;
+  background:var(--cyan);opacity:0;transition:opacity .2s}
+.flow-link.lit::after{opacity:1;animation:travel 1s var(--ease)}
+@keyframes travel{from{left:0}to{left:calc(100% - 6px)}}
+
+/* leitura referenciada */
+.ref{border-top:1px solid var(--line-soft);margin-top:38px;padding-top:26px}
+.ref h4{font-family:var(--f-display);font-size:1.1rem;color:#fff;margin-bottom:12px}
+.ref p{font-size:1rem;color:#CFC3DF;max-width:var(--measure)}
+.ref .cite{font-family:var(--f-data);font-size:.76rem;color:#8E7FA6;line-height:1.6;
+  border-left:2px solid var(--cyan-deep);padding-left:14px;margin-top:16px;max-width:70ch}
+
+/* cockpit */
+.cockpit{background:linear-gradient(150deg,#2B1449,#120726);border:1px solid var(--line);
+  border-radius:var(--r-l);padding:26px}
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:22px}
+.kpi{background:rgba(12,6,22,.55);border:1px solid var(--line-soft);border-radius:var(--r-m);padding:16px}
+.kpi span{display:block;font-family:var(--f-display);font-size:.72rem;color:var(--ice);margin-bottom:6px}
+.kpi b{font-family:var(--f-display);font-size:1.85rem;font-weight:800;letter-spacing:-.03em;color:#fff;display:block;line-height:1}
+.kpi i{font-style:normal;font-family:var(--f-data);font-size:.7rem;color:#9A86BC}
+.posture{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.posture b{font-family:var(--f-display);font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:8px 14px;border-radius:100px;border:1px solid var(--line);color:#8E7FA6;background:rgba(12,6,22,.5)}
+.posture b.on{color:var(--void);background:var(--amber);border-color:var(--amber)}
+.posture b.on.calm{background:var(--mint)} .posture b.on.hot{background:var(--rose);color:#fff}
+
+.footer{padding:56px 0 70px;color:#8E7FA6;font-size:.9rem}
+.footer h4{color:var(--paper);margin-bottom:10px}
+.footer a{color:var(--ice)}
+.biblio{font-family:var(--f-data);font-size:.78rem;line-height:1.75;color:#9A86BC;max-width:78ch}
+.biblio li{margin-bottom:9px}
+.disclaimer{margin-top:26px;font-size:.82rem;color:#7E6E97;max-width:72ch;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="progress" id="progress" role="presentation"></div>
+
+<header class="topbar">
+  <div class="mark">Econometria de Séries Temporais <span>· atlas interativo</span></div>
+  <nav>
+    <a href="#mapa">Mapa</a>
+    <a href="#c3">Modelagem</a>
+    <a href="#c6">Sistemas</a>
+    <a href="#c8">Volatilidade</a>
+    <a href="#cockpit">Cockpit</a>
+    <a href="#referencias">Referências</a>
+  </nav>
+  <button class="burger" id="burger" aria-expanded="false" aria-controls="rail">Capítulos</button>
+</header>
+
+<div class="shell">
+<aside class="rail" id="rail">
+  <h5>Percurso</h5>
+  <ol id="railList">
+    <li><a href="#mapa"><b>—</b><span>Mapa da obra</span></a></li>
+    <li><a href="#c1"><b>01</b><span>Introdução</span></a></li>
+    <li><a href="#c2"><b>02</b><span>Fundamentos estatísticos</span></a></li>
+    <li><a href="#c3"><b>03</b><span>Processos estacionários</span></a></li>
+    <li><a href="#c4"><b>04</b><span>Processos não estacionários</span></a></li>
+    <li><a href="#c5"><b>05</b><span>GMM</span></a></li>
+    <li><a href="#c6"><b>06</b><span>Vetor autorregressivo</span></a></li>
+    <li><a href="#c7"><b>07</b><span>Vetor de correção de erros</span></a></li>
+    <li><a href="#c8"><b>08</b><span>Heterocedasticidade condicional</span></a></li>
+    <li><a href="#cockpit"><b>—</b><span>Camada executiva</span></a></li>
+    <li><a href="#referencias"><b>—</b><span>Referências</span></a></li>
+  </ol>
+  <h5>Instrumentos</h5>
+  <ol>
+    <li><a href="#lab-acf"><b>fig</b><span>Correlograma FAC / FACP</span></a></li>
+    <li><a href="#lab-fan"><b>fig</b><span>Previsão com incerteza</span></a></li>
+    <li><a href="#lab-spurious"><b>fig</b><span>Regressão espúria</span></a></li>
+    <li><a href="#lab-df"><b>fig</b><span>Distribuição Dickey–Fuller</span></a></li>
+    <li><a href="#lab-gmm"><b>fig</b><span>Superfície do critério J</span></a></li>
+    <li><a href="#lab-irf"><b>fig</b><span>Resposta ao impulso</span></a></li>
+    <li><a href="#lab-vecm"><b>fig</b><span>Correção de erros</span></a></li>
+    <li><a href="#lab-garch"><b>fig</b><span>Laboratório GARCH</span></a></li>
+    <li><a href="#lab-var"><b>fig</b><span>Cauda, VaR e ES</span></a></li>
+  </ol>
+</aside>
+
+<main>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="topo" style="padding:0">
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <div>
+      <span class="kicker">Interactive Technical Book</span>
+      <h1>Econometria<em>de Séries Temporais</em></h1>
+      <p class="sub">Um atlas quantitativo navegável: da esperança condicional à volatilidade condicional, com simulação em tempo real de cada mecanismo.</p>
+      <p class="byline">
+        Obra de referência: <b>Rodrigo De Losso da Silveira Bueno</b> — Cengage Learning, 2ª edição.<br>
+        Companion digital idealizado e revisado por <b>Gabriel Groehs</b>.
+      </p>
+      <div class="hero-metrics">
+        <div><b>8</b><span>Capítulos</span></div>
+        <div><b>15</b><span>Equações navegáveis</span></div>
+        <div><b>13</b><span>Gráficos</span></div>
+        <div><b>11</b><span>Simulações</span></div>
+      </div>
+    </div>
+    <div class="tome">
+      <div class="tome-body" id="tome">
+        <div class="tome-face">
+          <div class="tome-txt">Econo<br>metria<small>de séries temporais</small></div>
+          <canvas class="tome-plot" id="tomePlot" aria-hidden="true"></canvas>
+          <div class="tome-foot">companion técnico</div>
+        </div>
+      </div>
+      <p class="tome-caption">Objeto gráfico original criado para este projeto; não reproduz a arte de capa da editora.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MAPA ==================== -->
+<section id="mapa">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-stage">Arquitetura editorial</span></div>
+    <h2>A obra lida como sistema de conhecimento</h2>
+    <p class="lede">Os oito capítulos não são módulos independentes: formam uma cadeia de decisões metodológicas. Cada etapa só faz sentido porque a anterior fechou uma pergunta — e cada uma abre a seguinte.</p>
+
+    <div class="spine" aria-label="Narrativa macro da obra">
+      <span class="on">Fundamento</span><i>→</i>
+      <span>Identificação</span><i>→</i>
+      <span>Diagnóstico</span><i>→</i>
+      <span>Estimação</span><i>→</i>
+      <span>Sistema</span><i>→</i>
+      <span>Equilíbrio</span><i>→</i>
+      <span>Risco</span><i>→</i>
+      <span>Decisão</span>
+    </div>
+
+    <div class="prose">
+      <p>A espinha dorsal intelectual do livro é uma única pergunta desdobrada em oito respostas: <strong>o que, exatamente, permanece constante numa série temporal?</strong> Se a média e a autocovariância permanecem, existe um objeto estatístico estável a ser estimado — e todo o aparato ARMA se aplica. Se não permanecem, é preciso descobrir o que se quebrou: o nível, a variância, ou a relação entre variáveis.</p>
+      <p>Os capítulos 2 e 3 constroem o caso estável. O capítulo 4 destrói esse conforto ao mostrar que a maior parte das séries econômicas tem raiz unitária e que regredir uma sobre a outra produz resultado convincente e falso. Os capítulos 5 a 7 reconstroem a inferência em terreno instável — momentos, sistemas e equilíbrio de longo prazo. O capítulo 8 desloca o eixo: a instabilidade migra da média para a variância.</p>
+    </div>
+
+    <div class="mapgrid" style="margin-top:30px">
+      <a class="mapcard" href="#c1"><span class="load">base</span><span class="n">Capítulo 1</span><h4>Introdução</h4><p>Por que o instrumental de séries temporais não é substituível pela regressão clássica.</p><div class="keys"><em>MQO</em><em>hipóteses</em><em>dependência</em></div></a>
+      <a class="mapcard pillar" href="#c2"><span class="load">pilar</span><span class="n">Capítulo 2</span><h4>Fundamentos estatísticos</h4><p>Esperança condicional, processos estocásticos, autocovariância, estacionaridade, ergodicidade, ARMA e invertibilidade.</p><div class="keys"><em>estacionaridade</em><em>ruído branco</em><em>ARMA(p,q)</em><em>filtros</em></div></a>
+      <a class="mapcard pillar" href="#c3"><span class="load">pilar</span><span class="n">Capítulo 3</span><h4>Processos estacionários</h4><p>FAC, FACP, identificação, estimação, inferência, diagnóstico de resíduos, previsão e sazonalidade.</p><div class="keys"><em>FAC/FACP</em><em>Box–Jenkins</em><em>previsão</em><em>SARMA</em></div></a>
+      <a class="mapcard pillar" href="#c4"><span class="load">pilar</span><span class="n">Capítulo 4</span><h4>Processos não estacionários</h4><p>Tendência determinística versus estocástica, passeio aleatório, regressão espúria, testes de raiz unitária e decomposição de Beveridge–Nelson.</p><div class="keys"><em>raiz unitária</em><em>espúria</em><em>ADF</em><em>B–N</em></div></a>
+      <a class="mapcard" href="#c5"><span class="load">método</span><span class="n">Capítulo 5</span><h4>GMM</h4><p>Condições de momento, estimação, propriedades assintóticas, casos especiais, testes e apreçamento de ativos.</p><div class="keys"><em>momentos</em><em>sobreidentificação</em><em>teste J</em></div></a>
+      <a class="mapcard pillar" href="#c6"><span class="load">pilar</span><span class="n">Capítulo 6</span><h4>Vetor autorregressivo</h4><p>Especificação, inferência, previsão, resposta ao impulso, decomposição da variância, causalidade de Granger e VAR estrutural.</p><div class="keys"><em>VAR</em><em>IRF</em><em>Granger</em><em>SVAR</em></div></a>
+      <a class="mapcard" href="#c7"><span class="load">síntese</span><span class="n">Capítulo 7</span><h4>Vetor de correção de erros</h4><p>Cointegração de Engle–Granger, modelo de correção de erros e o procedimento de Johansen.</p><div class="keys"><em>cointegração</em><em>VECM</em><em>Johansen</em></div></a>
+      <a class="mapcard pillar" href="#c8"><span class="load">pilar</span><span class="n">Capítulo 8</span><h4>Heterocedasticidade condicional</h4><p>Modelos GARCH: detecção, identificação, estimação, inferência, previsão, extensão multivariada e teste ARCH-LM.</p><div class="keys"><em>ARCH</em><em>GARCH</em><em>persistência</em><em>ARCH-LM</em></div></a>
+    </div>
+  </div>
+</section>
+<!-- ==================== CAP 1 ==================== -->
+<section id="c1">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-num">01</span><span class="chap-stage">Fundamento</span></div>
+    <h2>Introdução: por que o tempo quebra a regressão</h2>
+    <p class="lede">O capítulo de abertura resolve um problema de licença: sob quais condições ainda é legítimo usar o instrumental clássico quando as observações estão ordenadas no tempo — e o que exatamente se perde quando essas condições falham.</p>
+
+    <div class="prose">
+      <h3>Intuição antes da álgebra</h3>
+      <p>A regressão linear clássica supõe que cada observação traz informação nova. Numa série temporal isso raramente é verdade: o desemprego de março já contém quase toda a informação do desemprego de abril. A amostra tem 240 linhas, mas o número de <span class="term" data-tip="Quantidade de observações efetivamente independentes. Com forte dependência serial, centenas de pontos podem carregar a informação de poucas dezenas.">observações efetivas</span> pode ser uma fração disso.</p>
+      <p>A consequência não é o viés do coeficiente — é a <strong>ilusão de precisão</strong>. O estimador de mínimos quadrados continua consistente sob condições brandas, mas o erro-padrão calculado ingenuamente subestima a incerteza real. O pesquisador conclui com convicção estatística a partir de evidência que não existe.</p>
+
+      <button class="eqbox eq" data-eq="mqo">
+        <span class="eqname">Modelo linear e a hipótese que o tempo derruba</span>
+        <span class="v">y</span><span class="op">=</span><span class="v">X</span><span class="v">β</span><span class="op">+</span><span class="v">ε</span><span class="op">,</span>&nbsp;&nbsp;E[<span class="v">εε</span>′] <span class="op">=</span> <span class="v">σ</span><sup>2</sup><span class="v">I</span><sub>n</sub>
+      </button>
+      <p>A matriz identidade em <span class="term" data-tip="Matriz de variâncias e covariâncias dos erros. Fora da diagonal estão as covariâncias entre erros de períodos diferentes — que a hipótese clássica assume iguais a zero.">E[εε′]</span> é a hipótese sob ataque. Séries temporais colocam massa fora da diagonal principal, e é essa massa que o restante da obra aprende a modelar em vez de ignorar.</p>
+    </div>
+
+    <div class="lab" id="lab-ols">
+      <div class="lab-head"><h3>O custo de ignorar a dependência serial</h3><span class="lab-kind">Monte Carlo</span></div>
+      <p class="lab-note">Simulação: 600 amostras de <span class="v">y</span><sub>t</sub> = 0 · <span class="v">x</span><sub>t</sub> + <span class="v">u</span><sub>t</sub>, em que regressor e erro seguem AR(1) com o mesmo coeficiente ρ. O coeficiente verdadeiro é <strong>zero</strong>. O gráfico mostra a distribuição da estatística <span class="v">t</span> calculada com o erro-padrão convencional. Sob independência ela deveria ser aproximadamente normal padrão; com ρ alto, a cauda transborda os valores críticos e o teste rejeita a hipótese nula muito além dos 5% nominais.</p>
+      <div class="plot" data-plot="ols" style="aspect-ratio:16/8"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="ols-rho">Persistência ρ dos erros e do regressor <i id="ols-rho-v">0,80</i></label>
+          <input type="range" id="ols-rho" min="0" max="0.98" step="0.02" value="0.8">
+          <div class="meta"><span>0,00 · independente</span><span>0,98 · quase raiz unitária</span></div>
+          <div class="hint">Padrão: 0,80. Duplo clique reinicia.</div>
+        </div>
+        <div class="ctl">
+          <label for="ols-n">Tamanho da amostra T <i id="ols-n-v">120</i></label>
+          <input type="range" id="ols-n" min="30" max="400" step="10" value="120">
+          <div class="meta"><span>30</span><span>400</span></div>
+          <div class="hint">Aumentar T não corrige o problema — apenas o torna mais nítido.</div>
+        </div>
+      </div>
+      <div class="readout" id="ols-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>O que observar:</strong> mantenha ρ em zero e a taxa de rejeição fica próxima de 5%, como prometido pela teoria. Suba ρ e observe a taxa escalar para 30%, 50% ou mais — com um coeficiente verdadeiro que continua sendo zero. É exatamente esse fenômeno que reaparece, em forma extrema, na regressão espúria do Capítulo 4.</p>
+    </div>
+
+    <div class="ref">
+      <h4>Leitura técnica referenciada</h4>
+      <p>O capítulo inicial estabelece o contrato metodológico da obra. Em vez de apresentar séries temporais como uma técnica adicional, o autor as posiciona como o regime geral do qual a regressão clássica é um caso particular restrito: aquele em que a estrutura de dependência entre observações pode ser assumida como nula. A partir dessa inversão, os capítulos seguintes deixam de ser uma lista de modelos e passam a ser um programa — descrever, testar e explorar a dependência temporal em vez de tratá-la como patologia.</p>
+      <p class="cite">Leitura referenciada — Capítulo 1 (Introdução). BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. São Paulo: Cengage Learning. A simulação acima é construção original deste companion, não constando da obra.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CAP 2 ==================== -->
+<section id="c2">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-num">02</span><span class="chap-stage">Fundamento</span></div>
+    <h2>Fundamentos estatísticos</h2>
+    <p class="lede">Este é o capítulo que define o vocabulário. Sem estacionaridade e ergodicidade não existe objeto a estimar; sem autocovariância não existe assinatura para reconhecer o processo gerador.</p>
+
+    <div class="prose">
+      <h3>Intuição</h3>
+      <p>Numa amostra transversal, a lei dos grandes números funciona porque temos muitos indivíduos independentes. Numa série temporal temos <em>uma única</em> realização de um processo estocástico. A média amostral só converge para a média populacional se duas coisas valerem: o processo não muda de identidade ao longo do tempo (<span class="term" data-tip="Estacionaridade fraca: média constante, variância finita constante e autocovariância dependente apenas da defasagem k, não do instante t.">estacionaridade</span>) e a memória do processo se dissipa com a distância (<span class="term" data-tip="Ergodicidade: a média temporal de uma única trajetória converge para a média do conjunto de todas as trajetórias possíveis. Exige que a autocovariância decaia suficientemente rápido.">ergodicidade</span>).</p>
+      <p>São condições distintas e ambas necessárias. Um processo pode ser estacionário e não ergódico — por exemplo, se um choque inicial permanente desloca a trajetória para sempre. Nesse caso observar mil períodos não ensina mais do que observar dez.</p>
+    </div>
+
+    <h3 style="margin-top:34px">Conceitos centrais</h3>
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card"><span class="tag">2.1 – 2.2</span><h4>Esperança condicional</h4><p>A previsão ótima em erro quadrático médio. Todo o restante da obra é uma disputa sobre qual conjunto de informação usar para condicionar.</p></div>
+      <div class="card"><span class="tag">2.3</span><h4>Processo estocástico</h4><p>Uma família de variáveis aleatórias indexadas pelo tempo. A série observada é uma trajetória sorteada dessa família.</p></div>
+      <div class="card"><span class="tag">2.4</span><h4>Autocovariância</h4><p>A assinatura do processo. Reconhecer o modelo é reconhecer o padrão de decaimento de γ<sub>k</sub>.</p></div>
+      <div class="card"><span class="tag">2.5 – 2.6</span><h4>Estacionaridade e ergodicidade</h4><p>Condições de existência do problema estatístico. Sem elas não há parâmetro fixo a estimar.</p></div>
+      <div class="card"><span class="tag">2.7 – 2.10</span><h4>Ruído branco, MA, AR e ARMA</h4><p>Blocos construtivos. Todo processo estacionário admite representação de médias móveis infinitas.</p></div>
+      <div class="card"><span class="tag">2.11 – 2.13</span><h4>Filtros e invertibilidade</h4><p>Quando um MA pode ser reescrito como AR infinito — condição para que a estimação recupere o processo, e não um gêmeo observacional.</p></div>
+    </div>
+
+    <div class="prose" style="margin-top:34px">
+      <h3>A matemática mínima</h3>
+      <button class="eqbox eq" data-eq="estac">
+        <span class="eqname">Estacionaridade fraca (de segunda ordem)</span>
+        E[<span class="v">y</span><sub>t</sub>] <span class="op">=</span> <span class="v">μ</span><span class="op">,</span>&nbsp;
+        <span class="v">γ</span><sub>k</sub> <span class="op">=</span> E[(<span class="v">y</span><sub>t</sub><span class="op">−</span><span class="v">μ</span>)(<span class="v">y</span><sub>t−k</sub><span class="op">−</span><span class="v">μ</span>)] &nbsp;<span class="op">∀</span> <span class="v">t</span>
+      </button>
+      <button class="eqbox eq" data-eq="arma">
+        <span class="eqname">Processo ARMA(p, q) em operador de defasagem</span>
+        <span class="v">φ</span>(<span class="v">L</span>)<span class="v">y</span><sub>t</sub> <span class="op">=</span> <span class="v">c</span> <span class="op">+</span> <span class="v">θ</span>(<span class="v">L</span>)<span class="v">ε</span><sub>t</sub><span class="op">,</span>&nbsp;
+        <span class="v">ε</span><sub>t</sub> <span class="op">~</span> RB(0, <span class="v">σ</span><sup>2</sup>)
+      </button>
+      <button class="eqbox eq" data-eq="wold">
+        <span class="eqname">Representação de Wold — por que MA(∞) é suficiente</span>
+        <span class="v">y</span><sub>t</sub> <span class="op">=</span> <span class="v">μ</span> <span class="op">+</span> <span class="op">Σ</span><sub>j=0</sub><sup>∞</sup> <span class="v">ψ</span><sub>j</sub><span class="v">ε</span><sub>t−j</sub><span class="op">,</span>&nbsp; <span class="op">Σ</span><span class="v">ψ</span><sub>j</sub><sup>2</sup> <span class="op">&lt;</span> <span class="op">∞</span>
+      </button>
+    </div>
+
+    <div class="lab" id="lab-stat">
+      <div class="lab-head"><h3>Onde a estacionaridade se rompe</h3><span class="lab-kind">Simulação · AR(1)</span></div>
+      <p class="lab-note">Uma única equação, <span class="v">y</span><sub>t</sub> = φ<span class="v">y</span><sub>t−1</sub> + ε<span class="op">,</span> gera três mundos completamente distintos conforme φ. Acompanhe simultaneamente a trajetória, a média acumulada e o desvio-padrão acumulado: é a média acumulada que denuncia a perda de ergodicidade.</p>
+      <div class="plot" data-plot="stat" style="aspect-ratio:16/9"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="st-phi">Coeficiente autorregressivo φ <i id="st-phi-v">0,70</i></label>
+          <input type="range" id="st-phi" min="-0.98" max="1.02" step="0.02" value="0.7">
+          <div class="meta"><span>−0,98</span><span>1,02 · explosivo</span></div>
+          <div class="hint">Padrão: 0,70. Em φ = 1 o processo vira passeio aleatório.</div>
+        </div>
+        <div class="ctl">
+          <label for="st-sig">Desvio-padrão do choque σ <i id="st-sig-v">1,00</i></label>
+          <input type="range" id="st-sig" min="0.2" max="3" step="0.1" value="1">
+          <div class="meta"><span>0,2</span><span>3,0</span></div>
+          <div class="hint">Escala o ruído sem alterar a estrutura de memória.</div>
+        </div>
+        <div class="ctl">
+          <label for="st-seed">Trajetória sorteada <i id="st-seed-v">#7</i></label>
+          <input type="range" id="st-seed" min="1" max="40" step="1" value="7">
+          <div class="meta"><span>#1</span><span>#40</span></div>
+          <div class="hint">Cada valor é uma realização diferente do mesmo processo.</div>
+        </div>
+      </div>
+      <div class="readout" id="st-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>Interpretação:</strong> com |φ| &lt; 1 a variância teórica é σ²/(1−φ²) e a média acumulada estabiliza rapidamente em torno de zero. Ao aproximar φ de 1, a variância teórica explode e a média acumulada passa a vagar — o estimador deixa de convergir. Acima de 1, cada choque é amplificado indefinidamente e a série perde qualquer interpretação estatística estável.</p>
+    </div>
+
+    <div class="ref">
+      <h4>Leitura técnica referenciada</h4>
+      <p>A contribuição central deste capítulo é ordenar as condições de possibilidade da análise. A sequência esperança condicional → processo estocástico → autocovariância → estacionaridade → ergodicidade não é arbitrária: cada conceito é pré-requisito lógico do seguinte. A apresentação de médias móveis antes dos autorregressivos, e não o contrário, tem consequência pedagógica direta — o leitor encontra primeiro o processo de memória finita e explícita, e só então o processo cuja memória é infinita mas decai geometricamente. A discussão de filtros e invertibilidade encerra o capítulo respondendo a uma pergunta de identificação: quando dois conjuntos de parâmetros diferentes descrevem exatamente a mesma autocovariância, e qual deles a estimação deve escolher.</p>
+      <p class="cite">Leitura referenciada — Capítulo 2 (Fundamentos Estatísticos), seções 2.1 a 2.13. BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. São Paulo: Cengage Learning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CAP 3 ==================== -->
+<section id="c3">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-num">03</span><span class="chap-stage">Identificação</span></div>
+    <h2>Processos estacionários: reconhecer, estimar, prever</h2>
+    <p class="lede">Se o processo é estacionário, resta um problema de reconhecimento de padrões estatísticos. Este capítulo entrega o instrumento de leitura — o par FAC e FACP — e o ciclo de trabalho que o organiza.</p>
+
+    <div class="prose">
+      <h3>Intuição</h3>
+      <p>A FAC mede correlação bruta entre <span class="v">y</span><sub>t</sub> e <span class="v">y</span><sub>t−k</sub>, incluindo tudo o que passa pelos períodos intermediários. A FACP remove esse tráfego e mede apenas a ligação direta. A assimetria entre as duas é a impressão digital do processo: <strong>MA truncam a FAC, AR truncam a FACP</strong>.</p>
+    </div>
+
+    <div class="lab" id="lab-acf">
+      <div class="lab-head"><h3>Correlograma teórico: a impressão digital do processo</h3><span class="lab-kind">Interativo · FAC / FACP</span></div>
+      <p class="lab-note">Escolha a família, mova os coeficientes e observe as duas funções mudarem de forma. A FACP é calculada pela recursão de Durbin–Levinson a partir da FAC teórica, exatamente como no procedimento de identificação.</p>
+      <div class="btnrow" role="group" aria-label="Família do modelo">
+        <button class="btn" data-acf="ar1" aria-pressed="true">AR(1)</button>
+        <button class="btn" data-acf="ar2" aria-pressed="false">AR(2)</button>
+        <button class="btn" data-acf="ma1" aria-pressed="false">MA(1)</button>
+        <button class="btn" data-acf="ma2" aria-pressed="false">MA(2)</button>
+        <button class="btn" data-acf="arma11" aria-pressed="false">ARMA(1,1)</button>
+      </div>
+      <div class="plot" data-plot="acf" style="aspect-ratio:16/9;margin-top:14px"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="ac-p1">φ<sub>1</sub> — autorregressivo <i id="ac-p1-v">0,70</i></label>
+          <input type="range" id="ac-p1" min="-0.95" max="0.95" step="0.01" value="0.7">
+          <div class="meta"><span>−0,95</span><span>0,95</span></div>
+          <div class="hint">Padrão: 0,70. Valores negativos alternam o sinal da FAC.</div>
+        </div>
+        <div class="ctl">
+          <label for="ac-p2">φ<sub>2</sub> — segunda defasagem <i id="ac-p2-v">−0,40</i></label>
+          <input type="range" id="ac-p2" min="-0.9" max="0.9" step="0.01" value="-0.4">
+          <div class="meta"><span>−0,90</span><span>0,90</span></div>
+          <div class="hint">Ativo em AR(2). Raízes complexas produzem FAC oscilante amortecida.</div>
+        </div>
+        <div class="ctl">
+          <label for="ac-t1">θ<sub>1</sub> — médias móveis <i id="ac-t1-v">0,60</i></label>
+          <input type="range" id="ac-t1" min="-0.95" max="0.95" step="0.01" value="0.6">
+          <div class="meta"><span>−0,95</span><span>0,95</span></div>
+          <div class="hint">Padrão: 0,60. |θ| &lt; 1 garante invertibilidade.</div>
+        </div>
+        <div class="ctl">
+          <label for="ac-t2">θ<sub>2</sub> — segunda defasagem MA <i id="ac-t2-v">0,30</i></label>
+          <input type="range" id="ac-t2" min="-0.9" max="0.9" step="0.01" value="0.3">
+          <div class="meta"><span>−0,90</span><span>0,90</span></div>
+          <div class="hint">Ativo em MA(2).</div>
+        </div>
+      </div>
+      <div class="readout" id="ac-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>O que observar:</strong> em AR(1) a FACP zera após a primeira barra enquanto a FAC decai geometricamente; em MA(1) o padrão se inverte. Em ARMA(1,1) nenhuma das duas trunca — e é por isso que a identificação de modelos mistos exige critérios de informação, não apenas inspeção visual.</p>
+    </div>
+
+    <h3 style="margin-top:20px">O ciclo de Box–Jenkins</h3>
+    <p class="lab-note" style="max-width:70ch">Um processo de decisão, não uma receita linear: o diagnóstico de resíduos devolve o analista à identificação sempre que a hipótese de ruído branco é rejeitada.</p>
+    <div class="flow" id="flow-bj" aria-label="Ciclo de identificação, estimação, diagnóstico e previsão">
+      <div class="flow-node"><b>Estacionarizar</b><span>Diferenciar ou remover tendência até que média e variância estabilizem.</span></div><div class="flow-link"></div>
+      <div class="flow-node"><b>Identificar</b><span>Ler FAC e FACP; propor ordens (p, q) candidatas.</span></div><div class="flow-link"></div>
+      <div class="flow-node"><b>Estimar</b><span>Máxima verossimilhança condicional ou exata sobre cada candidato.</span></div><div class="flow-link"></div>
+      <div class="flow-node"><b>Diagnosticar</b><span>Ljung–Box nos resíduos; critérios de informação entre candidatos.</span></div><div class="flow-link"></div>
+      <div class="flow-node"><b>Prever</b><span>Projetar e monitorar o erro fora da amostra.</span></div>
+    </div>
+
+    <div class="prose" style="margin-top:26px">
+      <button class="eqbox eq" data-eq="lb">
+        <span class="eqname">Estatística de Ljung–Box — o teste que fecha o ciclo</span>
+        <span class="v">Q</span> <span class="op">=</span> <span class="v">T</span>(<span class="v">T</span><span class="op">+</span>2) <span class="op">Σ</span><sub>k=1</sub><sup>m</sup>
+        <span class="frac"><span class="n"><span class="v">r</span><sub>k</sub><sup>2</sup></span><span class="d"><span class="v">T</span><span class="op">−</span><span class="v">k</span></span></span>
+        <span class="op">~</span> <span class="v">χ</span><sup>2</sup><sub>m−p−q</sub>
+      </button>
+      <button class="eqbox eq" data-eq="fc">
+        <span class="eqname">Previsão h passos à frente em um AR(1)</span>
+        <span class="v">ŷ</span><sub>T+h</sub> <span class="op">=</span> <span class="v">μ</span> <span class="op">+</span> <span class="v">φ</span><sup>h</sup>(<span class="v">y</span><sub>T</sub><span class="op">−</span><span class="v">μ</span>)<span class="op">,</span>&nbsp;
+        Var(<span class="v">e</span><sub>h</sub>) <span class="op">=</span> <span class="v">σ</span><sup>2</sup>
+        <span class="frac"><span class="n">1<span class="op">−</span><span class="v">φ</span><sup>2h</sup></span><span class="d">1<span class="op">−</span><span class="v">φ</span><sup>2</sup></span></span>
+      </button>
+    </div>
+
+    <div class="lab" id="lab-fan">
+      <div class="lab-head"><h3>Previsão e o horizonte útil</h3><span class="lab-kind">Fan chart</span></div>
+      <p class="lab-note">A projeção pontual converge para a média incondicional a uma taxa φ<sup>h</sup>. O intervalo, por sua vez, converge para a variância incondicional. O ponto em que as duas convergências se completam é o horizonte a partir do qual o modelo deixa de informar mais do que a média histórica.</p>
+      <div class="plot" data-plot="fan" style="aspect-ratio:16/8"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="fc-phi">Persistência φ <i id="fc-phi-v">0,85</i></label>
+          <input type="range" id="fc-phi" min="0" max="0.99" step="0.01" value="0.85">
+          <div class="meta"><span>0,00</span><span>0,99</span></div>
+          <div class="hint">Padrão: 0,85. Quanto maior, mais longo o horizonte útil.</div>
+        </div>
+        <div class="ctl">
+          <label for="fc-h">Horizonte h <i id="fc-h-v">30</i></label>
+          <input type="range" id="fc-h" min="5" max="80" step="1" value="30">
+          <div class="meta"><span>5</span><span>80</span></div>
+          <div class="hint">Períodos projetados após o fim da amostra.</div>
+        </div>
+        <div class="ctl">
+          <label for="fc-y">Último valor observado y<sub>T</sub> <i id="fc-y-v">2,50</i></label>
+          <input type="range" id="fc-y" min="-4" max="4" step="0.1" value="2.5">
+          <div class="meta"><span>−4,0</span><span>4,0</span></div>
+          <div class="hint">Define a distância inicial em relação à média.</div>
+        </div>
+      </div>
+      <div class="readout" id="fc-out"></div>
+    </div>
+
+    <div class="ref">
+      <h4>Leitura técnica referenciada</h4>
+      <p>Este é o capítulo operacional da obra. A sequência FAC → FACP → identificação → estimação → inferência → diagnóstico reproduz a metodologia de Box–Jenkins, mas a inclusão da estimação exata ao lado da condicional cumpre função conceitual: mostra que a verossimilhança condicional descarta informação da parte inicial da amostra, o que é irrelevante em amostras longas e material em amostras curtas. O tratamento de sazonalidade ao final, contrastando a suavização tradicional com a formulação SARMA multiplicativa, marca a transição de uma prática descritiva para uma prática baseada em modelo probabilístico — e, com isso, para intervalos de previsão que têm interpretação estatística.</p>
+      <p class="cite">Leitura referenciada — Capítulo 3 (Processos Estacionários), seções 3.1 a 3.11. BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. São Paulo: Cengage Learning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CAP 4 ==================== -->
+<section id="c4">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-num">04</span><span class="chap-stage">Diagnóstico</span></div>
+    <h2>Processos não estacionários</h2>
+    <p class="lede">O capítulo que desfaz o conforto anterior. A maioria das séries macroeconômicas e financeiras não é estacionária em nível, e o método construído nos capítulos 2 e 3 aplicado sem verificação produz resultados confiantes e inteiramente falsos.</p>
+
+    <div class="prose">
+      <h3>Duas tendências que parecem iguais no gráfico</h3>
+      <p>Uma série com <span class="term" data-tip="Tendência determinística: y = a + bt + erro estacionário. Choques são transitórios; a série retorna à linha de tendência.">tendência determinística</span> e uma com <span class="term" data-tip="Tendência estocástica: y = y anterior + deriva + choque. Cada choque desloca permanentemente o nível da série; não há linha de retorno.">tendência estocástica</span> podem ser visualmente indistinguíveis. A diferença é econômica, não estética: na primeira, um choque de política se dissipa; na segunda, ele redefine o nível permanentemente. O tratamento correto também difere — remover tendência por regressão versus diferenciar. Aplicar o tratamento errado gera resíduos que ainda contêm raiz unitária, ou introduz correlação artificial em série já estacionária.</p>
+    </div>
+
+    <div class="lab" id="lab-spurious">
+      <div class="lab-head"><h3>Regressão espúria</h3><span class="lab-kind">Monte Carlo · 500 amostras</span></div>
+      <p class="lab-note">Duas séries são geradas de forma <strong>completamente independente</strong>. Regredimos uma sobre a outra e guardamos a estatística <span class="v">t</span> e o R². Quando as séries são passeios aleatórios, a distribuição de <span class="v">t</span> não converge para a normal padrão: ela diverge com T, e a rejeição da hipótese nula (que é verdadeira) torna-se a regra.</p>
+      <div class="btnrow" role="group" aria-label="Processo gerador">
+        <button class="btn" data-sp="rw" aria-pressed="true">Passeios aleatórios I(1)</button>
+        <button class="btn" data-sp="st" aria-pressed="false">Séries estacionárias I(0)</button>
+      </div>
+      <div class="plot" data-plot="spurious" style="aspect-ratio:16/8;margin-top:14px"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="sp-n">Tamanho da amostra T <i id="sp-n-v">150</i></label>
+          <input type="range" id="sp-n" min="40" max="500" step="10" value="150">
+          <div class="meta"><span>40</span><span>500</span></div>
+          <div class="hint">No caso I(1), aumentar T <em>piora</em> a taxa de rejeição.</div>
+        </div>
+      </div>
+      <div class="readout" id="sp-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>Interpretação:</strong> alterne entre os dois processos mantendo T fixo. No caso estacionário a distribuição empilha-se entre −2 e +2, como a teoria assintótica promete. No caso I(1) ela se espalha muito além, e o R² médio — indicador que muitos leitores usam como sinal de qualidade — sobe justamente quando a regressão não tem sentido algum.</p>
+    </div>
+
+    <div class="prose">
+      <button class="eqbox eq" data-eq="adf">
+        <span class="eqname">Regressão de Dickey–Fuller aumentada</span>
+        <span class="op">Δ</span><span class="v">y</span><sub>t</sub> <span class="op">=</span> <span class="v">α</span> <span class="op">+</span> <span class="v">δt</span> <span class="op">+</span> <span class="v">ρy</span><sub>t−1</sub> <span class="op">+</span> <span class="op">Σ</span><sub>i=1</sub><sup>p</sup> <span class="v">c</span><sub>i</sub><span class="op">Δ</span><span class="v">y</span><sub>t−i</sub> <span class="op">+</span> <span class="v">ε</span><sub>t</sub>
+      </button>
+    </div>
+
+    <div class="lab" id="lab-df">
+      <div class="lab-head"><h3>Por que a tabela normal não serve</h3><span class="lab-kind">Distribuição simulada</span></div>
+      <p class="lab-note">Sob a hipótese nula de raiz unitária, a estatística <span class="v">t</span> de ρ não segue a distribuição de Student. Sua distribuição limite é assimétrica e deslocada para a esquerda, descrita por funcionais de movimento browniano. A simulação abaixo reconstrói essa distribuição por Monte Carlo e a compara à normal padrão.</p>
+      <div class="btnrow" role="group" aria-label="Especificação determinística">
+        <button class="btn" data-df="none" aria-pressed="false">Sem constante</button>
+        <button class="btn" data-df="const" aria-pressed="true">Com constante</button>
+        <button class="btn" data-df="trend" aria-pressed="false">Constante e tendência</button>
+      </div>
+      <div class="plot" data-plot="df" style="aspect-ratio:16/8;margin-top:14px"></div>
+      <div class="readout" id="df-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>Consequência prática:</strong> usar −1,96 como valor crítico rejeita a raiz unitária com frequência muito superior ao nível nominal. Quanto mais termos determinísticos entram na regressão, mais à esquerda se desloca o valor crítico — e menor o poder do teste. Essa perda de poder é o argumento para os testes de estacionaridade com hipótese nula invertida.</p>
+    </div>
+
+    <h3>Decisão de tratamento</h3>
+    <div class="flow" id="flow-ur" aria-label="Árvore de decisão para raiz unitária">
+      <div class="flow-node"><b>Inspecionar</b><span>Nível, diferença e correlograma. Há deriva? Há tendência visível?</span></div><div class="flow-link"></div>
+      <div class="flow-node"><b>Especificar</b><span>Escolher os termos determinísticos antes de testar — eles mudam o valor crítico.</span></div><div class="flow-link"></div>
+      <div class="flow-node"><b>Testar</b><span>ADF e Phillips–Perron; confirmar com teste de nula estacionária.</span></div><div class="flow-link"></div>
+      <div class="flow-node"><b>Tratar</b><span>Diferenciar se I(1); remover tendência se estacionária em torno de tendência.</span></div><div class="flow-link"></div>
+      <div class="flow-node"><b>Reavaliar</b><span>Se há várias séries I(1), suspender a diferenciação e testar cointegração.</span></div>
+    </div>
+
+    <div class="lab" id="lab-bn">
+      <div class="lab-head"><h3>Decomposição de Beveridge–Nelson</h3><span class="lab-kind">Permanente vs. transitório</span></div>
+      <p class="lab-note">Toda série I(1) pode ser escrita como a soma de um passeio aleatório com deriva (o componente permanente) e um componente estacionário (o ciclo). O multiplicador de longo prazo ψ(1) determina quanto de cada choque se incorpora permanentemente ao nível.</p>
+      <div class="plot" data-plot="bn" style="aspect-ratio:16/8"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="bn-phi">Persistência da diferença φ <i id="bn-phi-v">0,55</i></label>
+          <input type="range" id="bn-phi" min="-0.8" max="0.9" step="0.01" value="0.55">
+          <div class="meta"><span>−0,80</span><span>0,90</span></div>
+          <div class="hint">Padrão: 0,55. Define ψ(1) = 1/(1 − φ).</div>
+        </div>
+        <div class="ctl">
+          <label for="bn-drift">Deriva por período <i id="bn-drift-v">0,15</i></label>
+          <input type="range" id="bn-drift" min="0" max="0.5" step="0.01" value="0.15">
+          <div class="meta"><span>0,00</span><span>0,50</span></div>
+          <div class="hint">Inclinação média do componente permanente.</div>
+        </div>
+      </div>
+      <div class="readout" id="bn-out"></div>
+    </div>
+
+    <div class="ref">
+      <h4>Leitura técnica referenciada</h4>
+      <p>A contribuição decisiva deste capítulo é epistemológica antes de ser técnica: ele demonstra que a evidência estatística convencional pode ser sistematicamente enganosa quando a hipótese de estacionaridade não é verificada. A ordem escolhida pelo autor — expor a regressão espúria antes de apresentar os testes de raiz unitária — inverte a apresentação usual e tem efeito pedagógico claro: o leitor encontra primeiro o problema em sua forma mais desconfortável e só então recebe o instrumento. A decomposição de Beveridge–Nelson fecha o capítulo devolvendo interpretação econômica ao objeto matemático, ao separar o que num choque é permanente do que é ciclo — distinção que sustenta boa parte da leitura macroeconômica de séries observadas.</p>
+      <p class="cite">Leitura referenciada — Capítulo 4 (Processos Não Estacionários), seções 4.1 a 4.6. BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. São Paulo: Cengage Learning. As simulações de Monte Carlo são construções originais deste companion.</p>
+    </div>
+  </div>
+</section>
+<!-- ==================== CAP 5 ==================== -->
+<section id="c5">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-num">05</span><span class="chap-stage">Estimação</span></div>
+    <h2>Método Generalizado dos Momentos</h2>
+    <p class="lede">O capítulo em que a estimação se liberta da verossimilhança. Em vez de especificar a distribuição inteira dos dados, o GMM exige apenas que a teoria econômica entregue condições de ortogonalidade — e estima a partir delas.</p>
+
+    <div class="prose">
+      <h3>Intuição</h3>
+      <p>A teoria econômica raramente prevê a distribuição completa de uma variável. Ela prevê relações que devem valer <em>em média</em>: um erro de previsão racional não deve ser correlacionado com a informação disponível; o produto entre fator de desconto estocástico e retorno de um ativo deve ter esperança unitária. Cada uma dessas afirmações é uma <span class="term" data-tip="Condição de momento: uma igualdade populacional do tipo E[g(dados, parâmetros)] = 0 que a teoria impõe e que o estimador tenta reproduzir na amostra.">condição de momento</span>.</p>
+      <p>O GMM escolhe o vetor de parâmetros que aproxima o máximo possível essas condições de zero na amostra. Quando há mais condições do que parâmetros — o caso <span class="term" data-tip="Sobreidentificação: há mais restrições de momento do que parâmetros livres. As condições excedentes não podem ser zeradas e servem como teste da própria especificação.">sobreidentificado</span> — o excesso vira teste: se a teoria estiver correta, os momentos residuais devem ser pequenos e o estatístico <span class="v">J</span> não deve rejeitar.</p>
+
+      <button class="eqbox eq" data-eq="gmm">
+        <span class="eqname">Critério do GMM</span>
+        <span class="v">J</span><sub>T</sub>(<span class="v">θ</span>) <span class="op">=</span> <span class="v">T</span> · <span class="v">g</span><sub>T</sub>(<span class="v">θ</span>)′ <span class="v">W</span><sub>T</sub> <span class="v">g</span><sub>T</sub>(<span class="v">θ</span>)<span class="op">,</span>&nbsp;
+        <span class="v">g</span><sub>T</sub>(<span class="v">θ</span>) <span class="op">=</span>
+        <span class="frac"><span class="n">1</span><span class="d"><span class="v">T</span></span></span>
+        <span class="op">Σ</span><sub>t</sub> <span class="v">g</span>(<span class="v">x</span><sub>t</sub><span class="op">,</span> <span class="v">θ</span>)
+      </button>
+      <button class="eqbox eq" data-eq="euler">
+        <span class="eqname">Equação de Euler — a condição de momento do apreçamento de ativos</span>
+        E<sub>t</sub>[<span class="v">β</span> (
+        <span class="frac"><span class="n"><span class="v">c</span><sub>t+1</sub></span><span class="d"><span class="v">c</span><sub>t</sub></span></span>
+        )<sup>−γ</sup> <span class="v">R</span><sub>t+1</sub> <span class="op">−</span> 1] <span class="op">=</span> 0
+      </button>
+    </div>
+
+    <div class="lab" id="lab-gmm">
+      <div class="lab-head"><h3>Superfície do critério e o papel da matriz de peso</h3><span class="lab-kind">Mapa de calor · J(β, γ)</span></div>
+      <p class="lab-note">A superfície mostra <span class="v">J</span> em função de dois parâmetros de um sistema sobreidentificado ilustrativo. O mínimo é a estimativa GMM. Ao mudar a matriz de peso, a geometria da superfície muda: o vale se reorienta e a estimativa se desloca — evidência visual de que a escolha de <span class="v">W</span> não é neutra em amostras finitas, ainda que todas as escolhas admissíveis sejam consistentes.</p>
+      <div class="btnrow" role="group" aria-label="Matriz de peso">
+        <button class="btn" data-gw="id" aria-pressed="true">W = I (primeiro estágio)</button>
+        <button class="btn" data-gw="eff" aria-pressed="false">W ótima (segundo estágio)</button>
+      </div>
+      <div class="plot" data-plot="gmm" style="aspect-ratio:16/9;margin-top:14px"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="gm-noise">Ruído nos momentos amostrais <i id="gm-noise-v">0,30</i></label>
+          <input type="range" id="gm-noise" min="0" max="1" step="0.02" value="0.3">
+          <div class="meta"><span>0,00</span><span>1,00</span></div>
+          <div class="hint">Maior ruído achata o vale e deteriora a identificação.</div>
+        </div>
+        <div class="ctl">
+          <label for="gm-corr">Correlação entre instrumentos <i id="gm-corr-v">0,50</i></label>
+          <input type="range" id="gm-corr" min="0" max="0.95" step="0.01" value="0.5">
+          <div class="meta"><span>0,00</span><span>0,95</span></div>
+          <div class="hint">Instrumentos muito correlacionados alongam o vale: identificação fraca.</div>
+        </div>
+      </div>
+      <div class="readout" id="gm-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>O que observar:</strong> quando o vale se torna quase plano em uma direção, pequenos ruídos amostrais deslocam muito a estimativa naquele eixo. É a assinatura geométrica da identificação fraca — o mesmo fenômeno que, em variáveis instrumentais, aparece como instrumento fraco.</p>
+    </div>
+
+    <div class="ref">
+      <h4>Leitura técnica referenciada</h4>
+      <p>Posicionar o GMM entre os capítulos de séries univariadas e o VAR é uma escolha estrutural relevante. O método aparece não como técnica avulsa, mas como a generalização que abriga mínimos quadrados, variáveis instrumentais e máxima verossimilhança como casos particulares — cada um correspondendo a um conjunto específico de condições de momento e a uma matriz de peso. A discussão sobre a estimação da autocovariância dos momentos conecta diretamente com o problema levantado no Capítulo 1: em presença de dependência serial, a matriz de covariância precisa ser estimada de forma robusta, sob pena de reproduzir a mesma ilusão de precisão. O fechamento com apreçamento de ativos dá ao capítulo sua justificativa econômica, mostrando que a equação de Euler é uma condição de momento pronta para uso.</p>
+      <p class="cite">Leitura referenciada — Capítulo 5 (GMM), seções 5.1 a 5.8. BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. São Paulo: Cengage Learning. A superfície apresentada é ilustração original, com sistema sintético.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CAP 6 ==================== -->
+<section id="c6">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-num">06</span><span class="chap-stage">Sistema</span></div>
+    <h2>Vetor autorregressivo</h2>
+    <p class="lede">A passagem de uma série para um sistema. Nenhuma variável é exógena por decreto: todas são explicadas pelo próprio passado e pelo passado das demais, e a estrutura causal passa a ser objeto de teste e de identificação, não de suposição.</p>
+
+    <div class="prose">
+      <h3>Intuição</h3>
+      <p>O VAR responde a uma pergunta que a econometria estrutural tradicional respondia por imposição teórica: <em>o que acontece com o sistema inteiro quando uma variável recebe um choque inesperado?</em> A resposta é a <span class="term" data-tip="Função de resposta ao impulso: trajetória temporal do efeito de um choque unitário em uma variável sobre todas as variáveis do sistema.">função de resposta ao impulso</span>, que propaga o choque pelas equações e pelos períodos.</p>
+      <p>Há um preço: os choques estimados na forma reduzida são correlacionados entre si e não têm interpretação econômica direta. Recuperar choques interpretáveis exige restrições de identificação — a decomposição de Cholesky impõe uma ordem causal contemporânea; a estratégia de Blanchard–Quah impõe restrições sobre efeitos de longo prazo.</p>
+
+      <button class="eqbox eq" data-eq="var">
+        <span class="eqname">VAR(p) na forma reduzida</span>
+        <span class="v">Y</span><sub>t</sub> <span class="op">=</span> <span class="v">c</span> <span class="op">+</span> <span class="v">A</span><sub>1</sub><span class="v">Y</span><sub>t−1</sub> <span class="op">+</span> <span class="op">…</span> <span class="op">+</span> <span class="v">A</span><sub>p</sub><span class="v">Y</span><sub>t−p</sub> <span class="op">+</span> <span class="v">u</span><sub>t</sub><span class="op">,</span>&nbsp; E[<span class="v">u</span><sub>t</sub><span class="v">u</span><sub>t</sub>′] <span class="op">=</span> <span class="v">Σ</span>
+      </button>
+      <button class="eqbox eq" data-eq="irf">
+        <span class="eqname">Resposta ao impulso ortogonalizada</span>
+        <span class="op">∂</span><span class="v">Y</span><sub>t+h</sub> <span class="op">/</span> <span class="op">∂</span><span class="v">ε</span><sub>t</sub> <span class="op">=</span> <span class="v">Ψ</span><sub>h</sub> <span class="op">=</span> <span class="v">A</span><sup>h</sup><span class="v">P</span><span class="op">,</span>&nbsp; <span class="v">PP</span>′ <span class="op">=</span> <span class="v">Σ</span>
+      </button>
+    </div>
+
+    <div class="lab" id="lab-irf">
+      <div class="lab-head"><h3>Propagação de choques em um VAR(1) bivariado</h3><span class="lab-kind">IRF + decomposição da variância</span></div>
+      <p class="lab-note">Sistema com duas variáveis — chame-as de <strong>atividade</strong> e <strong>preço</strong>. Os quatro coeficientes da matriz <span class="v">A</span> controlam persistência própria e transmissão cruzada. À esquerda, as respostas a um choque ortogonalizado de um desvio-padrão; à direita, a fração da variância do erro de previsão atribuída a cada choque ao longo do horizonte.</p>
+      <div class="plot" data-plot="irf" style="aspect-ratio:16/8"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="vr-a11">a<sub>11</sub> — persistência da atividade <i id="vr-a11-v">0,60</i></label>
+          <input type="range" id="vr-a11" min="-0.9" max="0.95" step="0.01" value="0.6">
+          <div class="meta"><span>−0,90</span><span>0,95</span></div>
+          <div class="hint">Padrão: 0,60.</div>
+        </div>
+        <div class="ctl">
+          <label for="vr-a12">a<sub>12</sub> — preço → atividade <i id="vr-a12-v">−0,25</i></label>
+          <input type="range" id="vr-a12" min="-0.8" max="0.8" step="0.01" value="-0.25">
+          <div class="meta"><span>−0,80</span><span>0,80</span></div>
+          <div class="hint">Transmissão cruzada defasada.</div>
+        </div>
+        <div class="ctl">
+          <label for="vr-a21">a<sub>21</sub> — atividade → preço <i id="vr-a21-v">0,35</i></label>
+          <input type="range" id="vr-a21" min="-0.8" max="0.8" step="0.01" value="0.35">
+          <div class="meta"><span>−0,80</span><span>0,80</span></div>
+          <div class="hint">Se for zero, atividade não Granger-causa preço.</div>
+        </div>
+        <div class="ctl">
+          <label for="vr-a22">a<sub>22</sub> — persistência do preço <i id="vr-a22-v">0,70</i></label>
+          <input type="range" id="vr-a22" min="-0.9" max="0.95" step="0.01" value="0.7">
+          <div class="meta"><span>−0,90</span><span>0,95</span></div>
+          <div class="hint">Padrão: 0,70.</div>
+        </div>
+        <div class="ctl">
+          <label for="vr-corr">Correlação contemporânea dos resíduos <i id="vr-corr-v">0,40</i></label>
+          <input type="range" id="vr-corr" min="-0.9" max="0.9" step="0.01" value="0.4">
+          <div class="meta"><span>−0,90</span><span>0,90</span></div>
+          <div class="hint">É ela que torna a ordem de Cholesky consequente.</div>
+        </div>
+      </div>
+      <div class="readout" id="vr-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>Estabilidade:</strong> o painel monitora o maior autovalor da matriz companion. Acima de 1 o sistema é explosivo e as respostas ao impulso deixam de convergir — o indicador muda de cor para sinalizar que a especificação saiu da região admissível.</p>
+    </div>
+
+    <div class="ref">
+      <h4>Leitura técnica referenciada</h4>
+      <p>O capítulo trata o VAR como instrumento de descrição dinâmica antes de tratá-lo como instrumento causal, e essa ordem importa. Especificação, inferência e previsão vêm primeiro; resposta ao impulso, decomposição da variância e causalidade de Granger vêm em seguida como leituras do objeto já estimado; e apenas ao final entra o VAR estrutural, quando fica claro que nenhuma dessas leituras é interpretável economicamente sem restrições adicionais explícitas. A inclusão da decomposição de Blanchard e Quah oferece o contraponto necessário à ordenação de Cholesky, deslocando a restrição do curto para o longo prazo e evidenciando que a identificação é sempre uma escolha do pesquisador, sujeita a defesa teórica.</p>
+      <p class="cite">Leitura referenciada — Capítulo 6 (Vetor Autorregressivo — VAR), seções 6.1 a 6.11. BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. São Paulo: Cengage Learning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CAP 7 ==================== -->
+<section id="c7">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-num">07</span><span class="chap-stage">Equilíbrio</span></div>
+    <h2>Vetor de correção de erros</h2>
+    <p class="lede">A síntese entre os capítulos 4 e 6. Se cada série é I(1), diferenciar resolve a não estacionaridade mas apaga a relação de longo prazo. A cointegração é a condição sob a qual essa relação existe — e o VECM é a forma de estimá-la sem descartá-la.</p>
+
+    <div class="prose">
+      <h3>Intuição</h3>
+      <p>Duas séries individualmente sem âncora podem, ainda assim, estar amarradas uma à outra. Preço à vista e futuro do mesmo ativo vagam livremente, mas a base entre eles não vaga: a arbitragem a traz de volta. Formalmente, existe uma combinação linear das séries I(1) que é I(0) — e o <span class="term" data-tip="Termo de correção de erros: o desvio corrente em relação à relação de equilíbrio de longo prazo. É a variável que puxa o sistema de volta.">termo de correção de erros</span> mede o desvio corrente em relação a esse equilíbrio.</p>
+      <p>O coeficiente de ajuste α diz que fração do desvio é corrigida a cada período. Ele deve ser negativo: o sistema reage no sentido de fechar o desvio. Sua magnitude define a meia-vida do desequilíbrio — informação diretamente utilizável em decisão, e não apenas em diagnóstico.</p>
+
+      <button class="eqbox eq" data-eq="vecm">
+        <span class="eqname">Modelo de correção de erros</span>
+        <span class="op">Δ</span><span class="v">y</span><sub>t</sub> <span class="op">=</span> <span class="v">α</span>(<span class="v">y</span><sub>t−1</sub> <span class="op">−</span> <span class="v">βx</span><sub>t−1</sub>) <span class="op">+</span> <span class="op">Σ</span> <span class="v">γ</span><sub>i</sub><span class="op">Δ</span><span class="v">y</span><sub>t−i</sub> <span class="op">+</span> <span class="op">Σ</span> <span class="v">δ</span><sub>i</sub><span class="op">Δ</span><span class="v">x</span><sub>t−i</sub> <span class="op">+</span> <span class="v">ε</span><sub>t</sub>
+      </button>
+      <button class="eqbox eq" data-eq="johansen">
+        <span class="eqname">Representação de Johansen — o posto define o número de relações</span>
+        <span class="op">Δ</span><span class="v">Y</span><sub>t</sub> <span class="op">=</span> <span class="v">Π</span><span class="v">Y</span><sub>t−1</sub> <span class="op">+</span> <span class="op">Σ</span> <span class="v">Γ</span><sub>i</sub><span class="op">Δ</span><span class="v">Y</span><sub>t−i</sub> <span class="op">+</span> <span class="v">ε</span><sub>t</sub><span class="op">,</span>&nbsp;
+        <span class="v">Π</span> <span class="op">=</span> <span class="v">αβ</span>′<span class="op">,</span>&nbsp; posto(<span class="v">Π</span>) <span class="op">=</span> <span class="v">r</span>
+      </button>
+    </div>
+
+    <div class="lab" id="lab-vecm">
+      <div class="lab-head"><h3>Velocidade de ajuste ao equilíbrio</h3><span class="lab-kind">Simulação · VECM bivariado</span></div>
+      <p class="lab-note">Duas séries I(1) compartilham uma tendência estocástica comum. O painel superior mostra os níveis; o inferior, o resíduo de cointegração e sua faixa de equilíbrio. Ajuste α e observe a mudança de regime na dinâmica do desvio.</p>
+      <div class="plot" data-plot="vecm" style="aspect-ratio:16/9"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="ve-alpha">Velocidade de ajuste α <i id="ve-alpha-v">−0,20</i></label>
+          <input type="range" id="ve-alpha" min="-0.9" max="0" step="0.01" value="-0.2">
+          <div class="meta"><span>−0,90 · ajuste rápido</span><span>0,00 · sem correção</span></div>
+          <div class="hint">Padrão: −0,20. Em zero, a cointegração deixa de existir.</div>
+        </div>
+        <div class="ctl">
+          <label for="ve-beta">Coeficiente de longo prazo β <i id="ve-beta-v">1,00</i></label>
+          <input type="range" id="ve-beta" min="0.4" max="1.8" step="0.02" value="1">
+          <div class="meta"><span>0,40</span><span>1,80</span></div>
+          <div class="hint">Define a proporção de equilíbrio entre as séries.</div>
+        </div>
+        <div class="ctl">
+          <label for="ve-sig">Volatilidade do desvio <i id="ve-sig-v">0,60</i></label>
+          <input type="range" id="ve-sig" min="0.1" max="2" step="0.05" value="0.6">
+          <div class="meta"><span>0,10</span><span>2,00</span></div>
+          <div class="hint">Amplitude dos choques transitórios sobre a relação.</div>
+        </div>
+      </div>
+      <div class="readout" id="ve-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>Leitura:</strong> a meia-vida ln(0,5)/ln(1+α) traduz o coeficiente estimado em prazo. Com α = −0,20, metade de um desvio se dissipa em cerca de três períodos; com α = −0,05, são treze — e uma estratégia baseada em reversão precisa de horizonte compatível com isso.</p>
+    </div>
+
+    <div class="ref">
+      <h4>Leitura técnica referenciada</h4>
+      <p>O capítulo é curto porque é, essencialmente, uma resolução. O procedimento de Engle–Granger aparece primeiro por ser transparente — testar raiz unitária no resíduo de uma regressão de nível — e sua limitação é exposta em seguida: com mais de duas variáveis, o número de relações de cointegração deixa de ser óbvio e a normalização escolhida afeta o resultado. O teste de Johansen resolve isso ao transformar a pergunta em uma questão de posto matricial, estimada conjuntamente por máxima verossimilhança. A separação entre a matriz de ajustes e a matriz de vetores cointegrantes é o que permite ler simultaneamente o equilíbrio e a velocidade com que ele é restaurado.</p>
+      <p class="cite">Leitura referenciada — Capítulo 7 (Vetor de Correção de Erros — VECM), seções 7.1 a 7.3. BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. São Paulo: Cengage Learning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CAP 8 ==================== -->
+<section id="c8">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-num">08</span><span class="chap-stage">Risco</span></div>
+    <h2>Heterocedasticidade condicional</h2>
+    <p class="lede">O deslocamento final: a instabilidade migra da média para a variância. Retornos financeiros são aproximadamente imprevisíveis em nível e fortemente previsíveis em magnitude — e é essa assimetria que o aparato ARCH/GARCH explora.</p>
+
+    <div class="prose">
+      <h3>Intuição</h3>
+      <p>Dias turbulentos vêm em grupos. Essa observação, banal para qualquer operador, é estatisticamente precisa: a autocorrelação dos retornos é próxima de zero, mas a autocorrelação dos retornos ao quadrado é alta e persistente. O modelo GARCH captura isso tornando a variância condicional uma função do passado — do choque recente (o termo ARCH) e da própria variância recente (o termo GARCH).</p>
+      <p>A consequência prática é distributiva: mesmo com inovações normais, a mistura de variâncias produz caudas mais pesadas que a normal. Um modelo que ignore isso subestima sistematicamente a probabilidade de perdas extremas.</p>
+
+      <button class="eqbox eq" data-eq="garch">
+        <span class="eqname">GARCH(1,1)</span>
+        <span class="v">σ</span><sup>2</sup><sub>t</sub> <span class="op">=</span> <span class="v">ω</span> <span class="op">+</span> <span class="v">α</span><span class="v">ε</span><sup>2</sup><sub>t−1</sub> <span class="op">+</span> <span class="v">β</span><span class="v">σ</span><sup>2</sup><sub>t−1</sub><span class="op">,</span>&nbsp;
+        <span class="v">ε</span><sub>t</sub> <span class="op">=</span> <span class="v">σ</span><sub>t</sub><span class="v">z</span><sub>t</sub>
+      </button>
+      <button class="eqbox eq" data-eq="archlm">
+        <span class="eqname">Teste ARCH-LM</span>
+        <span class="v">LM</span> <span class="op">=</span> <span class="v">T</span> · <span class="v">R</span><sup>2</sup> <span class="op">~</span> <span class="v">χ</span><sup>2</sup><sub>q</sub><span class="op">,</span>&nbsp; regredindo <span class="v">ε̂</span><sup>2</sup><sub>t</sub> sobre <span class="v">q</span> defasagens próprias
+      </button>
+    </div>
+
+    <div class="lab" id="lab-garch">
+      <div class="lab-head"><h3>Laboratório GARCH(1,1)</h3><span class="lab-kind">Simulação · agrupamento de volatilidade</span></div>
+      <p class="lab-note">O painel superior traz os retornos simulados com a banda de ±2σ<sub>t</sub> condicional; o inferior, a volatilidade condicional anualizada. Os medidores de persistência e curtose reagem em tempo real às escolhas de α e β.</p>
+      <div class="plot" data-plot="garch" style="aspect-ratio:16/9"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="ga-a">α — reação ao choque <i id="ga-a-v">0,090</i></label>
+          <input type="range" id="ga-a" min="0" max="0.35" step="0.005" value="0.09">
+          <div class="meta"><span>0,000</span><span>0,350</span></div>
+          <div class="hint">Padrão: 0,090. Controla a altura do salto após um choque.</div>
+        </div>
+        <div class="ctl">
+          <label for="ga-b">β — memória da variância <i id="ga-b-v">0,880</i></label>
+          <input type="range" id="ga-b" min="0" max="0.99" step="0.005" value="0.88">
+          <div class="meta"><span>0,000</span><span>0,990</span></div>
+          <div class="hint">Padrão: 0,880. Controla quanto tempo o regime dura.</div>
+        </div>
+        <div class="ctl">
+          <label for="ga-w">ω — variância de base (×10⁻⁵) <i id="ga-w-v">0,50</i></label>
+          <input type="range" id="ga-w" min="0.2" max="6" step="0.1" value="0.5">
+          <div class="meta"><span>0,20</span><span>6,00</span></div>
+          <div class="hint">Piso da variância condicional.</div>
+        </div>
+        <div class="ctl">
+          <label for="ga-seed">Trajetória sorteada <i id="ga-seed-v">#3</i></label>
+          <input type="range" id="ga-seed" min="1" max="40" step="1" value="3">
+          <div class="meta"><span>#1</span><span>#40</span></div>
+          <div class="hint">Mesmos parâmetros, realização diferente.</div>
+        </div>
+      </div>
+      <div class="readout" id="ga-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>Fronteira crítica:</strong> quando α + β se aproxima de 1, a variância incondicional ω/(1−α−β) diverge e o processo tende ao IGARCH — choques de volatilidade deixam de se dissipar. O medidor de persistência muda de cor ao ultrapassar 0,99, e acima de 1 a especificação deixa de ser estacionária em covariância.</p>
+    </div>
+
+    <div class="lab" id="lab-var">
+      <div class="lab-head"><h3>Da variância condicional à medida de risco</h3><span class="lab-kind">Cauda · VaR e Expected Shortfall</span></div>
+      <p class="lab-note">A mesma simulação, lida como distribuição. A curva compara a densidade empírica dos retornos padronizados pelo modelo com a normal de referência, e marca o quantil de perda e a perda esperada além dele — a ponte entre o Capítulo 8 e a mensuração regulatória de risco de mercado.</p>
+      <div class="plot" data-plot="tail" style="aspect-ratio:16/8"></div>
+      <div class="controls">
+        <div class="ctl">
+          <label for="tl-q">Nível de confiança <i id="tl-q-v">99,0%</i></label>
+          <input type="range" id="tl-q" min="90" max="99.5" step="0.5" value="99">
+          <div class="meta"><span>90,0%</span><span>99,5%</span></div>
+          <div class="hint">Padrão: 99,0%. Define o quantil da cauda esquerda.</div>
+        </div>
+        <div class="ctl">
+          <label for="tl-h">Horizonte de manutenção (dias) <i id="tl-h-v">1</i></label>
+          <input type="range" id="tl-h" min="1" max="20" step="1" value="1">
+          <div class="meta"><span>1</span><span>20</span></div>
+          <div class="hint">Escalonamento pela raiz do tempo, válido apenas sob independência.</div>
+        </div>
+      </div>
+      <div class="readout" id="tl-out"></div>
+      <p class="lab-note" style="margin-top:14px"><strong>Extensão interpretativa:</strong> esta seção não integra a obra original. É uma ponte construída para este companion entre a modelagem de volatilidade condicional e o uso da medida em mensuração de risco de mercado, onde a distinção entre quantil e perda esperada além do quantil é matéria de decisão e de norma.</p>
+    </div>
+
+    <div class="ref">
+      <h4>Leitura técnica referenciada</h4>
+      <p>O capítulo final fecha o arco da obra deslocando o objeto de interesse. Depois de sete capítulos dedicados à modelagem do primeiro momento condicional, o segundo momento passa a ser o parâmetro em movimento. A ordem adotada — detecção antes de identificação, identificação antes de estimação — repete conscientemente a estrutura metodológica do Capítulo 3, o que reforça a tese de que o procedimento de modelagem é invariante ao momento que se está modelando. A inclusão do caso multivariado ao final aponta para o problema que domina a aplicação prática: a dimensionalidade da matriz de covariâncias condicionais cresce quadraticamente, o que torna a parametrização, e não a teoria, o obstáculo real.</p>
+      <p class="cite">Leitura referenciada — Capítulo 8 (Heterocedasticidade Condicional), seções 8.1 a 8.8. BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. São Paulo: Cengage Learning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== COCKPIT ==================== -->
+<section id="cockpit">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-stage">Camada executiva · extensão interpretativa</span></div>
+    <h2>Da estimativa à decisão</h2>
+    <p class="lede">Um painel de leitura que traduz os diagnósticos dos oito capítulos em postura. Os valores refletem, em tempo real, as configurações escolhidas nos laboratórios acima.</p>
+
+    <div class="cockpit" style="margin-top:26px">
+      <div class="kpis" id="ck-kpis"></div>
+      <div class="plot" data-plot="cockpit" style="aspect-ratio:16/6"></div>
+      <h4 style="margin-top:24px;color:#fff">Postura sugerida</h4>
+      <div class="posture" id="ck-posture">
+        <b data-p="observar">Observar</b>
+        <b data-p="modelar">Remodelar</b>
+        <b data-p="reduzir">Reduzir exposição</b>
+        <b data-p="revisar">Revisar especificação</b>
+      </div>
+      <p class="lab-note" id="ck-diag" style="margin-top:18px"></p>
+    </div>
+    <p class="disclaimer">A camada executiva é construção própria deste companion e não corresponde a conteúdo da obra de referência. Serve para demonstrar como diagnósticos econométricos se convertem em critérios de decisão, e não como recomendação de investimento ou de política.</p>
+  </div>
+</section>
+
+<!-- ==================== REFERÊNCIAS ==================== -->
+<section id="referencias">
+  <div class="wrap">
+    <div class="chap-head"><span class="chap-stage">Aparato</span></div>
+    <h2>Referências e nota metodológica</h2>
+    <ul class="biblio" style="margin-top:22px">
+      <li>BUENO, R. D. L. S. <em>Econometria de séries temporais</em>. 2. ed. rev. e atual. São Paulo: Cengage Learning. ISBN 978-85-221-1157-2. — obra de referência deste companion.</li>
+      <li>BOX, G. E. P.; JENKINS, G. M.; REINSEL, G. C. <em>Time Series Analysis: Forecasting and Control</em>. 4. ed. Hoboken: Wiley, 2008.</li>
+      <li>HAMILTON, J. D. <em>Time Series Analysis</em>. Princeton: Princeton University Press, 1994.</li>
+      <li>ENDERS, W. <em>Applied Econometric Time Series</em>. 4. ed. Hoboken: Wiley, 2014.</li>
+      <li>BOLLERSLEV, T. Generalized autoregressive conditional heteroskedasticity. <em>Journal of Econometrics</em>, v. 31, n. 3, p. 307–327, 1986. DOI: 10.1016/0304-4076(86)90063-1</li>
+      <li>ENGLE, R. F. Autoregressive conditional heteroscedasticity with estimates of the variance of United Kingdom inflation. <em>Econometrica</em>, v. 50, n. 4, p. 987–1007, 1982. DOI: 10.2307/1912773</li>
+      <li>ENGLE, R. F.; GRANGER, C. W. J. Co-integration and error correction: representation, estimation, and testing. <em>Econometrica</em>, v. 55, n. 2, p. 251–276, 1987. DOI: 10.2307/1913236</li>
+      <li>GRANGER, C. W. J.; NEWBOLD, P. Spurious regressions in econometrics. <em>Journal of Econometrics</em>, v. 2, n. 2, p. 111–120, 1974. DOI: 10.1016/0304-4076(74)90034-7</li>
+      <li>DICKEY, D. A.; FULLER, W. A. Distribution of the estimators for autoregressive time series with a unit root. <em>Journal of the American Statistical Association</em>, v. 74, n. 366, p. 427–431, 1979. DOI: 10.2307/2286348</li>
+      <li>JOHANSEN, S. Statistical analysis of cointegration vectors. <em>Journal of Economic Dynamics and Control</em>, v. 12, n. 2–3, p. 231–254, 1988. DOI: 10.1016/0165-1889(88)90041-3</li>
+      <li>HANSEN, L. P. Large sample properties of generalized method of moments estimators. <em>Econometrica</em>, v. 50, n. 4, p. 1029–1054, 1982. DOI: 10.2307/1913625</li>
+      <li>SIMS, C. A. Macroeconomics and reality. <em>Econometrica</em>, v. 48, n. 1, p. 1–48, 1980. DOI: 10.2307/1912017</li>
+      <li>BEVERIDGE, S.; NELSON, C. R. A new approach to decomposition of economic time series into permanent and transitory components. <em>Journal of Monetary Economics</em>, v. 7, n. 2, p. 151–174, 1981. DOI: 10.1016/0304-3932(81)90040-4</li>
+      <li>BLANCHARD, O. J.; QUAH, D. The dynamic effects of aggregate demand and supply disturbances. <em>American Economic Review</em>, v. 79, n. 4, p. 655–673, 1989.</li>
+      <li>LJUNG, G. M.; BOX, G. E. P. On a measure of lack of fit in time series models. <em>Biometrika</em>, v. 65, n. 2, p. 297–303, 1978. DOI: 10.1093/biomet/65.2.297</li>
+    </ul>
+
+    <div class="prose" style="margin-top:34px">
+      <h3>Nota metodológica</h3>
+      <p>Este companion é uma síntese técnica original. Não reproduz texto, tabelas, figuras ou trechos da obra de referência. Os conceitos são reorganizados segundo uma arquitetura editorial própria; todos os exemplos numéricos, simulações e visualizações foram construídos especificamente para este projeto e não constam do livro. As seções marcadas como <em>extensão interpretativa</em> ultrapassam o escopo declarado da obra e devem ser lidas como contribuição do autor deste companion.</p>
+      <p>Todas as simulações rodam no navegador, sem dependência externa de bibliotecas de gráficos. Os geradores pseudoaleatórios são determinísticos e semeados, de modo que a mesma configuração de controles reproduz sempre o mesmo resultado.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <h4>Econometria de Séries Temporais — Atlas Técnico Interativo</h4>
+    <p>Companion digital idealizado e revisado por <strong>Gabriel Groehs</strong>.<br>
+    Obra de referência: Rodrigo De Losso da Silveira Bueno, Cengage Learning, 2ª edição.</p>
+    <p class="disclaimer">Publicação independente e sem vínculo com o autor ou a editora da obra referenciada. Marcas e títulos citados pertencem a seus respectivos titulares.</p>
+  </div>
+</footer>
+
+</main>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-box">
+    <button class="modal-close" data-close aria-label="Fechar">✕</button>
+    <span class="kind" id="modalKind"></span>
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+<script>
+"use strict";
+/* ============================================================
+   NÚCLEO NUMÉRICO
+   ============================================================ */
+const RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function rng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(r){let u=0,v=0;while(u===0)u=r();while(v===0)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+const npdf=x=>Math.exp(-x*x/2)/Math.sqrt(2*Math.PI);
+function nq(p){ // quantil normal (Acklam)
+  const a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924];
+  const b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857];
+  const c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878];
+  const d=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742];
+  const pl=0.02425;let q,r;
+  if(p<pl){q=Math.sqrt(-2*Math.log(p));return(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  if(p>1-pl){q=Math.sqrt(-2*Math.log(1-p));return-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  q=p-0.5;r=q*q;return(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+}
+function nf(v,d){return Number(v).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});}
+function mean(a){let s=0;for(let i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+function sd(a){const m=mean(a);let s=0;for(let i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1));}
+function quantile(sorted,p){const i=(sorted.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return lo===hi?sorted[lo]:sorted[lo]+(sorted[hi]-sorted[lo])*(i-lo);}
+function hist(vals,lo,hi,bins){const c=new Array(bins).fill(0);const wdt=(hi-lo)/bins;let n=0;
+  for(const v of vals){if(v<lo||v>=hi)continue;c[Math.min(bins-1,Math.floor((v-lo)/wdt))]++;n++;}
+  return{counts:c,lo,hi,w:wdt,dens:c.map(x=>n?x/(n*wdt):0),n};}
+/* OLS pequeno: resolve (X'X)b = X'y por eliminação de Gauss */
+function solve(A,b){const n=b.length,M=A.map((r,i)=>r.concat([b[i]]));
+  for(let i=0;i<n;i++){let p=i;for(let k=i+1;k<n;k++)if(Math.abs(M[k][i])>Math.abs(M[p][i]))p=k;
+    [M[i],M[p]]=[M[p],M[i]];if(Math.abs(M[i][i])<1e-12)return null;
+    for(let k=i+1;k<n;k++){const f=M[k][i]/M[i][i];for(let j=i;j<=n;j++)M[k][j]-=f*M[i][j];}}
+  const x=new Array(n).fill(0);
+  for(let i=n-1;i>=0;i--){let s=M[i][n];for(let j=i+1;j<n;j++)s-=M[i][j]*x[j];x[i]=s/M[i][i];}
+  return x;}
+function olsT(X,y,idx){ // devolve estatística t do coeficiente idx
+  const n=y.length,k=X[0].length,XX=[],Xy=[];
+  for(let i=0;i<k;i++){Xy.push(0);XX.push(new Array(k).fill(0));}
+  for(let t=0;t<n;t++){for(let i=0;i<k;i++){Xy[i]+=X[t][i]*y[t];for(let j=0;j<k;j++)XX[i][j]+=X[t][i]*X[t][j];}}
+  const b=solve(XX.map(r=>r.slice()),Xy.slice());if(!b)return null;
+  let ssr=0,tss=0;const ym=mean(y);
+  for(let t=0;t<n;t++){let f=0;for(let i=0;i<k;i++)f+=X[t][i]*b[i];ssr+=(y[t]-f)*(y[t]-f);tss+=(y[t]-ym)*(y[t]-ym);}
+  const s2=ssr/(n-k);const inv=[];
+  for(let i=0;i<k;i++){const e=new Array(k).fill(0);e[i]=1;const c=solve(XX.map(r=>r.slice()),e);if(!c)return null;inv.push(c[i]);}
+  return{b:b,t:b[idx]/Math.sqrt(s2*inv[idx]),r2:1-ssr/tss};
+}
+
+/* ============================================================
+   MOTOR DE GRÁFICOS
+   ============================================================ */
+const PLOTS=[];
+function makePlot(host,draw){
+  const cv=document.createElement("canvas");host.appendChild(cv);
+  const ctx=cv.getContext("2d");
+  const api={ctx:ctx,w:0,h:0,fs:11,redraw:function(){
+    const r=host.getBoundingClientRect();
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const w=Math.max(240,Math.round(r.width)),h=Math.max(150,Math.round(r.height));
+    cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);api.w=w;api.h=h;api.fs=w<520?9:(w<820?10:11);
+    draw(api);
+  }};
+  PLOTS.push(api);return api;
+}
+let rz;window.addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(function(){PLOTS.forEach(p=>p.redraw());},140);});
+window.addEventListener("orientationchange",function(){setTimeout(function(){PLOTS.forEach(p=>p.redraw());},260);});
+
+const C={cyan:"#5CC8F2",cyanD:"#2C7FA8",amber:"#E9A75C",rose:"#E4699A",mint:"#5FD6A8",violet:"#9C6BE8",
+  grid:"rgba(120,95,165,.20)",axis:"rgba(160,140,200,.55)",txt:"#A99CC0",txt2:"#DCD2E9"};
+
+function Ax(x,y,w,h,xd,yd){
+  return{x:x,y:y,w:w,h:h,xd:xd,yd:yd,
+    X:function(v){return x+(v-xd[0])/(xd[1]-xd[0])*w;},
+    Y:function(v){return y+h-(v-yd[0])/(yd[1]-yd[0])*h;}};
+}
+function ticks(lo,hi,n){
+  const span=hi-lo;if(!isFinite(span)||span<=0)return[lo];
+  const raw=span/n,mag=Math.pow(10,Math.floor(Math.log10(raw))),norm=raw/mag;
+  const step=(norm<1.5?1:norm<3?2:norm<7?5:10)*mag;
+  const out=[];for(let v=Math.ceil(lo/step)*step;v<=hi+step*1e-9;v+=step)out.push(Math.abs(v)<step*1e-9?0:v);
+  return out;
+}
+function frame(p,ax,o){
+  o=o||{};const ctx=p.ctx,fs=p.fs;
+  ctx.save();ctx.font=fs+"px 'IBM Plex Mono',monospace";ctx.lineWidth=1;
+  const xt=o.xticks||ticks(ax.xd[0],ax.xd[1],p.w<560?4:6);
+  const yt=o.yticks||ticks(ax.yd[0],ax.yd[1],4);
+  ctx.strokeStyle=C.grid;
+  yt.forEach(function(v){const y=Math.round(ax.Y(v))+.5;ctx.beginPath();ctx.moveTo(ax.x,y);ctx.lineTo(ax.x+ax.w,y);ctx.stroke();});
+  if(o.vgrid!==false)xt.forEach(function(v){const x=Math.round(ax.X(v))+.5;ctx.beginPath();ctx.moveTo(x,ax.y);ctx.lineTo(x,ax.y+ax.h);ctx.stroke();});
+  ctx.fillStyle=C.txt;ctx.textAlign="right";ctx.textBaseline="middle";
+  yt.forEach(function(v){ctx.fillText((o.yfmt||(z=>nf(z,Math.abs(z)<10?1:0)))(v),ax.x-6,ax.Y(v));});
+  ctx.textAlign="center";ctx.textBaseline="top";
+  xt.forEach(function(v){ctx.fillText((o.xfmt||(z=>nf(z,0)))(v),ax.X(v),ax.y+ax.h+6);});
+  ctx.strokeStyle=C.axis;ctx.beginPath();
+  ctx.moveTo(ax.x,ax.y);ctx.lineTo(ax.x,ax.y+ax.h);ctx.lineTo(ax.x+ax.w,ax.y+ax.h);ctx.stroke();
+  if(o.title){ctx.fillStyle=C.txt2;ctx.font="600 "+(fs+1)+"px 'Bricolage Grotesque',sans-serif";
+    ctx.textAlign="left";ctx.textBaseline="alphabetic";ctx.fillText(o.title,ax.x,ax.y-9);}
+  if(o.ylab){ctx.save();ctx.translate(ax.x-40,ax.y+ax.h/2);ctx.rotate(-Math.PI/2);ctx.fillStyle=C.txt;
+    ctx.font=fs+"px 'Bricolage Grotesque',sans-serif";ctx.textAlign="center";ctx.textBaseline="bottom";ctx.fillText(o.ylab,0,0);ctx.restore();}
+  if(o.xlab){ctx.fillStyle=C.txt;ctx.font=fs+"px 'Bricolage Grotesque',sans-serif";ctx.textAlign="center";
+    ctx.textBaseline="top";ctx.fillText(o.xlab,ax.x+ax.w/2,ax.y+ax.h+20);}
+  ctx.restore();
+}
+function line(p,ax,xs,ys,col,lw,dash){
+  const ctx=p.ctx;ctx.save();ctx.beginPath();ctx.lineWidth=lw||1.6;ctx.strokeStyle=col;
+  ctx.lineJoin="round";if(dash)ctx.setLineDash(dash);
+  let started=false;
+  for(let i=0;i<xs.length;i++){const v=ys[i];if(!isFinite(v))continue;
+    const X=ax.X(xs[i]),Y=Math.max(ax.y-500,Math.min(ax.y+ax.h+500,ax.Y(v)));
+    if(!started){ctx.moveTo(X,Y);started=true;}else ctx.lineTo(X,Y);}
+  ctx.stroke();ctx.restore();
+}
+function band(p,ax,xs,lo,hi,col){
+  const ctx=p.ctx;ctx.save();ctx.beginPath();ctx.fillStyle=col;
+  for(let i=0;i<xs.length;i++)ctx[i?"lineTo":"moveTo"](ax.X(xs[i]),ax.Y(hi[i]));
+  for(let i=xs.length-1;i>=0;i--)ctx.lineTo(ax.X(xs[i]),ax.Y(lo[i]));
+  ctx.closePath();ctx.fill();ctx.restore();
+}
+function bars(p,ax,xs,ys,col,bw){
+  const ctx=p.ctx;ctx.save();ctx.fillStyle=col;const y0=ax.Y(0);
+  for(let i=0;i<xs.length;i++){const X=ax.X(xs[i]),Y=ax.Y(ys[i]);
+    ctx.fillRect(X-bw/2,Math.min(Y,y0),bw,Math.max(1,Math.abs(Y-y0)));}
+  ctx.restore();
+}
+function hline(p,ax,v,col,dash,lw){const ctx=p.ctx;ctx.save();ctx.strokeStyle=col;ctx.lineWidth=lw||1;
+  if(dash)ctx.setLineDash(dash);const y=Math.round(ax.Y(v))+.5;ctx.beginPath();ctx.moveTo(ax.x,y);ctx.lineTo(ax.x+ax.w,y);ctx.stroke();ctx.restore();}
+function vline(p,ax,v,col,dash,lw){const ctx=p.ctx;ctx.save();ctx.strokeStyle=col;ctx.lineWidth=lw||1;
+  if(dash)ctx.setLineDash(dash);const x=Math.round(ax.X(v))+.5;ctx.beginPath();ctx.moveTo(x,ax.y);ctx.lineTo(x,ax.y+ax.h);ctx.stroke();ctx.restore();}
+function tag(p,x,y,txt,col,align){const ctx=p.ctx;ctx.save();ctx.font="600 "+(p.fs)+"px 'IBM Plex Mono',monospace";
+  ctx.fillStyle=col;ctx.textAlign=align||"left";ctx.textBaseline="middle";ctx.fillText(txt,x,y);ctx.restore();}
+function legend(p,x,y,items){
+  const ctx=p.ctx;ctx.save();ctx.font=p.fs+"px 'Bricolage Grotesque',sans-serif";ctx.textBaseline="middle";
+  let cx=x;items.forEach(function(it){
+    ctx.fillStyle=it[1];ctx.fillRect(cx,y-4,14,3);
+    ctx.fillStyle=C.txt2;ctx.textAlign="left";ctx.fillText(it[0],cx+19,y);
+    cx+=19+ctx.measureText(it[0]).width+18;});
+  ctx.restore();
+}
+function out(id,items){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML=items.map(function(i){return "<div><span>"+i[0]+"</span><b class='"+(i[2]||"")+"'>"+i[1]+"</b></div>";}).join("");
+}
+function bind(id,fmt,cb){
+  const el=document.getElementById(id),lab=document.getElementById(id+"-v"),def=el.value;
+  function upd(){if(lab)lab.textContent=fmt(parseFloat(el.value));cb();}
+  el.addEventListener("input",upd);
+  el.addEventListener("dblclick",function(){el.value=def;upd();});
+  upd();return el;
+}
+function group(sel,cb){
+  const btns=Array.prototype.slice.call(document.querySelectorAll(sel));
+  btns.forEach(function(b){b.addEventListener("click",function(){
+    btns.forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");cb(b);});});
+  return btns;
+}
+
+/* ============================================================
+   ESTADO COMPARTILHADO (alimenta a camada executiva)
+   ============================================================ */
+const STATE={garchPers:0.97,volAnual:0,varPct:0,esPct:0,halfLife:3.1,maxEig:0.8,dfPower:0};
+
+/* ============================================================
+   HERO — série que muda de identidade
+   ============================================================ */
+(function(){
+  const host=document.getElementById("heroCanvas");if(!host)return;
+  const ctx=host.getContext("2d");let t0=0,raf=null;
+  function draw(ts){
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const w=host.clientWidth||host.parentElement.clientWidth,h=host.clientHeight||520;
+    if(host.width!==w*dpr||host.height!==h*dpr){host.width=w*dpr;host.height=h*dpr;}
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+    const phase=RM?0.35:((ts-t0)/16000)%1;
+    const N=Math.max(160,Math.round(w/4));
+    const r=rng(20240607);let y=0,s2=1,e=0;
+    const pts=[];
+    for(let i=0;i<N;i++){
+      const u=i/N;
+      const mix=(u+phase)%1;
+      const phi=mix<0.34?0.55:(mix<0.67?0.995:0.72);
+      const gA=mix<0.67?0.02:0.16,gB=mix<0.67?0.6:0.82;
+      s2=0.02+gA*e*e+gB*s2;e=Math.sqrt(s2)*gauss(r);
+      y=phi*y+e;pts.push(y);
+    }
+    let mn=Infinity,mx=-Infinity;for(const v of pts){if(v<mn)mn=v;if(v>mx)mx=v;}
+    const pad=(mx-mn)*0.25||1;mn-=pad;mx+=pad;
+    ctx.beginPath();ctx.lineWidth=1.4;
+    const grd=ctx.createLinearGradient(0,0,w,0);
+    grd.addColorStop(0,"rgba(92,200,242,0)");grd.addColorStop(.35,"rgba(92,200,242,.85)");
+    grd.addColorStop(.72,"rgba(156,107,232,.8)");grd.addColorStop(1,"rgba(92,200,242,0)");
+    ctx.strokeStyle=grd;
+    for(let i=0;i<N;i++){const X=i/(N-1)*w,Y=h*0.62-(pts[i]-mn)/(mx-mn)*h*0.42+h*0.12;
+      i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}
+    ctx.stroke();
+    ctx.globalAlpha=.18;ctx.lineWidth=5;ctx.stroke();ctx.globalAlpha=1;
+    if(!RM)raf=requestAnimationFrame(draw);
+  }
+  function start(ts){t0=ts;draw(ts);}
+  requestAnimationFrame(start);
+  window.addEventListener("resize",function(){if(RM)requestAnimationFrame(draw);});
+})();
+
+/* objeto-livro: traçado poligonal original */
+(function(){
+  const cv=document.getElementById("tomePlot");if(!cv)return;
+  function draw(){
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;
+    cv.width=w*dpr;cv.height=h*dpr;const ctx=cv.getContext("2d");
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+    const r=rng(88),N=14,pts=[];let y=0;
+    for(let i=0;i<N;i++){y=0.62*y+gauss(r);pts.push({x:8+i*(w-16)/(N-1),y:h*0.55-y*h*0.11});}
+    ctx.strokeStyle="rgba(120,200,240,.28)";ctx.lineWidth=1;
+    for(let i=0;i<N;i++)for(let j=i+1;j<Math.min(N,i+3);j++){
+      ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();}
+    ctx.beginPath();ctx.strokeStyle="#7FD3F6";ctx.lineWidth=2;
+    pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
+    ctx.fillStyle="#CFA8F5";
+    pts.forEach(function(p,i){if(i%3===0){ctx.beginPath();ctx.arc(p.x,p.y,3,0,6.283);ctx.fill();}});
+  }
+  draw();window.addEventListener("resize",function(){setTimeout(draw,150);});
+})();
+
+/* ============================================================
+   CAP 1 — custo da dependência serial
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="ols"]');if(!host)return;
+  let ts=[],rej=0,rho=.8,T=120;
+  function run(){
+    const R=500,r=rng(4242);ts=[];rej=0;
+    for(let k=0;k<R;k++){
+      const x=[],y=[];let xv=0,uv=0;
+      for(let t=0;t<T+40;t++){xv=rho*xv+gauss(r);uv=rho*uv+gauss(r);
+        if(t>=40){x.push([1,xv]);y.push(uv);}}
+      const res=olsT(x,y,1);if(!res)continue;
+      ts.push(res.t);if(Math.abs(res.t)>1.96)rej++;
+    }
+    ts.sort((a,b)=>a-b);
+  }
+  const p=makePlot(host,function(p){
+    const L=p.w<520?38:52,ax=Ax(L,26,p.w-L-16,p.h-58,[-8,8],[0,0.62]);
+    const H=hist(ts,-8,8,52);
+    frame(p,ax,{title:"Distribuição da estatística t sob coeficiente verdadeiro igual a zero",xlab:"estatística t",yfmt:v=>nf(v,2)});
+    const bw=(ax.w/52)-1.5;
+    bars(p,ax,H.dens.map((_,i)=>H.lo+H.w*(i+.5)),H.dens,"rgba(92,200,242,.42)",bw);
+    const xs=[],ys=[];for(let v=-8;v<=8;v+=.1){xs.push(v);ys.push(npdf(v));}
+    line(p,ax,xs,ys,C.amber,1.8);
+    vline(p,ax,-1.96,C.rose,[4,4]);vline(p,ax,1.96,C.rose,[4,4]);
+    tag(p,ax.X(1.96)+5,ax.y+12,"±1,96",C.rose);
+    legend(p,ax.x,ax.y+ax.h+34,[["t simulado",C.cyan],["normal padrão",C.amber]]);
+  });
+  function upd(){run();p.redraw();
+    const rate=rej/Math.max(1,ts.length)*100;
+    out("ols-out",[["Taxa de rejeição a 5%",nf(rate,1)+"%",rate>15?"bad":rate>8?"warn":"good"],
+      ["Nível nominal","5,0%"],["Desvio-padrão de t",nf(sd(ts),2)],
+      ["Observações efetivas","≈ "+nf(T*(1-rho*rho)/(1+rho*rho),0)]]);
+  }
+  bind("ols-rho",v=>nf(v,2),function(){rho=parseFloat(document.getElementById("ols-rho").value);upd();});
+  bind("ols-n",v=>nf(v,0),function(){T=parseInt(document.getElementById("ols-n").value,10);upd();});
+  upd();
+})();
+
+/* ============================================================
+   CAP 2 — estacionaridade e ergodicidade
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="stat"]');if(!host)return;
+  let phi=.7,sig=1,seed=7,y=[],rm=[],rs=[];
+  function run(){
+    const T=420,r=rng(1000+seed*17);y=[];rm=[];rs=[];let v=0,s=0,ss=0;
+    for(let t=0;t<T;t++){v=phi*v+sig*gauss(r);y.push(v);s+=v;ss+=v*v;
+      const m=s/(t+1);rm.push(m);rs.push(Math.sqrt(Math.max(0,ss/(t+1)-m*m)));}
+  }
+  const p=makePlot(host,function(p){
+    const L=p.w<520?40:54,gap=34,hh=(p.h-58-gap)/2;
+    let mn=Math.min.apply(null,y),mx=Math.max.apply(null,y);
+    const pad=(mx-mn)*.12||1;mn-=pad;mx+=pad;
+    const a1=Ax(L,22,p.w-L-16,hh,[0,y.length-1],[mn,mx]);
+    frame(p,a1,{title:"Trajetória simulada de y",vgrid:false});
+    if(Math.abs(phi)<1){const s=sig/Math.sqrt(1-phi*phi);
+      band(p,a1,[0,y.length-1],[-2*s,-2*s],[2*s,2*s],"rgba(233,167,92,.10)");
+      hline(p,a1,2*s,"rgba(233,167,92,.5)",[3,3]);hline(p,a1,-2*s,"rgba(233,167,92,.5)",[3,3]);}
+    hline(p,a1,0,C.grid);
+    line(p,a1,y.map((_,i)=>i),y,C.cyan,1.3);
+    const lo=Math.min(-1,Math.min.apply(null,rm)*1.2),hi=Math.max(Math.max.apply(null,rs)*1.15,1.5);
+    const a2=Ax(L,22+hh+gap,p.w-L-16,hh,[0,y.length-1],[lo,hi]);
+    frame(p,a2,{title:"Média e desvio-padrão acumulados",xlab:"tempo",vgrid:false});
+    hline(p,a2,0,C.grid);
+    line(p,a2,rm.map((_,i)=>i),rm,C.violet,1.8);
+    line(p,a2,rs.map((_,i)=>i),rs,C.amber,1.8);
+    legend(p,a2.x,a2.y+a2.h+34,[["média acumulada",C.violet],["desvio acumulado",C.amber]]);
+  });
+  function upd(){
+    phi=parseFloat(document.getElementById("st-phi").value);
+    sig=parseFloat(document.getElementById("st-sig").value);
+    seed=parseInt(document.getElementById("st-seed").value,10);
+    run();p.redraw();
+    const st=Math.abs(phi)<1;
+    const vt=st?sig*sig/(1-phi*phi):Infinity;
+    out("st-out",[
+      ["Regime",Math.abs(phi)<0.999?"estacionário":(Math.abs(phi)<1.001?"raiz unitária":"explosivo"),
+        Math.abs(phi)<0.999?"good":(Math.abs(phi)<1.001?"warn":"bad")],
+      ["Variância teórica",st?nf(vt,2):"não definida",st?"":"bad"],
+      ["Variância amostral",nf(sd(y)*sd(y),2)],
+      ["Média acumulada final",nf(rm[rm.length-1],3)],
+      ["Meia-vida do choque",st&&phi>0?nf(Math.log(.5)/Math.log(Math.abs(phi)),1)+" per.":"∞",st&&phi>0?"":"warn"]]);
+  }
+  bind("st-phi",v=>nf(v,2),upd);bind("st-sig",v=>nf(v,2),upd);
+  bind("st-seed",v=>"#"+nf(v,0),upd);
+  upd();
+})();
+
+/* ============================================================
+   CAP 3 — FAC / FACP
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="acf"]');if(!host)return;
+  const K=18;let kind="ar1",p1=.7,p2=-.4,t1=.6,t2=.3,acf=[],pacf=[],note="";
+  function theoACF(){
+    const r=new Array(K+1).fill(0);r[0]=1;
+    if(kind==="ar1"){for(let k=1;k<=K;k++)r[k]=Math.pow(p1,k);note="FACP trunca em k = 1";}
+    else if(kind==="ar2"){r[1]=p1/(1-p2);r[2]=p2+p1*r[1];
+      for(let k=3;k<=K;k++)r[k]=p1*r[k-1]+p2*r[k-2];note="FACP trunca em k = 2";}
+    else if(kind==="ma1"){const g0=1+t1*t1;r[1]=t1/g0;note="FAC trunca em k = 1";}
+    else if(kind==="ma2"){const g0=1+t1*t1+t2*t2;r[1]=(t1+t1*t2)/g0;r[2]=t2/g0;note="FAC trunca em k = 2";}
+    else{const d=1+2*p1*t1+t1*t1;r[1]=(1+p1*t1)*(p1+t1)/d;
+      for(let k=2;k<=K;k++)r[k]=p1*r[k-1];note="nenhuma das duas trunca";}
+    return r;
+  }
+  function durbin(r){ // Durbin–Levinson
+    const ph=[[]],pc=new Array(K+1).fill(0);
+    let prev=[0,r[1]];pc[1]=r[1];
+    for(let k=2;k<=K;k++){
+      let num=r[k],den=1;
+      for(let j=1;j<k;j++){num-=prev[j]*r[k-j];den-=prev[j]*r[j];}
+      const pk=Math.abs(den)<1e-12?0:num/den;pc[k]=pk;
+      const cur=new Array(k+1).fill(0);cur[k]=pk;
+      for(let j=1;j<k;j++)cur[j]=prev[j]-pk*prev[k-j];
+      prev=cur;}
+    return pc;
+  }
+  const p=makePlot(host,function(p){
+    const wide=p.w>660,L=p.w<520?32:44;
+    const gap=wide?46:36;
+    const bw=wide?(p.w-2*L-gap-20)/2:p.w-L-16;
+    const hh=wide?p.h-56:(p.h-56-gap)/2;
+    const boxes=wide?[[L,26,bw,hh],[L+bw+gap+L*0.2,26,bw,hh]]:[[L,22,bw,hh],[L,22+hh+gap,bw,hh]];
+    const dat=[["FAC — correlação total",acf],["FACP — correlação direta",pacf]];
+    const lim=1.96/Math.sqrt(200);
+    boxes.forEach(function(b,idx){
+      let mx=0.05;for(let k=1;k<=K;k++)mx=Math.max(mx,Math.abs(dat[idx][1][k]));
+      mx=Math.min(1.05,Math.max(.35,mx*1.25));
+      const ax=Ax(b[0],b[1],b[2],b[3],[0.4,K+.6],[-mx,mx]);
+      frame(p,ax,{title:dat[idx][0],xlab:"defasagem k",yfmt:v=>nf(v,2),vgrid:false});
+      band(p,ax,[0.4,K+.6],[-lim,-lim],[lim,lim],"rgba(233,167,92,.10)");
+      hline(p,ax,lim,"rgba(233,167,92,.45)",[3,3]);hline(p,ax,-lim,"rgba(233,167,92,.45)",[3,3]);
+      hline(p,ax,0,C.axis);
+      const xs=[],ys=[];for(let k=1;k<=K;k++){xs.push(k);ys.push(dat[idx][1][k]);}
+      bars(p,ax,xs,ys,idx?C.violet:C.cyan,Math.max(3,ax.w/K*0.45));
+    });
+  });
+  function upd(){
+    p1=parseFloat(document.getElementById("ac-p1").value);
+    p2=parseFloat(document.getElementById("ac-p2").value);
+    t1=parseFloat(document.getElementById("ac-t1").value);
+    t2=parseFloat(document.getElementById("ac-t2").value);
+    acf=theoACF();pacf=durbin(acf);p.redraw();
+    let stat="sim",cls="good";
+    if(kind==="ar2"){const ok=(p1+p2<1)&&(p2-p1<1)&&Math.abs(p2)<1;stat=ok?"sim":"não";cls=ok?"good":"bad";}
+    else if(kind==="ar1"||kind==="arma11"){const ok=Math.abs(p1)<1;stat=ok?"sim":"não";cls=ok?"good":"bad";}
+    let inv="sim",icls="good";
+    if(kind==="ma1"||kind==="arma11"){const ok=Math.abs(t1)<1;inv=ok?"sim":"não";icls=ok?"good":"bad";}
+    else if(kind==="ma2"){const ok=Math.abs(t2)<1&&(t1+t2>-1)&&(t2-t1<1);inv=ok?"sim":"não";icls=ok?"good":"bad";}
+    out("ac-out",[["Assinatura",note],["ρ₁",nf(acf[1],3)],["ρ₅",nf(acf[5],3)],
+      ["Estacionário",stat,cls],["Invertível",inv,icls]]);
+  }
+  group('[data-acf]',function(b){kind=b.getAttribute("data-acf");upd();});
+  bind("ac-p1",v=>nf(v,2),upd);bind("ac-p2",v=>nf(v,2),upd);
+  bind("ac-t1",v=>nf(v,2),upd);bind("ac-t2",v=>nf(v,2),upd);
+  upd();
+})();
+
+/* ============================================================
+   CAP 3 — fan chart
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="fan"]');if(!host)return;
+  let phi=.85,H=30,yT=2.5;
+  const hist_=[];{const r=rng(31415);let v=0;for(let i=0;i<70;i++){v=.85*v+gauss(r);hist_.push(v);}}
+  const p=makePlot(host,function(p){
+    const L=p.w<520?38:52,n=hist_.length;
+    const h0=hist_.slice();h0[n-1]=yT;
+    const fx=[],fm=[],s95l=[],s95h=[],s80l=[],s80h=[],s50l=[],s50h=[];
+    const sig=1;
+    for(let h=0;h<=H;h++){
+      const m=Math.pow(phi,h)*yT;
+      const v=h===0?0:sig*Math.sqrt((1-Math.pow(phi,2*h))/(1-phi*phi||1e-9));
+      fx.push(n-1+h);fm.push(m);
+      s95l.push(m-1.96*v);s95h.push(m+1.96*v);
+      s80l.push(m-1.282*v);s80h.push(m+1.282*v);
+      s50l.push(m-0.674*v);s50h.push(m+0.674*v);}
+    let mn=Math.min(Math.min.apply(null,h0),Math.min.apply(null,s95l));
+    let mx=Math.max(Math.max.apply(null,h0),Math.max.apply(null,s95h));
+    const pad=(mx-mn)*.1;mn-=pad;mx+=pad;
+    const ax=Ax(L,26,p.w-L-16,p.h-58,[0,n-1+H],[mn,mx]);
+    frame(p,ax,{title:"Projeção pontual e intervalos de confiança",xlab:"tempo",vgrid:false});
+    hline(p,ax,0,"rgba(160,140,200,.35)",[4,4]);
+    band(p,ax,fx,s95l,s95h,"rgba(92,200,242,.10)");
+    band(p,ax,fx,s80l,s80h,"rgba(92,200,242,.16)");
+    band(p,ax,fx,s50l,s50h,"rgba(92,200,242,.24)");
+    line(p,ax,h0.map((_,i)=>i),h0,C.violet,1.5);
+    line(p,ax,fx,fm,C.cyan,2.2);
+    vline(p,ax,n-1,"rgba(233,167,92,.6)",[4,4]);
+    tag(p,ax.X(n-1)+6,ax.y+11,"origem da previsão",C.amber);
+    tag(p,ax.x+6,ax.Y(0)-9,"média incondicional",C.txt);
+    legend(p,ax.x,ax.y+ax.h+34,[["observado",C.violet],["previsão",C.cyan],["50 / 80 / 95%","rgba(92,200,242,.35)"]]);
+  });
+  function upd(){
+    phi=parseFloat(document.getElementById("fc-phi").value);
+    H=parseInt(document.getElementById("fc-h").value,10);
+    yT=parseFloat(document.getElementById("fc-y").value);
+    p.redraw();
+    const vinf=1/(1-phi*phi||1e-9);
+    let hUtil=H;for(let h=1;h<=H;h++){if(Math.abs(Math.pow(phi,h))<0.05){hUtil=h;break;}}
+    out("fc-out",[["Previsão em h = 1",nf(phi*yT,3)],
+      ["Previsão em h = "+H,nf(Math.pow(phi,H)*yT,3)],
+      ["Desvio do erro em h = "+H,nf(Math.sqrt((1-Math.pow(phi,2*H))/(1-phi*phi||1e-9)),3)],
+      ["Desvio incondicional",nf(Math.sqrt(vinf),3)],
+      ["Horizonte útil","≈ "+hUtil+" per.",hUtil<5?"warn":"good"]]);
+  }
+  bind("fc-phi",v=>nf(v,2),upd);bind("fc-h",v=>nf(v,0),upd);bind("fc-y",v=>nf(v,2),upd);
+  upd();
+})();
+
+/* ============================================================
+   CAP 4 — regressão espúria
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="spurious"]');if(!host)return;
+  let mode="rw",T=150,ts=[],r2=[],rej=0;
+  function run(){
+    const R=500,r=rng(777);ts=[];r2=[];rej=0;
+    for(let k=0;k<R;k++){
+      const X=[],y=[];let a=0,b=0;
+      for(let t=0;t<T+30;t++){
+        if(mode==="rw"){a+=gauss(r);b+=gauss(r);}else{a=.4*a+gauss(r);b=.4*b+gauss(r);}
+        if(t>=30){X.push([1,a]);y.push(b);}}
+      const res=olsT(X,y,1);if(!res)continue;
+      ts.push(res.t);r2.push(res.r2);if(Math.abs(res.t)>1.96)rej++;}
+    ts.sort((a,b)=>a-b);
+  }
+  const p=makePlot(host,function(p){
+    const L=p.w<520?38:52,lim=mode==="rw"?26:8;
+    const ax=Ax(L,26,p.w-L-16,p.h-58,[-lim,lim],[0,mode==="rw"?0.13:0.6]);
+    const H=hist(ts,-lim,lim,56);
+    frame(p,ax,{title:"Distribuição de t em regressões entre séries independentes",xlab:"estatística t",yfmt:v=>nf(v,2)});
+    bars(p,ax,H.dens.map((_,i)=>H.lo+H.w*(i+.5)),H.dens,mode==="rw"?"rgba(228,105,154,.45)":"rgba(95,214,168,.45)",(ax.w/56)-1.5);
+    const xs=[],ys=[];for(let v=-lim;v<=lim;v+=lim/160){xs.push(v);ys.push(npdf(v));}
+    line(p,ax,xs,ys,C.amber,1.8);
+    vline(p,ax,-1.96,"rgba(233,167,92,.7)",[4,4]);vline(p,ax,1.96,"rgba(233,167,92,.7)",[4,4]);
+    legend(p,ax.x,ax.y+ax.h+34,[["t simulado",mode==="rw"?C.rose:C.mint],["normal padrão",C.amber]]);
+  });
+  function upd(){run();p.redraw();
+    const rate=rej/Math.max(1,ts.length)*100;
+    out("sp-out",[["Taxa de rejeição a 5%",nf(rate,1)+"%",rate>15?"bad":"good"],
+      ["R² médio",nf(mean(r2),3),mean(r2)>.2?"bad":"good"],
+      ["|t| mediano",nf(quantile(ts.map(Math.abs).sort((a,b)=>a-b),.5),2)],
+      ["Percentil 95 de |t|",nf(quantile(ts.map(Math.abs).sort((a,b)=>a-b),.95),2)]]);
+  }
+  group('[data-sp]',function(b){mode=b.getAttribute("data-sp");upd();});
+  bind("sp-n",v=>nf(v,0),function(){T=parseInt(document.getElementById("sp-n").value,10);upd();});
+  upd();
+})();
+
+/* ============================================================
+   CAP 4 — distribuição de Dickey–Fuller
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="df"]');if(!host)return;
+  let spec="const";const cache={};
+  function run(sp){
+    if(cache[sp])return cache[sp];
+    const R=1400,T=220,r=rng(9091),ts=[];
+    for(let k=0;k<R;k++){
+      const y=[0];for(let t=1;t<=T;t++)y.push(y[t-1]+gauss(r));
+      const X=[],d=[];
+      for(let t=1;t<=T;t++){
+        const row=[y[t-1]];
+        if(sp!=="none")row.push(1);
+        if(sp==="trend")row.push(t/T);
+        X.push(row);d.push(y[t]-y[t-1]);}
+      const res=olsT(X,d,0);if(res&&isFinite(res.t))ts.push(res.t);}
+    ts.sort((a,b)=>a-b);cache[sp]=ts;return ts;
+  }
+  const p=makePlot(host,function(p){
+    const ts=run(spec),L=p.w<520?38:52;
+    const ax=Ax(L,26,p.w-L-16,p.h-58,[-5.5,3],[0,0.55]);
+    const H=hist(ts,-5.5,3,60);
+    frame(p,ax,{title:"Distribuição limite de t sob raiz unitária versus normal padrão",xlab:"estatística t",yfmt:v=>nf(v,2)});
+    bars(p,ax,H.dens.map((_,i)=>H.lo+H.w*(i+.5)),H.dens,"rgba(156,107,232,.45)",(ax.w/60)-1.5);
+    const xs=[],ys=[];for(let v=-5.5;v<=3;v+=.05){xs.push(v);ys.push(npdf(v));}
+    line(p,ax,xs,ys,C.amber,1.8);
+    const q5=quantile(ts,.05);
+    vline(p,ax,q5,C.cyan,[5,4],1.6);tag(p,ax.X(q5)-6,ax.y+12,"crítico 5%: "+nf(q5,2),C.cyan,"right");
+    vline(p,ax,-1.645,C.rose,[4,4]);tag(p,ax.X(-1.645)+6,ax.y+26,"normal 5%: −1,64",C.rose);
+    legend(p,ax.x,ax.y+ax.h+34,[["Dickey–Fuller simulada",C.violet],["normal padrão",C.amber]]);
+  });
+  function upd(){const ts=run(spec);p.redraw();
+    const q1=quantile(ts,.01),q5=quantile(ts,.05),q10=quantile(ts,.10);
+    let falso=0;for(const t of ts)if(t<-1.645)falso++;
+    STATE.dfPower=falso/ts.length;
+    out("df-out",[["Crítico 1%",nf(q1,2)],["Crítico 5%",nf(q5,2)],["Crítico 10%",nf(q10,2)],
+      ["Valor de referência da normal","−1,64"],
+      ["Rejeição indevida com a normal",nf(falso/ts.length*100,1)+"%","bad"]]);
+  }
+  group('[data-df]',function(b){spec=b.getAttribute("data-df");upd();});
+  upd();
+})();
+
+/* ============================================================
+   CAP 4 — Beveridge–Nelson
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="bn"]');if(!host)return;
+  let phi=.55,mu=.15,y=[],perm=[],tr=[];
+  function run(){
+    const T=260,r=rng(5150);y=[];perm=[];tr=[];
+    let d=0,lvl=0,pm=0;const psi1=1/(1-phi);
+    for(let t=0;t<T;t++){const e=gauss(r);d=mu+phi*(d-mu)+e;lvl+=d;
+      pm+=mu+psi1*e;y.push(lvl);perm.push(pm);tr.push(lvl-pm);}
+    const off=mean(tr);for(let t=0;t<T;t++){perm[t]+=off;tr[t]-=off;}
+  }
+  const p=makePlot(host,function(p){
+    const L=p.w<520?40:54;
+    let mn=Math.min(Math.min.apply(null,y),Math.min.apply(null,perm));
+    let mx=Math.max(Math.max.apply(null,y),Math.max.apply(null,perm));
+    const pad=(mx-mn)*.1;mn-=pad;mx+=pad;
+    const ax=Ax(L,26,p.w-L-16,(p.h-58)*.68,[0,y.length-1],[mn,mx]);
+    frame(p,ax,{title:"Série observada e componente permanente",vgrid:false});
+    line(p,ax,y.map((_,i)=>i),y,C.cyan,1.4);
+    line(p,ax,perm.map((_,i)=>i),perm,C.amber,1.8);
+    const th=(p.h-58)*.24;
+    let tm=Math.max.apply(null,tr.map(Math.abs))*1.2||1;
+    const a2=Ax(L,26+(p.h-58)*.68+22,p.w-L-16,th,[0,y.length-1],[-tm,tm]);
+    frame(p,a2,{title:"Componente transitório (ciclo)",xlab:"tempo",vgrid:false,yfmt:v=>nf(v,1)});
+    hline(p,a2,0,C.axis);
+    line(p,a2,tr.map((_,i)=>i),tr,C.violet,1.3);
+    legend(p,ax.x,ax.y+ax.h+16,[["série observada",C.cyan],["componente permanente",C.amber]]);
+  });
+  function upd(){
+    phi=parseFloat(document.getElementById("bn-phi").value);
+    mu=parseFloat(document.getElementById("bn-drift").value);
+    run();p.redraw();
+    const psi1=1/(1-phi);
+    out("bn-out",[["Multiplicador ψ(1)",nf(psi1,2),psi1>2?"warn":"good"],
+      ["Efeito permanente de um choque",nf(psi1,2)+" un."],
+      ["Amplitude do ciclo (dp)",nf(sd(tr),2)],
+      ["Deriva por período",nf(mu,2)],
+      ["Participação do permanente",nf(100*sd(perm)/(sd(perm)+sd(tr)),0)+"%"]]);
+  }
+  bind("bn-phi",v=>nf(v,2),upd);bind("bn-drift",v=>nf(v,2),upd);
+  upd();
+})();
+
+/* ============================================================
+   CAP 5 — superfície do critério GMM
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="gmm"]');if(!host)return;
+  let W="id",noise=.3,corr=.5;
+  const th0=[1.0,-0.5];
+  function build(){
+    const D=[[1,corr],[corr,1],[0.5,0.5]];
+    const r=rng(2718),e=[gauss(r)*noise,gauss(r)*noise,gauss(r)*noise];
+    let Wm;
+    if(W==="id")Wm=[[1,0,0],[0,1,0],[0,0,1]];
+    else{const rho=.6,S=[[1,rho,rho*rho],[rho,1,rho],[rho*rho,rho,1]];
+      const inv=[];for(let i=0;i<3;i++){const b=[0,0,0];b[i]=1;inv.push(solve(S.map(x=>x.slice()),b));}
+      Wm=[[inv[0][0],inv[1][0],inv[2][0]],[inv[0][1],inv[1][1],inv[2][1]],[inv[0][2],inv[1][2],inv[2][2]]];}
+    return{D:D,e:e,Wm:Wm};
+  }
+  function J(m,b1,b2){
+    const d1=b1-th0[0],d2=b2-th0[1],g=[0,0,0];
+    for(let i=0;i<3;i++)g[i]=m.D[i][0]*d1+m.D[i][1]*d2+m.e[i];
+    let s=0;for(let i=0;i<3;i++)for(let j=0;j<3;j++)s+=g[i]*m.Wm[i][j]*g[j];
+    return s;
+  }
+  const XD=[0.2,1.8],YD=[-1.35,0.35];
+  const p=makePlot(host,function(p){
+    const m=build(),L=p.w<520?48:58;
+    const ax=Ax(L,26,p.w-L-70,p.h-58,XD,YD);
+    const NX=Math.max(50,Math.round(ax.w/5)),NY=Math.max(40,Math.round(ax.h/5));
+    let mnJ=Infinity,mxJ=-Infinity,bx=0,by=0;const grid=[];
+    for(let j=0;j<NY;j++){const row=[];
+      for(let i=0;i<NX;i++){
+        const b1=XD[0]+(i+.5)/NX*(XD[1]-XD[0]),b2=YD[1]-(j+.5)/NY*(YD[1]-YD[0]);
+        const v=J(m,b1,b2);row.push(v);
+        if(v<mnJ){mnJ=v;bx=b1;by=b2;}if(v>mxJ)mxJ=v;}
+      grid.push(row);}
+    const ctx=p.ctx,cw=ax.w/NX,ch=ax.h/NY;
+    for(let j=0;j<NY;j++)for(let i=0;i<NX;i++){
+      const u=Math.pow((grid[j][i]-mnJ)/(mxJ-mnJ||1),0.42);
+      const R=Math.round(12+u*40),G=Math.round(90-u*70),B=Math.round(150-u*100);
+      ctx.fillStyle="rgb("+Math.round(20+u*220)+","+Math.round(200-u*120)+","+Math.round(245-u*130)+")";
+      ctx.globalAlpha=.92;ctx.fillRect(ax.x+i*cw,ax.y+j*ch,cw+.6,ch+.6);}
+    ctx.globalAlpha=1;
+    // curvas de nível
+    ctx.save();ctx.strokeStyle="rgba(12,6,22,.42)";ctx.lineWidth=1;
+    [0.06,0.16,0.32,0.55,0.8].forEach(function(lv){
+      const target=mnJ+lv*(mxJ-mnJ);
+      for(let j=0;j<NY;j++)for(let i=0;i<NX-1;i++){
+        if((grid[j][i]-target)*(grid[j][i+1]-target)<0){
+          ctx.fillStyle="rgba(12,6,22,.35)";ctx.fillRect(ax.x+i*cw,ax.y+j*ch,1.2,ch);}}
+    });ctx.restore();
+    frame(p,ax,{title:"Superfície do critério J sobre o espaço de parâmetros",xlab:"β₁",ylab:"β₂",yfmt:v=>nf(v,2),xfmt:v=>nf(v,1)});
+    ctx.save();
+    ctx.strokeStyle="#0C0616";ctx.lineWidth=2;ctx.beginPath();
+    ctx.arc(ax.X(th0[0]),ax.Y(th0[1]),6,0,6.283);ctx.stroke();
+    ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.beginPath();
+    ctx.moveTo(ax.X(bx)-6,ax.Y(by));ctx.lineTo(ax.X(bx)+6,ax.Y(by));
+    ctx.moveTo(ax.X(bx),ax.Y(by)-6);ctx.lineTo(ax.X(bx),ax.Y(by)+6);ctx.stroke();
+    ctx.restore();
+    tag(p,ax.X(th0[0])+10,ax.Y(th0[1])-10,"θ verdadeiro","#0C0616");
+    tag(p,ax.X(bx)+10,ax.Y(by)+12,"estimativa","#fff");
+    // escala
+    const bx0=ax.x+ax.w+16,bh=ax.h*.7;
+    for(let k=0;k<40;k++){const u=k/39;
+      ctx.fillStyle="rgb("+Math.round(20+u*220)+","+Math.round(200-u*120)+","+Math.round(245-u*130)+")";
+      ctx.fillRect(bx0,ax.y+bh-(k+1)*bh/40,14,bh/40+.6);}
+    tag(p,bx0+18,ax.y+bh-2,"mín",C.txt);tag(p,bx0+18,ax.y+2,"máx",C.txt);
+    // diagnóstico de identificação
+    const D=m.D;let d11=0,d12=0,d22=0;
+    for(let i=0;i<3;i++){d11+=D[i][0]*D[i][0];d12+=D[i][0]*D[i][1];d22+=D[i][1]*D[i][1];}
+    const tr=d11+d22,det=d11*d22-d12*d12,disc=Math.sqrt(Math.max(0,tr*tr-4*det));
+    const l1=(tr+disc)/2,l2=(tr-disc)/2,cond=Math.sqrt(l1/Math.max(l2,1e-9));
+    out("gm-out",[["β₁ estimado",nf(bx,3)],["β₂ estimado",nf(by,3)],
+      ["J mínimo",nf(mnJ,4)],
+      ["Número de condição",nf(cond,1),cond>8?"bad":cond>4?"warn":"good"],
+      ["Identificação",cond>8?"fraca":cond>4?"limítrofe":"forte",cond>8?"bad":cond>4?"warn":"good"]]);
+  });
+  group('[data-gw]',function(b){W=b.getAttribute("data-gw");p.redraw();});
+  bind("gm-noise",v=>nf(v,2),function(){noise=parseFloat(document.getElementById("gm-noise").value);p.redraw();});
+  bind("gm-corr",v=>nf(v,2),function(){corr=parseFloat(document.getElementById("gm-corr").value);p.redraw();});
+  p.redraw();
+})();
+
+/* ============================================================
+   CAP 6 — IRF e decomposição da variância
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="irf"]');if(!host)return;
+  const H=24;let A=[[.6,-.25],[.35,.7]],rho=.4;
+  function psis(){
+    const P=[[1,0],[rho,Math.sqrt(Math.max(1e-9,1-rho*rho))]];
+    let M=[[1,0],[0,1]];const out=[];
+    for(let h=0;h<=H;h++){
+      out.push([[M[0][0]*P[0][0]+M[0][1]*P[1][0],M[0][1]*P[1][1]],
+                [M[1][0]*P[0][0]+M[1][1]*P[1][0],M[1][1]*P[1][1]]]);
+      M=[[M[0][0]*A[0][0]+M[0][1]*A[1][0],M[0][0]*A[0][1]+M[0][1]*A[1][1]],
+         [M[1][0]*A[0][0]+M[1][1]*A[1][0],M[1][0]*A[0][1]+M[1][1]*A[1][1]]];}
+    return out;
+  }
+  const p=makePlot(host,function(p){
+    const PS=psis(),wide=p.w>680,L=p.w<520?38:50,gap=wide?58:34;
+    const bw=wide?(p.w-L*2-gap-16)/2:p.w-L-16;
+    const hh=wide?p.h-58:(p.h-58-gap)/2;
+    const b1=[L,26,bw,hh],b2=wide?[L+bw+gap,26,bw,hh]:[L,26+hh+gap,bw,hh];
+    let mx=.1;PS.forEach(m=>{for(let i=0;i<2;i++)for(let j=0;j<2;j++)mx=Math.max(mx,Math.abs(m[i][j]));});
+    mx*=1.2;
+    const ax=Ax(b1[0],b1[1],b1[2],b1[3],[0,H],[-mx,mx]);
+    frame(p,ax,{title:"Resposta ao impulso ortogonalizada",xlab:"horizonte",yfmt:v=>nf(v,2),vgrid:false});
+    hline(p,ax,0,C.axis);
+    const xs=[];for(let h=0;h<=H;h++)xs.push(h);
+    line(p,ax,xs,PS.map(m=>m[0][0]),C.cyan,2);
+    line(p,ax,xs,PS.map(m=>m[1][0]),C.violet,2);
+    line(p,ax,xs,PS.map(m=>m[0][1]),C.amber,1.6,[5,3]);
+    line(p,ax,xs,PS.map(m=>m[1][1]),C.mint,1.6,[5,3]);
+    legend(p,ax.x,ax.y+ax.h+(wide?34:30),[["atividade ← choque 1",C.cyan],["preço ← choque 1",C.violet]]);
+    legend(p,ax.x,ax.y+ax.h+(wide?50:44),[["atividade ← choque 2",C.amber],["preço ← choque 2",C.mint]]);
+    // FEVD da variável 1
+    const s1=[],s2=[],xs2=[];let c1=0,c2=0;
+    for(let h=0;h<=H;h++){c1+=PS[h][0][0]*PS[h][0][0];c2+=PS[h][0][1]*PS[h][0][1];
+      const tot=c1+c2||1;xs2.push(h);s1.push(c1/tot);s2.push(1);}
+    const a2=Ax(b2[0],b2[1],b2[2],b2[3],[0,H],[0,1]);
+    band(p,a2,xs2,xs2.map(()=>0),s1,"rgba(92,200,242,.55)");
+    band(p,a2,xs2,s1,s2,"rgba(156,107,232,.45)");
+    frame(p,a2,{title:"Decomposição da variância da atividade",xlab:"horizonte",yfmt:v=>nf(v*100,0)+"%",vgrid:false});
+    legend(p,a2.x,a2.y+a2.h+(wide?34:30),[["choque próprio","rgba(92,200,242,.75)"],["choque do preço","rgba(156,107,232,.75)"]]);
+  });
+  function upd(){
+    A=[[parseFloat(document.getElementById("vr-a11").value),parseFloat(document.getElementById("vr-a12").value)],
+       [parseFloat(document.getElementById("vr-a21").value),parseFloat(document.getElementById("vr-a22").value)]];
+    rho=parseFloat(document.getElementById("vr-corr").value);
+    p.redraw();
+    const tr=A[0][0]+A[1][1],det=A[0][0]*A[1][1]-A[0][1]*A[1][0],disc=tr*tr-4*det;
+    let eig;if(disc>=0){eig=Math.max(Math.abs((tr+Math.sqrt(disc))/2),Math.abs((tr-Math.sqrt(disc))/2));}
+    else eig=Math.sqrt(Math.abs(det));
+    STATE.maxEig=eig;
+    const PS=psis();let c1=0,c2=0;for(let h=0;h<=H;h++){c1+=PS[h][0][0]*PS[h][0][0];c2+=PS[h][0][1]*PS[h][0][1];}
+    out("vr-out",[["Maior autovalor",nf(eig,3),eig>=1?"bad":eig>.95?"warn":"good"],
+      ["Sistema",eig<1?"estável":"explosivo",eig<1?"good":"bad"],
+      ["Granger: atividade → preço",Math.abs(A[1][0])>1e-6?"sim":"não",Math.abs(A[1][0])>1e-6?"good":"warn"],
+      ["Granger: preço → atividade",Math.abs(A[0][1])>1e-6?"sim":"não",Math.abs(A[0][1])>1e-6?"good":"warn"],
+      ["Choque externo em h = 24",nf(100*c2/(c1+c2||1),1)+"%"]]);
+    updateCockpit();
+  }
+  ["vr-a11","vr-a12","vr-a21","vr-a22","vr-corr"].forEach(id=>bind(id,v=>nf(v,2),upd));
+  upd();
+})();
+
+/* ============================================================
+   CAP 7 — correção de erros
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="vecm"]');if(!host)return;
+  let al=-.2,be=1,sg=.6,y1=[],y2=[],u=[];
+  function run(){
+    const T=300,r=rng(6060);y1=[];y2=[];u=[];let x=0,e=0;
+    for(let t=0;t<T;t++){x+=gauss(r)*0.9;e=(1+al)*e+sg*gauss(r);
+      u.push(e);y2.push(x);y1.push(be*x+e);}
+  }
+  const p=makePlot(host,function(p){
+    const L=p.w<520?40:54,hh=(p.h-70)*.6;
+    let mn=Math.min(Math.min.apply(null,y1),Math.min.apply(null,y2));
+    let mx=Math.max(Math.max.apply(null,y1),Math.max.apply(null,y2));
+    const pad=(mx-mn)*.1;mn-=pad;mx+=pad;
+    const ax=Ax(L,26,p.w-L-16,hh,[0,y1.length-1],[mn,mx]);
+    frame(p,ax,{title:"Duas séries I(1) com tendência estocástica comum",vgrid:false});
+    line(p,ax,y1.map((_,i)=>i),y1,C.cyan,1.5);
+    line(p,ax,y2.map((_,i)=>i),y2,C.violet,1.5);
+    legend(p,ax.x,ax.y+ax.h+16,[["y₁",C.cyan],["y₂",C.violet]]);
+    const s=sd(u)||1,lim=Math.max(3*s,Math.max.apply(null,u.map(Math.abs))*1.1);
+    const a2=Ax(L,26+hh+40,p.w-L-16,(p.h-70)*.4-10,[0,u.length-1],[-lim,lim]);
+    band(p,a2,[0,u.length-1],[-2*s,-2*s],[2*s,2*s],"rgba(95,214,168,.10)");
+    frame(p,a2,{title:"Resíduo de cointegração y₁ − β·y₂",xlab:"tempo",vgrid:false,yfmt:v=>nf(v,1)});
+    hline(p,a2,0,C.mint,[4,4]);
+    line(p,a2,u.map((_,i)=>i),u,C.amber,1.3);
+  });
+  function upd(){
+    al=parseFloat(document.getElementById("ve-alpha").value);
+    be=parseFloat(document.getElementById("ve-beta").value);
+    sg=parseFloat(document.getElementById("ve-sig").value);
+    run();p.redraw();
+    const pers=Math.abs(1+al);
+    const hl=al<-1e-6&&pers<1?Math.log(.5)/Math.log(pers):Infinity;
+    STATE.halfLife=isFinite(hl)?hl:60;
+    out("ve-out",[["Persistência do desvio |1+α|",nf(pers,3),pers>.97?"bad":pers>.9?"warn":"good"],
+      ["Meia-vida do desequilíbrio",isFinite(hl)?nf(hl,1)+" per.":"∞",isFinite(hl)&&hl<10?"good":"warn"],
+      ["Cointegração",al<-1e-6?"presente":"ausente",al<-1e-6?"good":"bad"],
+      ["Desvio-padrão do resíduo",nf(sd(u),2)],
+      ["Correção por período",nf(Math.abs(al)*100,0)+"%"]]);
+    updateCockpit();
+  }
+  bind("ve-alpha",v=>nf(v,2),upd);bind("ve-beta",v=>nf(v,2),upd);bind("ve-sig",v=>nf(v,2),upd);
+  upd();
+})();
+
+/* ============================================================
+   CAP 8 — laboratório GARCH(1,1)
+   ============================================================ */
+const GARCH={rets:[],sig:[],a:.09,b:.88,w:1.5e-5,hooks:[]};
+(function(){
+  const host=document.querySelector('[data-plot="garch"]');if(!host)return;
+  let seed=3;
+  function run(){
+    const T=780,r=rng(400+seed*31);const a=GARCH.a,b=GARCH.b,w=GARCH.w;
+    const pers=a+b;let s2=pers<0.999?w/(1-pers):w/0.02;
+    GARCH.rets=[];GARCH.sig=[];
+    for(let t=0;t<T;t++){
+      const z=gauss(r),e=Math.sqrt(s2)*z;
+      GARCH.rets.push(e);GARCH.sig.push(Math.sqrt(s2));
+      s2=w+a*e*e+b*s2;
+      if(!isFinite(s2)||s2>1)s2=1;}
+  }
+  const p=makePlot(host,function(p){
+    const L=p.w<520?44:58,hh=(p.h-70)*.58;
+    const R=GARCH.rets.map(v=>v*100),S=GARCH.sig.map(v=>v*100);
+    let mx=Math.max.apply(null,R.map(Math.abs))*1.1||1;
+    const ax=Ax(L,26,p.w-L-16,hh,[0,R.length-1],[-mx,mx]);
+    band(p,ax,S.map((_,i)=>i),S.map(v=>-2*v),S.map(v=>2*v),"rgba(233,167,92,.13)");
+    frame(p,ax,{title:"Retornos simulados e banda condicional de ±2σ",vgrid:false,yfmt:v=>nf(v,1)+"%"});
+    hline(p,ax,0,C.axis);
+    line(p,ax,R.map((_,i)=>i),R,C.cyan,.9);
+    legend(p,ax.x,ax.y+ax.h+16,[["retorno",C.cyan],["±2σ condicional","rgba(233,167,92,.6)"]]);
+    const ann=S.map(v=>v*Math.sqrt(252));
+    const a2=Ax(L,26+hh+42,p.w-L-16,(p.h-70)*.42-12,[0,ann.length-1],[0,Math.max.apply(null,ann)*1.15||1]);
+    frame(p,a2,{title:"Volatilidade condicional anualizada",xlab:"pregão",vgrid:false,yfmt:v=>nf(v,0)+"%"});
+    line(p,a2,ann.map((_,i)=>i),ann,C.amber,1.6);
+    hline(p,a2,mean(ann),C.mint,[4,4]);
+    tag(p,a2.x+a2.w-4,a2.Y(mean(ann))-9,"média "+nf(mean(ann),1)+"%",C.mint,"right");
+  });
+  function upd(){
+    GARCH.a=parseFloat(document.getElementById("ga-a").value);
+    GARCH.b=parseFloat(document.getElementById("ga-b").value);
+    GARCH.w=parseFloat(document.getElementById("ga-w").value)*1e-5;
+    seed=parseInt(document.getElementById("ga-seed").value,10);
+    run();p.redraw();
+    const pers=GARCH.a+GARCH.b;
+    const uncond=pers<1?GARCH.w/(1-pers):NaN;
+    const volA=isFinite(uncond)?Math.sqrt(uncond*252)*100:NaN;
+    const den=1-2*GARCH.a*GARCH.a-pers*pers;
+    const kurt=den>0?3*(1-pers*pers)/den:NaN;
+    const hl=pers<1&&pers>0?Math.log(.5)/Math.log(pers):Infinity;
+    STATE.garchPers=pers;STATE.volAnual=isFinite(volA)?volA:NaN;
+    out("ga-out",[
+      ["Persistência α + β",nf(pers,3),pers>=1?"bad":pers>.99?"warn":"good"],
+      ["Vol. incondicional anual",isFinite(volA)?nf(volA,1)+"%":"não definida",isFinite(volA)?"":"bad"],
+      ["Curtose implícita",den>0?nf(kurt,2):"infinita",den>0?(kurt>6?"warn":"good"):"bad"],
+      ["Meia-vida do choque de vol.",isFinite(hl)?nf(hl,0)+" pregões":"∞",isFinite(hl)&&hl<120?"good":"warn"],
+      ["Regime",pers>=1?"IGARCH ou explosivo":pers>.98?"quase integrado":"estacionário em covariância",
+        pers>=1?"bad":pers>.98?"warn":"good"]]);
+    GARCH.hooks.forEach(f=>f());
+    updateCockpit();
+  }
+  ["ga-a","ga-b"].forEach(id=>bind(id,v=>nf(v,3),upd));
+  bind("ga-w",v=>nf(v,2),upd);bind("ga-seed",v=>"#"+nf(v,0),upd);
+  upd();
+
+  /* narrativa do gráfico: um choque de α ao entrar na seção */
+  if(!RM){
+    let told=false;
+    const io=new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if(!e.isIntersecting||told)return;told=true;io.disconnect();
+        const el=document.getElementById("ga-b"),base=parseFloat(el.value);
+        const seq=[base,0.30,0.30,base],dur=1250;let i=0;
+        function step(){
+          i++;if(i>=seq.length){el.value=base;el.dispatchEvent(new Event("input"));return;}
+          el.value=seq[i];el.dispatchEvent(new Event("input"));setTimeout(step,dur);}
+        setTimeout(step,700);
+      });
+    },{threshold:.35});
+    io.observe(host);
+  }
+})();
+
+/* ============================================================
+   CAP 8 — cauda, VaR e Expected Shortfall
+   ============================================================ */
+(function(){
+  const host=document.querySelector('[data-plot="tail"]');if(!host)return;
+  let q=99,hz=1;
+  const p=makePlot(host,function(p){
+    const R=GARCH.rets.map(v=>v*100);if(!R.length)return;
+    const s=sd(R),lim=Math.max(4*s,Math.max.apply(null,R.map(Math.abs))*1.05)||1;
+    const L=p.w<520?40:54;
+    const ax=Ax(L,26,p.w-L-16,p.h-58,[-lim,lim],[0,0]);
+    const H=hist(R,-lim,lim,64);
+    const top=Math.max.apply(null,H.dens)*1.2||1;
+    const ax2=Ax(L,26,p.w-L-16,p.h-58,[-lim,lim],[0,top]);
+    frame(p,ax2,{title:"Densidade dos retornos versus normal de mesma variância",xlab:"retorno diário (%)",yfmt:v=>nf(v,2)});
+    bars(p,ax2,H.dens.map((_,i)=>H.lo+H.w*(i+.5)),H.dens,"rgba(92,200,242,.40)",(ax2.w/64)-1.5);
+    const xs=[],ys=[];for(let v=-lim;v<=lim;v+=lim/200){xs.push(v);ys.push(npdf(v/s)/s);}
+    line(p,ax2,xs,ys,C.amber,1.8);
+    const sorted=R.slice().sort((a,b)=>a-b);
+    const vq=quantile(sorted,1-q/100);
+    const tailv=sorted.filter(v=>v<=vq);const es=tailv.length?mean(tailv):vq;
+    band(p,ax2,[-lim,vq],[0,0],[top,top],"rgba(228,105,154,.12)");
+    vline(p,ax2,vq,C.rose,null,1.8);
+    vline(p,ax2,es,"rgba(228,105,154,.6)",[4,3],1.4);
+    tag(p,ax2.X(vq)+6,ax2.y+14,"VaR "+nf(q,1)+"%",C.rose);
+    tag(p,ax2.X(es)-6,ax2.y+30,"ES",C.rose,"right");
+    legend(p,ax2.x,ax2.y+ax2.h+34,[["densidade simulada",C.cyan],["normal de referência",C.amber]]);
+  });
+  function upd(){
+    q=parseFloat(document.getElementById("tl-q").value);
+    hz=parseInt(document.getElementById("tl-h").value,10);
+    p.redraw();
+    const R=GARCH.rets.map(v=>v*100);if(!R.length)return;
+    const s=sd(R),sorted=R.slice().sort((a,b)=>a-b);
+    const vq=quantile(sorted,1-q/100);
+    const tailv=sorted.filter(v=>v<=vq);const es=tailv.length?mean(tailv):vq;
+    const vn=nq(1-q/100)*s;
+    const k=Math.sqrt(hz);
+    STATE.varPct=Math.abs(vq)*k;STATE.esPct=Math.abs(es)*k;
+    out("tl-out",[
+      ["VaR empírico ("+nf(hz,0)+"d)",nf(Math.abs(vq)*k,2)+"%","warn"],
+      ["VaR normal ("+nf(hz,0)+"d)",nf(Math.abs(vn)*k,2)+"%"],
+      ["Subestimação da normal",nf((Math.abs(vq)/Math.abs(vn)-1)*100,1)+"%",Math.abs(vq)>Math.abs(vn)?"bad":"good"],
+      ["Expected Shortfall",nf(Math.abs(es)*k,2)+"%","bad"],
+      ["ES / VaR",nf(Math.abs(es)/Math.abs(vq),2)]]);
+    updateCockpit();
+  }
+  bind("tl-q",v=>nf(v,1)+"%",upd);bind("tl-h",v=>nf(v,0),upd);
+  GARCH.hooks.push(upd);
+  upd();
+})();
+
+/* ============================================================
+   CAMADA EXECUTIVA
+   ============================================================ */
+var ckPlot=null;
+function updateCockpit(){
+  if(!ckPlot)return;
+  const pers=STATE.garchPers,vol=STATE.volAnual,hl=STATE.halfLife,eig=STATE.maxEig,vr=STATE.varPct;
+  const kp=document.getElementById("ck-kpis");
+  function cell(lab,val,sub,cls){return "<div class='kpi'><span>"+lab+"</span><b style='color:"+cls+"'>"+val+"</b><i>"+sub+"</i></div>";}
+  kp.innerHTML=
+    cell("Persistência da volatilidade",nf(pers,3),"α + β · limite 1,000",pers>=0.99?"#E4699A":pers>0.97?"#E9A75C":"#5FD6A8")+
+    cell("Volatilidade anualizada",isFinite(vol)?nf(vol,1)+"%":"—","incondicional do modelo",!isFinite(vol)?"#E4699A":vol>35?"#E9A75C":"#5FD6A8")+
+    cell("VaR diário 99%",nf(vr,2)+"%","cauda empírica simulada",vr>4?"#E4699A":vr>2.5?"#E9A75C":"#5FD6A8")+
+    cell("Meia-vida do desequilíbrio",hl>=60?"> 60":nf(hl,1),"períodos até fechar metade",hl>12?"#E9A75C":"#5FD6A8")+
+    cell("Estabilidade do sistema",nf(eig,3),"maior autovalor do VAR",eig>=1?"#E4699A":eig>0.95?"#E9A75C":"#5FD6A8");
+  let posture="observar",diag="";
+  if(eig>=1||pers>=1){posture="revisar";diag="A especificação saiu da região admissível: há autovalor fora do círculo unitário ou variância incondicional não definida. Antes de qualquer leitura econômica, a ordem do modelo e o tratamento de não estacionaridade precisam ser revistos.";}
+  else if(pers>0.99||vr>4){posture="reduzir";diag="A volatilidade está quase integrada e a cauda de perda é materialmente mais pesada que a referência normal. Choques de volatilidade não se dissipam no horizonte relevante — a exposição deve ser dimensionada pela perda esperada além do quantil, não pelo quantil.";}
+  else if(hl>12||eig>0.95){posture="modelar";diag="O sistema é estável, mas lento: desequilíbrios levam muitos períodos para se fechar e a dinâmica de curto prazo carrega pouca informação. Convém reespecificar o horizonte de decisão ou incorporar variáveis exógenas ao vetor.";}
+  else{posture="observar";diag="Todos os diagnósticos estão dentro de faixa: variância incondicional definida, sistema estável e reversão ao equilíbrio em prazo curto. As estimativas atuais sustentam leitura econômica e monitoramento em cadência normal.";}
+  document.querySelectorAll("#ck-posture b").forEach(function(b){
+    const on=b.getAttribute("data-p")===posture;
+    b.className=on?("on"+(posture==="observar"?" calm":posture==="reduzir"?" hot":"")):"";});
+  document.getElementById("ck-diag").innerHTML="<strong>Diagnóstico:</strong> "+diag;
+  ckPlot.redraw();
+}
+(function(){
+  const host=document.querySelector('[data-plot="cockpit"]');if(!host)return;
+  ckPlot=makePlot(host,function(p){
+    const tight=p.w<620;
+    const items=[
+      [tight?"Persistência da vol.":"Persistência da volatilidade",Math.min(1,STATE.garchPers/1.0)],
+      [tight?"Peso de cauda":"Peso de cauda (VaR sobre limite)",Math.min(1,STATE.varPct/5)],
+      ["Lentidão do ajuste",Math.min(1,STATE.halfLife/25)],
+      [tight?"Prox. da instabilidade":"Proximidade da instabilidade",Math.min(1,STATE.maxEig/1.0)],
+      [tight?"Rejeição indevida":"Rejeição indevida de raiz unitária",Math.min(1,STATE.dfPower/0.6)]];
+    const L=Math.min(230,Math.max(120,p.w*0.30));
+    const ax=Ax(L,18,p.w-L-58,p.h-36,[0,1],[0,items.length]);
+    const ctx=p.ctx,bh=ax.h/items.length;
+    items.forEach(function(it,i){
+      const y=ax.y+i*bh+bh*0.22,hgt=bh*0.5;
+      ctx.fillStyle="rgba(120,95,165,.18)";ctx.fillRect(ax.x,y,ax.w,hgt);
+      const v=Math.max(0.01,Math.min(1,it[1]));
+      ctx.fillStyle=v>0.85?"#E4699A":v>0.6?"#E9A75C":"#5FD6A8";
+      ctx.fillRect(ax.x,y,ax.w*v,hgt);
+      ctx.font=p.fs+"px 'Bricolage Grotesque',sans-serif";ctx.fillStyle=C.txt2;
+      ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillText(it[0],ax.x-10,y+hgt/2);
+      ctx.font="600 "+p.fs+"px 'IBM Plex Mono',monospace";ctx.fillStyle=C.txt;
+      ctx.textAlign="left";ctx.fillText(nf(v*100,0)+"%",ax.x+ax.w+8,y+hgt/2);});
+    ctx.strokeStyle="rgba(228,105,154,.5)";ctx.setLineDash([4,4]);ctx.beginPath();
+    ctx.moveTo(ax.X(0.85),ax.y);ctx.lineTo(ax.X(0.85),ax.y+ax.h);ctx.stroke();ctx.setLineDash([]);
+  });
+  updateCockpit();
+})();
+
+/* ============================================================
+   INSPETOR DE FÓRMULAS
+   ============================================================ */
+const EQ={
+ mqo:{k:"Modelo de referência",n:"Regressão linear e a hipótese esférica",
+  i:"O estimador de mínimos quadrados é ótimo dentro da classe linear não viesada apenas quando a matriz de covariância dos erros é escalar. Em séries temporais essa condição raramente vale: os elementos fora da diagonal capturam a dependência entre erros de períodos diferentes e são justamente o objeto de interesse do restante da obra.",
+  s:[["y","Vetor n × 1 da variável dependente ao longo do tempo."],["X","Matriz n × k de regressores, com posto pleno."],["β","Vetor k × 1 de coeficientes populacionais."],["ε","Vetor de erros. A hipótese sob teste é sobre sua matriz de covariância."],["σ²I","Covariância escalar: variância constante e ausência de correlação serial."]],
+  a:"Ponto de partida de qualquer diagnóstico. Antes de escolher um modelo de séries temporais, o analista precisa saber qual hipótese específica foi violada.",
+  l:"A consistência do estimador sobrevive à correlação serial sob condições brandas; a inferência não. Erros-padrão convencionais tornam-se inválidos e não há correção possível sem modelar a dependência.",
+  c:"Motiva o GMM com matriz robusta (Cap. 5) e todo o aparato ARMA (Caps. 2 e 3)."},
+
+ estac:{k:"Definição",n:"Estacionaridade fraca de segunda ordem",
+  i:"A condição de existência do problema estatístico. Se a média varia com o tempo, não existe um μ a estimar; se a autocovariância depende de t e não apenas da distância k, cada par de observações vem de uma população diferente e nenhuma média amostral converge para algo interpretável.",
+  s:[["y_t","Valor da série no instante t."],["μ","Média incondicional, constante ao longo do tempo."],["γ_k","Autocovariância na defasagem k, invariante ao instante t."],["k","Distância temporal entre as observações comparadas."]],
+  a:"Todo teste de raiz unitária é, em última análise, um teste dessa condição. É também o critério que define quando diferenciar uma série.",
+  l:"É uma condição de segundo momento apenas. Um processo pode satisfazê-la e ainda assim ter momentos superiores instáveis — exatamente o caso dos modelos GARCH do Capítulo 8.",
+  c:"Complementada pela ergodicidade, sem a qual uma única trajetória observada não identifica os parâmetros populacionais."},
+
+ arma:{k:"Modelo",n:"ARMA(p, q) em operador de defasagem",
+  i:"Combina memória infinita com decaimento geométrico (parte autorregressiva) e memória finita explícita (parte de médias móveis). A escrita em operador de defasagem transforma a dinâmica temporal em álgebra de polinômios: as raízes de φ(L) determinam estacionaridade, as de θ(L) determinam invertibilidade.",
+  s:[["φ(L)","Polinômio autorregressivo de grau p no operador de defasagem."],["θ(L)","Polinômio de médias móveis de grau q."],["L","Operador tal que L·y_t = y_{t−1}."],["c","Constante que determina a média incondicional c/φ(1)."],["ε_t","Ruído branco com média zero e variância σ²."]],
+  a:"Base de previsão univariada, de modelos sazonais multiplicativos e da representação em espaço de estados.",
+  l:"Supõe linearidade e variância condicional constante. Quebras estruturais, assimetrias e mudança de regime não são capturadas.",
+  c:"Generaliza-se ao VAR (Cap. 6) quando o vetor y passa a ser multivariado."},
+
+ wold:{k:"Teorema",n:"Representação de Wold",
+  i:"Todo processo estacionário puramente não determinístico pode ser escrito como média móvel infinita de choques não correlacionados. É o resultado que justifica a estratégia inteira: modelar processos estacionários é aproximar essa soma infinita por um número finito de parâmetros.",
+  s:[["ψ_j","Peso do choque ocorrido j períodos atrás; é a própria resposta ao impulso."],["ε_{t−j}","Choque não correlacionado no instante t−j."],["Σψ_j²","Condição de somabilidade quadrática, necessária para variância finita."]],
+  a:"Fundamenta a interpretação da função de resposta ao impulso e a decomposição de Beveridge–Nelson.",
+  l:"É um resultado de existência, não de identificação: garante que a representação existe, mas não que os pesos sejam recuperáveis de forma única sem restrições adicionais.",
+  c:"ψ(1) = Σψ_j é o multiplicador de longo prazo usado na separação entre permanente e transitório (Cap. 4)."},
+
+ lb:{k:"Teste",n:"Estatística Q de Ljung–Box",
+  i:"Testa conjuntamente se as primeiras m autocorrelações dos resíduos são nulas. É o instrumento que fecha o ciclo de Box–Jenkins: se Q rejeita, o modelo ainda deixou estrutura por explicar e o analista retorna à etapa de identificação.",
+  s:[["T","Número de observações efetivas."],["r_k","Autocorrelação amostral dos resíduos na defasagem k."],["m","Número de defasagens testadas conjuntamente."],["p, q","Ordens estimadas, subtraídas dos graus de liberdade."]],
+  a:"Validação de resíduos em modelos ARMA e verificação de que a previsão extraiu toda a informação linear disponível.",
+  l:"Detecta apenas dependência linear. Resíduos podem passar no teste e ainda apresentar forte dependência em magnitude — o que motiva o teste ARCH-LM.",
+  c:"Aplicado aos resíduos ao quadrado, torna-se um detector de heterocedasticidade condicional (Cap. 8)."},
+
+ fc:{k:"Previsão",n:"Projeção e variância do erro em um AR(1)",
+  i:"Duas convergências simultâneas: a previsão pontual converge geometricamente para a média incondicional, e a variância do erro converge para a variância incondicional. O horizonte útil do modelo termina onde as duas convergências se completam.",
+  s:[["ŷ_{T+h}","Previsão h passos à frente, ótima em erro quadrático médio."],["φ^h","Fator de decaimento da informação contida na última observação."],["y_T","Última observação disponível."],["Var(e_h)","Variância do erro de previsão no horizonte h."]],
+  a:"Construção de intervalos de previsão e definição do horizonte a partir do qual o modelo não supera a média histórica.",
+  l:"Assume parâmetros conhecidos. A incerteza de estimação não está incluída, o que torna os intervalos otimistas em amostras curtas.",
+  c:"Generaliza-se à previsão do VAR, em que a variância do erro depende da soma acumulada das matrizes de resposta ao impulso."},
+
+ adf:{k:"Teste",n:"Regressão de Dickey–Fuller aumentada",
+  i:"Testa a hipótese nula ρ = 0, equivalente à presença de raiz unitária. Os termos de diferença defasada existem para limpar a correlação serial residual, de modo que a distribuição assintótica da estatística se mantenha válida.",
+  s:[["Δy_t","Primeira diferença da série."],["ρ","Coeficiente sob teste; nulo sob raiz unitária."],["α, δt","Termos determinísticos, que alteram os valores críticos."],["c_i","Coeficientes das diferenças defasadas, para absorver autocorrelação."],["p","Número de defasagens, escolhido por critério de informação."]],
+  a:"Decisão sobre diferenciar ou remover tendência antes de modelar, e etapa preliminar do teste de cointegração de Engle–Granger.",
+  l:"Baixo poder contra alternativas próximas da raiz unitária e sensibilidade à escolha dos termos determinísticos e do número de defasagens. Quebras estruturais tendem a produzir não rejeição espúria.",
+  c:"Motiva testes com hipótese nula invertida e a análise conjunta de várias séries por cointegração (Cap. 7)."},
+
+ gmm:{k:"Estimador",n:"Critério do Método Generalizado dos Momentos",
+  i:"Estima parâmetros aproximando de zero um conjunto de condições de momento amostrais. Quando há mais condições do que parâmetros, o valor mínimo do critério vira estatística de teste da própria especificação.",
+  s:[["g_T(θ)","Média amostral das condições de momento avaliadas em θ."],["W_T","Matriz de peso, positiva definida; determina a métrica da distância."],["T","Tamanho da amostra."],["J_T","Valor do critério; sob especificação correta segue χ² com graus de liberdade iguais ao excesso de condições."]],
+  a:"Estimação de equações de Euler, modelos de apreçamento de ativos e qualquer modelo definido por restrições de ortogonalidade sem distribuição especificada.",
+  l:"Exige instrumentos relevantes. Com identificação fraca, as propriedades assintóticas descrevem mal o comportamento em amostras finitas, e a estimativa fica instável.",
+  c:"Contém mínimos quadrados, variáveis instrumentais e máxima verossimilhança como casos particulares."},
+
+ euler:{k:"Condição de momento",n:"Equação de Euler do consumidor",
+  i:"Expressa o equilíbrio intertemporal: no ótimo, o custo marginal de abrir mão de consumo hoje iguala o benefício esperado descontado de consumir amanhã. Como é uma esperança condicional igual a zero, qualquer variável do conjunto de informação serve como instrumento.",
+  s:[["β","Fator subjetivo de desconto intertemporal."],["c_{t+1}/c_t","Taxa de crescimento do consumo."],["γ","Coeficiente de aversão relativa ao risco."],["R_{t+1}","Retorno bruto do ativo entre t e t+1."]],
+  a:"Estimação conjunta de preferências e de prêmios de risco a partir de dados agregados de consumo e retornos.",
+  l:"Os testes empíricos clássicos rejeitam a especificação para valores plausíveis de γ — o enigma do prêmio de risco acionário.",
+  c:"É o exemplo canônico de condição de momento que dispensa a especificação da distribuição completa."},
+
+ var:{k:"Sistema",n:"VAR(p) na forma reduzida",
+  i:"Cada variável é explicada pelo próprio passado e pelo passado de todas as demais, sem imposição prévia de exogeneidade. É um sistema descritivo: capta a dinâmica conjunta sem, por si só, identificar relações causais.",
+  s:[["Y_t","Vetor n × 1 de variáveis endógenas."],["A_i","Matriz n × n de coeficientes na defasagem i."],["u_t","Vetor de inovações da forma reduzida, correlacionadas entre si."],["Σ","Matriz de covariância contemporânea das inovações."]],
+  a:"Previsão multivariada, análise de política monetária e mensuração de transmissão entre mercados.",
+  l:"O número de parâmetros cresce com n²p, o que consome graus de liberdade rapidamente. Os choques da forma reduzida não têm interpretação econômica sem restrições adicionais.",
+  c:"Restringido pelo posto de Π, torna-se o VECM (Cap. 7); identificado por restrições, torna-se o VAR estrutural."},
+
+ irf:{k:"Análise",n:"Função de resposta ao impulso ortogonalizada",
+  i:"Traça o efeito de um choque estrutural sobre todo o sistema ao longo do tempo. A ortogonalização por decomposição de Cholesky torna os choques não correlacionados ao preço de impor uma ordem causal contemporânea escolhida pelo pesquisador.",
+  s:[["Ψ_h","Matriz de respostas no horizonte h."],["A^h","Potência h da matriz companion; governa a propagação."],["P","Fator triangular inferior de Cholesky, com PP′ = Σ."],["ε_t","Choques estruturais ortogonalizados, de variância unitária."]],
+  a:"Quantificação da magnitude e da duração do efeito de um choque de política ou de mercado.",
+  l:"A trajetória depende da ordem imposta às variáveis. Ordens diferentes produzem respostas diferentes, e a escolha exige justificativa teórica explícita.",
+  c:"A alternativa de Blanchard–Quah desloca a restrição do curto para o longo prazo, identificando choques pelo efeito permanente."},
+
+ vecm:{k:"Modelo",n:"Modelo de correção de erros",
+  i:"Reconcilia curto e longo prazo em uma única equação. O termo entre parênteses mede o desvio corrente em relação ao equilíbrio; α determina que fração desse desvio é corrigida a cada período. As demais diferenças capturam a dinâmica de curto prazo.",
+  s:[["α","Velocidade de ajuste; deve ser negativo para que o sistema convirja."],["β","Coeficiente da relação de equilíbrio de longo prazo."],["Δ","Operador de primeira diferença."],["γ_i, δ_i","Coeficientes de curto prazo sobre diferenças defasadas."]],
+  a:"Modelagem de pares cointegrados, estratégias de reversão à média e relações de paridade em finanças.",
+  l:"Exige que a cointegração tenha sido estabelecida antes. Aplicar o modelo a séries não cointegradas produz um termo de correção não estacionário e inferência inválida.",
+  c:"A meia-vida ln(0,5)/ln(1+α) converte o coeficiente estimado em prazo de decisão."},
+
+ johansen:{k:"Procedimento",n:"Representação e teste de Johansen",
+  i:"Transforma a pergunta sobre cointegração em uma questão de posto matricial. O posto de Π é o número de relações de equilíbrio independentes; sua fatoração em αβ′ separa a velocidade de ajuste dos vetores cointegrantes.",
+  s:[["Π","Matriz de longo prazo. Posto zero indica ausência de cointegração; posto pleno indica sistema já estacionário."],["α","Matriz de velocidades de ajuste de cada equação."],["β","Matriz cujas colunas são os vetores cointegrantes."],["Γ_i","Matrizes de dinâmica de curto prazo."],["r","Número de relações de cointegração."]],
+  a:"Sistemas com três ou mais variáveis I(1), em que o método bivariado de Engle–Granger é insuficiente.",
+  l:"Sensível à escolha da ordem de defasagem e à especificação dos termos determinísticos. Os testes de traço e de autovalor máximo podem divergir quanto ao posto.",
+  c:"Resolve a ambiguidade de normalização presente no procedimento em dois estágios."},
+
+ garch:{k:"Modelo",n:"GARCH(1, 1)",
+  i:"Torna a variância condicional uma função do choque recente e da própria variância recente. Com apenas três parâmetros reproduz o agrupamento de volatilidade e as caudas pesadas observadas em praticamente todas as séries de retornos financeiros.",
+  s:[["σ²_t","Variância condicional no instante t, conhecida ao final de t−1."],["ω","Componente constante; define o piso da variância."],["α","Reação ao choque mais recente ao quadrado."],["β","Peso da variância anterior; governa a duração do regime."],["z_t","Inovação padronizada, de média zero e variância unitária."]],
+  a:"Cálculo de valor em risco, apreçamento de opções com volatilidade variável e dimensionamento de posição.",
+  l:"É simétrico: choques positivos e negativos de mesma magnitude produzem o mesmo efeito sobre a variância, contrariando o efeito de alavancagem observado em ações.",
+  c:"Quando α + β tende a 1, a variância incondicional deixa de existir e o processo se aproxima do IGARCH."},
+
+ archlm:{k:"Teste",n:"Teste ARCH-LM",
+  i:"Regride o resíduo ao quadrado sobre suas próprias defasagens. Se essas defasagens explicam parte da variação, há dependência na magnitude dos choques — heterocedasticidade condicional — mesmo que os resíduos em nível já tenham passado no teste de Ljung–Box.",
+  s:[["T","Número de observações da regressão auxiliar."],["R²","Coeficiente de determinação da regressão auxiliar."],["q","Número de defasagens incluídas; graus de liberdade do teste."],["ε̂²_t","Resíduo ao quadrado do modelo estimado para a média condicional."]],
+  a:"Etapa de detecção que precede a estimação de qualquer modelo da família GARCH.",
+  l:"Não distingue entre heterocedasticidade condicional genuína e quebras estruturais na variância, que produzem sintoma semelhante.",
+  c:"É o análogo, no segundo momento, do que Ljung–Box faz no primeiro."}
+};
+(function(){
+  const modal=document.getElementById("modal"),body=document.getElementById("modalBody");
+  let last=null;
+  function open(key){
+    const e=EQ[key];if(!e)return;
+    document.getElementById("modalKind").textContent=e.k;
+    document.getElementById("modalTitle").textContent=e.n;
+    body.innerHTML="<h5>Interpretação</h5><p style='color:#CFC3DF;font-size:.97rem'>"+e.i+"</p>"+
+      "<h5>Símbolos</h5><table class='symtab'>"+e.s.map(s=>"<tr><td>"+s[0]+"</td><td>"+s[1]+"</td></tr>").join("")+"</table>"+
+      "<h5>Aplicação</h5><ul><li>"+e.a+"</li></ul>"+
+      "<h5>Limitações</h5><ul><li>"+e.l+"</li></ul>"+
+      "<h5>Conexões</h5><ul><li>"+e.c+"</li></ul>";
+    modal.classList.add("open");modal.querySelector(".modal-close").focus();
+  }
+  document.querySelectorAll("[data-eq]").forEach(function(b){
+    b.addEventListener("click",function(){last=b;open(b.getAttribute("data-eq"));});});
+  function close(){modal.classList.remove("open");if(last)last.focus();}
+  modal.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",close));
+  document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&modal.classList.contains("open"))close();});
+})();
+
+/* ============================================================
+   TOOLTIPS
+   ============================================================ */
+(function(){
+  const tip=document.getElementById("tip");let cur=null;
+  function show(el){
+    cur=el;tip.innerHTML="<b>"+el.textContent.trim()+"</b>"+el.getAttribute("data-tip");
+    tip.classList.add("show");place(el);
+  }
+  function place(el){
+    const r=el.getBoundingClientRect(),t=tip.getBoundingClientRect();
+    let x=r.left+r.width/2-t.width/2,y=r.top-t.height-10;
+    if(y<8)y=r.bottom+10;
+    x=Math.max(10,Math.min(window.innerWidth-t.width-10,x));
+    tip.style.left=x+"px";tip.style.top=y+"px";
+  }
+  function hide(){tip.classList.remove("show");cur=null;}
+  document.querySelectorAll(".term").forEach(function(el){
+    el.setAttribute("tabindex","0");
+    el.addEventListener("mouseenter",()=>show(el));
+    el.addEventListener("mouseleave",hide);
+    el.addEventListener("focus",()=>show(el));
+    el.addEventListener("blur",hide);
+    el.addEventListener("click",function(ev){ev.preventDefault();cur===el?hide():show(el);});
+  });
+  window.addEventListener("scroll",function(){if(cur)place(cur);},{passive:true});
+})();
+
+/* ============================================================
+   NAVEGAÇÃO, PROGRESSO, FLUXOS
+   ============================================================ */
+(function(){
+  const bar=document.getElementById("progress");
+  function upd(){
+    const h=document.documentElement;
+    const p=h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight);
+    bar.style.width=(p*100).toFixed(2)+"%";
+  }
+  window.addEventListener("scroll",upd,{passive:true});upd();
+
+  const burger=document.getElementById("burger"),rail=document.getElementById("rail");
+  burger.addEventListener("click",function(){
+    const open=rail.classList.toggle("open");
+    burger.setAttribute("aria-expanded",open?"true":"false");});
+  rail.querySelectorAll("a").forEach(a=>a.addEventListener("click",function(){
+    if(window.innerWidth<=1100){rail.classList.remove("open");burger.setAttribute("aria-expanded","false");}}));
+
+  const links=Array.prototype.slice.call(rail.querySelectorAll('a[href^="#"]'));
+  const spine=Array.prototype.slice.call(document.querySelectorAll(".spine span"));
+  const order=["mapa","c1","c2","c3","c4","c5","c6","c7","c8","cockpit","referencias"];
+  const spineFor={c1:0,c2:0,c3:1,c4:2,c5:3,c6:4,c7:5,c8:6,cockpit:7};
+  const io=new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(!e.isIntersecting)return;
+      const id=e.target.id;
+      links.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+id);});
+      if(id in spineFor)spine.forEach((s,i)=>s.classList.toggle("on",i===spineFor[id]));
+    });
+  },{rootMargin:"-45% 0px -50% 0px"});
+  order.forEach(function(id){const el=document.getElementById(id);if(el)io.observe(el);});
+
+  document.querySelectorAll(".flow").forEach(function(fl){
+    const kids=Array.prototype.slice.call(fl.children);
+    const fio=new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if(!e.isIntersecting)return;fio.disconnect();
+        if(RM){kids.forEach(k=>k.classList.add("lit"));return;}
+        kids.forEach(function(k,i){setTimeout(function(){k.classList.add("lit");},i*230);});
+      });},{threshold:.4});
+    fio.observe(fl);
+  });
+})();
+window.addEventListener("load",function(){setTimeout(function(){PLOTS.forEach(p=>p.redraw());},260);});
+</script>
+
+</body>
+</html>
