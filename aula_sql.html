@@ -1,0 +1,808 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SQL Lakehouse Lab — Databricks para Data Product Owners</title>
+<meta name="description" content="Laboratório interativo de SQL aplicado ao Databricks para Data Product Owners: SELECT, filtros, agregações, joins, CTEs, window functions, fato/dimensão, Delta Lake, particionamento e performance."/>
+<style>
+:root{
+  --bg:#061019;--bg2:#091521;--panel:#0d1a27;--panel2:#101f2e;--line:#22394d;
+  --txt:#edf6fc;--muted:#91a8ba;--cyan:#24d1ff;--blue:#5c7cff;--green:#38d8a2;
+  --yellow:#ffc857;--red:#ff6d7d;--violet:#a786ff;--orange:#ff9d5c;
+  --shadow:0 22px 70px rgba(0,0,0,.34);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--txt);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:
+  radial-gradient(circle at 15% -10%,rgba(36,209,255,.11),transparent 29%),
+  radial-gradient(circle at 92% 5%,rgba(167,134,255,.09),transparent 24%),
+  var(--bg);
+}
+button,textarea,input,select{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:310px minmax(0,1fr);min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;overflow:auto;padding:18px 14px;border-right:1px solid var(--line);
+  background:rgba(6,16,25,.93);backdrop-filter:blur(18px);z-index:40
+}
+.brand{display:flex;align-items:center;gap:12px;padding:7px 8px 17px}
+.logo{width:45px;height:45px;border-radius:14px;display:grid;place-items:center;font-weight:1000;color:#001821;
+  background:linear-gradient(135deg,var(--cyan),#5bf0d1);box-shadow:0 12px 35px rgba(36,209,255,.18)}
+.brand b{font-size:15px}.brand small{display:block;margin-top:3px;color:var(--muted)}
+.progress{border:1px solid #29445a;background:linear-gradient(180deg,rgba(92,124,255,.10),rgba(36,209,255,.035));border-radius:15px;padding:13px;margin:2px 4px 14px}
+.progress-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:8px}
+.track{height:8px;border-radius:999px;overflow:hidden;background:#061019;border:1px solid #1b3042}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));transition:.35s}
+.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:#617d93;margin:17px 10px 6px}
+.navbtn{
+  width:100%;display:grid;grid-template-columns:28px 1fr 20px;gap:8px;align-items:center;
+  text-align:left;background:transparent;color:#c4d3de;border:1px solid transparent;border-radius:11px;
+  padding:9px 9px;margin:2px 0
+}
+.navbtn:hover{background:#0c1925;border-color:#1d3447}
+.navbtn.active{background:linear-gradient(90deg,rgba(36,209,255,.11),rgba(92,124,255,.06));border-color:#2a5871;color:white}
+.navbtn.done .n{color:var(--green);border-color:rgba(56,216,162,.38);background:rgba(56,216,162,.08)}
+.n{width:26px;height:26px;border:1px solid #2b4357;border-radius:8px;display:grid;place-items:center;color:#8ca5b8;font-size:10px}
+.navtxt b{display:block;font-size:12px}.navtxt small{font-size:9px;color:#728ba0}
+.tick{color:var(--green);font-size:11px}
+.main{min-width:0}
+.topbar{
+  position:sticky;top:0;z-index:30;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 25px;
+  border-bottom:1px solid var(--line);background:rgba(6,16,25,.82);backdrop-filter:blur(17px)
+}
+.crumb{color:var(--muted);font-size:12px}.crumb strong{color:#fff}
+.pill{font-size:10px;border:1px solid #294357;background:#0b1722;border-radius:999px;padding:7px 9px;color:#a9bdca}
+.mobile{display:none}
+.content{max-width:1280px;margin:auto;padding:27px 27px 80px}
+.page{display:none}.page.active{display:block;animation:enter .32s ease}
+@keyframes enter{from{opacity:.1;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero{
+  position:relative;overflow:hidden;border:1px solid #284962;border-radius:27px;padding:36px;box-shadow:var(--shadow);
+  background:linear-gradient(135deg,rgba(36,209,255,.08),rgba(92,124,255,.055) 48%,rgba(167,134,255,.075))
+}
+.hero:before{content:"";position:absolute;width:430px;height:430px;right:-170px;top:-220px;border-radius:50%;border:1px solid rgba(36,209,255,.16);
+  box-shadow:0 0 0 42px rgba(36,209,255,.025),0 0 0 85px rgba(92,124,255,.019)}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.16em;font-weight:900;color:var(--cyan)}
+.hero h1{max-width:840px;font-size:clamp(38px,6vw,67px);line-height:.94;letter-spacing:-.05em;margin:13px 0 18px}
+.hero p{max-width:800px;color:#abc0d0;line-height:1.68;font-size:15px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.btn,.btn2,.run,.ghost{
+  border:0;border-radius:11px;padding:10px 13px;font-weight:800
+}
+.btn,.run{background:linear-gradient(135deg,var(--cyan),#68edcf);color:#00212a}
+.btn2,.ghost{border:1px solid #2a455a;background:#0d1b28;color:#d8e6ef}
+.ghost{padding:7px 10px;font-size:11px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.tag{font-size:10px;border:1px solid #28465b;background:#0a1823;color:#9fb6c7;padding:6px 8px;border-radius:999px}
+.section{margin-top:24px}
+.sectitle{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:12px}
+.sectitle h2,.sectitle h3{margin:0;letter-spacing:-.02em}.sectitle h2{font-size:25px}.sectitle h3{font-size:20px}
+.sectitle p{margin:0;color:var(--muted);font-size:11px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.card{border:1px solid var(--line);border-radius:17px;padding:16px;background:linear-gradient(180deg,#0d1a27,#09151f)}
+.card h3,.card h4{margin:0 0 7px}.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.58}
+.big{font-size:28px;font-weight:950;margin-top:7px;letter-spacing:-.03em}
+.lessonhead{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start;margin-bottom:15px}
+.lessonhead h1{font-size:34px;line-height:1.05;letter-spacing:-.035em;margin:6px 0 10px}
+.lessonhead p{max-width:820px;color:#9fb3c4;line-height:1.65;margin:0}
+.level{border:1px solid #34536a;border-radius:999px;padding:7px 10px;color:#bad0df;font-size:10px}
+.callout{border-left:3px solid var(--cyan);border-radius:0 11px 11px 0;padding:12px 14px;background:rgba(36,209,255,.055);color:#cde1ed;font-size:13px;line-height:1.58}
+.callout.yellow{border-color:var(--yellow);background:rgba(255,200,87,.045)}
+.callout.green{border-color:var(--green);background:rgba(56,216,162,.045)}
+.lab{display:grid;grid-template-columns:1.03fr .97fr;gap:13px;margin-top:14px}
+.box{border:1px solid #263f54;background:#06111a;border-radius:15px;overflow:hidden}
+.boxbar{height:41px;padding:0 12px;border-bottom:1px solid #203649;background:#0a1722;display:flex;align-items:center;justify-content:space-between;color:#8fa7b9;font-size:10px}
+.dots{display:flex;gap:5px}.dots i{display:block;width:8px;height:8px;border-radius:50%;background:#38556b}.dots i:first-child{background:var(--red)}.dots i:nth-child(2){background:var(--yellow)}.dots i:nth-child(3){background:var(--green)}
+.editor{display:block;width:100%;height:228px;resize:vertical;border:0;outline:0;padding:16px;background:#06111a;color:#eaf6ff;font:13px/1.65 Consolas,"SFMono-Regular",monospace;tab-size:2}
+.toolbar{border-top:1px solid #203649;padding:9px;display:flex;justify-content:flex-end;gap:7px}
+.result{min-height:274px;max-height:355px;overflow:auto}
+.data{border-collapse:collapse;width:100%;font-size:11px}
+.data th{position:sticky;top:0;background:#102233;color:#a8c0d1;text-align:left;padding:9px;border-bottom:1px solid #29445a;white-space:nowrap}
+.data td{padding:8px 9px;border-bottom:1px solid #172c3c;color:#dbe8f1;white-space:nowrap}
+.data tr:hover td{background:#0d1e2b}
+.status{border-top:1px solid #203649;padding:9px 11px;color:#7590a4;font-size:10px}.ok{color:var(--green)}.err{color:var(--red)}
+.steps{display:grid;gap:8px}
+.step{display:grid;grid-template-columns:33px 1fr;gap:10px;border:1px solid #20384b;border-radius:12px;padding:11px;background:#0a1621}
+.step i{font-style:normal;width:29px;height:29px;border-radius:8px;background:#10283a;color:var(--cyan);display:grid;place-items:center;font-weight:900;font-size:11px}
+.step b{font-size:12px}.step small{display:block;color:var(--muted);margin-top:3px;line-height:1.48}
+.challenge{border:1px solid rgba(255,200,87,.34);background:rgba(255,200,87,.045);border-radius:14px;padding:14px}
+.challenge h4{margin:0 0 6px;color:#ffe19a}.challenge p{margin:0;color:#b6c3cd;font-size:12px;line-height:1.55}
+.quiz{display:grid;gap:7px}.quiz button{border:1px solid #294257;background:#0a1722;color:#c8d8e3;border-radius:10px;padding:10px;text-align:left;font-size:11px}
+.quiz button.correct{border-color:var(--green);background:rgba(56,216,162,.07)}.quiz button.wrong{border-color:var(--red);background:rgba(255,109,125,.07)}
+.arch{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:center}
+.node{position:relative;border:1px solid #29465b;background:#0b1925;border-radius:13px;min-height:80px;padding:12px;display:grid;place-items:center;text-align:center}
+.node b{font-size:12px}.node small{display:block;color:var(--muted);font-size:9px;margin-top:4px}
+.node:not(:last-child):after{content:"→";position:absolute;right:-17px;color:var(--cyan);font-weight:900;animation:pulse 1.5s infinite}
+@keyframes pulse{50%{opacity:.25;transform:translateX(3px)}}
+.medallion{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.med{border-radius:18px;padding:18px;border:1px solid #2a4356;min-height:160px}
+.med b{font-size:16px}.med small{display:block;margin-top:6px;color:var(--muted);line-height:1.5}.bronze{background:linear-gradient(160deg,rgba(190,120,60,.14),#0b1721)}.silver{background:linear-gradient(160deg,rgba(180,200,215,.1),#0b1721)}.gold{background:linear-gradient(160deg,rgba(255,200,87,.11),#0b1721)}
+.schema{min-height:340px;position:relative;border:1px solid #244057;border-radius:18px;overflow:hidden;background:radial-gradient(circle at center,rgba(36,209,255,.075),transparent 48%),#07131d}
+.schema svg{position:absolute;inset:0;width:100%;height:100%}.schema line{stroke:#2c607c;stroke-width:1.2;stroke-dasharray:5 5;animation:dash 8s linear infinite}@keyframes dash{to{stroke-dashoffset:-100}}
+.entity{position:absolute;width:180px;border:1px solid #33556e;border-radius:12px;padding:10px;background:#0e1e2c;box-shadow:0 12px 35px rgba(0,0,0,.25)}
+.entity b{font-size:11px}.entity small{display:block;color:#88a0b2;font-size:9px;margin-top:5px}.fact{left:50%;top:50%;transform:translate(-50%,-50%);border-color:#2f91ae}.d1{left:25px;top:28px}.d2{right:25px;top:28px}.d3{left:25px;bottom:28px}.d4{right:25px;bottom:28px}
+.pipeline{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:center}
+.stage{position:relative;border:1px solid #294459;background:#0b1925;border-radius:12px;padding:11px;min-height:96px;text-align:center;display:grid;place-items:center;transition:.25s}
+.stage.active{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(36,209,255,.08),0 0 25px rgba(36,209,255,.08);transform:translateY(-2px)}
+.stage b{font-size:10px}.stage small{display:block;font-size:8px;color:var(--muted);margin-top:4px}
+.stage:not(:last-child):after{content:"→";position:absolute;right:-14px;color:#4d6f85;font-weight:900}
+.partition-demo{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.files{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:13px}
+.file{height:58px;border:1px solid #2b485d;border-radius:9px;background:#0b1a26;display:grid;place-items:center;text-align:center;color:#89a2b5;font-size:8px;transition:.25s}
+.file.hit{border-color:var(--green);background:rgba(56,216,162,.09);color:#d7fff0;transform:translateY(-2px)}
+.file.skip{opacity:.28;filter:saturate(.4)}
+.switchrow{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+.barwrap{display:grid;gap:8px}
+.barline{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;font-size:10px;color:#9db0be}
+.bar{height:9px;background:#08131d;border-radius:999px;overflow:hidden;border:1px solid #1f3547}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:.4s}
+.joinviz{display:grid;grid-template-columns:.8fr 1.2fr;gap:12px;align-items:center}
+.venn{height:180px;position:relative}.circle{width:150px;height:150px;border-radius:50%;position:absolute;top:15px;border:2px solid}.a{left:calc(50% - 126px);border-color:var(--cyan);background:rgba(36,209,255,.13)}.b{right:calc(50% - 126px);border-color:var(--violet);background:rgba(167,134,255,.13)}
+.joincontrols{display:flex;gap:7px;flex-wrap:wrap}.joincontrols button.active{border-color:var(--cyan);color:white}
+.legend{font-size:10px;color:var(--muted);text-align:center}
+.sqlhint{font-family:Consolas,monospace;border:1px solid #213a4d;border-radius:11px;background:#07141e;padding:12px;overflow:auto;color:#dbe9f2;font-size:11px;line-height:1.6}
+.kw{color:#79b6ff}.str{color:#79dfb7}.fn{color:#d4a3ff}.cm{color:#607f95}
+.kpirow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi{border:1px solid #253e52;border-radius:13px;padding:13px;background:#0a1722}.kpi small{color:var(--muted);font-size:9px}.kpi b{display:block;font-size:21px;margin-top:5px}
+.footer{text-align:center;color:#627d91;font-size:9px;margin-top:34px}
+kbd{border:1px solid #3a5367;background:#0b1721;border-bottom-width:2px;border-radius:5px;padding:1px 5px;font-size:10px}
+@media(max-width:1050px){
+  .app{grid-template-columns:1fr}.sidebar{position:fixed;left:-320px;width:300px;transition:.28s}.app.open .sidebar{left:0;box-shadow:35px 0 70px rgba(0,0,0,.55)}
+  .mobile{display:inline-flex}.lab,.grid2,.partition-demo,.joinviz{grid-template-columns:1fr}.grid3,.grid4{grid-template-columns:1fr 1fr}
+  .arch,.pipeline{grid-template-columns:1fr}.node:not(:last-child):after,.stage:not(:last-child):after{content:"↓";right:auto;bottom:-15px;left:50%}.content{padding:20px 15px 60px}
+}
+@media(max-width:650px){
+  .grid3,.grid4,.medallion,.kpirow{grid-template-columns:1fr}.hero{padding:24px}.hero h1{font-size:40px}.lessonhead{grid-template-columns:1fr}
+  .lessonhead h1{font-size:29px}.files{grid-template-columns:repeat(3,1fr)}.entity{width:138px}.schema{min-height:390px}.fact{width:158px}.d1{left:10px}.d2{right:10px}.d3{left:10px}.d4{right:10px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<aside class="sidebar">
+  <div class="brand">
+    <div class="logo">SQL</div>
+    <div><b>Lakehouse Lab</b><small>Databricks para Data Product Owners</small></div>
+  </div>
+  <div class="progress">
+    <div class="progress-row"><span>Trilha concluída</span><strong id="ptext">0%</strong></div>
+    <div class="track"><div class="fill" id="pfill"></div></div>
+  </div>
+  <div class="nav-label">Aprendizado</div>
+  <div id="nav"></div>
+  <div class="nav-label">Laboratório</div>
+  <button class="navbtn" onclick="go('play')"><span class="n">⌘</span><span class="navtxt"><b>SQL Playground</b><small>Consulta livre</small></span><span>›</span></button>
+  <button class="navbtn" onclick="go('cheatsheet')"><span class="n">?</span><span class="navtxt"><b>Cheat sheet</b><small>Referência rápida</small></span><span>›</span></button>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <button class="ghost mobile" onclick="document.getElementById('app').classList.toggle('open')">☰ Módulos</button>
+    <div class="crumb">SQL Lakehouse Lab / <strong id="crumb">Visão geral</strong></div>
+    <div class="pill">● simulador local</div>
+  </header>
+
+  <div class="content">
+    <section id="home" class="page active">
+      <div class="hero">
+        <div class="eyebrow">SQL • Databricks • Lakehouse • Product Thinking</div>
+        <h1>Aprenda a perguntar para os dados.</h1>
+        <p>Um curso interativo feito para quem precisa <b>entender e consultar dados</b>, não necessariamente se tornar engenheiro. Você vai do primeiro <b>SELECT</b> a <b>JOINs, CTEs, funções de janela e performance</b>, enquanto entende o que acontece dentro do Databricks quando uma query roda.</p>
+        <div class="actions">
+          <button class="btn" onclick="go('m1')">Começar pelo primeiro SELECT →</button>
+          <button class="btn2" onclick="go('arch')">Ver arquitetura Databricks</button>
+          <button class="btn2" onclick="go('play')">Abrir playground</button>
+        </div>
+        <div class="tags">
+          <span class="tag">um único HTML</span><span class="tag">sem backend</span><span class="tag">dataset fictício</span>
+          <span class="tag">queries executáveis</span><span class="tag">fato + dimensões</span><span class="tag">particionamento</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectitle"><h2>O mapa mental do Data PO</h2><p>antes da sintaxe</p></div>
+        <div class="arch">
+          <div class="node"><div><b>Pergunta de negócio</b><small>O que eu preciso decidir?</small></div></div>
+          <div class="node"><div><b>SELECT</b><small>Quais campos preciso enxergar?</small></div></div>
+          <div class="node"><div><b>FROM / JOIN</b><small>De onde vêm os dados?</small></div></div>
+          <div class="node"><div><b>WHERE / GROUP BY</b><small>Qual recorte e qual granularidade?</small></div></div>
+          <div class="node"><div><b>Resultado</b><small>A resposta faz sentido?</small></div></div>
+        </div>
+      </div>
+
+      <div class="section grid3">
+        <div class="card"><div class="eyebrow">Nível 01</div><div class="big">SELECT</div><p>Ler tabelas, escolher colunas, filtrar e ordenar.</p></div>
+        <div class="card"><div class="eyebrow">Nível 02</div><div class="big">JOIN</div><p>Conectar fatos e dimensões e entender granularidade.</p></div>
+        <div class="card"><div class="eyebrow">Nível 03</div><div class="big">CTE + Window</div><p>Ler consultas intermediárias e quase avançadas com confiança.</p></div>
+      </div>
+
+      <div class="section">
+        <div class="sectitle"><h2>Mini Lakehouse usado no curso</h2><p>dataset fictício</p></div>
+        <div class="schema">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+            <line x1="50" y1="50" x2="17" y2="18"/><line x1="50" y1="50" x2="83" y2="18"/>
+            <line x1="50" y1="50" x2="17" y2="82"/><line x1="50" y1="50" x2="83" y2="82"/>
+          </svg>
+          <div class="entity fact"><b>fato_operacoes_credito</b><small>1 linha = 1 operação em uma data-base</small></div>
+          <div class="entity d1"><b>dim_cliente</b><small>quem é o cliente?</small></div>
+          <div class="entity d2"><b>dim_cooperativa</b><small>onde está a operação?</small></div>
+          <div class="entity d3"><b>dim_produto</b><small>qual produto?</small></div>
+          <div class="entity d4"><b>dim_tempo</b><small>quando aconteceu?</small></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="modules"></div>
+
+    <section id="arch" class="page">
+      <div class="lessonhead">
+        <div><div class="eyebrow">Databricks por dentro</div><h1>Da query ao resultado</h1><p>Para um Data PO, a parte mais importante não é decorar infraestrutura. É entender <b>por que algumas consultas são rápidas, caras, lentas ou perigosas</b> e como organização de dados afeta o produto.</p></div>
+        <span class="level">Arquitetura</span>
+      </div>
+
+      <div class="callout">Modelo mental: você escreve SQL. O <b>SQL Warehouse</b> recebe a consulta. O engine analisa o plano, tenta reduzir leitura, acessa arquivos/tabelas Delta e executa operações distribuídas. Se precisar reorganizar dados entre nós, aparece o famoso <b>shuffle</b>.</div>
+
+      <div class="section">
+        <div class="sectitle"><h3>Fluxo de execução</h3><p>clique em “Animar query”</p></div>
+        <div class="pipeline" id="pipe">
+          <div class="stage"><div><b>1. SQL</b><small>texto da consulta</small></div></div>
+          <div class="stage"><div><b>2. Parse</b><small>sintaxe + referências</small></div></div>
+          <div class="stage"><div><b>3. Optimize</b><small>plano lógico/físico</small></div></div>
+          <div class="stage"><div><b>4. Prune / Skip</b><small>evita ler arquivos</small></div></div>
+          <div class="stage"><div><b>5. Scan</b><small>lê arquivos necessários</small></div></div>
+          <div class="stage"><div><b>6. Shuffle / Agg</b><small>redistribui e agrega</small></div></div>
+          <div class="stage"><div><b>7. Result</b><small>retorna linhas</small></div></div>
+        </div>
+        <div class="actions"><button class="btn" onclick="animatePipe()">▶ Animar query</button></div>
+      </div>
+
+      <div class="section">
+        <div class="sectitle"><h3>Arquitetura medalhão</h3><p>um padrão comum no Lakehouse</p></div>
+        <div class="medallion">
+          <div class="med bronze"><b>Bronze</b><small>Dados mais próximos da origem. Pouca transformação. Útil para rastreabilidade e reprocessamento.</small></div>
+          <div class="med silver"><b>Silver</b><small>Dados tratados, tipados, deduplicados e padronizados. É onde muitas regras estruturais vivem.</small></div>
+          <div class="med gold"><b>Gold</b><small>Modelos de consumo: fatos, dimensões, agregações e produtos orientados ao negócio.</small></div>
+        </div>
+      </div>
+
+      <div class="section grid3">
+        <div class="card"><h4>Unity Catalog</h4><p>Governança de objetos: catálogos, schemas, tabelas, views e permissões. Para o PO: ajuda a saber <b>quem pode acessar o quê</b> e qual ativo é oficial.</p></div>
+        <div class="card"><h4>Delta Lake</h4><p>Formato de tabela com log transacional e metadados. Para o PO: pense em confiabilidade, histórico e leitura eficiente.</p></div>
+        <div class="card"><h4>SQL Warehouse</h4><p>Compute voltado ao SQL/BI. A query não “roda dentro da tabela”: ela é processada por compute que lê os dados necessários.</p></div>
+      </div>
+
+      <div class="section">
+        <div class="sectitle"><h3>Particionamento e data skipping</h3><p>simule um filtro</p></div>
+        <div class="partition-demo">
+          <div class="card">
+            <h4>Arquivos da tabela</h4>
+            <p>Imagine 12 arquivos Delta. O filtro pode permitir que o engine ignore parte deles. Menos leitura tende a significar menos I/O e menor tempo.</p>
+            <div class="switchrow">
+              <button class="ghost" onclick="partitionMode('all')">Sem filtro</button>
+              <button class="ghost" onclick="partitionMode('sc')">WHERE uf = 'SC'</button>
+              <button class="ghost" onclick="partitionMode('date')">WHERE dt_base = '2026-09-30'</button>
+            </div>
+            <div class="files" id="files"></div>
+          </div>
+          <div class="card">
+            <h4>O que muda?</h4>
+            <div class="kpirow">
+              <div class="kpi"><small>Arquivos lidos</small><b id="filesRead">12</b></div>
+              <div class="kpi"><small>Arquivos ignorados</small><b id="filesSkip">0</b></div>
+              <div class="kpi"><small>Leitura simulada</small><b id="gbRead">12 GB</b></div>
+              <div class="kpi"><small>Custo relativo</small><b id="costRel">100%</b></div>
+            </div>
+            <div class="callout yellow" style="margin-top:13px">
+              <b>Importante:</b> particionamento não é “criar uma coluna de filtro”. É uma decisão física de organização. Em Databricks modernos, estratégias como clustering e data skipping também podem ser mais relevantes dependendo do desenho da tabela.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectitle"><h3>Quando aparece shuffle?</h3><p>o conceito que um PO deveria reconhecer</p></div>
+        <div class="grid3">
+          <div class="card"><h4>GROUP BY</h4><p>Linhas com a mesma chave podem estar distribuídas em lugares diferentes. Para agregar, o engine pode precisar reunir grupos.</p></div>
+          <div class="card"><h4>JOIN</h4><p>Para casar chaves de duas tabelas grandes, dados podem ser redistribuídos. Isso costuma ser mais caro do que simples filtros.</p></div>
+          <div class="card"><h4>ORDER BY</h4><p>Ordenar globalmente um volume enorme é diferente de ordenar 100 linhas. Quanto maior o conjunto, maior o trabalho.</p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectitle"><h3>Query Profile — leitura executiva</h3><p>perfil fictício</p></div>
+        <div class="card">
+          <div class="barwrap">
+            <div class="barline"><span>Scan</span><div class="bar"><span style="width:82%"></span></div><b>82%</b></div>
+            <div class="barline"><span>Shuffle</span><div class="bar"><span style="width:61%"></span></div><b>61%</b></div>
+            <div class="barline"><span>Aggregation</span><div class="bar"><span style="width:31%"></span></div><b>31%</b></div>
+            <div class="barline"><span>Result</span><div class="bar"><span style="width:8%"></span></div><b>8%</b></div>
+          </div>
+          <div class="callout green" style="margin-top:14px">Leitura de PO: “estou lendo dados demais?”, “há JOIN/shuffle desnecessário?”, “o filtro veio cedo?”, “a granularidade pedida é realmente necessária?”.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="play" class="page">
+      <div class="lessonhead">
+        <div><div class="eyebrow">Sandbox</div><h1>SQL Playground</h1><p>Edite e rode consultas sobre o mini Lakehouse. O interpretador é didático e funciona totalmente no navegador.</p></div>
+        <span class="level">Livre</span>
+      </div>
+      <div class="lab">
+        <div class="box">
+          <div class="boxbar"><span>SQL Editor</span><div class="dots"><i></i><i></i><i></i></div></div>
+          <textarea id="playEditor" class="editor">SELECT
+  c.nm_cliente,
+  o.vl_saldo,
+  o.dias_atraso
+FROM fato_operacoes_credito o
+LEFT JOIN dim_cliente c
+  ON o.id_cliente = c.id_cliente
+WHERE o.vl_saldo > 10000
+ORDER BY o.vl_saldo DESC
+LIMIT 5;</textarea>
+          <div class="toolbar"><button class="ghost" onclick="preset(1)">SELECT</button><button class="ghost" onclick="preset(2)">GROUP BY</button><button class="ghost" onclick="preset(3)">JOIN</button><button class="run" onclick="execute('playEditor','playResult','playStatus')">▶ Executar</button></div>
+        </div>
+        <div class="box"><div class="boxbar"><span>Result</span><span>dados fictícios</span></div><div class="result" id="playResult"></div><div class="status" id="playStatus">Pronto para executar.</div></div>
+      </div>
+      <div class="section grid3">
+        <div class="card"><h4>Tabelas</h4><p><span class="tag">fato_operacoes_credito</span> <span class="tag">dim_cliente</span> <span class="tag">dim_cooperativa</span> <span class="tag">dim_produto</span></p></div>
+        <div class="card"><h4>Atalho mental</h4><p>Traduza primeiro para português: <b>quais colunas, de qual origem, sob qual condição e em qual granularidade?</b></p></div>
+        <div class="card"><h4>Escopo do simulador</h4><p>SELECT, filtros simples, aliases, ORDER BY, LIMIT, COUNT/SUM/AVG, GROUP BY e JOINs didáticos.</p></div>
+      </div>
+    </section>
+
+    <section id="cheatsheet" class="page">
+      <div class="lessonhead"><div><div class="eyebrow">Referência rápida</div><h1>Cheat sheet do Data PO</h1><p>O mínimo que você precisa reconhecer para conversar com engenharia, analytics e BI sem ficar refém de outra pessoa para toda consulta.</p></div><span class="level">Resumo</span></div>
+      <div class="grid2">
+        <div class="card"><h4>Leitura</h4><div class="sqlhint"><span class="kw">SELECT</span> colunas<br><span class="kw">FROM</span> tabela<br><span class="kw">WHERE</span> condição<br><span class="kw">ORDER BY</span> coluna <span class="kw">DESC</span><br><span class="kw">LIMIT</span> 100;</div></div>
+        <div class="card"><h4>Agregação</h4><div class="sqlhint"><span class="kw">SELECT</span> categoria, <span class="fn">SUM</span>(valor)<br><span class="kw">FROM</span> tabela<br><span class="kw">GROUP BY</span> categoria;</div></div>
+        <div class="card"><h4>JOIN</h4><div class="sqlhint"><span class="kw">FROM</span> fato f<br><span class="kw">LEFT JOIN</span> dimensao d<br>&nbsp;&nbsp;<span class="kw">ON</span> f.id = d.id</div></div>
+        <div class="card"><h4>CTE</h4><div class="sqlhint"><span class="kw">WITH</span> base <span class="kw">AS</span> (<br>&nbsp;&nbsp;<span class="kw">SELECT</span> ...<br>)<br><span class="kw">SELECT</span> * <span class="kw">FROM</span> base;</div></div>
+      </div>
+      <div class="section grid3">
+        <div class="card"><h4>Pergunta-chave #1</h4><p>Qual é a granularidade da tabela? Uma linha representa o quê?</p></div>
+        <div class="card"><h4>Pergunta-chave #2</h4><p>Esse JOIN pode duplicar linhas? A chave é realmente única?</p></div>
+        <div class="card"><h4>Pergunta-chave #3</h4><p>Estou lendo tudo ou consigo restringir por data, cooperativa, produto ou outro recorte?</p></div>
+      </div>
+    </section>
+
+    <div class="footer">SQL Lakehouse Lab • arquivo autocontido • conteúdo educacional • nenhum dado é enviado para fora do navegador</div>
+  </div>
+</main>
+</div>
+
+<script>
+const DB={
+fato_operacoes_credito:[
+{id_operacao:1001,id_cliente:1,id_cooperativa:101,id_produto:10,dt_base:"2026-09-30",vl_saldo:18500,dias_atraso:0,rating:"A",estagio:1},
+{id_operacao:1002,id_cliente:2,id_cooperativa:101,id_produto:11,dt_base:"2026-09-30",vl_saldo:74200,dias_atraso:18,rating:"B",estagio:2},
+{id_operacao:1003,id_cliente:3,id_cooperativa:102,id_produto:10,dt_base:"2026-09-30",vl_saldo:9100,dias_atraso:0,rating:"A",estagio:1},
+{id_operacao:1004,id_cliente:4,id_cooperativa:103,id_produto:12,dt_base:"2026-09-30",vl_saldo:128000,dias_atraso:95,rating:"D",estagio:3},
+{id_operacao:1005,id_cliente:1,id_cooperativa:101,id_produto:12,dt_base:"2026-09-30",vl_saldo:32000,dias_atraso:7,rating:"B",estagio:1},
+{id_operacao:1006,id_cliente:5,id_cooperativa:102,id_produto:11,dt_base:"2026-09-30",vl_saldo:5600,dias_atraso:0,rating:"A",estagio:1},
+{id_operacao:1007,id_cliente:6,id_cooperativa:103,id_produto:10,dt_base:"2026-09-30",vl_saldo:45800,dias_atraso:42,rating:"C",estagio:2},
+{id_operacao:1008,id_cliente:7,id_cooperativa:104,id_produto:13,dt_base:"2026-09-30",vl_saldo:22100,dias_atraso:2,rating:"A",estagio:1},
+{id_operacao:1009,id_cliente:8,id_cooperativa:104,id_produto:11,dt_base:"2026-09-30",vl_saldo:87500,dias_atraso:67,rating:"C",estagio:2},
+{id_operacao:1010,id_cliente:3,id_cooperativa:102,id_produto:13,dt_base:"2026-09-30",vl_saldo:14600,dias_atraso:0,rating:"A",estagio:1}
+],
+dim_cliente:[
+{id_cliente:1,nm_cliente:"Aurora Alimentos",tipo_pessoa:"PJ",segmento:"Empresarial"},
+{id_cliente:2,nm_cliente:"Marina Costa",tipo_pessoa:"PF",segmento:"Alta Renda"},
+{id_cliente:3,nm_cliente:"Pedro Alves",tipo_pessoa:"PF",segmento:"Varejo"},
+{id_cliente:4,nm_cliente:"Vale Norte Máquinas",tipo_pessoa:"PJ",segmento:"Empresarial"},
+{id_cliente:5,nm_cliente:"Ana Martins",tipo_pessoa:"PF",segmento:"Varejo"},
+{id_cliente:6,nm_cliente:"Serra Azul Logística",tipo_pessoa:"PJ",segmento:"Empresarial"},
+{id_cliente:7,nm_cliente:"João Ramos",tipo_pessoa:"PF",segmento:"Varejo"},
+{id_cliente:8,nm_cliente:"Bianca Souza",tipo_pessoa:"PF",segmento:"Alta Renda"},
+{id_cliente:9,nm_cliente:"Cliente sem operação",tipo_pessoa:"PF",segmento:"Varejo"}
+],
+dim_cooperativa:[
+{id_cooperativa:101,nm_cooperativa:"Coop Litoral",uf:"SC"},
+{id_cooperativa:102,nm_cooperativa:"Coop Serra",uf:"SC"},
+{id_cooperativa:103,nm_cooperativa:"Coop Sul",uf:"RS"},
+{id_cooperativa:104,nm_cooperativa:"Coop Campos",uf:"PR"}
+],
+dim_produto:[
+{id_produto:10,nm_produto:"Capital de Giro",familia:"Crédito Comercial"},
+{id_produto:11,nm_produto:"Crédito Pessoal",familia:"Crédito PF"},
+{id_produto:12,nm_produto:"Financiamento",familia:"Longo Prazo"},
+{id_produto:13,nm_produto:"Conta Garantida",familia:"Crédito Rotativo"}
+]
+};
+
+const MODULES=[
+{id:"m1",title:"Primeiro SELECT",level:"Básico",sub:"SELECT / FROM / LIMIT",
+ intro:"SELECT é a pergunta mais básica que você faz ao dado: “quais campos eu quero enxergar?”. Para começar, pense menos em código e mais em recorte.",
+ question:"Quero ver operação, saldo e atraso — apenas 5 linhas para explorar a tabela.",
+ sql:`SELECT
+  id_operacao,
+  vl_saldo,
+  dias_atraso
+FROM fato_operacoes_credito
+LIMIT 5;`,
+ concepts:[["SELECT","escolhe as colunas"],["FROM","aponta a origem"],["LIMIT","limita a quantidade retornada"]],
+ challenge:"Troque LIMIT 5 por LIMIT 3. Depois inclua a coluna rating no SELECT.",
+ quiz:["SELECT define as colunas que quero retornar.","SELECT cria obrigatoriamente uma nova tabela.","SELECT só funciona com GROUP BY."],answer:0},
+{id:"m2",title:"WHERE",level:"Básico",sub:"filtros",
+ intro:"WHERE decide quais linhas sobrevivem. Em linguagem de produto, ele representa critérios de recorte, elegibilidade, escopo e segmentação.",
+ question:"Quais operações estão com mais de 30 dias de atraso?",
+ sql:`SELECT
+  id_operacao,
+  vl_saldo,
+  dias_atraso,
+  rating
+FROM fato_operacoes_credito
+WHERE dias_atraso > 30
+ORDER BY dias_atraso DESC;`,
+ concepts:[["WHERE","filtra linhas"],["AND / OR","combina condições"],["IN","testa uma lista de valores"]],
+ challenge:"Altere para dias_atraso >= 60. Depois experimente WHERE rating = 'C'.",
+ quiz:["WHERE reduz o conjunto de linhas.","WHERE define a granularidade física da tabela.","WHERE só funciona com números."],answer:0},
+{id:"m3",title:"ORDER BY + LIMIT",level:"Básico",sub:"ranking exploratório",
+ intro:"ORDER BY cria uma ordem no resultado. LIMIT evita trazer dados demais. Juntos, são úteis para inspeção rápida e listas de maiores/menores casos.",
+ question:"Quais são as 5 maiores exposições por saldo?",
+ sql:`SELECT
+  id_operacao,
+  vl_saldo,
+  dias_atraso
+FROM fato_operacoes_credito
+ORDER BY vl_saldo DESC
+LIMIT 5;`,
+ concepts:[["ASC","menor → maior"],["DESC","maior → menor"],["LIMIT","retorna apenas N linhas"]],
+ challenge:"Troque DESC por ASC e veja as 5 menores exposições.",
+ quiz:["DESC coloca os maiores valores primeiro.","LIMIT filtra por regra de negócio.","ORDER BY altera a tabela fisicamente."],answer:0},
+{id:"m4",title:"Agregações",level:"Intermediário",sub:"COUNT / SUM / AVG / GROUP BY",
+ intro:"Agregações mudam a granularidade da resposta. Em vez de uma linha por operação, você pode querer uma linha por rating, cooperativa ou produto.",
+ question:"Qual saldo total e quantas operações existem em cada estágio?",
+ sql:`SELECT
+  estagio,
+  COUNT(*) AS qtd_operacoes,
+  SUM(vl_saldo) AS saldo_total,
+  AVG(vl_saldo) AS saldo_medio
+FROM fato_operacoes_credito
+GROUP BY estagio
+ORDER BY estagio;`,
+ concepts:[["COUNT","conta linhas"],["SUM","soma uma medida"],["AVG","calcula média"],["GROUP BY","define os grupos"]],
+ challenge:"Troque GROUP BY estagio por GROUP BY rating.",
+ quiz:["GROUP BY altera a granularidade do resultado.","SUM é usado para ordenar.","COUNT cria um JOIN."],answer:0},
+{id:"m5",title:"CASE + NULL",level:"Intermediário",sub:"regras na consulta",
+ intro:"CASE cria uma classificação derivada. NULL significa ausência de valor, e deve ser tratado de forma explícita. Para PO, isso é importante porque regras podem virar lógica de produto.",
+ question:"Quero classificar atraso em faixas de acompanhamento.",
+ sql:`SELECT
+  id_operacao,
+  dias_atraso,
+  CASE
+    WHEN dias_atraso = 0 THEN 'Em dia'
+    WHEN dias_atraso <= 30 THEN '1-30'
+    WHEN dias_atraso <= 90 THEN '31-90'
+    ELSE '90+'
+  END AS faixa_atraso
+FROM fato_operacoes_credito
+ORDER BY dias_atraso DESC;`,
+ concepts:[["CASE","cria regra condicional"],["IS NULL","testa ausência"],["COALESCE","substitui NULL por alternativa"]],
+ challenge:"Crie uma faixa adicional para 1-15 e 16-30 dias.",
+ quiz:["CASE pode derivar categorias dentro da consulta.","NULL é sempre igual a zero.","COALESCE faz um JOIN."],answer:0},
+{id:"m6",title:"INNER JOIN",level:"Intermediário",sub:"cruzando tabelas",
+ intro:"JOIN conecta entidades. INNER JOIN mantém apenas chaves que existem dos dois lados. O risco principal para um PO é esquecer a granularidade e duplicar linhas.",
+ question:"Quero ver o nome do cliente ao lado de cada operação.",
+ sql:`SELECT
+  o.id_operacao,
+  c.nm_cliente,
+  o.vl_saldo
+FROM fato_operacoes_credito o
+INNER JOIN dim_cliente c
+  ON o.id_cliente = c.id_cliente
+ORDER BY o.vl_saldo DESC;`,
+ concepts:[["o / c","aliases das tabelas"],["ON","regra de casamento"],["INNER JOIN","mantém correspondências"]],
+ challenge:"Inclua c.segmento no SELECT.",
+ quiz:["INNER JOIN exige correspondência entre as tabelas.","INNER JOIN sempre mantém tudo da esquerda.","ON serve para ordenar o resultado."],answer:0,join:true},
+{id:"m7",title:"LEFT JOIN",level:"Intermediário",sub:"preservando a esquerda",
+ intro:"LEFT JOIN preserva todas as linhas da tabela à esquerda, mesmo quando não existe correspondência à direita. É muito usado em diagnósticos de completude.",
+ question:"Quero listar todos os clientes e, quando existir, trazer suas operações.",
+ sql:`SELECT
+  c.nm_cliente,
+  o.id_operacao,
+  o.vl_saldo
+FROM dim_cliente c
+LEFT JOIN fato_operacoes_credito o
+  ON c.id_cliente = o.id_cliente
+ORDER BY c.nm_cliente;`,
+ concepts:[["LEFT","preserva a esquerda"],["NULL","aparece quando não há match"],["Cardinalidade","1:1, 1:N ou N:N importa"]],
+ challenge:"Compare LEFT JOIN com INNER JOIN e observe o cliente sem operação.",
+ quiz:["LEFT JOIN mantém as linhas da tabela esquerda.","LEFT JOIN remove todos os NULLs.","LEFT JOIN é sempre mais rápido que INNER JOIN."],answer:0,join:true},
+{id:"m8",title:"Fato x Dimensão",level:"Modelagem",sub:"star schema",
+ intro:"Fato registra eventos ou medições; dimensão descreve contexto. Essa separação ajuda análise, reuso e consistência sem obrigar todo mundo a consultar tabelas transacionais brutas.",
+ question:"Quero analisar saldo por cooperativa, juntando fato com a dimensão organizacional.",
+ sql:`SELECT
+  co.nm_cooperativa,
+  SUM(o.vl_saldo) AS saldo_total
+FROM fato_operacoes_credito o
+LEFT JOIN dim_cooperativa co
+  ON o.id_cooperativa = co.id_cooperativa
+GROUP BY co.nm_cooperativa
+ORDER BY saldo_total DESC;`,
+ concepts:[["Fato","evento + medidas"],["Dimensão","contexto descritivo"],["Chave","liga fato à dimensão"]],
+ challenge:"Troque a dimensão de cooperativa por dim_produto e faça saldo por produto.",
+ quiz:["Fato costuma guardar medidas e chaves.","Dimensão sempre possui bilhões de linhas.","Toda tabela precisa ser fato."],answer:0,schema:true},
+{id:"m9",title:"CTE",level:"Quase avançado",sub:"WITH",
+ intro:"CTE quebra uma consulta grande em etapas legíveis. Para PO, é uma forma excelente de acompanhar a lógica de uma transformação sem ler um bloco monolítico.",
+ question:"Primeiro filtro operações relevantes; depois agrego por rating.",
+ sql:`WITH base AS (
+  SELECT
+    rating,
+    vl_saldo
+  FROM fato_operacoes_credito
+  WHERE vl_saldo >= 10000
+)
+SELECT
+  rating,
+  SUM(vl_saldo) AS saldo_total
+FROM base
+GROUP BY rating
+ORDER BY saldo_total DESC;`,
+ concepts:[["WITH","nomeia uma etapa"],["base","resultado intermediário lógico"],["SELECT final","consome a etapa"]],
+ challenge:"Inclua dias_atraso na CTE e filtre somente operações com dias_atraso > 0.",
+ quiz:["CTE ajuda a organizar uma consulta em etapas.","CTE é necessariamente uma tabela física persistida.","WITH só pode aparecer uma vez no Databricks."],answer:0},
+{id:"m10",title:"Window Functions",level:"Quase avançado",sub:"OVER / PARTITION BY",
+ intro:"Funções de janela calculam métricas mantendo as linhas detalhadas. Isso permite ranking, acumulados e comparação dentro de grupos sem colapsar tudo como GROUP BY.",
+ question:"Quero ranquear operações dentro de cada estágio pelo maior saldo.",
+ sql:`SELECT
+  id_operacao,
+  estagio,
+  vl_saldo,
+  ROW_NUMBER() OVER (
+    PARTITION BY estagio
+    ORDER BY vl_saldo DESC
+  ) AS ranking_estagio
+FROM fato_operacoes_credito;`,
+ concepts:[["OVER","abre uma janela analítica"],["PARTITION BY","cria grupos lógicos"],["ROW_NUMBER","numera linhas no grupo"]],
+ challenge:"Troque PARTITION BY estagio por PARTITION BY rating.",
+ quiz:["Window function pode manter o detalhe das linhas.","PARTITION BY de window sempre cria partição física no storage.","ROW_NUMBER soma valores."],answer:0},
+{id:"m11",title:"Performance SQL",level:"Databricks",sub:"scan / pruning / shuffle",
+ intro:"Uma boa query não é apenas correta. Ela evita ler dados sem necessidade, reduz movimentação e respeita granularidade. Em Databricks, volume lido e operações distribuídas fazem diferença.",
+ question:"Quero consultar só a data e o recorte necessários, evitando SELECT *.",
+ sql:`SELECT
+  id_operacao,
+  vl_saldo,
+  rating
+FROM fato_operacoes_credito
+WHERE dt_base = '2026-09-30'
+  AND vl_saldo > 10000
+ORDER BY vl_saldo DESC
+LIMIT 100;`,
+ concepts:[["Evite SELECT *","leia apenas colunas necessárias"],["Filtre cedo","reduza dados"],["Observe JOINs","podem gerar shuffle"]],
+ challenge:"Remova o filtro de dt_base e pense: em uma tabela de anos, o que isso faria com a leitura?",
+ quiz:["Filtrar por um recorte relevante pode reduzir leitura.","SELECT * é sempre melhor.","Shuffle é sinônimo de erro."],answer:0,performance:true}
+];
+
+let completed=new Set(JSON.parse(localStorage.getItem("sqlLabDone")||"[]"));
+let active="home";
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function navBuild(){
+  let h=`<button class="navbtn ${active==="home"?"active":""}" onclick="go('home')"><span class="n">00</span><span class="navtxt"><b>Visão geral</b><small>modelo mental</small></span><span>›</span></button>`;
+  MODULES.forEach((m,i)=>{
+    h+=`<button class="navbtn ${active===m.id?"active":""} ${completed.has(m.id)?"done":""}" onclick="go('${m.id}')"><span class="n">${String(i+1).padStart(2,"0")}</span><span class="navtxt"><b>${m.title}</b><small>${m.sub}</small></span><span class="tick">${completed.has(m.id)?"✓":"›"}</span></button>`
+  });
+  h+=`<button class="navbtn ${active==="arch"?"active":""}" onclick="go('arch')"><span class="n">DB</span><span class="navtxt"><b>Databricks por dentro</b><small>arquitetura + partições</small></span><span>›</span></button>`;
+  document.getElementById("nav").innerHTML=h;
+  let pct=Math.round(completed.size/MODULES.length*100);
+  document.getElementById("ptext").textContent=pct+"%";document.getElementById("pfill").style.width=pct+"%";
+}
+
+function moduleHTML(m,i){
+ const concepts=m.concepts.map((c,j)=>`<div class="step"><i>${j+1}</i><div><b>${c[0]}</b><small>${c[1]}</small></div></div>`).join("");
+ const quiz=m.quiz.map((q,j)=>`<button onclick="quiz(this,'${m.id}',${j},${m.answer})">${q}</button>`).join("");
+ const visual=m.join?`
+ <div class="section card">
+   <div class="sectitle"><h3>Visualize o JOIN</h3><p>mude o tipo</p></div>
+   <div class="joinviz">
+    <div><div class="venn"><div class="circle a"></div><div class="circle b"></div></div><div class="legend">Tabela esquerda &nbsp; • &nbsp; Tabela direita</div></div>
+    <div><div class="joincontrols"><button class="ghost active" onclick="joinView(this,'inner')">INNER</button><button class="ghost" onclick="joinView(this,'left')">LEFT</button></div>
+    <div class="callout" id="joinText">INNER JOIN: ficam apenas as chaves encontradas dos dois lados.</div></div>
+   </div>
+ </div>`:"";
+ const schema=m.schema?`
+ <div class="section">
+  <div class="schema">
+   <svg viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="50" y1="50" x2="17" y2="18"/><line x1="50" y1="50" x2="83" y2="18"/><line x1="50" y1="50" x2="17" y2="82"/><line x1="50" y1="50" x2="83" y2="82"/></svg>
+   <div class="entity fact"><b>fato_operacoes_credito</b><small>medidas: saldo, atraso; chaves: cliente, cooperativa, produto</small></div>
+   <div class="entity d1"><b>dim_cliente</b><small>nome, segmento, tipo</small></div><div class="entity d2"><b>dim_cooperativa</b><small>nome, UF</small></div>
+   <div class="entity d3"><b>dim_produto</b><small>produto, família</small></div><div class="entity d4"><b>dim_tempo</b><small>data, mês, ano</small></div>
+  </div>
+ </div>`:"";
+ const perf=m.performance?`
+ <div class="section grid3">
+  <div class="card"><h4>Projection pruning</h4><p>Selecionar apenas colunas necessárias pode reduzir dados processados.</p></div>
+  <div class="card"><h4>Data skipping</h4><p>Metadados ajudam o engine a evitar arquivos que não podem conter o filtro procurado.</p></div>
+  <div class="card"><h4>Shuffle</h4><p>JOINs, GROUP BY e ordenações podem mover dados entre executores. É um custo a observar.</p></div>
+ </div>`:"";
+ return `<section id="${m.id}" class="page">
+   <div class="lessonhead"><div><div class="eyebrow">Módulo ${String(i+1).padStart(2,"0")} • ${m.level}</div><h1>${m.title}</h1><p>${m.intro}</p></div><span class="level">${m.sub}</span></div>
+   <div class="callout">${m.question}</div>
+   <div class="lab">
+    <div class="box">
+      <div class="boxbar"><span>SQL Editor</span><div class="dots"><i></i><i></i><i></i></div></div>
+      <textarea class="editor" id="ed_${m.id}">${m.sql}</textarea>
+      <div class="toolbar"><button class="ghost" onclick="document.getElementById('ed_${m.id}').value=${JSON.stringify(m.sql)}">Restaurar</button><button class="run" onclick="execute('ed_${m.id}','res_${m.id}','st_${m.id}')">▶ Executar</button></div>
+    </div>
+    <div class="box"><div class="boxbar"><span>Result</span><span>simulado</span></div><div class="result" id="res_${m.id}"></div><div class="status" id="st_${m.id}">Execute a consulta para ver o resultado.</div></div>
+   </div>
+   <div class="section grid2">
+     <div><div class="sectitle"><h3>Como ler essa query</h3><p>por partes</p></div><div class="steps">${concepts}</div></div>
+     <div><div class="sectitle"><h3>Desafio</h3><p>edite e rode</p></div><div class="challenge"><h4>Agora é você</h4><p>${m.challenge}</p></div>
+       <div class="sectitle" style="margin-top:14px"><h3>Cheque o conceito</h3><p>1 resposta</p></div><div class="quiz">${quiz}</div>
+     </div>
+   </div>
+   ${visual}${schema}${perf}
+   <div class="actions" style="justify-content:flex-end"><button class="btn2" onclick="complete('${m.id}')">✓ Marcar módulo como concluído</button>${i<MODULES.length-1?`<button class="btn" onclick="go('${MODULES[i+1].id}')">Próximo módulo →</button>`:`<button class="btn" onclick="go('arch')">Databricks por dentro →</button>`}</div>
+ </section>`
+}
+document.getElementById("modules").innerHTML=MODULES.map(moduleHTML).join("");
+
+function go(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const el=document.getElementById(id); if(el) el.classList.add("active");
+  active=id;
+  const m=MODULES.find(x=>x.id===id);
+  document.getElementById("crumb").textContent=m?m.title:(id==="arch"?"Databricks por dentro":id==="play"?"SQL Playground":id==="cheatsheet"?"Cheat sheet":"Visão geral");
+  document.getElementById("app").classList.remove("open");
+  navBuild(); window.scrollTo({top:0,behavior:"smooth"});
+}
+function complete(id){completed.add(id);localStorage.setItem("sqlLabDone",JSON.stringify([...completed]));navBuild()}
+function quiz(btn,id,choice,answer){
+  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("correct","wrong"));
+  btn.classList.add(choice===answer?"correct":"wrong");
+  if(choice===answer) complete(id);
+}
+function joinView(btn,type){
+  btn.parentElement.querySelectorAll("button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
+  document.querySelectorAll("#joinText").forEach(el=>el.innerHTML= type==="inner"
+    ?"<b>INNER JOIN:</b> ficam apenas as chaves encontradas dos dois lados."
+    :"<b>LEFT JOIN:</b> tudo da esquerda é preservado; quando não há correspondência à direita, aparecem NULLs.");
+}
+function animatePipe(){
+  const s=[...document.querySelectorAll("#pipe .stage")];s.forEach(x=>x.classList.remove("active"));
+  s.forEach((x,i)=>setTimeout(()=>x.classList.add("active"),i*420));
+  setTimeout(()=>s.forEach(x=>x.classList.remove("active")),s.length*420+900);
+}
+function buildFiles(){
+  let h="";for(let i=1;i<=12;i++)h+=`<div class="file" data-i="${i}">part-${String(i).padStart(2,"0")}<br>${i<=5?"SC":i<=9?"RS":"PR"}</div>`;
+  document.getElementById("files").innerHTML=h;
+}
+function partitionMode(mode){
+ const els=[...document.querySelectorAll(".file")];let read=12;
+ els.forEach(e=>{e.classList.remove("hit","skip")});
+ if(mode==="sc"){read=5;els.forEach((e,i)=>e.classList.add(i<5?"hit":"skip"))}
+ else if(mode==="date"){read=3;els.forEach((e,i)=>e.classList.add([1,5,8].includes(i)?"hit":"skip"))}
+ else els.forEach(e=>e.classList.add("hit"));
+ document.getElementById("filesRead").textContent=read;
+ document.getElementById("filesSkip").textContent=12-read;
+ document.getElementById("gbRead").textContent=read+" GB";
+ document.getElementById("costRel").textContent=Math.round(read/12*100)+"%";
+}
+buildFiles();partitionMode("all");
+
+function splitCSV(s){
+ let out=[],cur="",depth=0,q=null;
+ for(let i=0;i<s.length;i++){let c=s[i];if(q){cur+=c;if(c===q&&s[i-1]!=="\\")q=null;continue}if(c==="'"||c==='"'){q=c;cur+=c;continue}
+ if(c==="(")depth++;if(c===")")depth--;if(c===","&&depth===0){out.push(cur.trim());cur="";}else cur+=c}
+ if(cur.trim())out.push(cur.trim());return out;
+}
+function normKey(x){return x.trim().replace(/[`"]/g,"")}
+function valFrom(row,expr){
+ expr=expr.trim();
+ if(/^'.*'$/.test(expr))return expr.slice(1,-1);
+ if(/^\d+(\.\d+)?$/.test(expr))return Number(expr);
+ let k=normKey(expr);
+ if(k in row)return row[k];
+ let bare=k.split(".").pop(); if(bare in row)return row[bare];
+ return undefined;
+}
+function flatten(row){
+ let o={};Object.entries(row).forEach(([k,v])=>{o[k]=v;if(k.includes(".")){let b=k.split(".").pop();if(!(b in o))o[b]=v}});return o;
+}
+function qualify(table,alias){
+ return DB[table].map(r=>{let o={};Object.entries(r).forEach(([k,v])=>{o[k]=v;o[(alias||table)+"."+k]=v});return o});
+}
+function applyWhere(rows,w){
+ if(!w)return rows;
+ let conds=w.split(/\s+AND\s+/i);
+ return rows.filter(r=>conds.every(c=>{
+   c=c.trim().replace(/;$/,"");
+   let im=c.match(/^([\w.]+)\s+IN\s*\((.+)\)$/i);
+   if(im){let list=splitCSV(im[2]).map(x=>x.trim().replace(/^'|'$/g,""));return list.map(String).includes(String(valFrom(r,im[1])))}
+   let nm=c.match(/^([\w.]+)\s+IS\s+(NOT\s+)?NULL$/i);
+   if(nm){let v=valFrom(r,nm[1]);return nm[2]?v!=null:v==null}
+   let m=c.match(/^([\w.]+)\s*(>=|<=|<>|!=|=|>|<)\s*(.+)$/i);if(!m)return true;
+   let a=valFrom(r,m[1]),b=valFrom(r,m[3].trim()); if(typeof a==="number"&&typeof b==="string"&&!isNaN(+b))b=+b;
+   return {"=":a==b,">":a>b,"<":a<b,">=":a>=b,"<=":a<=b,"!=":a!=b,"<>":a!=b}[m[2]];
+ }));
+}
+function parseFrom(sql){
+ const fm=sql.match(/\bFROM\s+([\w.]+)(?:\s+(?:AS\s+)?(\w+))?/i);if(!fm)throw Error("Não encontrei FROM.");
+ let table=fm[1].split(".").pop(),alias=fm[2]||table;if(!DB[table])throw Error("Tabela não disponível no simulador: "+table);
+ let rows=qualify(table,alias);
+ const jr=/\b(INNER|LEFT)\s+JOIN\s+([\w.]+)(?:\s+(?:AS\s+)?(\w+))?\s+ON\s+([\w.]+)\s*=\s*([\w.]+)/ig;
+ let m;
+ while((m=jr.exec(sql))){
+   let type=m[1].toUpperCase(),t=m[2].split(".").pop(),a=m[3]||t;if(!DB[t])throw Error("Tabela do JOIN não disponível: "+t);
+   let right=qualify(t,a),out=[];
+   rows.forEach(l=>{
+     let hits=right.filter(r=>valFrom(l,m[4])==valFrom(r,m[5]));
+     if(hits.length)hits.forEach(r=>out.push({...l,...r}));
+     else if(type==="LEFT")out.push({...l});
+   });rows=out;
+ }
+ return rows;
+}
+function selectProject(rows,sel,groupBy){
+ const fields=splitCSV(sel);
+ const hasAgg=fields.some(f=>/\b(COUNT|SUM|AVG|MIN|MAX)\s*\(/i.test(f));
+ if(groupBy||hasAgg){
+   let gs=groupBy?splitCSV(groupBy):[];
+   let map=new Map();
+   rows.forEach(r=>{let key=gs.map(g=>String(valFrom(r,g))).join("¦");if(!map.has(key))map.set(key,[]);map.get(key).push(r)});
+   if(!rows.length&&!gs.length)map.set("",[]);
+   return [...map.values()].map(gr=>{
+     let out={};let first=gr[0]||{};
+     fields.forEach(f=>{
+       let am=f.match(/^(.*?)\s+AS\s+(\w+)$/i);let expr=(am?am[1]:f).trim(),name=am?am[2]:expr.split(".").pop();
+       let ag=expr.match(/^(COUNT|SUM|AVG|MIN|MAX)\s*\(\s*(\*|[\w.]+)\s*\)$/i);
+       if(ag){let fn=ag[1].toUpperCase(),col=ag[2],vals=col==="*"?gr.map(()=>1):gr.map(r=>Number(valFrom(r,col))).filter(v=>!isNaN(v));
+         if(fn==="COUNT")out[name]=gr.length;if(fn==="SUM")out[name]=vals.reduce((a,b)=>a+b,0);if(fn==="AVG")out[name]=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;if(fn==="MIN")out[name]=Math.min(...vals);if(fn==="MAX")out[name]=Math.max(...vals);
+       }else out[name]=valFrom(first,expr);
+     });return out;
+   });
+ }
+ return rows.map(r=>{let out={};fields.forEach(f=>{
+   if(f==="*"){Object.entries(flatten(r)).filter(([k])=>!k.includes(".")).forEach(([k,v])=>out[k]=v);return}
+   let am=f.match(/^(.*?)\s+AS\s+(\w+)$/i);let expr=(am?am[1]:f).trim(),name=am?am[2]:expr.split(".").pop();
+   let cm=expr.match(/^CASE\s+/i);
+   if(cm){
+     let txt=expr, wh=[...txt.matchAll(/WHEN\s+([\w.]+)\s*(=|<=|>=|<|>)\s*('?[^']+'?|\d+)\s+THEN\s+'([^']+)'/ig)];
+     let em=txt.match(/ELSE\s+'([^']+)'/i);let v=null;
+     for(let x of wh){let a=valFrom(r,x[1]),b=x[3].replace(/^'|'$/g,"");if(!isNaN(+b))b=+b;let ok={"=":a==b,"<=":a<=b,">=":a>=b,"<":a<b,">":a>b}[x[2]];if(ok){v=x[4];break}}
+     out[name]=v??(em?em[1]:null);
+   }else out[name]=valFrom(r,expr);
+ });return out});
+}
+function simpleEngine(sql){
+ sql=sql.replace(/--.*$/gm," ").trim().replace(/;\s*$/,"");
+ if(/\bWITH\b/i.test(sql))throw Error("O módulo de CTE é explicativo neste simulador local. Use o Playground para SELECT/JOIN/GROUP BY.");
+ if(/\bOVER\s*\(/i.test(sql))throw Error("Window Functions são apresentadas conceitualmente; o mini-engine local não executa OVER().");
+ let sm=sql.match(/\bSELECT\s+([\s\S]*?)\s+FROM\b/i);if(!sm)throw Error("Não encontrei SELECT ... FROM.");
+ let rows=parseFrom(sql);
+ let wm=sql.match(/\bWHERE\s+([\s\S]*?)(?=\bGROUP\s+BY\b|\bORDER\s+BY\b|\bLIMIT\b|$)/i);rows=applyWhere(rows,wm&&wm[1].trim());
+ let gm=sql.match(/\bGROUP\s+BY\s+([\s\S]*?)(?=\bORDER\s+BY\b|\bLIMIT\b|$)/i);
+ let result=selectProject(rows,sm[1],gm&&gm[1].trim());
+ let om=sql.match(/\bORDER\s+BY\s+([\w.]+)(?:\s+(ASC|DESC))?/i);
+ if(om){let col=om[1].split(".").pop(),dir=(om[2]||"ASC").toUpperCase();result.sort((a,b)=>{let x=a[col],y=b[col];return (x==y?0:(x>y?1:-1))*(dir==="DESC"?-1:1)})}
+ let lm=sql.match(/\bLIMIT\s+(\d+)/i);if(lm)result=result.slice(0,+lm[1]);
+ return result;
+}
+function renderTable(rows,target){
+ const el=document.getElementById(target);
+ if(!rows.length){el.innerHTML=`<div style="padding:18px;color:#7f98aa;font-size:11px">0 linhas retornadas.</div>`;return}
+ let cols=Object.keys(rows[0]);
+ el.innerHTML=`<table class="data"><thead><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${typeof r[c]==="number"?Intl.NumberFormat("pt-BR",{maximumFractionDigits:2}).format(r[c]):esc(r[c]??"NULL")}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+function execute(editor,result,status){
+ let sql=document.getElementById(editor).value,st=document.getElementById(status);
+ try{let t=performance.now(),rows=simpleEngine(sql);renderTable(rows,result);st.innerHTML=`<span class="ok">✓ Query executada</span> • ${rows.length} linha(s) • ${(performance.now()-t).toFixed(1)} ms no simulador`;
+ }catch(e){document.getElementById(result).innerHTML="";st.innerHTML=`<span class="err">● ${esc(e.message)}</span>`}
+}
+function preset(n){
+ const e=document.getElementById("playEditor");
+ if(n===1)e.value=`SELECT id_operacao, vl_saldo, rating\nFROM fato_operacoes_credito\nWHERE vl_saldo > 20000\nORDER BY vl_saldo DESC\nLIMIT 5;`;
+ if(n===2)e.value=`SELECT estagio, COUNT(*) AS qtd, SUM(vl_saldo) AS saldo_total\nFROM fato_operacoes_credito\nGROUP BY estagio\nORDER BY saldo_total DESC;`;
+ if(n===3)e.value=`SELECT c.nm_cliente, o.vl_saldo, o.dias_atraso\nFROM fato_operacoes_credito o\nLEFT JOIN dim_cliente c ON o.id_cliente = c.id_cliente\nWHERE o.dias_atraso > 0\nORDER BY o.dias_atraso DESC;`;
+}
+navBuild();
+execute("ed_m1","res_m1","st_m1");
+</script>
+</body>
+</html>
