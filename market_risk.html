@@ -485,6 +485,42 @@ footer b{color:var(--fg-2)}
 .legend{display:flex;flex-wrap:wrap;gap:8px 18px;padding:10px 18px 14px;font-size:12px;color:var(--fg-3)}
 .legend i{display:inline-block;width:16px;height:2px;vertical-align:middle;margin-right:6px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Extensão metodológica de 2026 — preserva tokens e componentes existentes */
+.enh-intro,.enh-card,.enh-split > article{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:20px;margin:22px 0}
+.enh-intro{border-left:3px solid var(--amber);margin:26px 0}
+.enh-intro h3{margin:0 0 8px;font-size:20px}.enh-intro p,.enh-card p,.enh-split p{color:var(--fg-2);font-size:15px;line-height:1.6}
+.enh-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.enh-btn,.enh-select,.enh-number{border:1px solid var(--rule);background:var(--panel-2);border-radius:3px;color:var(--fg);padding:9px 12px;font-family:var(--mono);font-size:12px}
+.enh-btn{cursor:pointer}.enh-btn:hover{border-color:var(--amber);color:var(--amber)}.enh-btn:focus-visible,.enh-select:focus-visible,.enh-number:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.enh-btn.primary{border-color:var(--amber-d);color:var(--amber)}
+.enh-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:20px 0}.enh-split>article{margin:0}
+.enh-split h3{margin:0 0 8px;font-size:20px}.enh-split .chip{margin-bottom:10px;display:inline-flex}
+.enh-alert{padding:13px 15px;border-left:2px solid var(--amber);background:var(--ink-2);color:var(--fg-2);font-size:13.5px;line-height:1.6;margin:16px 0}
+.enh-mono{font-family:var(--mono);font-size:12px;color:var(--teal)}
+.enh-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:18px 0}
+.enh-controls label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--fg-2)}
+.enh-controls input[type=range]{accent-color:var(--amber);width:100%}
+.enh-controls .enh-select,.enh-controls .enh-number{width:100%;min-width:0}
+.enh-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);margin:16px 0}
+.enh-kpis>div{background:var(--ink-2);padding:14px 11px}.enh-kpis b{display:block;color:var(--fg);font-family:var(--mono);font-size:17px}.enh-kpis small{display:block;color:var(--fg-3);font-size:11.5px;margin-top:5px;line-height:1.5}
+.enh-kpis [data-state="reject"] b{color:var(--crimson)}.enh-kpis [data-state="ok"] b{color:var(--teal)}.enh-kpis [data-state="weak"] b{color:var(--amber)}
+.enh-chart{display:block;width:100%;height:260px;margin:10px 0;border:1px solid var(--rule-soft);border-radius:3px;background:var(--ink-2)}
+.enh-table-wrap{overflow-x:auto;max-width:100%}.enh-table{width:100%;border-collapse:collapse;font-size:13.5px;text-align:left}
+.enh-table th{font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--amber);font-weight:500;background:var(--ink-2)}
+.enh-table th,.enh-table td{padding:12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.55}
+.enh-table td{color:var(--fg-2)}.enh-table strong{color:var(--fg)}
+.enh-table code{color:var(--teal);font-size:12px}.enh-table a{color:var(--teal)}
+.enh-method{margin:0;border-top:1px solid var(--rule-soft);background:var(--ink-2)}
+.enh-method summary{padding:11px 17px;cursor:pointer;color:var(--teal);font-family:var(--mono);font-size:11.5px}
+.enh-method[open] summary{color:var(--amber)}
+.enh-method div{padding:0 17px 15px;color:var(--fg-2);font-size:13px;line-height:1.65}
+.enh-method b{color:var(--fg)}.enh-method p{margin:6px 0}
+.enh-status{color:var(--fg-3);font-size:13px;min-height:1.4em;margin:9px 0}
+.enh-formula{font-family:var(--mono);font-size:12.5px;color:var(--fg);padding:11px;background:var(--ink-2);overflow-x:auto}
+@media(max-width:800px){.enh-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.enh-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.enh-split{grid-template-columns:1fr}.enh-controls{grid-template-columns:1fr}.enh-intro,.enh-card,.enh-split>article{padding:15px}.enh-table{font-size:12.5px}.enh-table th,.enh-table td{padding:9px}}
+
 </style>
 </head>
 <body>
@@ -509,6 +545,8 @@ footer b{color:var(--fg-2)}
     <li><a href="#m7"><i>VII</i><span>Integridade de mercado</span></a></li>
     <li><a href="#m8"><i>VIII</i><span>Governança e capital</span></a></li>
     <li><a href="#cockpit"><i>—</i><span>Cockpit executivo</span></a></li>
+    <li><a href="#validacao"><i>—</i><span>Validação estatística</span></a></li>
+    <li><a href="#metodologia"><i>—</i><span>Metodologia</span></a></li>
     <li><a href="#refs"><i>—</i><span>Referências</span></a></li>
   </ul>
   <div class="rail-sep">Idealizado e revisado por<br>Gabriel Groehs</div>
@@ -568,6 +606,18 @@ footer b{color:var(--fg-2)}
 </div>
 
 <!-- ========================= MAPA ========================= -->
+
+<div class="wrap">
+  <aside class="enh-intro" aria-label="Como explorar o atlas">
+    <h3>Da teoria à experimentação quantitativa</h3>
+    <p>Explore os oito movimentos do livro, ajuste dez simuladores, compare cenários no cockpit e execute um <em>backtesting</em> estatístico reproduzível. Os números e trajetórias são <strong>sintéticos</strong>: ilustram mecanismos, não constituem estimativas ou aconselhamento sobre posições reais.</p>
+    <div class="enh-actions">
+      <a class="enh-btn primary" href="#m1">Explorar modelos</a>
+      <a class="enh-btn" href="#validacao">Laboratório de validação</a>
+      <a class="enh-btn" href="#metodologia">Premissas e limites</a>
+    </div>
+  </aside>
+</div>
 <section class="mov" id="mapa">
   <div class="wrap">
     <div class="mov-head">
@@ -1992,11 +2042,29 @@ footer b{color:var(--fg-2)}
       ela mesma, uma fonte de risco.</p>
     </div>
 
+
+    <div class="enh-alert"><strong>Enquadramento técnico:</strong> o gráfico abaixo é um experimento histórico, não uma implementação regulatória. As zonas verde/amarela/vermelha para VaR de 99% e 250 dias têm referência no backtesting tradicional. Ao mover o nível de confiança, os limiares são recalculados por uma heurística binomial, sem equivalência automática com as zonas oficiais. A estimativa <strong>k × VaR</strong> omite parcelas e condições relevantes; não deve ser usada para apurar RWA ou requerimento prudencial.</div>
+    <div class="enh-split" aria-label="Evolução regulatória">
+      <article>
+        <span class="chip"><b>Histórico</b> VaR · Basileia 2.5</span>
+        <h3>Quantil, exceções e multiplicadores</h3>
+        <p>O backtesting clássico compara perdas realizadas com VaR ex ante. A formulação histórica de capital combina componentes de VaR e VaR estressado, com multiplicadores e outras exigências. O painel desta página <em>não calcula</em> essa formulação completa.</p>
+        <p class="enh-mono">Aqui: demonstração estatística e contextualização histórica.</p>
+      </article>
+      <article>
+        <span class="chip"><b>Contemporâneo</b> FRTB · RWAsens</span>
+        <h3>Expected Shortfall e abordagem por sensibilidades</h3>
+        <p>No arcabouço internacional FRTB, a abordagem de modelos internos utiliza ES com confiança unilateral de 97,5%, ajuste ao estresse e horizontes de liquidez. A abordagem padronizada reúne método de sensibilidades (delta, vega e curvatura), DRC e RRAO, conforme regras de aplicação.</p>
+        <p>No Brasil, a Resolução BCB nº 470/2025 disciplina o <strong>RWAsens</strong>, no âmbito da implementação divulgada para S1–S3 com início em <strong>1º/01/2027</strong>. As regras e escopos devem ser consultados nas fontes oficiais; a página não apura RWAsens.</p>
+        <p><a href="https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?numero=470&amp;tipo=Resolu%C3%A7%C3%A3o+BCB" target="_blank" rel="noopener">Resolução BCB 470/2025</a> · <a href="https://www.bis.org/publications/fsi-summary-revised-market-risk-framework-executive-summary" target="_blank" rel="noopener">Síntese FRTB/BIS</a></p>
+      </article>
+    </div>
+
     <div class="flow" data-flow="capital" aria-label="Ciclo do capital regulatório de risco de mercado"></div>
 
     <div class="eqwrap">
       <button class="eq" data-eq="mrc">
-        <span class="eq-name"><span>Requerimento de capital para risco de mercado</span><em>inspecionar</em></span>
+        <span class="eq-name"><span>Requerimento histórico de capital — expressão esquemática</span><em>inspecionar</em></span>
         <span class="eq-body">
           <span class="vb">MRC</span><sub>t</sub> <span class="op">=</span> <span class="v">max</span>
           <span class="paren">(</span><span class="vb">VaR</span><sub>t−1</sub><span class="op">,</span>
@@ -2007,7 +2075,7 @@ footer b{color:var(--fg-2)}
           <span class="frac"><span><span class="vm">k</span><sub>s</sub></span><span><span class="num-c">60</span></span></span>
           <span class="op">∑</span><span class="vb">sVaR</span><span class="paren">)</span>
         </span>
-        <span class="eq-foot">O multiplicador <span class="vm">k</span> parte de 3 e sobe conforme o desempenho do modelo no backtesting.</span>
+        <span class="eq-foot">Formulação histórica simplificada; não reproduz o cálculo atual do capital prudencial.</span>
       </button>
     </div>
     <div class="eqwrap">
@@ -2028,8 +2096,8 @@ footer b{color:var(--fg-2)}
 
     <div class="viz" id="viz-basel">
       <div class="viz-head">
-        <h4>Backtesting, zonas de supervisão e o preço de errar o modelo</h4>
-        <span class="tag">janela de 250 dias úteis · VaR de 1 dia</span>
+        <h4>Backtesting histórico e zonas de supervisão — simulação ilustrativa</h4>
+        <span class="tag">Basileia 2.5 (histórico) · 250 dias úteis · VaR de 1 dia</span>
       </div>
       <div class="viz-body"><div class="canvas-slot"><canvas id="cv-basel" role="img"
         aria-label="Distribuição binomial do número de violações com as zonas verde, amarela e vermelha demarcadas, e o multiplicador de capital resultante"></canvas></div></div>
@@ -2058,7 +2126,7 @@ footer b{color:var(--fg-2)}
       <div class="readout">
         <div class="ro" data-ro="basel.zone"><b>—</b><span>zona de supervisão</span></div>
         <div class="ro" data-ro="basel.k"><b>—</b><span>multiplicador k</span></div>
-        <div class="ro" data-ro="basel.cap"><b>—</b><span>capital exigido</span></div>
+        <div class="ro" data-ro="basel.cap"><b>—</b><span>proxy didática de capital</span></div>
         <div class="ro" data-ro="basel.lr"><b>—</b><span>estatística do teste</span></div>
       </div>
     </div>
@@ -2078,7 +2146,7 @@ footer b{color:var(--fg-2)}
     </div>
     <div class="interp apply">
       <h4>Onde isso é usado</h4>
-      <p>O ciclo completo — modelo interno, apuração diária de VaR, comparação com o resultado efetivo,
+      <p>Historicamente, o ciclo — modelo interno, apuração diária de VaR, comparação com o resultado efetivo,
       classificação em zonas, multiplicador e capital — é a rotina de qualquer instituição com autorização
       para modelo interno. As mesmas peças reaparecem, com nomes diferentes, na validação independente de
       modelos de crédito: backtesting, análise de exceções, ajuste conservador quando o desempenho degrada.
@@ -2137,6 +2205,22 @@ footer b{color:var(--fg-2)}
       </div>
     </div>
 
+
+    <div class="enh-card" id="scenarioLab">
+      <h3>Comparador de cenários</h3>
+      <p>Congele os parâmetros como cenário-base, modifique quaisquer simuladores e compare os quatro indicadores executivos. A comparação é determinística para as configurações simuladas e não representa previsão sobre dados observados.</p>
+      <div class="enh-actions">
+        <button class="enh-btn primary" id="scene-save" type="button">Salvar cenário-base</button>
+        <button class="enh-btn" id="scene-restore" type="button">Restaurar cenário-base</button>
+        <button class="enh-btn" id="scene-csv" type="button">Exportar comparação CSV</button>
+      </div>
+      <p class="enh-status" id="scene-status" role="status" aria-live="polite">Ainda não foi definido um cenário-base.</p>
+      <div class="enh-table-wrap"><table class="enh-table" aria-label="Comparação de cenários">
+        <thead><tr><th>Indicador</th><th>Base</th><th>Atual</th><th>Variação</th></tr></thead>
+        <tbody id="scene-body"><tr><td colspan="4">Salve um cenário para iniciar a comparação.</td></tr></tbody>
+      </table></div>
+    </div>
+
     <div class="interp">
       <h4>Como ler o diagnóstico</h4>
       <p>A postura não é a média dos quatro indicadores. Ela segue a lógica que atravessa o volume: uma
@@ -2145,6 +2229,86 @@ footer b{color:var(--fg-2)}
       perda relevante nesse regime não é a da carteira isolada. Do mesmo modo, custo de saída elevado torna
       qualquer limite de posição ilusório: a posição só existe enquanto não precisa ser desmontada.</p>
     </div>
+  </div>
+</section>
+
+
+<section class="mov" id="validacao">
+  <div class="wrap">
+    <div class="mov-head">
+      <div class="mov-num"><em>Laboratório</em> testes de cobertura de risco</div>
+      <h2>Validação estatística: a exceção foi frequente ou previsível?</h2>
+      <p class="lede prose">O VaR só é útil quando a distribuição prevista é confrontada com resultados posteriores. Este laboratório gera retornos hipotéticos com volatilidade GARCH(1,1), calcula previsões de VaR normal por EWMA <em>apenas com informação até t−1</em> e testa a frequência e a dependência temporal das exceções.</p>
+    </div>
+    <div class="enh-card">
+      <div class="enh-alert"><strong>Escopo:</strong> exercício de simulação controlada e validação <em>in-sample</em> da especificação sintética. Não é backtesting de uma carteira real, não há estimação econométrica sobre dados de mercado e os valores-p são aproximações assintóticas, particularmente frágeis quando há poucas exceções.</div>
+      <div class="enh-controls">
+        <label>Amostra (dias)<select class="enh-select" id="val-n"><option value="250">250</option><option value="500" selected>500</option><option value="1000">1.000</option></select></label>
+        <label>Confiança do VaR<select class="enh-select" id="val-q"><option value="95">95,0%</option><option value="97.5">97,5%</option><option value="99" selected>99,0%</option></select></label>
+        <label>Persistência EWMA λ <span class="enh-mono" id="val-lbl">0,94</span><input type="range" id="val-lam" min="0.85" max="0.99" step="0.01" value="0.94"></label>
+        <label>Semente pseudoaleatória<input class="enh-number" id="val-seed" type="number" min="1" max="2147483646" step="1" value="2026"></label>
+      </div>
+      <canvas id="val-canvas" class="enh-chart" width="960" height="260" role="img" aria-label="Retornos simulados e limite de perda previsto por VaR ao longo da amostra, com exceções sinalizadas"></canvas>
+      <p class="enh-status">Linha azul: retorno diário sintético · linha âmbar: limite negativo do VaR previsto · pontos vermelhos: violações. Escala em percentual diário.</p>
+      <div class="enh-kpis" id="val-kpis" aria-live="polite">
+        <div><b id="val-ex">—</b><small>Exceções (observadas / esperadas)</small></div>
+        <div id="val-uc"><b>—</b><small>Kupiec · cobertura incondicional</small></div>
+        <div id="val-ind"><b>—</b><small>Christoffersen · independência</small></div>
+        <div id="val-cc"><b>—</b><small>Cobertura condicional conjunta</small></div>
+      </div>
+      <div class="enh-alert" id="val-summary" role="status" aria-live="polite">Aguardando simulação.</div>
+      <div class="enh-actions"><button class="enh-btn primary" id="val-rerun" type="button">Recalcular experiência</button><button class="enh-btn" id="val-download" type="button">Exportar trajetórias e exceções (CSV)</button></div>
+    </div>
+    <div class="enh-split">
+      <article>
+        <h3>1. Cobertura incondicional · Kupiec (1995)</h3>
+        <p>Hipótese nula: a frequência de exceções é igual à probabilidade nominal α = 1 − nível de confiança. A estatística de razão de verossimilhanças compara a frequência observada com a teórica.</p>
+        <div class="enh-formula">LR<sub>uc</sub> = 2[ℓ(p̂) − ℓ(α)] ∼ χ²(1)</div>
+        <p>Não detecta, sozinha, agrupamento temporal: um modelo pode acertar a contagem total e concentrar falhas nos períodos turbulentos.</p>
+      </article>
+      <article>
+        <h3>2. Independência e cobertura condicional · Christoffersen (1998)</h3>
+        <p>Hipótese nula da independência: a probabilidade de exceção não depende de ter ocorrido exceção no dia anterior. Avalia-se uma cadeia de Markov de primeira ordem.</p>
+        <div class="enh-formula">LR<sub>cc</sub> = LR<sub>uc</sub> + LR<sub>ind</sub> ∼ χ²(2)</div>
+        <p>Rejeição a 5% sugere má especificação sob as hipóteses do teste. Não rejeitar <strong>não comprova</strong> a qualidade do modelo; potência e adequação da amostra permanecem relevantes.</p>
+      </article>
+    </div>
+    <div class="srcline"><b>Fundamentos:</b> Kupiec (1995), <i>Journal of Derivatives</i>, 3(2), 73–84; Christoffersen (1998), <i>International Economic Review</i>, 39(4), 841–862. <b>Simulação:</b> GARCH(1,1) gerador, EWMA preditivo, perdas unilaterais, independência de primeira ordem, α em {1%, 2,5%, 5%}. Não se aplicam automaticamente as zonas regulatórias históricas a este laboratório.</div>
+  </div>
+</section>
+
+<section class="mov" id="metodologia">
+  <div class="wrap">
+    <div class="mov-head">
+      <div class="mov-num"><em>Apêndice técnico</em> rastreabilidade e limites</div>
+      <h2>Premissas, parametrização e reprodutibilidade</h2>
+      <p class="lede prose">É preciso distinguir um mecanismo teórico, um gerador sintético de dados e um modelo estimado empiricamente. Os controles dos dez simuladores modificam hipóteses e trajetórias construídas no navegador — não são parâmetros ajustados por máxima verossimilhança, não usam séries históricas observadas e não oferecem testes de significância para cada modelo.</p>
+    </div>
+    <div class="enh-card">
+      <h3>Matriz de especificações dos simuladores</h3>
+      <div class="enh-table-wrap">
+        <table class="enh-table">
+          <thead><tr><th>Simulador</th><th>Mecanismo implementado</th><th>Parâmetros editáveis</th><th>Limitação / identificação</th></tr></thead>
+          <tbody>
+            <tr><td><strong>I · Contágio</strong></td><td>Rede aleatória de 80 nós; cascatas por capital/choque; médias de 25 réplicas por conectividade.</td><td>Grau médio, capital relativo, severidade</td><td>Grafo e calibração estilizados, sem exposições reais; R é proxy de ramificação simulada.</td></tr>
+            <tr><td><strong>II · Liquidez</strong></td><td>Livro de ordens artificial com 26 níveis, impacto mecânico e reversão exponencial.</td><td>Volume, profundidade, meia-vida</td><td>Sem dinâmica de agentes/cancelamentos; custo de saída depende de unidades hipotéticas.</td></tr>
+            <tr><td><strong>III · Memória</strong></td><td>Trajetória fracionária por subdivisão aproximada; H estimado por inclinação log(R/S).</td><td>H, custos, semente de amostra</td><td>Estimador R/S possui vieses de amostra; o caminho gerado não é calibração em retornos reais.</td></tr>
+            <tr><td><strong>IV · DCC e hedge</strong></td><td>Recursão ilustrativa inspirada em DCC; variâncias EWMA e comparação com hedge estático.</td><td>a, b, intensidade de choque</td><td>Coeficientes não são estimados por máxima verossimilhança; não substitui DCC-GARCH ajustado.</td></tr>
+            <tr><td><strong>IV · Opções</strong></td><td>Black–Scholes simplificado (sem juros/dividendos), delta hedge e saltos artificiais.</td><td>Volatilidade implícita, realizada, saltos</td><td>300 trajetórias fixas, fricções e execução limitadas; não é precificação calibrada.</td></tr>
+            <tr><td><strong>V · Curva</strong></td><td>Nelson–Siegel paramétrico e taxa forward analítica; spread hipotético de crédito/liquidez.</td><td>β0, β1, β2, λ, CDS, z-spread</td><td>Sem otimização por preços de títulos, arbitragem ou estrutura de discounting real.</td></tr>
+            <tr><td><strong>VI · LPPL</strong></td><td>Lei de potência log-periódica com ruído gaussiano e data crítica fixada por construção.</td><td>Expoente, frequência, ruído</td><td>Geração sintética, <strong>não</strong> previsão de data de crash ou teste de bolha observada.</td></tr>
+            <tr><td><strong>VI · Agentes</strong></td><td>Processo recursivo estilizado de agentes; caudas empíricas, curtose, ACF e ES.</td><td>Herding, reversão, confiança</td><td>Sem estimação de parâmetros estruturais ou teste de robustez fora da simulação.</td></tr>
+            <tr><td><strong>VII · Detecção</strong></td><td>Poder de teste normal unilateral e função hipotética de incentivo.</td><td>Significância, janela, intenção</td><td>Não representa um classificador de fraude treinado nem taxas reais de detecção.</td></tr>
+            <tr><td><strong>VIII · Backtesting</strong></td><td>Binomial de exceções e LR de Kupiec, com zonas heurísticas dinâmicas.</td><td>Exceções, confiança, VaR médio</td><td>Comparação regulatória <strong>histórica/didática</strong>; proxy de capital não é RWA.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="enh-split">
+      <article><h3>Padronização do experimento</h3><p>As unidades são informadas junto aos controles (%, pontos-base, dias, milhões de R$). Os módulos empregam sementes fixas na fonte; mudar parâmetros preserva a repetibilidade do experimento. O laboratório de validação permite escolher explicitamente a semente e exportar seus resultados linha a linha. A exportação do comparador documenta alterações no vetor de parâmetros.</p></article>
+      <article><h3>Critério de evidência</h3><p>Fórmulas canônicas são acompanhadas de referências; resultados numéricos são realizações dos geradores implementados. Apenas o laboratório de VaR acrescenta testes inferenciais, sob hipótese de observações sintéticas e aproximações assintóticas. Validação acadêmica ou prudencial exigiria dados reais, estimação, diagnósticos de resíduos, testes fora da amostra, robustez e revisão independente.</p></article>
+    </div>
+    <p class="enh-alert"><strong>Versão de referência: novembro/2026.</strong> Este material é educacional, não prestação de consultoria, recomendação de investimento, certificação de modelo ou cálculo oficial do Banco Central. Para implementação prudencial, prevalecem a regulamentação atual, os critérios de elegibilidade e o escopo de aplicação de cada instituição.</p>
   </div>
 </section>
 
@@ -2188,6 +2352,10 @@ footer b{color:var(--fg-2)}
       <li>Nelson, C. R., &amp; Siegel, A. F. (1987). Parsimonious Modeling of Yield Curves. <i>The Journal of Business</i>, 60(4), 473–489. <a href="https://doi.org/10.1086/296409" target="_blank" rel="noopener">doi:10.1086/296409</a></li>
       <li>Sornette, D. (1998). Discrete Scale Invariance and Complex Dimensions. <i>Physics Reports</i>, 297(5), 239–270. <a href="https://doi.org/10.1016/S0370-1573(97)00076-8" target="_blank" rel="noopener">doi:10.1016/S0370-1573(97)00076-8</a></li>
       <li>Basel Committee on Banking Supervision. (1996). <i>Supervisory Framework for the Use of Backtesting in Conjunction with the Internal Models Approach to Market Risk Capital Requirements</i>. Bank for International Settlements.</li>
+
+      <li>Christoffersen, P. F. (1998). Evaluating Interval Forecasts. <i>International Economic Review</i>, 39(4), 841–862. <a href="https://ideas.repec.org/a/ier/iecrev/v39y1998i4p841-62.html" target="_blank" rel="noopener">Referência</a>.</li>
+      <li>Basel Committee on Banking Supervision. <i>Revised market risk framework</i>. <a href="https://www.bis.org/publications/fsi-summary-revised-market-risk-framework-executive-summary" target="_blank" rel="noopener">BIS — FRTB</a>.</li>
+      <li>Banco Central do Brasil. Resolução BCB nº 470, de 30 de abril de 2025, e documentação de implementação do RWAsens. <a href="https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?numero=470&amp;tipo=Resolu%C3%A7%C3%A3o+BCB" target="_blank" rel="noopener">Texto normativo</a>.</li>
     </ul>
   </div>
 </section>
@@ -2201,8 +2369,7 @@ footer b{color:var(--fg-2)}
     obra de referência pertencem aos seus titulares; a imagem de capa é exibida como identificação bibliográfica.
     Todo o conteúdo interpretativo, as simulações e os gráficos desta página são originais.</p>
     <p style="margin-top:22px">Funciona inteiramente no navegador, sem servidor e sem coleta de dados.
-    Os simuladores usam geradores pseudoaleatórios com semente fixa: a mesma configuração produz sempre o mesmo
-    resultado.</p>
+    Os simuladores existentes usam geradores pseudoaleatórios com semente fixa; o laboratório estatístico permite alterar a semente e exportar os dados. A mesma configuração e semente reproduzem o experimento.</p>
   </div>
 </footer>
 
@@ -3442,7 +3609,7 @@ function updateCockpit() {
   else if (perm != null && perm > 8) { p = 'REPRECIFICAR'; col = 'var(--amber)'; msg = 'O impacto permanente de saída é alto o bastante para que o preço de tela não represente o preço realizável. A posição continua viável, mas o retorno exigido precisa incorporar o custo de liquidação — e os limites devem ser expressos em fração do volume, não em valor absoluto.'; }
   else if (he != null && he < .6) { p = 'OBSERVAR'; col = 'var(--amber)'; msg = 'A cobertura elimina menos de sessenta por cento da variância no regime de estresse. A exposição residual é tolerável, mas exige acompanhamento da correlação condicional e revisão da razão de hedge antes de ampliar a posição.'; }
   else { p = 'CRESCER'; col = 'var(--teal)'; msg = 'Sistema subcrítico, custo de saída contido, cobertura efetiva no estresse e modelo aprovado no backtesting. É a única configuração em que ampliar exposição é uma decisão de retorno, e não uma aposta sobre a estabilidade do regime.'; }
-  badge.textContent = p; badge.style.color = col; txt.textContent = msg;
+  badge.textContent = p; badge.style.color = col; txt.textContent = msg; updateComparison();
 }
 
 /* ------------------------------------------------------- hero e capa 3D --- */
@@ -3605,6 +3772,185 @@ addEventListener('load', () => {
     updateCockpit();
   }, 900);
 });
+
+/* =============================================================
+   EXTENSÕES: método por simulador, comparação e VaR backtesting
+   ============================================================= */
+const MODEL_NOTES = {
+  net: ["Rede de contágio com limiar de falha","80 instituições, capital sintético e arestas sorteadas; 25 repetições por ponto do parâmetro de conectividade.","A razão R é obtida por propagação entre gerações na simulação, não por ajuste a uma rede bancária observada.","Risco sistêmico e modelos de cascata; capítulos 1–3 do volume."],
+  liq: ["Livro artificial e impacto de execução","26 níveis com espaçamento de 2 pb, profundidade crescente, componente de impacto permanente de 32% e decaimento exponencial.","Meia-vida e custos são hipóteses de laboratório; nenhuma informação de ordens reais é coletada.","Kyle (1985); capítulos 4–6."],
+  hurst: ["Dependência de longo alcance","Subdivisão de uma trajetória de memória fracionária aproximada e R/S em escalas logarítmicas.","O estimador R/S pode produzir vieses, especialmente em amostra finita, volatilidade variável e mudanças de regime.","Mandelbrot e Van Ness (1968); capítulos 7, 8, 15 e 23."],
+  dcc: ["Recursão tipo DCC e hedge dinâmico","Resíduos bivariados gerados sob choque artificial; volatilidade por EWMA; correlação e hedge recursivos.","Não é estimação DCC por máxima verossimilhança nem avaliação fora da amostra de hedge real.","Bollerslev (1986); Engle (2002); capítulo 9."],
+  opt: ["Opções com delta hedge","Black–Scholes simplificado e 300 trajetórias sintéticas, 60 dias úteis e choques de salto.","Juros, dividendos, fricções, risco de contraparte e execução real são abstraídos.","Black–Scholes (1973); capítulo 10."],
+  curve: ["Estrutura a termo paramétrica","Curva zero por Nelson–Siegel, forward derivado analiticamente e decomposição hipotética de spreads.","Parâmetros são exógenos: não há bootstrap, ajuste a preços, avaliação de arbitragem ou convenções locais.","Nelson e Siegel (1987); capítulos 11, 12 e 22."],
+  lppl: ["Curva log-periódica pré-crítica","Data crítica fixada no gerador, expoente, log-frequência e ruído controlados.","Não há busca numérica de data crítica, intervalo de confiança nem teste de falsos positivos.","Johansen, Ledoit e Sornette (2000); capítulo 18."],
+  abm: ["Agentes e caudas pesadas","Processo de retornos com interação e reversão sintéticas; VaR e ES empíricos.","A identificação de mecanismos não é única; os indicadores são descritivos da amostra simulada.","Capítulos 17 e 21."],
+  det: ["Detecção estatística","Poder aproximado de teste unilateral normal com sinal construído e custos simplificados.","Potência teórica não é sensibilidade de classificador validado em eventos reais.","Capítulos 19 e 20."],
+  basel: ["VaR, zonas históricas e Kupiec","250 observações, binomial, LR de frequência e multiplicador esquemático.","Regras normativas mudam no tempo; limiares móveis fora de 99% e k × VaR não são cálculo regulamentar.","Kupiec (1995); BCBS (1996); FRTB e Resolução BCB 470/2025."]
+};
+Object.entries(MODEL_NOTES).forEach(([key,n])=>{
+  const card=document.getElementById("viz-"+key);
+  if(!card)return;
+  const d=document.createElement("details");d.className="enh-method";
+  const sum=document.createElement("summary");sum.textContent="ⓘ Modelo, hipóteses e limites · "+n[0];
+  d.appendChild(sum);
+  const detail=document.createElement("div");
+  [["Especificação",n[1]],["Limitação",n[2]],["Base conceitual",n[3]]].forEach(row=>{
+    const p=document.createElement("p"),b=document.createElement("b");b.textContent=row[0]+": ";p.appendChild(b);p.appendChild(document.createTextNode(row[1]));detail.appendChild(p);
+  });
+  d.appendChild(detail);card.appendChild(d);
+});
+
+let SCENE_BASE=null;
+const SCENE_METRICS=[
+  ["R","Razão de ramificação","net","R",""],
+  ["L","Impacto permanente","liq","perm"," pb"],
+  ["H","Hedge no estresse","dcc","heD","%"],
+  ["C","Multiplicador histórico","basel","kmul",""]
+];
+function sceneSnapshot(){
+  // Força a apuração dos dez painéis somente após gesto explícito.
+  Object.keys(VIZ).forEach(n=>{if(!STATE[n]||!Object.keys(STATE[n]).length)render(n);});
+  const params={};Object.keys(VIZ).forEach(n=>{params[n]={...VIZ[n].p};});
+  const metrics={};
+  SCENE_METRICS.forEach(m=>{const v=STATE[m[2]]&&STATE[m[2]][m[3]];metrics[m[0]]=Number.isFinite(v)?(m[0]==="H"?v*100:v):null;});
+  return {params,metrics};
+}
+const sceneBody=document.getElementById("scene-body"),sceneStatus=document.getElementById("scene-status");
+function updateComparison(){
+  if(!SCENE_BASE||!sceneBody)return;
+  const curr=sceneSnapshot();
+  let changed=0;
+  Object.keys(curr.params).forEach(n=>Object.keys(curr.params[n]).forEach(k=>{if(curr.params[n][k]!==SCENE_BASE.params[n][k])changed++;}));
+  sceneBody.replaceChildren();
+  SCENE_METRICS.forEach(m=>{
+    const row=document.createElement("tr");const a=SCENE_BASE.metrics[m[0]], b=curr.metrics[m[0]];
+    const cells=[m[1],a==null?"—":U.br(a,2)+m[4],b==null?"—":U.br(b,2)+m[4],a==null||b==null?"—":(b>=a?"+":"")+U.br(b-a,2)+m[4]];
+    cells.forEach(c=>{const td=document.createElement("td");td.textContent=c;row.appendChild(td);});sceneBody.appendChild(row);
+  });
+  sceneStatus.textContent="Cenário-base salvo · "+changed+" parâmetro(s) alterado(s) nos dez modelos.";
+}
+document.getElementById("scene-save")?.addEventListener("click",()=>{
+  SCENE_BASE=sceneSnapshot();updateComparison();
+});
+document.getElementById("scene-restore")?.addEventListener("click",()=>{
+  if(!SCENE_BASE){sceneStatus.textContent="Salve primeiro um cenário-base.";return;}
+  Object.entries(SCENE_BASE.params).forEach(([n,obj])=>Object.entries(obj).forEach(([k,val])=>{
+    VIZ[n].p[k]=val;
+    const inp=document.querySelector('input[data-viz="'+n+'"][data-param="'+k+'"]');
+    if(inp)inp.value=String(val);
+  }));
+  Object.keys(VIZ).forEach(schedule);
+});
+function downloadEnhFile(name,body,kind="text/csv;charset=utf-8"){
+  const blob=new Blob(["\uFEFF",body],{type:kind}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),300);
+}
+function encCsv(value){const x=String(value??"");return '"'+x.replaceAll('"','""')+'"';}
+document.getElementById("scene-csv")?.addEventListener("click",()=>{
+  if(!SCENE_BASE){sceneStatus.textContent="Salve primeiro um cenário-base.";return;}
+  const current=sceneSnapshot(),rows=[["tipo","modelo","variavel","base","atual","delta"]];
+  Object.keys(current.params).forEach(n=>Object.keys(current.params[n]).forEach(k=>{
+    const a=SCENE_BASE.params[n][k],b=current.params[n][k];rows.push(["parametro",n,k,a,b,b-a]);
+  }));
+  SCENE_METRICS.forEach(m=>{
+    const a=SCENE_BASE.metrics[m[0]],b=current.metrics[m[0]];
+    rows.push(["indicador",m[2],m[1],a,b,a==null||b==null?"":b-a]);
+  });
+  downloadEnhFile("market-risk-cenarios.csv",rows.map(r=>r.map(encCsv).join(";")).join("\r\n"));
+  sceneStatus.textContent="Comparação exportada com parâmetros e quatro métricas.";
+});
+
+/* Backtesting inferencial: DGP GARCH(1,1) vs previsão normal EWMA ex ante */
+let VALID_DATA=[];
+function labLogTerm(k,n,p){if(!k)return 0;if(p<=0)return -Infinity;return k*Math.log(p);}
+function labBinLL(x,n,p){return labLogTerm(x,n,p)+labLogTerm(n-x,n,1-p);}
+function labBacktest(hits,alpha){
+  const n=hits.length,x=hits.reduce((s,v)=>s+v,0),ph=x/n;
+  const LRuc=Math.max(0,2*(labBinLL(x,n,ph)-labBinLL(x,n,alpha)));
+  let n00=0,n01=0,n10=0,n11=0;
+  for(let i=1;i<n;i++){
+    const k=hits[i-1]*2+hits[i];if(k===0)n00++;else if(k===1)n01++;else if(k===2)n10++;else n11++;
+  }
+  const p01=(n00+n01)>0?n01/(n00+n01):0;
+  const p11=(n10+n11)>0?n11/(n10+n11):0;
+  const pool=(n01+n11)/(n-1);
+  const nullLL=labBinLL(n01+n11,n-1,pool);
+  const altLL=labBinLL(n01,n00+n01,p01)+labBinLL(n11,n10+n11,p11);
+  const LRind=Math.max(0,2*(altLL-nullLL)),LRcc=LRuc+LRind;
+  return {n,x,LRuc,LRind,LRcc,puc:2*(1-U.Phi(Math.sqrt(LRuc))),pind:2*(1-U.Phi(Math.sqrt(LRind))),pcc:Math.exp(-LRcc/2),transitions:[n00,n01,n10,n11]};
+}
+function runValidation(){
+  const n=Number(document.getElementById("val-n").value),
+        confidence=Number(document.getElementById("val-q").value),
+        alpha=1-confidence/100,
+        lambda=Number(document.getElementById("val-lam").value),
+        seedInput=document.getElementById("val-seed"),
+        seed=Math.max(1,Math.min(2147483646,Math.trunc(Number(seedInput.value)||2026)));
+  seedInput.value=seed;document.getElementById("val-lbl").textContent=U.br(lambda,2);
+  const rnd=U.mulberry32(seed),z=U.Phinv(1-alpha);
+  const initVariance=0.012*0.012,omega=initVariance*(1-0.08-0.90);
+  let conditionalVar=initVariance,forecastVar=initVariance;
+  VALID_DATA=[];const exceptions=[];
+  for(let i=0;i<n;i++){
+    const sigma=Math.sqrt(forecastVar),ret=Math.sqrt(conditionalVar)*U.gauss(rnd),forecast=z*sigma;
+    const hit=ret < -forecast?1:0;
+    VALID_DATA.push({day:i+1,return_pct:ret*100,var_pct:forecast*100,ewma_sigma_pct:sigma*100,exception:hit});
+    exceptions.push(hit);
+    conditionalVar=omega+0.08*ret*ret+0.90*conditionalVar;
+    forecastVar=lambda*forecastVar+(1-lambda)*ret*ret;
+  }
+  const r=labBacktest(exceptions,alpha),sparse=r.x<5;
+  document.getElementById("val-ex").textContent=String(r.x)+" / "+U.br(n*alpha,1);
+  const vals=[["val-uc",r.LRuc,r.puc,false],["val-ind",r.LRind,r.pind,sparse],["val-cc",r.LRcc,r.pcc,sparse]];
+  vals.forEach(([id,stat,pv,weak])=>{
+    const el=document.getElementById(id);
+    el.querySelector("b").textContent="LR "+U.br(stat,2)+" · p "+(pv<0.001?"<0,001":U.br(pv,3));
+    el.dataset.state=weak?"weak":pv<0.05?"reject":"ok";
+  });
+  const conclusion=r.puc<0.05?"Kupiec rejeita a cobertura nominal de exceções a 5%.":"Kupiec não rejeita a cobertura nominal a 5%.";
+  const indep=sparse?"Há menos de cinco exceções: os testes de independência e cobertura conjunta possuem baixa informação e sua aproximação assintótica não é confiável.":r.pind<0.05?"O teste de independência rejeita a hipótese de ausência de agrupamento de violações.":"A hipótese de independência das violações não foi rejeitada a 5%.";
+  document.getElementById("val-summary").textContent=conclusion+" "+indep+" Nenhuma não rejeição prova adequação empírica: são dados simulados, não perdas reais.";
+  drawValidation();
+}
+function drawValidation(){
+  const cv=document.getElementById("val-canvas");
+  if(!cv||!VALID_DATA.length)return;
+  const w=Math.max(320,cv.clientWidth||820),h=260,dpr=Math.min(window.devicePixelRatio||1,2);
+  cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);
+  const ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
+  const left=44,right=w-18,top=18,bottom=h-39;
+  const maxAbs=Math.max(2,...VALID_DATA.map(o=>Math.max(Math.abs(o.return_pct),o.var_pct)))*1.10;
+  const x=i=>left+(i/Math.max(VALID_DATA.length-1,1))*(right-left);
+  const y=v=>top+(maxAbs-v)/(2*maxAbs)*(bottom-top);
+  ctx.clearRect(0,0,w,h);ctx.fillStyle="#1A1814";ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle="#342F27";ctx.lineWidth=1;ctx.font='10px "IBM Plex Mono", monospace';
+  ctx.textAlign="right";ctx.fillStyle="#B7AD9C";
+  for(let t=-2;t<=2;t++){
+    const val=t*maxAbs/2,yy=y(val);ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(right,yy);ctx.stroke();ctx.fillText(U.br(val,1)+"%",left-5,yy+3);
+  }
+  ctx.textAlign="center";ctx.fillStyle="#B7AD9C";
+  for(let k=0;k<=4;k++){const i=Math.round((VALID_DATA.length-1)*k/4);ctx.fillText(String(i+1),x(i),h-16);}
+  ctx.save();ctx.beginPath();ctx.rect(left,top,right-left,bottom-top);ctx.clip();
+  ctx.strokeStyle="#47A0A6";ctx.lineWidth=1.0;ctx.beginPath();
+  VALID_DATA.forEach((o,i)=>{if(i===0)ctx.moveTo(x(i),y(o.return_pct));else ctx.lineTo(x(i),y(o.return_pct));});
+  ctx.stroke();ctx.strokeStyle="#E3A231";ctx.lineWidth=1.3;ctx.beginPath();
+  VALID_DATA.forEach((o,i)=>{if(i===0)ctx.moveTo(x(i),y(-o.var_pct));else ctx.lineTo(x(i),y(-o.var_pct));});
+  ctx.stroke();ctx.fillStyle="#C7402F";
+  VALID_DATA.forEach((o,i)=>{if(o.exception){ctx.beginPath();ctx.arc(x(i),y(o.return_pct),2.8,0,Math.PI*2);ctx.fill();}});
+  ctx.restore();
+}
+document.querySelectorAll("#val-n,#val-q,#val-lam,#val-seed").forEach(el=>el.addEventListener("change",runValidation));
+document.getElementById("val-rerun")?.addEventListener("click",runValidation);
+document.getElementById("val-download")?.addEventListener("click",()=>{
+  if(!VALID_DATA.length)runValidation();
+  const cols=["dia","retorno_percentual","VaR_previsto_percentual","volatilidade_EWMA_percentual","excecao"];
+  const rows=VALID_DATA.map(o=>[o.day,o.return_pct,o.var_pct,o.ewma_sigma_pct,o.exception]);
+  downloadEnhFile("market-risk-validacao-sintetica.csv",[cols.join(";"),...rows.map(r=>r.join(";"))].join("\r\n"));
+});
+runValidation();
+addEventListener("resize",()=>{if(VALID_DATA.length)drawValidation();},{passive:true});
+
 </script>
 </body>
 </html>
