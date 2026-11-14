@@ -4,14 +4,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Macroeconomia — Olivier Blanchard · 9ª edição | Atlas Técnico Interativo</title>
+<title>Macroeconomia · Olivier Blanchard | Revista Interativa de Estudo</title>
 <meta name="description" content="Atlas técnico interativo dos 24 capítulos de Macroeconomia, de Olivier Blanchard, 9ª edição: modelos conectados, fórmulas, laboratórios, gráficos e aplicações.">
 <meta name="author" content="Gabriel Groehs">
-<meta name="theme-color" content="#075b83">
-<meta property="og:title" content="Macroeconomia — Atlas Técnico Interativo">
+<meta name="theme-color" content="#f7f5f0">
+<meta property="og:title" content="Macroeconomia · Uma revista interativa de estudo">
 <meta property="og:description" content="24 capítulos, modelos conectados, laboratórios e fórmulas do Blanchard em uma experiência técnica interativa.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://dl4326nmjp5rc.cloudfront.net/Custom/Content/Products/10/53/1053276_macroeconomia-9ed9788582607077_z1_638996077474793109.webp">
+<meta property="og:image" content="https://gabriel-groehs.github.io/assets/macroeconomia/blanchard-5ed.jpg">
 <style>
 :root{
   --paper:#f4f1e9;--paper2:#ece7db;--surface:#fffdf8;--surface2:#f7f4ed;
@@ -63,59 +63,70 @@ main{min-width:0;padding:2.3rem 0 7rem}section{scroll-margin-top:80px;margin:0 0
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.book-wrap{transform:none!important}}
 @media print{.topnav,.rail,#progress,.chapter-tools,.lab-controls,.lab-head button,.codebox,.hero-pulse{display:none!important}.shell{display:block;max-width:none}.hero,.lab,.graph-card,.concept-grid,.formula-row{break-inside:avoid;box-shadow:none}.chapter{break-before:page}body{background:white;color:black}.hero{min-height:0}.book-wrap{transform:none}}
 </style>
+<link rel="stylesheet" href="assets/macroeconomia/reader.css">
+<link rel="canonical" href="https://gabriel-groehs.github.io/macroeconomia_blanchard.html">
 </head>
 <body>
 <div id="progress"></div>
 <a class="skip" href="#conteudo">Ir para o conteúdo</a>
 <header class="topnav">
   <div class="topnav-in">
-    <div class="brand">Macroeconomia <span>· Blanchard 9e</span></div>
-    <nav class="navlinks" aria-label="Navegação principal">
-      <a href="#mapa">24 capítulos</a><a href="#arquitetura">Arquitetura</a><a href="#macro-lab">Macro Lab</a><a href="#referencias">Referências</a>
-    </nav>
-    <button class="ui-btn" id="focusBtn" type="button">Foco</button>
-    <button class="ui-btn" id="themeBtn" type="button">Tema</button>
+    <button class="ui-btn icon-btn toc-toggle" id="tocBtn" type="button" aria-controls="rail" aria-expanded="false" aria-label="Abrir sumário"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <a class="brand" href="#topo" aria-label="Macroeconomia — início"><span class="brand-mark" aria-hidden="true">M</span><span><strong>Macroeconomia</strong><small>Uma revista de estudo</small></span></a>
+    <nav class="navlinks" aria-label="Navegação principal"><a href="biblioteca.html">Biblioteca</a><a href="#manifesto">A revista</a><a href="#mapa">Capítulos</a><a href="#macro-lab">Laboratório</a></nav>
+    <div class="top-actions">
+      <button class="ui-btn icon-btn text-size-control" id="textSizeBtn" type="button" aria-label="Alterar tamanho do texto">A<span class="sr-only">umentar texto</span>+</button>
+      <button class="ui-btn icon-btn" id="focusBtn" type="button" aria-label="Entrar no modo foco" aria-pressed="false" title="Modo foco"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+      <button class="ui-btn icon-btn" id="themeBtn" type="button" aria-label="Ativar tema escuro" aria-pressed="false" title="Alterar tema"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></button>
+    </div>
   </div>
 </header>
+<button class="toc-backdrop" id="tocBackdrop" type="button" tabindex="-1" aria-label="Fechar sumário"></button>
 <div class="shell">
 <aside class="rail" id="rail" aria-label="Sumário lateral"></aside>
 <main id="conteudo">
-<section class="hero" id="topo">
+<noscript><p class="noscript-note">Ative o JavaScript para explorar os 24 capítulos, as fórmulas e os laboratórios interativos. As referências e a apresentação permanecem disponíveis abaixo.</p></noscript>
+<section class="hero" id="topo" aria-labelledby="bookTitle">
+  <div class="hero-topline"><span><b>Biblioteca interativa</b> / Economia</span><span>Conceitos. Conexões. Experimentos.</span></div>
   <div class="hero-grid">
-    <div>
-      <div class="kicker">Interactive Technical Book · 9ª edição</div>
-      <h1>Macro<em>economia</em></h1>
-      <p class="subtitle">Da demanda agregada à política econômica: uma arquitetura navegável dos 24 capítulos de Olivier Blanchard.</p>
-      <p class="signature">Atlas idealizado e revisado por Gabriel Groehs · síntese autoral para estudo técnico</p>
-      <div class="hero-stats">
-        <div><b>24</b><span>capítulos aprofundados</span></div>
-        <div><b>24</b><span>laboratórios interativos</span></div>
-        <div><b>7</b><span>movimentos conceituais</span></div>
-        <div><b>1</b><span>motor macro integrado</span></div>
-      </div>
+    <div class="hero-copy">
+      <div class="kicker">Olivier Blanchard · edição de estudo</div>
+      <h1 id="bookTitle">Macro<em>economia<span class="period">.</span></em></h1>
+      <p class="subtitle">Uma economia inteira.<br>Um capítulo de cada vez.</p>
+      <p class="muted" style="font-size:13px;max-width:42ch">Da primeira ideia aos modelos conectados. Explore os mecanismos, investigue as fórmulas e experimente a economia em movimento.</p>
+      <div class="hero-actions"><a class="primary-link" id="continueReading" href="#cap-1"><span id="continueLabel">Começar a leitura</span><span aria-hidden="true">↗</span></a><a class="secondary-link" href="#mapa">Explorar capítulos <span aria-hidden="true">↓</span></a></div>
+      <p class="resume-note" id="resumeNote">Escolha um capítulo ou comece pela primeira página.</p>
+      <p class="signature">Uma síntese autoral e interativa por <b>Gabriel Groehs</b>.<br>Roteiro organizado a partir da 9ª edição da obra.</p>
     </div>
-    <div class="book-stage" aria-label="Capa da nona edição de Macroeconomia em perspectiva 3D">
-      <div class="book-wrap"><div class="book-shadow"></div><div class="book">
-        <div class="book-spine"></div><div class="book-pages"></div>
-        <div class="book-front">
-          <div class="cover-fallback"><div><small>9ª EDIÇÃO</small><h3>Macroeconomia</h3></div><div class="globe"></div><div class="author">Olivier Blanchard</div></div>
-          <img src="https://dl4326nmjp5rc.cloudfront.net/Custom/Content/Products/10/53/1053276_macroeconomia-9ed9788582607077_z1_638996077474793109.webp" alt="Capa de Macroeconomia, 9ª edição, de Olivier Blanchard" onload="this.previousElementSibling.style.display='none'" onerror="this.style.display='none'">
-        </div>
-      </div></div>
+    <div class="book-column">
+      <div class="book-stage" aria-label="Livro em perspectiva 3D com a capa da quinta edição">
+        <a class="book-wrap" href="#cap-1" aria-label="Abrir o primeiro capítulo de Macroeconomia">
+          <div class="book-shadow"></div><div class="book"><div class="book-back"></div>
+            <div class="book-spine" aria-hidden="true">OLIVIER BLANCHARD · MACROECONOMIA</div><div class="book-pages"></div>
+            <div class="book-front">
+              <div class="cover-fallback" aria-hidden="true"><div><small>5ª EDIÇÃO</small><h3>Macroeconomia</h3></div><div class="globe"></div><div class="author">Olivier Blanchard</div></div>
+              <img src="assets/macroeconomia/blanchard-5ed.jpg" width="600" height="800" fetchpriority="high" alt="Capa de Macroeconomia, de Olivier Blanchard, 5ª edição, Pearson: três globos lilases em fundo branco" onload="this.previousElementSibling.style.display='none'" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </a>
+      </div>
+      <button class="book-turn" id="bookTurnBtn" type="button" aria-pressed="false">Ver capa de frente ↗</button>
+      <p class="book-caption">Capa ilustrada: 5ª edição · Pearson.<br>O roteiro desta revista acompanha a 9ª edição.</p>
     </div>
   </div>
-  <div class="hero-pulse"><canvas id="heroPulse" aria-hidden="true"></canvas></div>
+  <div class="hero-stats" aria-label="Conteúdo da revista"><div><b>24</b><span>capítulos para explorar</span></div><div><b>24</b><span>laboratórios interativos</span></div><div><b>07</b><span>partes conectadas</span></div><div><b>01</b><span>economia em movimento</span></div></div>
 </section>
 
 <section id="manifesto">
-  <div class="section-head"><div><div class="kicker">Como ler este atlas</div><h2>O livro como sistema, não como sumário.</h2></div><div class="aside">Cada capítulo tem pergunta central, mecanismo, equação, laboratório, código e conexão com os demais. Os modelos são tratados como camadas de uma mesma economia.</div></div>
+  <div class="section-head"><div><div class="kicker">Como ler este atlas</div><h2>As ideias fazem mais sentido juntas.</h2></div><div class="aside">Cada capítulo tem pergunta central, mecanismo, equação, laboratório, código e conexão com os demais. Os modelos são tratados como camadas de uma mesma economia.</div></div>
   <p class="lede">A força pedagógica de Blanchard está na costura entre horizontes. No curto prazo, demanda e condições financeiras movem o produto; no médio, salários, preços e inflação fecham o sistema; no longo, acumulação e tecnologia dominam. Expectativas e abertura atravessam todos esses blocos, e a política econômica precisa agir sabendo que cada instrumento altera vários mercados ao mesmo tempo.</p>
   <div class="parts" id="parts"></div>
 </section>
 
 <section id="mapa">
-  <div class="section-head"><div><div class="kicker">Mapa da obra</div><h2>24 capítulos, com o mesmo padrão editorial.</h2></div><div class="aside">A versão anterior diferenciava capítulos “pilares”, “estruturais” e “contextuais”. Aqui todos ganham uma camada técnica completa; a diferença passa a ser o tipo de mecanismo, não a profundidade.</div></div>
-  <div class="chapter-tools"><input id="chapterSearch" type="search" placeholder="Buscar capítulo, conceito, modelo ou aplicação…" aria-label="Buscar capítulos"><button class="active" data-filter="all">Todos</button><button data-filter="curto">Curto prazo</button><button data-filter="medio">Médio prazo</button><button data-filter="longo">Longo prazo</button><button data-filter="expectativas">Expectativas</button><button data-filter="aberta">Economia aberta</button><button data-filter="politica">Política</button></div>
+  <div class="section-head"><div><div class="kicker">Mapa da obra</div><h2>Encontre sua próxima descoberta.</h2></div><div class="aside">Siga a sequência da obra ou entre pelo conceito que desperta sua curiosidade. Cada capítulo reúne uma pergunta, os mecanismos, uma fórmula e um laboratório.</div></div>
+  <div class="chapter-tools"><input id="chapterSearch" type="search" placeholder="Buscar capítulo, conceito, modelo ou aplicação…" aria-label="Buscar capítulos"><button class="active" type="button" data-filter="all" aria-pressed="true">Todos</button><button type="button" data-filter="intro" aria-pressed="false">Introdução</button><button data-filter="curto">Curto prazo</button><button data-filter="medio">Médio prazo</button><button data-filter="longo">Longo prazo</button><button data-filter="expectativas">Expectativas</button><button data-filter="aberta">Economia aberta</button><button data-filter="politica">Política</button></div>
+  <div class="search-meta"><span id="mapResults" role="status" aria-live="polite">24 de 24 capítulos</span><button type="button" class="search-reset" id="resetSearch" data-reset-search hidden>Limpar filtros</button></div>
   <div class="chapter-map" id="chapterMap"></div>
 </section>
 
@@ -139,7 +150,7 @@ main{min-width:0;padding:2.3rem 0 7rem}section{scroll-margin-top:80px;margin:0 0
 </section>
 
 <section id="macro-lab">
-  <div class="section-head"><div><div class="kicker">Macro State Engine</div><h2>Um choque. Vários mercados. Uma economia.</h2></div><div class="aside">Motor didático reduzido para conectar os mecanismos do livro. Não é um DSGE estimado nem uma ferramenta de previsão: serve para visualizar sinais, encadeamentos e trade-offs.</div></div>
+  <div class="section-head"><div><div class="kicker">Laboratório macroeconômico</div><h2>Um choque. Vários mercados. Uma economia.</h2></div><div class="aside">Motor didático reduzido para conectar os mecanismos do livro. Não é um DSGE estimado nem uma ferramenta de previsão: serve para visualizar sinais, encadeamentos e trade-offs.</div></div>
   <div class="cockpit">
     <div class="cock-controls">
       <h3>Cenário</h3><p class="muted" style="font-size:.78rem">Mude os choques e observe o sistema responder simultaneamente.</p>
@@ -157,19 +168,26 @@ main{min-width:0;padding:2.3rem 0 7rem}section{scroll-margin-top:80px;margin:0 0
 <div id="chapters"></div>
 
 <section id="referencias">
-  <div class="section-head"><div><div class="kicker">Referências e escopo</div><h2>Leitura técnica, não reprodução.</h2></div><div class="aside">Os textos deste atlas são sínteses originais. Fórmulas e modelos são apresentados como conhecimento técnico padrão da disciplina e organizados segundo a arquitetura da 9ª edição.</div></div>
+  <div class="section-head"><div><div class="kicker">Referências e escopo</div><h2>Para continuar a investigação.</h2></div><div class="aside">Os textos deste atlas são sínteses originais. Fórmulas e modelos são apresentados como conhecimento técnico padrão da disciplina e organizados segundo a arquitetura da 9ª edição.</div></div>
   <div class="references">
-    <div class="refcard"><h3>Obra-base</h3><p><b>BLANCHARD, Olivier.</b> <i>Macroeconomics</i>. 9th ed. Pearson, 2025. A edição brasileira de <i>Macroeconomia</i>, 9ª ed., é publicada pela Bookman/Grupo A.</p><p><a href="https://www.pearson.com/en-us/subject-catalog/p/macroeconomics/P200000010516" target="_blank" rel="noopener">Página oficial Pearson</a> · <a href="https://loja.grupoa.com.br/macroeconomia-9ed-9788582607077-p1053276" target="_blank" rel="noopener">Edição brasileira</a></p></div>
+    <div class="refcard"><h3>Obra-base e capa</h3><p>A capa ilustrada nesta revista é a de <i>Macroeconomia</i>, 5ª edição, de Olivier Blanchard, Pearson, conforme a referência visual escolhida. A organização dos 24 capítulos e os textos de estudo seguem a arquitetura da 9ª edição.</p><p><b>BLANCHARD, Olivier.</b> <i>Macroeconomics</i>. 9th ed. Pearson, 2025. A edição brasileira de <i>Macroeconomia</i>, 9ª ed., é publicada pela Bookman/Grupo A.</p><p><a href="https://www.pearson.com/en-us/subject-catalog/p/macroeconomics/P200000010516" target="_blank" rel="noopener">Página oficial Pearson</a> · <a href="https://loja.grupoa.com.br/macroeconomia-9ed-9788582607077-p1053276" target="_blank" rel="noopener">Edição brasileira</a></p></div>
     <div class="refcard"><h3>Princípios do atlas</h3><ul><li>Separar identidade contábil, mecanismo teórico e evidência empírica.</li><li>Explicitar horizontes: curto, médio e longo prazo.</li><li>Tratar expectativas e regime de política como parte do modelo.</li><li>Não confundir laboratório pedagógico com estimação econométrica.</li><li>Conectar macroeconomia a finanças e risco sem atribuir essas extensões ao autor quando forem editoriais.</li></ul></div>
     <div class="refcard"><h3>Complementos úteis</h3><ul><li>Romer — <i>Advanced Macroeconomics</i>.</li><li>Galí — <i>Monetary Policy, Inflation, and the Business Cycle</i>.</li><li>Hamilton — <i>Time Series Analysis</i>.</li><li>Jordà — Local Projections para análise dinâmica empírica.</li></ul></div>
     <div class="refcard"><h3>Nota metodológica</h3><p>Os gráficos utilizam parâmetros ilustrativos e são determinísticos, salvo indicação em contrário. Não representam calibração oficial do livro, nem projeções para Brasil ou qualquer economia específica.</p></div>
   </div>
 </section>
-<footer class="footer"><span>Macroeconomia · Atlas Técnico Interativo · Gabriel Groehs</span><span>HTML único · sem bibliotecas JavaScript externas · responsivo · impressão preparada</span></footer>
+<footer class="footer"><span>Macroeconomia · Revista interativa de estudo<br>Curadoria e síntese autoral: Gabriel Groehs</span><span>Explore. Conecte. Experimente.<br><button type="button" class="back-top" id="backTop">Voltar à abertura ↑</button></span></footer>
 </main>
 </div>
+<nav class="reader-dock" id="readerDock" aria-label="Navegação entre capítulos" hidden>
+  <a class="dock-arrow" id="dockPrev" href="#mapa" aria-label="Voltar ao mapa de capítulos">←</a>
+  <div class="dock-info"><span id="dockPart">Introdução · 01 / 24</span><strong id="dockTitle">Uma viagem pelo mundo</strong></div>
+  <button class="dock-type text-size-control" type="button" aria-label="Alterar tamanho do texto">A+</button>
+  <button class="read-toggle dock-read" id="dockRead" type="button" data-read="1" aria-pressed="false">Marcar como lido</button>
+  <a class="dock-arrow" id="dockNext" href="#cap-2" aria-label="Próximo capítulo">→</a>
+</nav>
 <dialog class="formula-dialog" id="formulaDialog"><div class="dlg-head"><div><div class="kicker">Inspetor de fórmula</div><h3 id="dlgTitle">Fórmula</h3></div><button class="ui-btn" id="dlgClose" type="button">Fechar</button></div><div class="dlg-body"><div class="bigformula" id="dlgFormula"></div><p id="dlgExplain" class="muted"></p><table id="dlgSymbols"></table></div></dialog>
-<div class="toast" id="toast">Gráfico exportado</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 'use strict';
 const PARTS=[
@@ -429,5 +447,6 @@ function selfTests(){
 
 renderParts();renderRail();renderMap();renderChapters();renderMacroControls();setupFormulaDialog();setupInteractions();updateMacro();drawHeroPulse();selfTests();updateRailActive();
 </script>
+<script src="assets/macroeconomia/reader.js"></script>
 </body>
 </html>
