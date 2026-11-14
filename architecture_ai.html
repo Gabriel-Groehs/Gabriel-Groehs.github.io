@@ -412,9 +412,9 @@ function tex(src,display){
   if(window.katex){try{return katex.renderToString(src,{displayMode:!!display,throwOnError:false,strict:'ignore'});}catch(e){}}
   return display?`<pre class="ddTexFallback">${esc(src)}</pre>`:`<code>${esc(src)}</code>`;
 }
-function rich(s){const math=[];let t=String(s||'').replace(/\$([^$]+)\$/g,(m,x)=>{math.push(x);return ''+(math.length-1)+'';});
+function rich(s){const math=[];let t=String(s||'').replace(/\$([^$]+)\$/g,(m,x)=>{math.push(x);return '\uE000'+(math.length-1)+'\uE000';});
   t=t.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/(^|[\s(>"“])\*([^*\s][^*]*?)\*(?=[\s.,;:)!?<"”]|$)/g,'$1<i>$2</i>');
-  return t.replace(/(\d+)/g,(m,i)=>tex(math[+i],false));}
+  return t.replace(/\uE000(\d+)\uE000/g,(m,i)=>tex(math[+i],false));}
 DD.tex=tex;DD.rich=rich;
 
 function S(tag,attrs,parent,text){const n=document.createElementNS(NS,tag);if(attrs)for(const k in attrs){if(attrs[k]!=null)n.setAttribute(k,attrs[k]);}if(text!=null)n.textContent=text;if(parent)parent.appendChild(n);return n;}
