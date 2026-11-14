@@ -2360,4 +2360,10 @@ document.getElementById('guideStart').onclick=()=>{
 };
 window.addEventListener('resize',()=>{if(fitLocked){clearTimeout(window.__fitTimer);window.__fitTimer=setTimeout(()=>fitToContent(false),90);}});
 renderMenu(); const hashParts=decodeURIComponent(location.hash.slice(1)).split('/'); const hashArch=ARCHS.find(a=>a.id===hashParts[0]); const firstArch=hashArch||orderedArchs()[0]; setMenuActive(firstArch.id); loadArch(firstArch.id); if(hashArch){if(hashParts[1]&&window.DD)setTimeout(()=>DD.openNode(hashParts[1]),150);} else setTimeout(startOnboarding,700);
-</script></body></html>
+</script>
+<script>
+document.addEventListener('contextmenu', function (event) {
+  event.preventDefault();
+});
+</script>
+</body></html>
