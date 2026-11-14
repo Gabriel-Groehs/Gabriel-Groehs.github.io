@@ -6,6 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bank Valuation &amp; Value-Based Management — Atlas Técnico Interativo</title>
 <meta name="description" content="Atlas técnico interativo sobre avaliação de bancos, fund transfer pricing, precificação de depósitos e empréstimos, provisões e gestão de riscos. Síntese original com simulações, idealizada e revisada por Gabriel Groehs.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bank Valuation &amp; Value-Based Management — Jean Dermine">
+<meta property="og:description" content="Atlas técnico interativo sobre avaliação de bancos, precificação, FTP, desempenho e gestão de riscos. Curadoria de Gabriel Groehs.">
+<meta property="og:url" content="https://gabriel-groehs.github.io/bank_valuation.html">
+<meta property="og:image" content="https://gabriel-groehs.github.io/assets/bank-valuation/bank-valuation-jean-dermine.jpg">
+<meta property="og:image:width" content="738">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:alt" content="Capa original de Bank Valuation &amp; Value-Based Management, de Jean Dermine, edição brasileira da Évora">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -102,20 +110,77 @@ hr.rule{border:0;border-top:1px solid var(--rule-strong);margin:44px 0 0}
 .stats b{display:block;font-family:var(--mono);font-size:20px;font-weight:600;color:var(--ink)}
 .stats span{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.02em}
 
-/* livro 3d */
-.bookstage{perspective:1400px;display:flex;justify-content:center;padding:10px 0}
-.book{width:min(280px,72vw);aspect-ratio:.7;position:relative;transform-style:preserve-3d;transform:rotateY(-19deg) rotateX(5deg);transition:transform .5s cubic-bezier(.2,.7,.3,1)}
-.face{position:absolute;inset:0;backface-visibility:hidden}
-.cover{background:linear-gradient(155deg,#20205A 0%,#161640 55%,#101030 100%);border-radius:2px 4px 4px 2px;
-  box-shadow:0 22px 40px -18px rgba(16,16,48,.75), inset 0 0 0 1px rgba(200,164,69,.35);
-  padding:30px 22px;display:flex;flex-direction:column;justify-content:space-between;color:#F0E5CB}
-.cover .t{font-size:clamp(21px,4.4vw,29px);line-height:1.02;letter-spacing:-.02em;font-weight:600}
-.cover .t b{display:block;color:var(--bronze-hi);font-weight:600}
-.cover .s{font-family:var(--mono);font-size:9.6px;line-height:1.65;color:rgba(240,229,203,.72);letter-spacing:.02em}
-.cover .foil{height:1px;background:linear-gradient(90deg,var(--bronze-hi),rgba(200,164,69,0));margin:12px 0}
-.spine{position:absolute;left:-15px;top:0;bottom:0;width:15px;background:linear-gradient(#0E0E2C,#1A1A48);transform:rotateY(90deg);transform-origin:right center;border-radius:2px 0 0 2px}
-.pages{position:absolute;right:-9px;top:5px;bottom:5px;width:9px;background:repeating-linear-gradient(to right,#EFE6D2,#EFE6D2 1px,#D8CBAF 1px,#D8CBAF 2px);transform:rotateY(-90deg);transform-origin:left center}
-.bookmeta{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-top:22px;line-height:1.7}
+/* livro 3d com a capa original da edição brasileira */
+.bookstage {
+  perspective: 1400px;
+  display: flex;
+  justify-content: center;
+  padding: 20px 24px 28px;
+}
+.book {
+  width: min(280px, 72vw);
+  aspect-ratio: 738 / 1024;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-19deg) rotateX(5deg);
+  transition: transform .5s cubic-bezier(.2, .7, .3, 1);
+}
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+.cover {
+  background: #dec680;
+  border-radius: 2px 4px 4px 2px;
+  transform: translateZ(16px);
+  box-shadow: 15px 24px 36px -14px rgba(24, 24, 69, .45);
+  overflow: hidden;
+}
+.cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, .12), transparent 2%, rgba(255, 255, 255, .18) 3%, transparent 5%);
+  pointer-events: none;
+}
+.spine {
+  position: absolute;
+  left: -32px;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  background: linear-gradient(90deg, #bba45e, #dec680 70%, #c7b06e);
+  transform: translateZ(16px) rotateY(-90deg);
+  transform-origin: right center;
+  backface-visibility: hidden;
+  border-radius: 2px 0 0 2px;
+}
+.pages {
+  position: absolute;
+  right: -32px;
+  top: 5px;
+  bottom: 5px;
+  width: 32px;
+  background: repeating-linear-gradient(to right, #f7f1df 0 1px, #d7ccb1 1px 2px);
+  transform: translateZ(16px) rotateY(90deg);
+  transform-origin: left center;
+  backface-visibility: hidden;
+}
+.bookmeta {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin-top: 14px;
+  line-height: 1.7;
+}
 
 /* ---------- figuras / painéis ---------- */
 .fig{background:var(--paper-hi);border:1px solid var(--rule-strong);border-radius:3px;margin:30px 0;overflow:hidden;box-shadow:var(--shadow)}
@@ -441,21 +506,16 @@ canvas.grab:active{cursor:grabbing}
       <div class="bookstage">
         <div class="book" id="book">
           <div class="face cover">
-            <div>
-              <div class="s">Jean Dermine · INSEAD</div>
-              <div class="foil"></div>
-            </div>
-            <div class="t">Bank Valuation<b>&amp; Value-Based Management</b></div>
-            <div>
-              <div class="foil"></div>
-              <div class="s">Precificação de depósitos e de empréstimos,<br>avaliação de desempenho e gerenciamento de riscos</div>
-            </div>
+            <!-- Capa original disponibilizada pela Editora Évora: https://www.editoraevora.com.br/bank-valuation-value-based-management -->
+            <img src="assets/bank-valuation/bank-valuation-jean-dermine.jpg"
+                 width="738" height="1024" fetchpriority="high"
+                 alt="Capa original de Bank Valuation &amp; Value-Based Management, de Jean Dermine, edição brasileira da Évora com PwC e Planning">
           </div>
-          <div class="spine"></div>
-          <div class="pages"></div>
+          <div class="spine" aria-hidden="true"></div>
+          <div class="pages" aria-hidden="true"></div>
         </div>
       </div>
-      <p class="bookmeta">Representação editorial do volume.<br>Mova o ponteiro sobre a capa.</p>
+      <p class="bookmeta">Capa original da edição brasileira.<br>Évora · PwC · Planning</p>
     </div>
   </div>
 </header>
@@ -1528,7 +1588,7 @@ canvas.grab:active{cursor:grabbing}
   <div class="col">
     <span class="kicker">Créditos e método</span>
     <h2>Sobre esta obra digital</h2>
-    <p>Este é um companion técnico independente. O conteúdo aqui apresentado é síntese original em português: explicações, exemplos numéricos, gráficos, simulações e interpretações foram produzidos para este projeto. Não há reprodução de trechos, tabelas ou figuras do livro original. As seções de leitura referenciada indicam os capítulos de onde as ideias discutidas derivam, para que o leitor possa recorrer à fonte primária.</p>
+    <p>Este é um companion técnico independente. O conteúdo aqui apresentado é síntese original em português: explicações, exemplos numéricos, gráficos, simulações e interpretações foram produzidos para este projeto. A capa apresentada é a da edição brasileira da obra, disponibilizada pela <a href="https://www.editoraevora.com.br/bank-valuation-value-based-management" target="_blank" rel="noopener">Editora Évora</a>. As seções de leitura referenciada indicam os capítulos de onde as ideias discutidas derivam, para que o leitor possa recorrer à fonte primária.</p>
     <p>As simulações usam parâmetros ilustrativos e modelos deliberadamente simplificados — fator único para risco de crédito, choques paralelos para risco de taxa, distribuições paramétricas para risco de mercado. São suficientes para revelar o mecanismo econômico, e insuficientes para uso regulatório ou decisório sem calibração própria.</p>
 
     <h4>Referências</h4>
