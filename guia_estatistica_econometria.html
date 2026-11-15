@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Guia de Modelagem Estatística e Econometria — Visão Riscos Financeiros | Gabriel Groehs</title>
+<title>Guia de Modelagem Estatística e Econometria — Baseado no Bacharelado em Estatística | Gabriel Groehs</title>
 <meta name="description" content="Curso avançado de modelagem estatística e econometria com visão de riscos financeiros: 39 disciplinas, de Cálculo I a V a séries temporais, econometria, sobrevivência, inferência causal, VaR/ES, PD/LGD/EAD e IFRS 9, com fórmulas animadas, simulações, código Python e PySpark e livros de referência.">
 <meta name="author" content="Gabriel Groehs">
 <meta property="og:type" content="book">
-<meta property="og:title" content="Guia de Modelagem Estatística e Econometria — Visão Riscos Financeiros">
+<meta property="og:title" content="Guia de Modelagem Estatística e Econometria — Baseado no Bacharelado em Estatística">
 <meta property="og:description" content="Livro-revista interativo por Gabriel Groehs: 39 disciplinas avançadas de estatística e econometria aplicadas a riscos de mercado e de crédito.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Source+Code+Pro:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap" rel="stylesheet">
@@ -71,7 +71,9 @@ a{color:var(--accent-ink)}
 .coverMain .kick{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#9fd8c5;margin:18px 0 10px}
 .coverMain h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(44px,6.4vw,92px);line-height:.95;letter-spacing:-.02em;color:#f6dfa0}
 .coverMain h1 em{display:block;font-style:italic;font-weight:600;color:#fff6dd;font-size:.62em;margin-top:10px;letter-spacing:-.01em}
-.coverMain .vision{display:inline-block;margin-top:18px;padding:7px 12px;border:1px solid #f1d58f;font-family:var(--sans);font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#f1d58f}
+.coverMain .basis{display:table;margin-top:20px;padding:9px 16px 10px;background:#f1d58f;color:#0b2621;font-family:var(--sans);font-weight:800;font-size:clamp(17px,2vw,24px);letter-spacing:.01em;line-height:1.25;box-shadow:0 8px 22px rgba(0,0,0,.28),inset 0 -3px 0 rgba(11,38,33,.18)}
+.miniCover strong{display:inline-block;margin:3px 0 7px;padding:3px 7px;background:#f1d58f;color:#0b2621;font-family:var(--sans);font-weight:800;font-size:11.5px;line-height:1.3}
+.coverMain .vision{display:inline-block;margin-top:14px;padding:7px 12px;border:1px solid #f1d58f;font-family:var(--sans);font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#f1d58f}
 .coverMain .by{margin-top:18px;font-family:var(--serif);font-size:19px;font-style:italic;color:#e6dcc6}
 .coverMain .by b{font-style:normal;color:#fff}
 .coverLines{position:relative;display:flex;flex-direction:column;gap:12px;align-self:end}
@@ -1080,7 +1082,7 @@ function nn(n){return String(n).padStart(2,'0');}
 function buildSide(){
   const mods=G.MODS.map(md=>{const items=G.CURR.filter(m=>m.mod===md.n);
     return `<div class="tocMod" data-mod="${md.n}">Módulo ${md.n}<b>${esc(md.name)}</b></div>`+items.map(m=>`<a class="tocItem" href="#/cap/${m.id}" data-id="${m.id}" data-q="${esc((m.t+' '+m.s).toLowerCase())}" style="--pc:${partColor(m)}"><span class="n">${nn(chNum(m.id))}</span><span class="t"><span class="dot"></span>${esc(m.t)}<i>${esc(m.s)}</i></span></a>`).join('');}).join('');
-  side.innerHTML=`<a class="miniCover" href="#/"><small>Edição 2026 · Vol. I</small><b>Guia de Modelagem Estatística e Econometria</b><span>Visão Riscos Financeiros</span><em>por Gabriel Groehs</em></a>
+  side.innerHTML=`<a class="miniCover" href="#/"><small>Edição 2026 · Vol. I</small><b>Guia de Modelagem Estatística e Econometria</b><strong>Baseado no Bacharelado em Estatística</strong><span>Visão Riscos Financeiros</span><em>por Gabriel Groehs</em></a>
   <nav class="sideNav" aria-label="Seções"><a href="#/" data-v="capa">Capa</a><a href="#/grade" data-v="grade">Grade curricular</a><a href="#/estante" data-v="estante">Estante</a><a href="#/refs" data-v="refs">Referências</a></nav>
   <input class="sideSearch" id="sideSearch" type="search" placeholder="Buscar disciplina…" aria-label="Buscar disciplina"><nav id="toc" aria-label="Sumário">${mods}</nav>
   <p style="margin:18px 2px 0;font-size:12px;color:var(--muted);line-height:1.45"><a href="https://gabriel-groehs.github.io/portfolio.html" target="_blank" rel="noopener noreferrer">Portfólio</a> · <a href="biblioteca.html">Biblioteca</a></p>`;
@@ -1115,7 +1117,7 @@ function renderCover(){
   view.innerHTML=`<section class="cover">${coverArt()}
   <div class="coverTop"><span>Guia · Edição 2026</span><span>Vol. I · ${G.CURR.length} disciplinas · ${G.MODS.length} módulos</span></div>
   <div class="coverMain"><div class="kick">Curso avançado de modelagem estatística e econometria</div>
-    <h1>Guia de Modelagem Estatística<em>e Econometria</em></h1><div class="vision">Visão Riscos Financeiros</div>
+    <h1>Guia de Modelagem Estatística<em>e Econometria</em></h1><div class="basis">Baseado no Bacharelado em Estatística</div><div class="vision">Visão Riscos Financeiros</div>
     <div class="by">por <b>Gabriel Groehs</b></div>
     <div class="coverCta"><a class="primary" href="#/grade">Ver a grade curricular</a><a href="#/cap/${G.CURR[0].id}">Começar pelo capítulo 1</a><a href="#/estante">Estante de livros</a></div></div>
   <div class="coverLines">${LINES.filter(l=>G.byId[l[0]]).map((l,i)=>`<a class="coverLine" href="#/cap/${l[0]}" style="animation-delay:${.5+i*.18}s"><small>Cap. ${nn(chNum(l[0]))} · ${esc(l[1])}</small><b>${esc(l[2])}</b></a>`).join('')}</div>
