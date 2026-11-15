@@ -7,6 +7,7 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 ## Livros e atlas de estudo
 
 - [Macroeconomia · Olivier Blanchard | Revista Interativa de Estudo](macroeconomia_blanchard.html) — `macroeconomia_blanchard.html`
+- [Guia de Modelagem Estatística e Econometria — Baseado no Bacharelado em Estatística](guia_estatistica_econometria.html) — `guia_estatistica_econometria.html`
 - [Bank Valuation & Value-Based Management — Atlas Técnico Interativo](bank_valuation.html) — `bank_valuation.html`
 - [Análise de Sobrevivência Aplicada — Atlas interativo](book_survival.html) — `book_survival.html`
 - [Cálculo Financeiro das Tesourarias — Atlas Técnico Interativo](calculo_tesouraria.html) — `calculo_tesouraria.html`
