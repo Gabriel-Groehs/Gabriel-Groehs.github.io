@@ -7,6 +7,7 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 ## Livros e atlas de estudo
 
 - [Macroeconomia · Olivier Blanchard | Revista Interativa de Estudo](macroeconomia_blanchard.html) — `macroeconomia_blanchard.html`
+- [Guia de Modelagem Estatística e Econometria — Baseado no Bacharelado em Estatística](guia_estatistica_econometria.html) — `guia_estatistica_econometria.html`
 - [Bank Valuation & Value-Based Management — Atlas Técnico Interativo](bank_valuation.html) — `bank_valuation.html`
 - [Análise de Sobrevivência Aplicada — Atlas interativo](book_survival.html) — `book_survival.html`
 - [Cálculo Financeiro das Tesourarias — Atlas Técnico Interativo](calculo_tesouraria.html) — `calculo_tesouraria.html`
@@ -35,6 +36,7 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 - [Ecossistema LLM para Risco de Crédito](ecossistema_LLM.html) — `ecossistema_LLM.html`
 - [Ecossistema LLM para Risco de Crédito — Unicred](ecossistemallm.html) — `ecossistemallm.html`
 - [Engineering Architecture Atlas — Gabriel Groehs](engineering.html) — `engineering.html`
+- [Time Series Atlas — Gabriel Groehs](time_series_atlas.html) — `time_series_atlas.html`
 - [LLM Conceitos — by Groehs](llm_groehs.html) — `llm_groehs.html`
 - [mkdocs-storyteller — The Documentation Studio Kit](skill_storytelling.html) — `skill_storytelling.html`
 
@@ -77,6 +79,7 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 - `architecture_ai.html`, `architecture_ai_llm.html` e `claude_arch.html`: abordagens de arquitetura de IA e agentes.
 - `portal3scorp.html`, `portalwebart.html`, `portalwebart2.html` e `wiki.html`: portais e versões de navegação corporativa.
 - `index.html`, `portfolio.html` e `tech.html`: apresentações profissionais relacionadas.
+- `time_series_atlas.html`, `time_series.html` e `econometria_timeseries.html`: atlas de modelos de previsão, laboratório visual de séries e atlas de econometria — conteúdos distintos sobre séries temporais.
 - `qualificacao.html`, `previsao_lstm2025.html`, `forecast_computer2026.html` e `artigo_ed_iii.html`: materiais de pesquisa sobre previsão de carga e consumo.
 
 Nenhum desses grupos foi tratado como duplicata para exclusão. Para mover arquivos futuramente, cada URL antiga precisará continuar servindo uma página de redirecionamento, incluindo a preservação de fragmentos de capítulo.
