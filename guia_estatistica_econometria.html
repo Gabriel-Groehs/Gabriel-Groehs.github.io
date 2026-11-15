@@ -10691,5 +10691,362 @@ refs:[
 })();
 
 </script>
+<script>
+/* ---- Capítulo: Testes de Estresse — cenários macro, modelos satélite, capital e estresse reverso ---- */
+(function(){
+const R=String.raw, St=G.St;
+const N=St.ncdf, Ni=St.ninv, ex=St.expit, lg=St.logit;
+/* PIB: AR(1) no crescimento anual (% a.a.); satélite: ARDL(1,1) no desvio do logit da taxa de default */
+const MU=2, PHI_G=0.85, SIG_G=1.5, T=12;
+const YB=lg(0.03), PHI=0.7, B0=-0.04, B1=-0.02, SIG_Y=0.05;
+const DP3=SIG_G*Math.sqrt(1+PHI_G*PHI_G+Math.pow(PHI_G,4));
+const shape=k=>k<=0?0:Math.pow(k/3,2)*Math.exp(2*(1-k/3));
+const condPD=(pd,rho,z)=>N((Ni(pd)-Math.sqrt(rho)*z)/Math.sqrt(1-rho));
+const memo=f=>{const c=new Map();return (...a)=>{const k=a.join('|');if(!c.has(k)){if(c.size>600)c.clear();c.set(k,f(...a));}return c.get(k);};};
+const advD=memo((s,phi,b0,b1)=>{const D=[0];let xp=0;for(let k=1;k<=T;k++){const x=-s*shape(k);D.push(phi*D[k-1]+b0*x+b1*xp);xp=x;}return D;});
+const drAdv=(s,phi)=>advD(s,phi,B0,B1).map(d=>ex(YB+d));
+/* passo comum aos dois gráficos de trajetórias: consome os sorteios na mesma ordem */
+const stepMacro=(st,z,p,k,rng)=>{const g=MU+PHI_G*(st.g-MU)+SIG_G*z;const e=rng.n();const phi=(p&&p.phi!=null)?p.phi:PHI;return {g,d:phi*st.d+B0*(g-MU)+B1*(st.g-MU)+SIG_Y*e};};
+/* resposta a um choque de PIB de duração dur */
+const irf=(phi,dur,shock)=>{const out=[[0,3]];let d=0,xp=0;for(let k=1;k<=16;k++){const x=k<=dur?shock:0;d=phi*d+B0*x+B1*xp;xp=x;out.push([k,100*ex(YB+d)]);}return out;};
+/* projeção trimestral do capital (p.p. do RWA inicial) */
+const proj=memo((s,c0,pro)=>{const D=advD(s,PHI,B0,B1);let C=c0,best=null;const cum={ppnr:0,cl:0,ml:0,ol:0};
+ for(let k=1;k<=T;k++){const x=-s*shape(k),dr=ex(YB+D[k]);const lgd=pro?Math.min(0.9,0.45+1.5*Math.max(0,dr-0.03)):0.45;
+  const ppnr=0.5+0.04*x,cl=lgd*0.7*dr/4*100,ml=k===1?0.2+0.15*s:0,ol=0.04;C+=ppnr-cl-ml-ol;cum.ppnr+=ppnr;cum.cl+=cl;cum.ml+=ml;cum.ol+=ol;
+  const r=C/(1+0.1*D[k]);if(!best||r<best.min)best={min:r,k,C,ppnr:cum.ppnr,cl:cum.cl,ml:cum.ml,ol:cum.ol};}
+ return best;});
+const sStar=(c0,thr,pro)=>{const f=s=>proj(s,c0,pro).min;if(f(0)<=thr)return 0;let lo=0,hi=30;if(f(hi)>thr)return Infinity;for(let i=0;i<40;i++){const m=(lo+hi)/2;if(f(m)>thr)lo=m;else hi=m;}return (lo+hi)/2;};
+const big=n=>n>=1e9?St.f(n/1e9,1)+' bilhões':n>=1e6?St.f(n/1e6,1)+' milhões':n>=1e3?St.f(n/1e3,0)+' mil':St.f(n,0);
+const oneIn=p=>p>=0.01?St.pct(p,1):(p>0?'1 em '+big(1/p):'praticamente nula');
+/* índice de ciclo de Vasicek */
+const RH=0.12;
+const zIdx=dr=>(Ni(0.03)-Math.sqrt(1-RH)*Ni(dr))/Math.sqrt(RH);
+const GH=[{l:'A · 0,3%',pd:0.003},{l:'B · 1%',pd:0.01},{l:'C · 3%',pd:0.03},{l:'D · 8%',pd:0.08},{l:'E · 20%',pd:0.2}];
+const GRD=[{n:'grau A',l:'grau A (PD TTC de 0,5%)',pd:0.005,c:'navy'},{n:'grau B',l:'grau B (2%)',pd:0.02,c:'accent'},{n:'grau C',l:'grau C (8%)',pd:0.08,c:'brick'}];
+/* incerteza de modelo: três especificações satélite */
+const MODS=[{phi:0.7,b0:-0.04,b1:-0.02},{phi:0,b0:-0.12,b1:-0.08},{phi:0.8,b0:-0.03,b1:-0.03}];
+const lossPath=(s,phi,b0,b1)=>{let d=0,xp=0,L=0;for(let k=1;k<=T;k++){const x=-s*shape(k);d=phi*d+b0*x+b1*xp;xp=x;L+=31.5*ex(YB+d)/4;}return L;};
+const modW=w=>[(1-w)*2/3,(1-w)/3,w];
+
+G.chapter('stress',{
+dek:R`Um teste de estresse pergunta o que acontece com o capital do banco se o mundo piorar de um jeito específico. Este capítulo percorre a cadeia completa: cenários coerentes gerados por VARs, modelos satélite que levam a macroeconomia à inadimplência, o índice de ciclo de Vasicek, a projeção de resultado e capital, o estresse reverso e os limites impostos pela crítica de Lucas e pela incerteza de modelo.`,
+abstract:R`Comparamos os arcabouços supervisórios da EBA e do Fed e situamos os testes do Banco Central do Brasil. Mostramos como gerar cenários coerentes com VARs e previsões condicionais e como medir sua plausibilidade pela distância de Mahalanobis. Estimamos modelos satélite ARDL para o logit da taxa de default, derivamos seus multiplicadores dinâmicos e usamos o índice de ciclo de Vasicek para distribuir o choque entre os graus de rating de forma coerente com o capital IRB. Projetamos PPNR, perdas, RWA e o índice de CET1 trimestre a trimestre, reproduzimos a lógica do stress capital buffer, derivamos o cenário de ruptura mais plausível do estresse reverso e discutimos a crítica de Lucas, a incerteza de Knight e a média de modelos. Implementamos a regressão satélite e o estresse reverso em Python e a ECL estressada contrato a contrato em PySpark.`,
+objectives:[
+ R`Distinguir análise de sensibilidade, análise de cenários e estresse reverso, e comparar os arcabouços da EBA, do Fed e do Banco Central do Brasil.`,
+ R`Gerar cenários macro coerentes com VARs e previsões condicionais e medir sua plausibilidade pela distância de Mahalanobis.`,
+ R`Estimar modelos satélite ARDL para o logit da taxa de default e interpretar os multiplicadores de impacto e de longo prazo.`,
+ R`Traduzir a taxa de default projetada em PDs por grau com o índice de ciclo de Vasicek.`,
+ R`Projetar resultado, provisões, RWA e CET1 e calcular uma necessidade de capital no estilo do stress capital buffer.`,
+ R`Encontrar o cenário de ruptura mais plausível, quantificar a incerteza de modelo e recalcular a ECL estressada em PySpark.`],
+sections:[
+{h:'Para que serve um teste de estresse',blocks:[
+ {t:'p',x:R`Medidas estatísticas como VaR e ES resumem a distribuição de perdas num horizonte curto, estimada com o passado. Um **teste de estresse** faz outra pergunta: dado um cenário adverso, mas plausível, quanto capital e quanta liquidez restam ao longo de dois ou três anos? A resposta é condicional ao cenário — não vem acompanhada de uma probabilidade — e por isso complementa, mas não substitui, as medidas de risco. Os bancos usam os testes para planejar capital e dividendos, calibrar o apetite a risco e preparar planos de recuperação; os supervisores, para fixar requerimentos e avaliar a resiliência do sistema.`},
+ {t:'list',items:[R`**Análise de sensibilidade**: choque isolado em um fator (por exemplo, +300 pontos-base nos juros), sem narrativa macroeconômica.`,R`**Análise de cenários**: trajetórias coerentes de muitas variáveis — PIB, desemprego, juros, câmbio, preços de imóveis e de ativos — derivadas de uma narrativa histórica ou hipotética.`,R`**Estresse reverso**: parte de um resultado inaceitável (o capital abaixo de um gatilho) e procura os cenários que o produzem.`,R`**Top-down ou bottom-up**: o supervisor projeta com modelos próprios sobre dados dos bancos, ou cada banco projeta com seus modelos sob regras comuns.`,R`**Micro ou macroprudencial**: a solvência de cada banco ou a do sistema, incluindo contágio e efeitos de segunda ordem.`]},
+ {t:'info',items:[{v:'9',l:'trimestres: o horizonte de planejamento do teste supervisório do Fed'},{v:'3',l:'anos: o horizonte do teste da EBA, com balanço estático',s:'exercício de 2027: de 2027 a 2029'},{v:'2,5%',l:'piso do stress capital buffer do Fed, em proporção do RWA',s:'regra de 2020'},{v:'100',l:'bilhões de dólares em ativos: a partir daí, o grupo bancário entra no teste supervisório do Fed'}]},
+ {t:'compare',head:['Aspecto','EBA (União Europeia)','Fed (Estados Unidos)'],
+  rows:[['Cenários','adverso desenhado pelo ESRB e pelo BCE; cenário-base fornecido pelo BCE','definidos pelo Fed; ao menos dois cenários por ano, incluindo um severamente adverso'],['Quem projeta','os bancos, com metodologia comum e restrita: bottom-up com elementos top-down','o Fed, com modelos supervisórios; os bancos também conduzem e divulgam testes próprios'],['Horizonte','três anos','nove trimestres'],['Balanço','estático: sem crescimento nem mudança de composição','nível de ativos constante, hipótese adotada em 2020'],['Uso do resultado','insumo para a avaliação supervisória (SREP) e transparência ao mercado','fixa o stress capital buffer de cada banco; resultados divulgados banco a banco']],
+  caption:'Testes supervisórios na União Europeia e nos Estados Unidos, segundo a metodologia da EBA para 2027 e a regra do Fed de 2020.'},
+ {t:'risk',area:'reg',title:'Brasil: testes do Banco Central e programa de estresse das instituições',x:[R`O Banco Central do Brasil divulga no Relatório de Estabilidade Financeira (REF), publicado semestralmente, testes de estresse de capital do sistema bancário, com cenários macroeconômicos e análises de sensibilidade a choques isolados, conduzidos de forma top-down com modelos do próprio BC. Do lado das instituições, a Resolução CMN nº 4.557/2017 exige um programa de testes de estresse integrado ao gerenciamento de riscos e de capital, com resultados considerados nas decisões de capital e no apetite a riscos.`],items:['cenários e premissas documentados e aprovados pela governança','integração com o plano de capital e com a avaliação interna de adequação de capital','revisão periódica dos cenários e dos modelos usados'],kpis:['REF','Res. CMN 4.557','ICAAP']}
+]},
+{h:'Cenários: narrativa, coerência e plausibilidade',blocks:[
+ {t:'p',x:R`Um bom cenário começa por uma **narrativa**: quais vulnerabilidades preocupam hoje e que sequência de choques as exporia — uma recessão com desemprego alto, um choque de juros, uma crise cambial, uma queda forte nos preços de imóveis. A narrativa precisa virar trajetórias trimestrais para dezenas de variáveis, e essas trajetórias precisam ser **coerentes**: desemprego, juros e câmbio devem se mover com o PIB como se moveram nas crises. É aqui que entram os VARs de Sims (1980).`},
+ {t:'eq',caption:'VAR(p) para as variáveis do cenário',
+  tex:R`\mathbf y_t=\T{1}{\mathbf c+\sum_{j=1}^{p}A_j\,\mathbf y_{t-j}}+\T{2}{\mathbf u_t},\qquad \mathbf u_t\sim\mathcal N(\mathbf 0,\Sigma_u)`,
+  terms:[['1','Dinâmica conjunta: cada variável depende das defasagens de todas, o que propaga o choque de forma coerente.'],['2',R`Inovações correlacionadas: $\Sigma_u$ registra como os choques costumam chegar juntos (PIB cai, desemprego sobe).`]]},
+ {t:'p',x:R`Na prática, o comitê de cenários fixa a trajetória de algumas variáveis-chave (o PIB e a taxa básica de juros, por exemplo) e pede ao modelo as trajetórias das demais que sejam mais prováveis dada essa restrição. Com erros gaussianos e parâmetros conhecidos, a previsão condicional é o condicionamento normal aplicado ao vetor empilhado de previsões; Waggoner e Zha (1999) mostram como fazê-lo em VARs, inclusive incorporando a incerteza dos parâmetros por métodos bayesianos.`},
+ {t:'eq',caption:R`Previsão condicional com restrições rígidas $R\,\mathbf y_f=\mathbf r$ sobre o vetor empilhado de previsões $\mathbf y_f$`,
+  tex:R`\E[\mathbf y_f\mid R\,\mathbf y_f=\mathbf r]=\T{1}{\hat{\mathbf y}_f}+\T{2}{\Omega R^\top\big(R\,\Omega\,R^\top\big)^{-1}}\big(\T{3}{\mathbf r-R\,\hat{\mathbf y}_f}\big)`,
+  terms:[['1','Previsão incondicional do VAR para todas as variáveis e horizontes.'],['2',R`Ganho: como um desvio imposto se propaga às demais variáveis, dado pela covariância $\Omega$ dos erros de previsão.`],['3','Distância entre a trajetória imposta pelo cenário e a previsão incondicional.']]},
+ {t:'chart',kind:'paths',title:'Crescimento do PIB: trajetórias simuladas e cenário adverso',n:60,hi:3,T:T,seed:21,xlabel:'trimestres à frente',ylabel:'crescimento do PIB (% a.a.)',
+  param:{label:'severidade s: vale do PIB abaixo da base (p.p.)',min:0,max:8,step:0.5,value:6,fmt:v=>St.f(v,1)},
+  y:s=>[Math.min(-5,MU-s-1.5),9],
+  init:()=>({g:MU,d:0}),
+  step:stepMacro,
+  value:st=>st.g,
+  overlay:(k,s)=>MU-s*shape(k),overlayColor:'brick',
+  hlines:[{y:MU,label:'média de longo prazo: 2%'}],
+  readout:(P,s)=>{const below=P.filter(a=>a[3]<=MU-s).length;const z=s/DP3;return `vale do cenário: ${St.f(MU-s,1)}% no trimestre 3 · desvio-padrão da previsão em 3 trimestres = ${St.f(DP3,2)} p.p. · z = ${St.f(-z,2)} · probabilidade marginal de um vale assim ou pior: ${oneIn(N(-z))} · trajetórias simuladas abaixo do vale no trimestre 3: ${below} de ${P.length}`;},
+  caption:R`Sessenta trajetórias de um AR(1) para o crescimento do PIB, $g_t-\mu=0{,}85\,(g_{t-1}-\mu)+1{,}5\,e_t$ com $\mu=2\%$, partindo da média; três estão destacadas. A curva tracejada é o cenário adverso, com vale no terceiro trimestre e recuperação gradual. A régua de plausibilidade é o desvio-padrão da previsão em três trimestres.`},
+ {t:'eq',caption:'Plausibilidade de um cenário: distância de Mahalanobis',
+  tex:R`d(\mathbf x)^2=\T{1}{(\mathbf x-\boldsymbol\mu)^\top\Sigma^{-1}(\mathbf x-\boldsymbol\mu)}\ \sim\ \T{2}{\chi^2_m},\qquad \mathcal P_k=\{\mathbf x:\ d(\mathbf x)\le k\}`,
+  terms:[['1','Desvio do cenário em relação ao centro, medido em desvios-padrão e descontadas as correlações.'],['2',R`Para um vetor gaussiano de dimensão $m$, a distância ao quadrado segue uma qui-quadrado: $\mathcal P_k$ é uma região de plausibilidade.`]]},
+ {t:'p',x:R`Severidade e plausibilidade puxam em sentidos opostos: um cenário severo demais é descartado como irrelevante, um brando demais não testa nada. A distância de Mahalanobis dá uma régua comum. Para uma trajetória gerada por um AR(1), ela é a soma dos quadrados dos choques padronizados $e_k=(x_k-\phi\,x_{k-1})/\sigma$ que a produziriam: uma recessão súbita exige choques grandes e é menos plausível que outra, igualmente funda, mas gradual.`},
+ {t:'quote',x:R`But Uncertainty must be taken in a sense radically distinct from the familiar notion of Risk, from which it has never been properly separated.`,a:'Frank H. Knight',src:R`*Risk, Uncertainty, and Profit* (1921), parte I, cap. I`},
+ {t:'p',x:R`“A incerteza deve ser tomada num sentido radicalmente distinto da noção familiar de risco, da qual nunca foi adequadamente separada.” Para Knight, risco é aleatoriedade com distribuição conhecida; incerteza é o que não se reduz a uma distribuição. Testes de estresse existem sobretudo para a segunda: exploram cenários aos quais nenhum modelo estimado atribuiria uma probabilidade confiável.`},
+ {t:'note',kind:'warn',k:'Atenção',x:R`Distâncias de Mahalanobis e probabilidades gaussianas medem a plausibilidade *dentro do modelo*. Caudas reais são mais pesadas e as correlações sobem nas crises; por isso, supervisores combinam cenários históricos, hipotéticos e julgamento de especialistas, em vez de escolher cenários apenas por um quantil.`}
+]},
+{h:'Modelos satélite: da macroeconomia à inadimplência',blocks:[
+ {t:'p',x:R`Um **modelo satélite** liga as variáveis do cenário a um parâmetro de risco do banco: a taxa de default de um segmento, a taxa de cura, a margem financeira, as tarifas. Como a taxa de default vive em $(0,1)$ e responde de forma não linear, modela-se o seu logit. Como a deterioração do crédito leva trimestres — atrasos viram defaults com defasagem —, o modelo inclui defasagens da própria variável e das variáveis macro: um ARDL. Abordagens desse tipo remontam ao CreditPortfolioView, de Wilson (1997), e foram estendidas a um VAR global por Pesaran, Schuermann, Treutler e Weiner (2006).`},
+ {t:'eq',caption:'Modelo satélite ARDL para o logit da taxa de default',
+  tex:R`\operatorname{logit}(\mathrm{DR}_t)=\T{1}{\alpha}+\T{2}{\sum_{j=1}^{p}\phi_j\operatorname{logit}(\mathrm{DR}_{t-j})}+\T{3}{\sum_{k=1}^{K}\sum_{l=0}^{q}\beta_{kl}\,x_{k,t-l}}+\T{4}{\varepsilon_t}`,
+  terms:[['1','Nível de longo prazo, dadas as médias das variáveis macro.'],['2','Persistência: a inadimplência responde devagar, porque o default é o fim de um processo de deterioração.'],['3','Variáveis macro (PIB, desemprego, juros, renda) e suas defasagens: os canais por onde o cenário entra.'],['4','Choque do período, não explicado pelo cenário.']]},
+ {t:'eq',caption:'Multiplicadores dinâmicos de um ARDL(1,1)',
+  steps:[{tex:R`y_t=\alpha+\phi\,y_{t-1}+\beta_0\,x_t+\beta_1\,x_{t-1}+\varepsilon_t,\qquad |\phi|<1`,x:'Modelo para o logit da taxa de default com uma defasagem de cada variável.'},
+   {tex:R`\frac{\partial y_t}{\partial x_t}=\beta_0`,x:'Multiplicador de impacto: o efeito no próprio trimestre.'},
+   {tex:R`\frac{\partial y_{t+1}}{\partial x_t}=\phi\,\beta_0+\beta_1,\qquad \frac{\partial y_{t+h}}{\partial x_t}=\phi^{\,h-1}\big(\phi\,\beta_0+\beta_1\big),\quad h\ge1`,x:'O efeito se propaga pela defasagem da própria variável e decai à taxa φ.'},
+   {tex:R`m_\infty=\sum_{h\ge0}\frac{\partial y_{t+h}}{\partial x_t}=\beta_0+\frac{\phi\,\beta_0+\beta_1}{1-\phi}=\frac{\beta_0+\beta_1}{1-\phi}`,x:'Multiplicador de longo prazo: o efeito final de um choque permanente de uma unidade em x.'},
+   {tex:R`t_{1/2}=\frac{\ln 0{,}5}{\ln\phi}`,x:'Meia-vida do choque em trimestres: com φ = 0,7, cerca de dois trimestres.'}]},
+ {t:'chart',kind:'line',title:'Resposta da taxa de default a uma queda de 3 p.p. no crescimento do PIB',x:[0,16],xlabel:'trimestres após o início do choque',ylabel:'taxa de default anualizada (%)',fmtY:v=>St.f(v,1)+'%',
+  params:[{key:'phi',label:R`persistência $\phi$`,min:0,max:0.95,step:0.05,value:0.7,fmt:v=>St.f(v,2)},{key:'dur',label:'duração do choque (trimestres)',min:1,max:12,step:1,value:4,fmt:v=>St.f(v,0)}],
+  series:[{label:'ARDL com persistência',color:'accent',dots:true,points:p=>irf(p.phi,p.dur,-3)},{label:'sem persistência (φ = 0)',color:'muted',dash:true,points:p=>irf(0,p.dur,-3)}],
+  hlines:[{y:3,label:'base: 3%'}],
+  readout:p=>{const a=irf(p.phi,p.dur,-3),b=irf(0,p.dur,-3);let km=0;a.forEach((q,i)=>{if(q[1]>a[km][1])km=i;});const exc=v=>v.reduce((s,q)=>s+(q[1]-3),0)/4;const hl=p.phi>0?St.f(Math.log(0.5)/Math.log(p.phi),1)+' trimestres':'imediata';return `pico = ${St.f(a[km][1],2)}% no trimestre ${a[km][0]} · multiplicador de longo prazo = ${St.f((B0+B1)/(1-p.phi),3)} no logit por p.p. de PIB · meia-vida = ${hl} · excesso acumulado de defaults: ${St.f(exc(a),2)} p.p. com persistência e ${St.f(exc(b),2)} p.p. sem`;},
+  caption:R`Coeficientes ilustrativos $\beta_0=-0{,}04$ e $\beta_1=-0{,}02$ por p.p. de crescimento, com taxa de default de longo prazo de 3%. Com persistência, a taxa de default sobe ao longo de todo o choque e volta devagar depois dele; sem a defasagem da própria variável, a resposta é menor e some um trimestre depois que o choque termina, subestimando a perda acumulada.`},
+ {t:'chart',kind:'paths',title:'Taxa de default: as mesmas trajetórias passadas pelo modelo satélite',n:60,hi:3,T:T,seed:21,xlabel:'trimestres à frente',ylabel:'taxa de default anualizada (%)',
+  params:[{key:'s',label:'severidade s (p.p. de PIB no vale)',min:0,max:8,step:0.5,value:6,fmt:v=>St.f(v,1)},{key:'phi',label:R`persistência $\phi$ da inadimplência`,min:0,max:0.9,step:0.05,value:0.7,fmt:v=>St.f(v,2)}],
+  y:p=>[0,Math.max(10,125*Math.max(...drAdv(p.s,p.phi)))],
+  init:()=>({g:MU,d:0}),
+  step:stepMacro,
+  value:st=>100*ex(YB+st.d),
+  overlay:(k,p)=>100*drAdv(p.s,p.phi)[k],overlayColor:'brick',
+  hlines:[{y:3,label:'média de longo prazo: 3%'}],
+  readout:(P,p)=>{const a=drAdv(p.s,p.phi);let km=0;a.forEach((v,k)=>{if(v>a[km])km=k;});const pk=100*a[km];const n=P.filter(x=>Math.max(...x)>pk).length;return `pico no cenário adverso: ${St.f(pk,2)}% no trimestre ${km} · multiplicador de longo prazo = ${St.f((B0+B1)/(1-p.phi),3)} no logit por p.p. de PIB · trajetórias simuladas com pico acima do cenário: ${n} de ${P.length}`;},
+  caption:R`As trajetórias do PIB do gráfico da seção anterior (mesma semente inicial) alimentam o ARDL, com um pequeno choque próprio no logit; a curva tracejada é a taxa de default no cenário adverso, sem ruído. O pico chega dois trimestres depois do vale do PIB — a defasagem que um modelo estático não captura.`},
+ {t:'risk',area:'credito',title:'Modelos satélite: armadilhas frequentes',x:[R`Séries de inadimplência são curtas, persistentes e cobrem poucas recessões. Regressões em nível entre séries não estacionárias podem ser espúrias; a seleção automática de variáveis e defasagens superajusta; e o sinal de um coeficiente macro pode sair errado num período em que políticas de governo ou renegociações mascararam o ciclo.`],items:['teste raízes unitárias e cointegração, ou modele em diferenças','imponha e documente os sinais econômicos esperados: PIB maior, menos defaults','valide fora da amostra numa recessão inteira, como a de 2015–2016 no Brasil','prefira poucas variáveis com defasagens justificadas a dezenas de candidatas','registre mudanças na definição de default e quebras de série'],kpis:['ARDL','fora da amostra','sinais']},
+ {t:'code',lang:'python',title:'Regressão satélite no logit da taxa de default e projeção por cenário',src:R`
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+from scipy.special import expit, logit
+from scipy.stats import norm
+
+# base trimestral: taxa de default anualizada da carteira, PIB (% a.a.) e juro real (%)
+df = pd.read_parquet("macro_inadimplencia.parquet")          # colunas: dr, pib, juro_real
+df["y"] = logit(df["dr"])
+
+X = pd.DataFrame({
+    "y_l1": df["y"].shift(1),
+    "pib": df["pib"],
+    "pib_l1": df["pib"].shift(1),
+    "juro_l2": df["juro_real"].shift(2),                     # juros agem com defasagem
+})
+base = pd.concat([df["y"], X], axis=1).dropna()
+sat = sm.OLS(base["y"], sm.add_constant(base.drop(columns="y"))).fit(
+    cov_type="HAC", cov_kwds={"maxlags": 4})                 # erros-padrão de Newey-West
+print(sat.summary().tables[1])
+
+b = sat.params
+assert b["pib"] + b["pib_l1"] < 0, "sinal errado: PIB maior deveria reduzir os defaults"
+mlp = (b["pib"] + b["pib_l1"]) / (1 - b["y_l1"])            # multiplicador de longo prazo
+print(f"multiplicador de longo prazo do PIB: {mlp:.3f} no logit por p.p.")
+
+def projeta_dr(cenario, hist):
+    """cenario: DataFrame trimestral com 'pib' e 'juro_real' futuros; hist: dados observados."""
+    y_ant, pib_ant = hist["y"].iloc[-1], hist["pib"].iloc[-1]
+    juros = np.r_[hist["juro_real"].iloc[-2:].to_numpy(), cenario["juro_real"].to_numpy()]
+    saida = []
+    for t, pib in enumerate(cenario["pib"].to_numpy()):
+        y = (b["const"] + b["y_l1"] * y_ant + b["pib"] * pib
+             + b["pib_l1"] * pib_ant + b["juro_l2"] * juros[t])
+        saida.append(expit(y))
+        y_ant, pib_ant = y, pib
+    return pd.Series(saida, index=cenario.index)
+
+cenarios = {nome: pd.read_parquet(f"cenario_{nome}.parquet") for nome in ["base", "adverso", "severo"]}
+dr_proj = pd.DataFrame({nome: projeta_dr(c, df) for nome, c in cenarios.items()})
+
+# índice de ciclo de Vasicek e PDs por grau no cenário adverso
+rho, pd_media = 0.12, df["dr"].mean()
+z = pd.DataFrame((norm.ppf(pd_media) - np.sqrt(1 - rho) * norm.ppf(dr_proj.to_numpy())) / np.sqrt(rho),
+                 index=dr_proj.index, columns=dr_proj.columns)
+pd_ttc = np.array([0.003, 0.01, 0.03, 0.08, 0.20])
+pd_adverso = pd.DataFrame(
+    norm.cdf((norm.ppf(pd_ttc)[:, None] - np.sqrt(rho) * z["adverso"].to_numpy()[None, :]) / np.sqrt(1 - rho)),
+    index=list("ABCDE"), columns=dr_proj.index)
+print(pd_adverso.round(4))
+`}
+]},
+{h:'Do índice de ciclo às PDs por grau',blocks:[
+ {t:'p',x:R`Satélites por segmento dizem como a taxa de default *média* reage ao cenário, mas capital e provisões precisam de PDs por grau. O modelo de um fator do capítulo de crédito oferece a ponte: a taxa de default observada de uma carteira granular é a PD condicional ao fator sistemático, de modo que cada trimestre revela um valor do **índice de ciclo** $Z_t$. A ideia de resumir o ciclo de crédito num único índice remonta a Belkin, Suchower e Forest (1998), que o usaram para deslocar matrizes de migração de ratings.`},
+ {t:'eq',caption:'Índice de ciclo de Vasicek: da taxa de default observada às PDs estressadas por grau',
+  steps:[{tex:R`\mathrm{DR}_t=\Phi\Big(\frac{\Phi^{-1}(\overline{\PD})-\sqrt\rho\,Z_t}{\sqrt{1-\rho}}\Big)`,x:'Numa carteira granular, a taxa de default do período é a PD condicional ao fator sistemático.'},
+   {tex:R`Z_t=\frac{\Phi^{-1}(\overline{\PD})-\sqrt{1-\rho}\;\Phi^{-1}(\mathrm{DR}_t)}{\sqrt\rho}`,x:'Invertendo: cada trimestre observado revela um valor do índice de ciclo.'},
+   {tex:R`Z_t=\gamma_0+\gamma_1 Z_{t-1}+\boldsymbol\gamma^\top\mathbf x_t+\eta_t`,x:'O modelo satélite pode ser estimado diretamente no índice, em vez do logit da taxa de default.'},
+   {tex:R`\widehat Z_t^{(s)}=\hat\gamma_0+\hat\gamma_1\,\widehat Z_{t-1}^{(s)}+\hat{\boldsymbol\gamma}^\top\mathbf x_t^{(s)}`,x:'Projeção do índice sob a trajetória macro do cenário s.'},
+   {tex:R`\PD_{g,t}^{(s)}=\Phi\Big(\frac{\Phi^{-1}(\PD_g)-\sqrt\rho\,\widehat Z_t^{(s)}}{\sqrt{1-\rho}}\Big)`,x:'Um único índice desloca as PDs de todos os graus, de forma coerente com o modelo do capital IRB.'}]},
+ {t:'chart',kind:'line',title:'PD condicional ao fator sistemático, por grau de rating',x:[-3.5,2.5],samples:200,y0:0,xlabel:'fator sistemático z (negativo = recessão)',ylabel:'PD condicional (%)',fmtY:v=>St.f(v,0)+'%',
+  params:[{key:'z',label:'cenário: valor de z',min:-3.5,max:1.5,step:0.1,value:-2,fmt:v=>St.f(v,1)},{key:'rho',label:R`correlação de ativos $\rho$`,min:0.03,max:0.3,step:0.01,value:0.12,fmt:v=>St.f(v,2)}],
+  series:GRD.map(g=>({label:g.l,color:g.c,f:(z,p)=>100*condPD(g.pd,p.rho,z)})),
+  marks:[{x:p=>p.z,label:'cenário'},{x:-Ni(0.999),label:'1 em 1000'}],
+  points:p=>GRD.map(g=>({x:p.z,y:100*condPD(g.pd,p.rho,p.z),color:g.c})),
+  readout:p=>GRD.map(g=>{const v=condPD(g.pd,p.rho,p.z);return `${g.n}: ${St.pct(v,2)} (${St.f(v/g.pd,1)}× a TTC)`;}).join(' · ')+` · probabilidade de um z tão ruim ou pior: ${oneIn(N(p.z))}`,
+  caption:R`Cada curva é a PD condicional de um grau no modelo de um fator. Em cenários severos, o multiplicador em relação à PD TTC é maior nos graus melhores; em choques leves a ordem pode se inverter, e a PD condicional dos graus bons pode até ficar abaixo da TTC, porque a TTC é a média ao longo do ciclo, e não a PD em $z=0$. A marca em $z=-\Phi^{-1}(0{,}999)$ é o cenário de 1 em 1000 da fórmula IRB.`},
+ {t:'chart',kind:'heat',title:'Multiplicador da PD por grau e trimestre no cenário adverso (PD estressada ÷ PD TTC)',rows:GH.map(g=>g.l),cols:Array.from({length:T},(_,i)=>'T'+(i+1)),scale:[0.5,3.5],labelW:84,fmt:v=>St.f(v,1),
+  param:{label:'severidade s (p.p. de PIB no vale)',min:0,max:8,step:0.5,value:6,fmt:v=>St.f(v,1)},
+  values:s=>{const dr=drAdv(s,PHI);return GH.map(g=>dr.slice(1).map(d=>condPD(g.pd,RH,zIdx(d))/g.pd));},
+  readout:(s,M)=>{const dr=drAdv(s,PHI);let km=1;for(let k=1;k<=T;k++)if(dr[k]>dr[km])km=k;const z=zIdx(dr[km]);return `pior trimestre: T${km}, com taxa de default da carteira de ${St.pct(dr[km],2)} e índice Z = ${St.f(z,2)} · PD do grau A: ${St.pct(condPD(0.003,RH,z),2)} · PD do grau E: ${St.pct(condPD(0.2,RH,z),1)}`;},
+  caption:R`A taxa de default projetada da carteira (média de longo prazo de 3%) é convertida no índice Z a cada trimestre, e o índice desloca as PDs dos cinco graus, com $\rho=0{,}12$. No cenário-base ($s=0$) o índice fica ligeiramente negativo: uma taxa de default igual à média corresponde a um ano um pouco pior que o mediano. Por isso, nesse cenário, os graus bons ficam um pouco abaixo da TTC e os ruins, um pouco acima.`},
+ {t:'p',x:R`O choque não para na PD. Em recessões, as **LGDs** sobem — garantias perdem valor, curas ficam raras, a cobrança demora — e as **EADs** de produtos rotativos crescem, porque devedores em dificuldade sacam os limites antes do default. Satélites próprios para a taxa de cura, para os preços de imóveis (que movem a LGD hipotecária) e para os fatores de conversão completam a tradução do cenário. Ignorar a correlação entre PD e LGD subestima a perda justamente nos cenários que interessam, como mostra a curva pró-cíclica do estresse reverso adiante.`}
+]},
+{h:'Do cenário ao capital: resultado, provisões e CET1',blocks:[
+ {t:'p',x:R`Com PDs, LGDs e EADs de cada trimestre, a projeção segue a contabilidade. As **provisões** vêm da ECL: sob o IFRS 9 — e, no Brasil, sob a Resolução CMN nº 4.966/2021 —, contratos que migram para o estágio 2 passam a provisionar a perda de vida inteira, o que antecipa as perdas para o início do cenário. O **PPNR**, resultado antes de provisões, cai com margens menores, menos tarifas e custos rígidos. Perdas de mercado vêm de um choque instantâneo nas carteiras de negociação, e o **RWA** cresce à medida que os ratings migram para pior. O índice de capital é recalculado trimestre a trimestre, e o que importa é o seu **mínimo** ao longo do horizonte.`},
+ {t:'flow',title:'Do cenário ao capital',caption:'O teste percorre o caminho do cenário ao capital. No estresse reverso (seção 6), aumenta-se a severidade até o gatilho ser atingido; os efeitos de segunda ordem pedem uma visão de sistema.',
+  nodes:[{id:'narr',label:'Narrativa do cenário',sub:'riscos relevantes hoje',c:0,r:0,tone:'soft',shape:'pill'},{id:'macro',label:'Projeção macro',sub:'VAR e previsão condicional',c:1,r:0,tone:'blue'},{id:'sat',label:'Modelos satélite',sub:'PD, LGD, margem e tarifas',c:2,r:0,tone:'accent'},{id:'par',label:'Parâmetros estressados',sub:'por grau e por trimestre',c:3,r:0,tone:'accent'},
+   {id:'plano',label:'Plano de contingência',sub:'dividendos, capital, hedge',c:0,r:1,tone:'ink'},{id:'gat',label:'Abaixo do gatilho?',sub:'CET1 mínimo × limite',c:1,r:1,tone:'brick',shape:'diamond'},{id:'cap',label:'Capital e RWA',sub:'CET1 trimestre a trimestre',c:2,r:1,tone:'navy'},{id:'pl',label:'Resultado projetado',sub:'PPNR, perdas e impostos',c:3,r:1,tone:'gold'},
+   {id:'rev',label:'Estresse reverso',sub:'severidade até o gatilho',c:1,r:2,tone:'gold'},{id:'ef',label:'Efeitos de 2ª ordem',sub:'liquidez e vendas forçadas',c:2,r:2,tone:'plum'}],
+  order:['narr','macro','sat','par','pl','cap','gat','plano','rev','ef'],
+  edges:[['narr','macro'],['macro','sat'],['sat','par'],['par','pl'],['sat','cap','RWA'],['pl','cap'],['cap','gat'],['gat','plano','sim'],['gat','rev','não'],['cap','ef','sistema','dash']]},
+ {t:'eq',caption:'Projeção do capital e do índice de CET1',
+  tex:R`\mathrm{CET1}_t=\mathrm{CET1}_{t-1}+\T{1}{\mathrm{PPNR}_t}-\T{2}{\mathrm{Prov}_t}-\T{3}{\big(\mathrm{PM}_t+\mathrm{PO}_t\big)}-\T{4}{\big(\mathrm{Imp}_t+\mathrm{Div}_t\big)},\qquad \kappa_t=\frac{\mathrm{CET1}_t}{\T{5}{\mathrm{RWA}_t}}`,
+  terms:[['1','Resultado antes de provisões: margem financeira, tarifas e custos, que pioram na recessão.'],['2','Provisões para perdas de crédito: a ECL projetada com PDs, LGDs e EADs estressadas.'],['3','Perdas de mercado (choque nas carteiras de negociação e de contraparte) e perdas operacionais.'],['4','Impostos e distribuições de capital (dividendos e recompras).'],['5','Ativos ponderados pelo risco: crescem quando ratings migram para pior e PDs sobem.']]},
+ {t:'chart',kind:'waterfall',title:'Do CET1 inicial ao CET1 mínimo do cenário (p.p. do RWA)',labels:['PPNR','Crédito','Mercado','Operacional','RWA'],start:13,startLabel:'CET1 inicial',totalLabel:'CET1 mínimo',up:'accent',down:'brick',fmt:v=>St.f(v,2),fmtY:v=>St.f(v,0)+'%',illustrative:true,
+  param:{label:'severidade s (p.p. de PIB no vale)',min:1,max:10,step:0.5,value:6,fmt:v=>St.f(v,1)},
+  values:s=>{const b=proj(s,13,false);return [b.ppnr,-b.cl,-b.ml,-b.ol,b.min-b.C];},
+  readout:(s,acc)=>{const b=proj(s,13,false);const q=13-b.min;const scb=Math.max(2.5,q+0.5);return `CET1 mínimo = ${St.f(acc,2)}% no trimestre ${b.k} · queda = ${St.f(q,2)} p.p. · SCB = máx(queda + 0,5 p.p. de dividendos planejados; 2,5%) = ${St.f(scb,2)}% · requerimento de CET1 = 4,5% + SCB = ${St.f(4.5+scb,2)}%`;},
+  caption:'Ponte do CET1 inicial (13% do RWA) até o mínimo projetado, com o modelo satélite da seção 3 e um balanço simplificado: PPNR de 0,5 p.p. por trimestre que cai com o PIB, perdas de crédito com LGD de 45% sobre uma carteira equivalente a 70% do RWA, choque de mercado instantâneo no primeiro trimestre e RWA que cresce com a migração de ratings. Sem sobretaxa de G-SIB.'},
+ {t:'eq',caption:'Stress capital buffer do Fed (regra de 2020)',
+  tex:R`\mathrm{SCB}=\max\Big\{\T{1}{\kappa_0-\min_{1\le t\le 9}\kappa_t}+\T{2}{\frac{\sum_{t=4}^{7}\mathrm{Div}_t}{\mathrm{RWA}_{t^\star}}},\ 2{,}5\%\Big\}`,
+  terms:[['1','Queda do índice de CET1 entre o início e o mínimo projetado no cenário severamente adverso.'],['2',R`Quatro trimestres de dividendos planejados (do 4º ao 7º), divididos pelo RWA do trimestre $t^\star$ em que o índice atinge o mínimo.`]]},
+ {t:'risk',area:'reg',title:'Do teste ao requerimento: o stress capital buffer',x:[R`Desde 2020, o resultado do teste supervisório entra diretamente no requerimento de capital dos grupos bancários americanos com 100 bilhões de dólares ou mais em ativos. O SCB substitui a parcela fixa de 2,5% do colchão de conservação de capital: é a queda do índice de CET1 entre o início e o mínimo projetado no cenário severamente adverso, mais quatro trimestres de dividendos planejados, com piso de 2,5%. A mesma regra passou a supor que o banco mantém constante o nível de ativos ao longo do horizonte.`],items:['requerimento de CET1 = mínimo de 4,5% + SCB + sobretaxa de G-SIB, quando aplicável','abaixo do requerimento combinado, distribuições de capital e bônus discricionários ficam limitados','os testes conduzidos pelos próprios bancos complementam o planejamento de capital'],kpis:['SCB','CET1','9 trimestres']},
+ {t:'risk',area:'ambos',title:'Efeitos de segunda ordem: quando todos vendem ao mesmo tempo',x:[R`O teste de um banco isolado supõe que o resto do mundo apenas segue o cenário. Numa crise, bancos que perdem capital cortam crédito, vendem ativos e retiram liquidez uns dos outros; esses movimentos aprofundam a recessão e derrubam preços, gerando perdas que nenhum cenário de primeira ordem contém. Testes macroprudenciais acrescentam esses canais. Borio, Drehmann e Tsatsaronis (2014) argumentam que os testes macro funcionam mal como alerta antecipado em tempos calmos — antes de 2007, não sinalizaram as vulnerabilidades — e muito melhor como ferramenta de gestão de crises.`],items:['liquidez e financiamento: saques de depósitos e de linhas de crédito dentro do mesmo cenário','vendas forçadas: preços de ativos que caem com a própria venda','contágio: exposições interbancárias e a contrapartes centrais'],kpis:['macroprudencial','liquidez','contágio']},
+ {t:'code',lang:'pyspark',title:'ECL estressada contrato a contrato: choques de PD no logit, LGD e migração de estágio',src:R`
+from pyspark.sql import functions as F
+
+carteira = spark.table("credito.carteira")      # contrato, segmento, estagio, ead, lgd, pd_12m, pd_vida, pd_vida_orig
+choques = spark.table("estresse.choques")       # cenario, segmento, delta_logit, mult_lgd (saída dos modelos satélite)
+
+def logit(c):
+    return F.log(c / (1 - c))
+
+def expit(c):
+    return 1 / (1 + F.exp(-c))
+
+def pd_do_estagio(estagio, pd_12m, pd_vida):
+    return (F.when(estagio == 1, pd_12m)
+             .when(estagio == 2, pd_vida)
+             .otherwise(F.lit(1.0)))                       # estágio 3: PD = 1
+
+estresse = (carteira.join(F.broadcast(choques), "segmento")
+    .withColumn("pd_12m_s", expit(logit(F.col("pd_12m")) + F.col("delta_logit")))
+    .withColumn("pd_vida_s", expit(logit(F.col("pd_vida")) + F.col("delta_logit")))
+    .withColumn("lgd_s", F.least(F.lit(1.0), F.col("lgd") * F.col("mult_lgd")))
+    # critério ilustrativo de aumento significativo: PD de vida inteira acima do dobro da PD na originação
+    .withColumn("estagio_s", F.when(F.col("estagio") == 3, F.lit(3))
+                             .when(F.col("pd_vida_s") > 2 * F.col("pd_vida_orig"), F.lit(2))
+                             .otherwise(F.col("estagio")))
+    .withColumn("ecl_s", pd_do_estagio(F.col("estagio_s"), F.col("pd_12m_s"), F.col("pd_vida_s"))
+                         * F.col("lgd_s") * F.col("ead")))
+
+base = (carteira
+    .withColumn("ecl", pd_do_estagio(F.col("estagio"), F.col("pd_12m"), F.col("pd_vida"))
+                       * F.col("lgd") * F.col("ead"))
+    .groupBy("segmento").agg(F.sum("ecl").alias("ecl_base")))
+
+resumo = (estresse.groupBy("cenario", "segmento")
+    .agg(F.sum("ecl_s").alias("ecl_estressada"),
+         F.sum(F.when(F.col("estagio_s") > F.col("estagio"), F.col("ead")).otherwise(0.0)).alias("ead_migrada"))
+    .join(base, "segmento")
+    .withColumn("acrescimo", F.col("ecl_estressada") - F.col("ecl_base")))
+
+resumo.orderBy("cenario", F.desc("acrescimo")).show()
+`}
+]},
+{h:'Estresse reverso: o que quebraria o banco?',blocks:[
+ {t:'p',x:R`O **estresse reverso** inverte a pergunta: em vez de partir de um cenário e medir o capital, parte de um resultado inaceitável — o CET1 abaixo de um gatilho, a perda de acesso a financiamento, a inviabilidade do modelo de negócio — e procura os cenários que o produzem. As orientações da EBA sobre os testes de estresse das próprias instituições, por exemplo, incluem o estresse reverso no programa de cada banco. Com muitos fatores de risco, infinitos cenários levam ao gatilho; a escolha natural é o **mais plausível** deles. Breuer e Csiszár (2013) generalizam a ideia para distribuições não gaussianas, com restrições de plausibilidade baseadas em entropia.`},
+ {t:'eq',caption:'Cenário de ruptura mais plausível com perda linear nos fatores',
+  steps:[{tex:R`\min_{\mathbf x}\ (\mathbf x-\boldsymbol\mu)^\top\Sigma^{-1}(\mathbf x-\boldsymbol\mu)\quad\text{s.a.}\quad a+\mathbf b^\top\mathbf x=k`,x:'Entre os cenários que levam a perda ao limiar k, o de menor distância de Mahalanobis.'},
+   {tex:R`\mathcal L(\mathbf x,\lambda)=(\mathbf x-\boldsymbol\mu)^\top\Sigma^{-1}(\mathbf x-\boldsymbol\mu)-2\lambda\,\big(a+\mathbf b^\top\mathbf x-k\big)`,x:'Lagrangiano, com a perda aproximada por uma função linear dos fatores.'},
+   {tex:R`\nabla_{\mathbf x}\mathcal L=2\,\Sigma^{-1}(\mathbf x-\boldsymbol\mu)-2\lambda\,\mathbf b=\mathbf 0\ \Rightarrow\ \mathbf x-\boldsymbol\mu=\lambda\,\Sigma\mathbf b`,x:'O deslocamento ótimo é proporcional a Σb: combina as sensibilidades da perda com as correlações dos fatores.'},
+   {tex:R`\lambda=\frac{k-a-\mathbf b^\top\boldsymbol\mu}{\mathbf b^\top\Sigma\mathbf b}\ \Rightarrow\ \mathbf x^\star=\boldsymbol\mu+\frac{k-a-\mathbf b^\top\boldsymbol\mu}{\mathbf b^\top\Sigma\mathbf b}\,\Sigma\mathbf b`,x:'Impondo a restrição para encontrar o multiplicador.'},
+   {tex:R`d^\star=\sqrt{(\mathbf x^\star-\boldsymbol\mu)^\top\Sigma^{-1}(\mathbf x^\star-\boldsymbol\mu)}=\frac{k-a-\mathbf b^\top\boldsymbol\mu}{\sqrt{\mathbf b^\top\Sigma\mathbf b}}`,x:'A distância mínima é a folga de capital medida em desvios-padrão da perda.'}]},
+ {t:'thm',k:'Proposição',title:'o cenário de ruptura mais plausível',x:R`Sejam $\mathbf x\sim\mathcal N(\boldsymbol\mu,\Sigma)$ os fatores de risco, $L(\mathbf x)=a+\mathbf b^\top\mathbf x$ a perda e $k>L(\boldsymbol\mu)$ um limiar. Entre os cenários com $L(\mathbf x)\ge k$, o de menor distância de Mahalanobis é $\mathbf x^\star=\boldsymbol\mu+\frac{k-L(\boldsymbol\mu)}{\mathbf b^\top\Sigma\mathbf b}\,\Sigma\mathbf b$, a distância mínima é $d^\star=\frac{k-L(\boldsymbol\mu)}{\sqrt{\mathbf b^\top\Sigma\mathbf b}}$, vale $\Prob\big(L(\mathbf x)\ge k\big)=1-\Phi(d^\star)$ e $\mathbf x^\star=\E[\mathbf x\mid L(\mathbf x)=k]$.`,
+  proof:R`Seja $c=k-L(\boldsymbol\mu)>0$. Para todo $\mathbf x$ com $L(\mathbf x)\ge k$, a desigualdade de Cauchy–Schwarz dá $c\le\mathbf b^\top(\mathbf x-\boldsymbol\mu)=(\Sigma^{1/2}\mathbf b)^\top\,\Sigma^{-1/2}(\mathbf x-\boldsymbol\mu)\le\sqrt{\mathbf b^\top\Sigma\mathbf b}\;d(\mathbf x)$, logo $d(\mathbf x)\ge c/\sqrt{\mathbf b^\top\Sigma\mathbf b}=d^\star$, com igualdade se e só se $\Sigma^{-1/2}(\mathbf x-\boldsymbol\mu)$ é proporcional a $\Sigma^{1/2}\mathbf b$, isto é, $\mathbf x-\boldsymbol\mu\propto\Sigma\mathbf b$; a restrição fixa a constante e produz $\mathbf x^\star$. Como $L(\mathbf x)\sim\mathcal N\big(L(\boldsymbol\mu),\,\mathbf b^\top\Sigma\mathbf b\big)$, $\Prob(L\ge k)=1-\Phi(d^\star)$. Por fim, $(\mathbf x,L)$ é conjuntamente normal com $\Cov(\mathbf x,L)=\Sigma\mathbf b$, e a fórmula da esperança condicional gaussiana, $\boldsymbol\mu+\Sigma\mathbf b\,(k-L(\boldsymbol\mu))/(\mathbf b^\top\Sigma\mathbf b)$, coincide com $\mathbf x^\star$.`},
+ {t:'chart',kind:'line',title:'Estresse reverso: CET1 mínimo em função da severidade do cenário',x:[0,15],samples:90,xlabel:'severidade s: vale do PIB abaixo da base (p.p.)',ylabel:'CET1 mínimo (% do RWA)',fmtY:v=>St.f(v,0)+'%',
+  y:p=>[0,p.c0+1.5],
+  params:[{key:'c0',label:'CET1 inicial',min:9,max:16,step:0.5,value:12,fmt:v=>St.f(v,1)+'%'},{key:'thr',label:'gatilho',min:4.5,max:10,step:0.5,value:7,fmt:v=>St.f(v,1)+'%'}],
+  series:[{label:'LGD constante (45%)',color:'navy',f:(s,p)=>proj(s,p.c0,false).min},{label:'LGD pró-cíclica',color:'brick',dash:true,f:(s,p)=>proj(s,p.c0,true).min}],
+  hlines:[{y:p=>p.thr,label:p=>'gatilho de '+St.f(p.thr,1)+'%'}],
+  marks:[{x:p=>sStar(p.c0,p.thr,false),label:'ruptura'}],
+  points:p=>[{x:sStar(p.c0,p.thr,false),y:p.thr,color:'navy'},{x:sStar(p.c0,p.thr,true),y:p.thr,color:'brick'}],
+  readout:p=>{const fz=s=>s===0?'o banco já começa abaixo do gatilho':(isFinite(s)?`ruptura com o PIB ${St.f(s,1)} p.p. abaixo da base (crescimento de ${St.f(MU-s,1)}% no vale), z = ${St.f(s/DP3,2)}, probabilidade marginal ${oneIn(N(-s/DP3))}`:'sem ruptura até s = 30');return `LGD constante: ${fz(sStar(p.c0,p.thr,false))} · LGD pró-cíclica: ${fz(sStar(p.c0,p.thr,true))}`;},
+  caption:R`Cada ponto da curva roda a projeção trimestral do capital da seção anterior para um cenário com o vale do PIB $s$ p.p. abaixo da base. O ponto de ruptura $s^\star$ é a menor severidade que leva o CET1 mínimo ao gatilho, encontrada por bisseção. A probabilidade marginal usa o AR(1) do PIB da seção 2: com capital inicial alto, a ruptura exige cenários que o modelo gaussiano considera quase impossíveis — o que diz tanto sobre as caudas finas do modelo quanto sobre o banco. A LGD que sobe com a inadimplência antecipa a ruptura.`},
+ {t:'code',lang:'python',title:'Estresse reverso: ponto de ruptura por bisseção e cenário mais plausível',src:R`
+import numpy as np
+from scipy.optimize import brentq
+from scipy.special import expit, logit
+from scipy.stats import norm
+
+T, MU, PHI_G, SIG_G = 12, 2.0, 0.85, 1.5            # AR(1) do crescimento do PIB (% a.a.)
+YB, PHI, B0, B1 = logit(0.03), 0.7, -0.04, -0.02    # satélite ARDL(1,1) no logit da taxa de default
+
+def forma(k):
+    return (k / 3) ** 2 * np.exp(2 * (1 - k / 3))   # vale no 3º trimestre
+
+def cet1_minimo(s, c0=13.0, lgd_prociclica=False):
+    """Menor índice de CET1 (% do RWA) em 12 trimestres com o vale do PIB s p.p. abaixo da base."""
+    d, x_ant, capital, minimo = 0.0, 0.0, c0, np.inf
+    for k in range(1, T + 1):
+        x = -s * forma(k)
+        d = PHI * d + B0 * x + B1 * x_ant
+        x_ant = x
+        dr = expit(YB + d)
+        lgd = min(0.9, 0.45 + 1.5 * max(0.0, dr - 0.03)) if lgd_prociclica else 0.45
+        ppnr = 0.5 + 0.04 * x                          # p.p. do RWA inicial por trimestre
+        credito = lgd * 0.7 * dr / 4 * 100             # carteira de crédito = 70% do RWA
+        mercado = 0.2 + 0.15 * s if k == 1 else 0.0    # choque instantâneo
+        capital += ppnr - credito - mercado - 0.04     # 0,04 p.p.: perdas operacionais
+        minimo = min(minimo, capital / (1 + 0.1 * d))  # RWA cresce com a migração de ratings
+    return minimo
+
+gatilho = 7.0
+dp3 = SIG_G * np.sqrt(1 + PHI_G**2 + PHI_G**4)       # desvio-padrão da previsão em 3 trimestres
+for prociclica in (False, True):
+    s_star = brentq(lambda s: cet1_minimo(s, lgd_prociclica=prociclica) - gatilho, 0.0, 30.0)
+    print(f"LGD pró-cíclica = {prociclica}: ruptura com o PIB {s_star:.2f} p.p. abaixo da base, "
+          f"z = {s_star / dp3:.2f}, probabilidade marginal = {norm.cdf(-s_star / dp3):.2e}")
+
+# cenário de ruptura mais plausível com perda linear nos fatores (Proposição desta seção)
+mu = np.array([2.0, 8.0, 10.5])                      # PIB (% a.a.), desemprego (%), Selic (%)
+Sigma = np.array([[4.0, -1.5, -1.0],
+                  [-1.5, 1.5, 0.6],
+                  [-1.0, 0.6, 4.0]])
+b = np.array([-0.35, 0.40, 0.10])                    # p.p. de CET1 perdidos por unidade de cada fator
+perda_base, folga = 1.0, 4.5                         # perda no cenário central e perda que atinge o gatilho
+c = folga - perda_base
+d_star = c / np.sqrt(b @ Sigma @ b)
+x_star = mu + Sigma @ b * c / (b @ Sigma @ b)
+print("cenário:", x_star.round(2), "| d* =", round(d_star, 2), "| P(perda >= folga) =", f"{norm.sf(d_star):.2e}")
+# cenário ≈ [-3.62, 11.17, 13.15]: recessão com desemprego e juros altos, a cerca de 3,1 desvios-padrão
+`},
+ {t:'note',kind:'tip',k:'Na prática',x:R`O estresse reverso é mais útil como conversa do que como número: o cenário de ruptura deve chegar à alta administração, que decide se ele é plausível o bastante para justificar ações — mais capital, hedge, limites de concentração ou ajustes no plano de recuperação.`}
+]},
+{h:'Crítica de Lucas e incerteza de modelo',blocks:[
+ {t:'p',x:R`Lucas (1976) mostrou que relações econométricas estimadas sob um regime de política mudam quando o regime muda, porque os agentes reotimizam suas decisões. Em testes de estresse, a crítica tem duas faces. Primeiro, os satélites são estimados em períodos predominantemente calmos e aplicados a cenários extremos, nos quais o comportamento muda: devedores sacam limites, bancos renegociam em massa, governos lançam garantias e moratórias. Segundo, o próprio cenário costuma embutir uma resposta de política — cortes de juros, estímulo fiscal — que altera as relações que o modelo supõe estáveis. Em 2020, a inadimplência no Brasil ficou contida por programas de crédito e renegociações, apesar da queda abrupta do PIB: uma relação histórica que deixou de valer.`},
+ {t:'quote',x:R`Given that the structure of an econometric model consists of optimal decision rules of economic agents, and that optimal decision rules vary systematically with changes in the structure of series relevant to the decision maker, it follows that any change in policy will systematically alter the structure of econometric models.`,a:'Robert E. Lucas Jr.',src:R`*Econometric Policy Evaluation: A Critique* (1976)`},
+ {t:'p',x:R`Mesmo sem mudança de regime, há **incerteza de modelo**: várias especificações ajustam o passado quase igualmente bem e divergem no cenário. A resposta prática é torná-la explícita — modelos desafiantes, faixas de resultados em vez de um número, média de modelos com pesos baseados no ajuste e ajustes de gestão (overlays) documentados quando nenhum modelo captura um risco conhecido.`},
+ {t:'eq',caption:'Média de modelos com pesos aproximados pelo BIC',
+  tex:R`\bar L=\sum_{m}\T{1}{\pi_m}\,\T{2}{\E[L\mid m]},\qquad \pi_m\approx\frac{\exp\!\big(-\tfrac12\mathrm{BIC}_m\big)}{\sum_j\exp\!\big(-\tfrac12\mathrm{BIC}_j\big)}`,
+  terms:[['1','Peso do modelo m: a probabilidade a posteriori do modelo, aproximada pelo BIC com prioris iguais.'],['2','Perda estressada projetada pelo modelo m no cenário.']]},
+ {t:'thm',k:'Proposição',title:'decomposição da incerteza entre modelos',x:R`Seja $M$ um índice aleatório de modelos com pesos $\pi_m$ e $L$ a perda estressada, com $\bar L=\sum_m\pi_m\E[L\mid m]$. Então $\Var(L)=\underbrace{\sum_m\pi_m\Var(L\mid m)}_{\text{dentro dos modelos}}+\underbrace{\sum_m\pi_m\big(\E[L\mid m]-\bar L\big)^2}_{\text{entre modelos}}$.`,
+  proof:R`É a lei da variância total. Como $\E[L^2]=\sum_m\pi_m\E[L^2\mid m]=\sum_m\pi_m\big(\Var(L\mid m)+\E[L\mid m]^2\big)$, temos $\Var(L)=\E[L^2]-\bar L^2=\sum_m\pi_m\Var(L\mid m)+\Big(\sum_m\pi_m\E[L\mid m]^2-\bar L^2\Big)$, e o termo entre parênteses é a variância ponderada das médias dos modelos, $\sum_m\pi_m(\E[L\mid m]-\bar L)^2$. Reportar apenas o modelo escolhido descarta esse segundo termo.`},
+ {t:'chart',kind:'mc',title:'Perda de crédito estressada sob incerteza de modelo e de parâmetros',n:4000,bins:48,q:0.95,tail:'right',qlabel:'percentil 95',xlabel:'perda de crédito em 12 trimestres (p.p. do RWA), cenário com s = 6',illustrative:true,
+  params:[{key:'u',label:'incerteza dos coeficientes (múltiplo do erro-padrão de referência)',min:0,max:2,step:0.1,value:1,fmt:v=>St.f(v,1)},{key:'w',label:'peso do modelo com quebra estrutural (M3)',min:0,max:0.8,step:0.05,value:0.25,fmt:v=>St.pct(v,0)}],
+  range:[2,11],
+  sample:(rng,p)=>{const W=modW(p.w),u=rng.u();const m=u<W[0]?0:(u<W[0]+W[1]?1:2);const M=MODS[m];const phi=M.phi>0?Math.min(0.9,Math.max(0,M.phi+0.08*p.u*rng.n())):0;return lossPath(6,phi,M.b0*(1+0.25*p.u*rng.n()),M.b1*(1+0.25*p.u*rng.n()));},
+  readout:(st,p)=>{const W=modW(p.w),Lm=MODS.map(M=>lossPath(6,M.phi,M.b0,M.b1));const Lb=Lm.reduce((a,v,i)=>a+W[i]*v,0);const vb=Lm.reduce((a,v,i)=>a+W[i]*(v-Lb)*(v-Lb),0);const sh=Math.min(1,vb/Math.max(1e-12,st.sd*st.sd));return `perda média = ${St.f(st.mean,2)} p.p. · desvio-padrão = ${St.f(st.sd,2)} p.p. · percentil 95 = ${St.f(st.q,2)} p.p. · modelos com coeficientes centrais: M1 ${St.f(Lm[0],2)}, M2 ${St.f(Lm[1],2)}, M3 ${St.f(Lm[2],2)} · parcela entre modelos ≈ ${St.pct(sh,0)} da variância`;},
+  caption:'Três especificações satélite plausíveis: ARDL com persistência (M1), modelo estático em nível (M2) e um modelo reestimado após uma quebra, mais persistente e sensível ao PIB (M3). Cada sorteio escolhe um modelo pelos pesos (M1 recebe o dobro do peso de M2) e perturba seus coeficientes. Com incerteza de coeficientes zero, restam três barras: toda a dispersão é entre modelos.'},
+ {t:'risk',area:'reg',title:'Governança dos modelos de estresse',x:[R`Modelos de estresse são modelos: entram no inventário, passam por validação independente e têm limitações documentadas, como no capítulo de validação. O que os distingue é a falta de dados para o regime que pretendem descrever; por isso, o peso recai sobre a análise conceitual, os testes de sensibilidade, os modelos desafiantes e a comparação com episódios históricos.`],items:['documente a narrativa, as variáveis e a ligação de cada satélite ao cenário','teste a sensibilidade do resultado a especificações alternativas e reporte faixas','trate overlays como parte do modelo: justificativa, aprovação e acompanhamento','compare as projeções de exercícios anteriores com o que de fato ocorreu'],kpis:['inventário','desafiantes','overlays']},
+ {t:'timeline',items:[['1999','FMI e Banco Mundial lançam o FSAP, que inclui testes de estresse dos sistemas financeiros dos países'],['2009','O Fed conduz o SCAP nos 19 maiores conglomerados bancários dos EUA; o Comitê de Basileia publica princípios para testes de estresse'],['2010','A Lei Dodd-Frank torna obrigatórios testes de estresse anuais para grandes instituições'],['2011','Primeiro CCAR do Fed e primeiro teste de estresse da EBA em toda a União Europeia'],['2014','O BCE conduz a avaliação abrangente (revisão de ativos e estresse) antes de assumir a supervisão bancária europeia'],['2017','A Resolução CMN nº 4.557 exige programas de testes de estresse das instituições no Brasil'],['2018','O Comitê de Basileia publica os Stress testing principles, que substituem os princípios de 2009'],['2020','O Fed substitui a avaliação quantitativa do CCAR pelo stress capital buffer'],['2026','A EBA publica a metodologia do teste de 2027, simplificada e com um módulo de risco climático']]},
+ {t:'note',kind:'tip',k:'Na prática',x:R`Apresente o resultado como uma história: cenário, canais de transmissão, contribuição de cada risco para a queda do capital (a ponte do CET1) e ações de gestão disponíveis. Um CET1 mínimo isolado, sem a ponte e sem as faixas de incerteza, convida a uma falsa precisão.`}
+]}
+],
+books:[['lutkepohl','VARs: estimação, previsão e intervalos de previsão'],['kilian','VARs estruturais: respostas a impulso, decomposições e cenários'],['bellini','PD, LGD e EAD condicionadas a cenários macroeconômicos'],['cra','Testes de estresse de modelos de PD e LGD'],['hullrm','Testes de estresse, capital e liquidez em instituições financeiras'],['taleb','Eventos raros e os limites da previsão']],
+refs:[
+ {t:'Lucas, R. E. (1976). Econometric Policy Evaluation: A Critique. Carnegie-Rochester Conference Series on Public Policy, 1, 19–46.',u:'https://doi.org/10.1016/S0167-2231(76)80003-6'},
+ {t:'Sims, C. A. (1980). Macroeconomics and Reality. Econometrica, 48(1), 1–48.',u:'https://doi.org/10.2307/1912017'},
+ {t:'Waggoner, D. F. & Zha, T. (1999). Conditional Forecasts in Dynamic Multivariate Models. Review of Economics and Statistics, 81(4), 639–651.',u:'https://doi.org/10.1162/003465399558508'},
+ {t:'Pesaran, M. H., Schuermann, T., Treutler, B.-J. & Weiner, S. M. (2006). Macroeconomic Dynamics and Credit Risk: A Global Perspective. Journal of Money, Credit and Banking, 38(5), 1211–1261.',u:'https://doi.org/10.1353/mcb.2006.0074'},
+ {t:'Borio, C., Drehmann, M. & Tsatsaronis, K. (2014). Stress-testing macro stress testing: Does it live up to expectations? Journal of Financial Stability, 12, 3–15.',u:'https://doi.org/10.1016/j.jfs.2013.06.001'},
+ {t:'Breuer, T. & Csiszár, I. (2013). Systematic stress tests with entropic plausibility constraints. Journal of Banking & Finance, 37(5), 1552–1559.',u:'https://doi.org/10.1016/j.jbankfin.2012.04.013'},
+ {t:'Basel Committee on Banking Supervision (2018). Stress testing principles.',u:'https://www.bis.org/bcbs/publ/d450.htm'},
+ {t:'Basel Committee on Banking Supervision (2009). Principles for sound stress testing practices and supervision.',u:'https://www.bis.org/publ/bcbs155.htm'},
+ {t:'Board of Governors of the Federal Reserve System — Stress Tests (Dodd-Frank Act Stress Tests e stress capital buffer).',u:'https://www.federalreserve.gov/supervisionreg/dfa-stress-tests.htm'},
+ {t:'Board of Governors of the Federal Reserve System (2020). Regra final do stress capital buffer (comunicado de 4 de março de 2020).',u:'https://www.federalreserve.gov/newsevents/pressreleases/bcreg20200304a.htm'},
+ {t:'European Banking Authority — EU-wide stress testing (metodologia, cenários e resultados).',u:'https://www.eba.europa.eu/risk-and-data-analysis/risk-analysis/eu-wide-stress-testing'},
+ {t:'Banco Central do Brasil — Relatório de Estabilidade Financeira (REF).',u:'https://www.bcb.gov.br/publicacoes/ref'}]
+});
+})();
+
+</script>
 <script>G.start();</script>
 </body></html>
