@@ -20,6 +20,8 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 
 ## Laboratórios e ferramentas
 
+- [Macrópolis · Laboratório Groehs de Macroeconomia](laboratorio_macroeconomia.html) — `laboratorio_macroeconomia.html`
+- [Cidade do Crédito · Dados Abertos Bacen e SCR](cidade_credito.html) — `cidade_credito.html`
 - [MacroLab Fusion — Terminal Quantitativo de Política Monetária, Banking & IFRS 9](macro_monetary.html) — `macro_monetary.html`
 - [Banking Spread Lab v10 | Unicred Light & Dark · Margem, Spread & Stress Testing](spread.html) — `spread.html`
 - [TS·Lab — Plataforma Visual de Séries Temporais: Cluster, Modelos e Benchmark](time_series.html) — `time_series.html`
@@ -30,7 +32,7 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 
 ## IA e engenharia
 
-- [LLM Engineer Archtetures — Gabriel Groehs](architecture_ai.html) — `architecture_ai.html`
+- [LLM Engineer Architectures — Gabriel Groehs](architecture_ai.html) — `architecture_ai.html`
 - [Arquitetura AI & Risk Engineering — Canvas Compacto | Unicred](architecture_ai_llm.html) — `architecture_ai_llm.html`
 - [Claude Code Architecture](claude_arch.html) — `claude_arch.html`
 - [Ecossistema LLM para Risco de Crédito](ecossistema_LLM.html) — `ecossistema_LLM.html`
@@ -42,6 +44,7 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 
 ## Aulas e aprendizado
 
+- [Cidade Bacharelado · Ciências Econômicas](cidade_bacharelado_economia.html) — `cidade_bacharelado_economia.html`
 - [Databricks Learning Lab](aula_databricks.html) — `aula_databricks.html`
 - [SQL Lakehouse Lab — Databricks para Data Product Owners](aula_sql.html) — `aula_sql.html`
 - [500 Palavras Anglo-Saxãs em Inglês](ingles_500.html) — `ingles_500.html`
