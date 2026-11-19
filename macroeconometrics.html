@@ -22,7 +22,7 @@
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:clip}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 body{margin:0;background:var(--void);color:var(--ink);font-family:var(--serif);font-weight:300;
   font-size:17px;line-height:1.68;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -33,7 +33,7 @@ a:hover{border-bottom-color:var(--chalk)}
 
 /* ---------- progress + top bar ---------- */
 #prog{position:fixed;top:0;left:0;height:2px;background:var(--chalk);width:0;z-index:60;transition:width .12s linear}
-#top{position:fixed;top:0;left:0;right:0;height:52px;z-index:50;display:flex;align-items:center;gap:18px;
+#top{position:fixed;top:0;left:0;right:0;max-width:100vw;height:52px;z-index:50;display:flex;align-items:center;gap:18px;
   padding:0 20px;background:rgba(7,26,33,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
 #top .brand{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink);white-space:nowrap}
 #top .brand span{color:var(--dim);font-weight:400}
@@ -84,6 +84,8 @@ strong{font-weight:600;color:#F1FAF7}
 .heroGrid>*{position:relative;z-index:1}
 h1{font-size:clamp(38px,7.2vw,74px);font-weight:300;letter-spacing:-.028em;line-height:1.02}
 h1 i{font-style:italic;font-weight:300}
+.heroGrid>div{min-width:0}
+@media(max-width:380px){#top .brand span{display:none}h1{font-size:clamp(30px,9vw,34px)}}
 .kicker{font-family:var(--sans);font-size:12.5px;color:var(--chalk);letter-spacing:.14em;margin-bottom:20px}
 .byline{font-family:var(--sans);font-size:13.5px;color:var(--mute);margin-top:22px;line-height:1.85}
 .byline b{color:var(--ink);font-weight:600}
@@ -321,6 +323,39 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--rule2);border-
 .split .num{font-family:var(--mono);font-size:13px;color:var(--mute);line-height:2.05}
 .split .num b{color:var(--chalk);font-weight:500}
 .split .num u{text-decoration:none;color:var(--amber)}
+/* ---------- v5: expansão — linha do tempo, protocolo, autoavaliação ---------- */
+.chart.dbl{height:440px}
+@media(max-width:620px){.chart.dbl{height:380px}}
+.tl{list-style:none;margin:26px 0;padding:0 0 0 22px;border-left:1px solid var(--rule2);max-width:var(--col)}
+.tl li{position:relative;padding:0 0 18px 14px}
+.tl li::before{content:"";position:absolute;left:-27px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--void);border:2px solid var(--chalk-d)}
+.tl li.k::before{background:var(--chalk);border-color:var(--chalk)}
+.tl .y{font-family:var(--mono);font-size:12px;color:var(--amber);display:block}
+.tl b{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink)}
+.tl span.s{display:block;font-size:15px;color:#BFD5D0;line-height:1.55}
+.steps{counter-reset:st;list-style:none;margin:26px 0;padding:0;display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+@media(min-width:760px){.steps{grid-template-columns:1fr 1fr}}
+.steps li{counter-increment:st;background:var(--panel);padding:16px 18px 17px 58px;position:relative;font-size:15px;color:#BFD5D0;line-height:1.55}
+.steps li::before{content:counter(st,decimal-leading-zero);position:absolute;left:18px;top:15px;font-family:var(--mono);font-size:15px;color:var(--chalk)}
+.steps li b{display:block;font-family:var(--sans);font-size:13.5px;color:var(--ink);font-weight:600;margin-bottom:3px}
+.steps li a{font-family:var(--sans);font-size:11.5px}
+.quiz{margin:26px 0}
+.qz{background:var(--panel);border:1px solid var(--rule);border-radius:3px;margin:0 0 14px;padding:16px 18px 14px}
+.qz .qn{font-family:var(--mono);font-size:11px;color:var(--chalk-d);margin-bottom:6px}
+.qz .qt{font-size:17px;color:var(--ink);margin-bottom:12px;line-height:1.5}
+.qz .opts{display:grid;gap:7px}
+.qz button.op{text-align:left;font-family:var(--sans);font-size:13.5px;line-height:1.45;color:var(--mute);background:var(--deep);
+  border:1px solid var(--rule2);border-radius:2px;padding:9px 12px;cursor:pointer}
+.qz button.op:hover:not(:disabled){border-color:var(--chalk-d);color:var(--ink)}
+.qz button.op:disabled{cursor:default}
+.qz button.op.ok{border-color:var(--chalk);color:var(--chalk);background:rgba(99,214,176,.10)}
+.qz button.op.no{border-color:var(--rose);color:var(--rose);background:rgba(226,116,138,.08)}
+.qz .fb{display:none;font-family:var(--sans);font-size:13px;color:#C3D9D4;line-height:1.6;margin-top:11px;border-top:1px solid var(--rule);padding-top:10px}
+.qz .fb.on{display:block}
+.qscore{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-family:var(--sans);font-size:13px;color:var(--mute);margin:8px 0 18px}
+.qscore .bar{flex:1 1 200px;height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+.qscore .bar i{display:block;height:100%;width:0;background:var(--chalk);transition:width .3s}
+.qscore b{font-family:var(--mono);color:var(--chalk);font-weight:500}
 @media print{
   #top,#rail,#prog,#toTop,#pal,#tip,.ctrls,.btnrow,#modal{display:none!important}
   body{background:#fff;color:#111}
@@ -357,12 +392,15 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--rule2);border-
         Companion digital idealizado e revisado por <b>Gabriel Groehs</b>
       </div>
       <div class="counts">
-        <div><b>8</b><span>módulos</span></div>
+        <div><b>11</b><span>módulos</span></div>
         <div><b>4</b><span>estratégias de pesquisa</span></div>
-        <div><b>12</b><span>equações anotadas</span></div>
-        <div><b>13</b><span>painéis interativos</span></div>
-        <div><b>19</b><span>visualizações</span></div>
-        <div><b>22</b><span>parâmetros ajustáveis</span></div>
+        <div><b>20</b><span>equações anotadas</span></div>
+        <div><b>19</b><span>painéis interativos</span></div>
+        <div><b>24</b><span>visualizações</span></div>
+        <div><b>40</b><span>parâmetros ajustáveis</span></div>
+        <div><b>12</b><span>questões de autoavaliação</span></div>
+        <div><b>30</b><span>referências</span></div>
+        <div><b>33</b><span>termos no glossário</span></div>
       </div>
     </div>
     <div>
@@ -382,7 +420,7 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--rule2);border-
     <span class="chnum">Arquitetura editorial</span>
     <h2>O livro como sistema de conhecimento</h2>
     <p class="lede">O texto de Favero não é um catálogo de técnicas. É a reconstrução de uma ruptura: a econometria estrutural dos anos 1960 quebrou, e três programas de pesquisa disputaram o espaço vazio. Cada capítulo responde a uma pergunta da mesma cadeia.</p>
-    <p>Este atlas reorganiza o material em oito módulos. A ordem preserva a lógica do original — do instrumento estatístico ao juízo sobre modelos — mas troca a divisão por capítulos por uma divisão por <em>problema resolvido</em>. Os módulos destacados com barra verde são os eixos: sem eles, os demais não se sustentam.</p>
+    <p>Este atlas reorganiza o material em onze módulos. Os oito primeiros preservam a lógica do original — do instrumento estatístico ao juízo sobre modelos — mas trocam a divisão por capítulos por uma divisão por <em>problema resolvido</em>. Os módulos 09 e 10 aplicam o aparato a dois objetos centrais da macroeconomia monetária, a regra de política e a curva de juros; o módulo 11 conecta o livro à literatura posterior a 2001. Os módulos destacados com barra verde são os eixos: sem eles, os demais não se sustentam.</p>
   </div>
 
   <div class="panel wide">
@@ -560,10 +598,38 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--rule2);border-
     <h4>Aplicação</h4>
     <p>A estrutura de correção de erros é o formato natural para modelos de perda esperada com âncora macro: o componente de longo prazo carrega a relação estrutural entre inadimplência e ciclo, e o termo de curto prazo absorve a dinâmica trimestral sem contaminar a projeção de horizonte longo.</p>
     <div data-code="m3"></div>
+
+    <h3>O risco oposto: regressão espúria</h3>
+    <p>A cointegração tem um gêmeo perigoso. Regredir uma série integrada sobre outra, <em>independente</em> dela, produz com frequência coeficientes "significativos", R² elevado e resíduos fortemente autocorrelacionados. Granger e Newbold mostraram o fenômeno por simulação; Phillips provou depois que a estatística <em>t</em> nem sequer converge — ela cresce com a raiz do tamanho da amostra. Mais dados pioram o problema em vez de resolvê-lo.</p>
+    <p>A distinção entre as duas situações é exatamente o que os testes de cointegração fazem: em uma relação genuína o resíduo é estacionário; em uma regressão espúria ele herda a raiz unitária das séries.</p>
+  </div>
+
+  <button class="eq anim" data-eq="spur"><span class="lbl">Regressão espúria entre passeios aleatórios independentes</span>
+    <span class="m"><span class="tk"><i class="sy" data-s="passeio aleatório">y</i><sub>t</sub></span><span class="tk op">=</span><span class="tk"><i class="sy" data-s="intercepto">α</i></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="coeficiente verdadeiro igual a zero">β</i> <i class="sy" data-s="outro passeio aleatório, independente de y">x</i><sub>t</sub></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="resíduo: herda a raiz unitária">u</i><sub>t</sub></span><span class="tk op">·</span><span class="tk">Δ<i class="sy" data-s="passeio aleatório">y</i><sub>t</sub> ⊥ Δ<i class="sy" data-s="outro passeio aleatório, independente de y">x</i><sub>t</sub></span><span class="tk op">⟹</span><span class="tk"><i class="sy" data-s="estatística t do coeficiente β">t</i><sub>β</sub> = O<sub>p</sub>(√<i class="sy" data-s="tamanho da amostra">T</i>)</span></span>
+    <span class="open">abrir inspetor</span></button>
+
+  <div class="panel wide">
+    <div class="phead"><h5>Distribuição da estatística t em regressões espúrias</h5><span class="tag">400 réplicas Monte Carlo</span></div>
+    <div class="pbody"><div class="chart" id="c_spur"></div>
+      <div class="legend"><span><i style="background:var(--chalk)"></i>t de β̂ com séries em nível</span><span><i style="background:var(--slate)"></i>normal padrão (o que o teste supõe)</span><span><i style="background:var(--rose)"></i>valores críticos ±1,96</span></div>
+      <div class="readout" id="r_spur"></div>
+    </div>
+    <div class="ctrls">
+      <div class="ctrl"><label>Tamanho da amostra (T) <b id="v_spT">100</b></label>
+        <input type="range" id="s_spT" min="30" max="500" step="10" value="100"><div class="hint">padrão 100 · com ρ = 1 a distribuição se alarga à medida que T cresce</div></div>
+      <div class="ctrl"><label>Persistência comum das duas séries (ρ) <b id="v_sprho">1,00</b></label>
+        <input type="range" id="s_sprho" min="0" max="1" step="0.01" value="1"><div class="hint">padrão 1,00 · abaixo de ~0,7 a inferência volta a funcionar razoavelmente</div></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <h4>O que observar</h4>
+    <p>Com ρ = 1, cerca de três quartos das regressões rejeitam β = 0 a 5%, embora as séries não tenham nenhuma relação. Aumente T: a taxa de rejeição sobe. Reduza ρ e a distribuição se aproxima da normal. A regra de bolso clássica — desconfiar quando o R² supera a estatística de Durbin–Watson — aparece na leitura abaixo do gráfico. Estimar em diferenças elimina o problema, mas também descarta a informação de longo prazo; o modelo de correção de erros é a forma de manter as duas coisas quando, e somente quando, há cointegração.</p>
+    <div data-code="spur"></div>
     <div class="ref">
       <div class="rt">Leitura técnica referenciada</div>
       <p>A discussão de cointegração é o ponto em que o livro conecta séries temporais e teoria econômica de forma explícita: vetores cointegrantes são interpretados como relações de equilíbrio, e o número de vetores passa a ser uma questão empírica com consequência estrutural. O procedimento de máxima verossimilhança de Johansen aparece como a ferramenta que permite testar quantas relações existem em vez de assumi-las.</p>
-      <div class="cite">Favero, C. A. (2001). <em>Applied macroeconometrics</em> (cap. 2). Oxford University Press. · Johansen, S., &amp; Juselius, K. (1990). Maximum likelihood estimation and inference on cointegration. <em>Oxford Bulletin of Economics and Statistics, 52</em>(2), 169–210. https://doi.org/10.1111/j.1468-0084.1990.mp52002003.x · Engle, R. F., &amp; Granger, C. W. J. (1987). Co-integration and error correction. <em>Econometrica, 55</em>(2), 251–276. https://doi.org/10.2307/1913236</div>
+      <div class="cite">Favero, C. A. (2001). <em>Applied macroeconometrics</em> (cap. 2). Oxford University Press. · Johansen, S., &amp; Juselius, K. (1990). Maximum likelihood estimation and inference on cointegration. <em>Oxford Bulletin of Economics and Statistics, 52</em>(2), 169–210. https://doi.org/10.1111/j.1468-0084.1990.mp52002003.x · Engle, R. F., &amp; Granger, C. W. J. (1987). Co-integration and error correction. <em>Econometrica, 55</em>(2), 251–276. https://doi.org/10.2307/1913236 · Granger, C. W. J., &amp; Newbold, P. (1974). Spurious regressions in econometrics. <em>Journal of Econometrics, 2</em>(2), 111–120. https://doi.org/10.1016/0304-4076(74)90034-7 · Phillips, P. C. B. (1986). Understanding spurious regressions in econometrics. <em>Journal of Econometrics, 33</em>(3), 311–340. https://doi.org/10.1016/0304-4076(86)90001-1</div>
     </div>
   </div>
 </section>
@@ -651,10 +717,40 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--rule2);border-
     <p>Leve δ para zero. As duas projeções colapsam sobre a mesma linha: sem componente prospectivo, a mudança de regra não desloca o coeficiente e a crítica deixa de morder. Agora recoloque δ em 0,60 e afaste λ₁ de λ₀ — o erro cresce de forma não linear. A magnitude da crítica é uma questão quantitativa, e o livro insiste nisso: ela não invalida toda equação estimada, invalida o uso de equações não invariantes em exercícios contrafactuais.</p>
     <h4>Aplicação</h4>
     <p>É o mesmo argumento que limita o uso de modelos comportamentais de risco calibrados em um regime regulatório para simular o efeito de uma mudança regulatória. Se a regra que gera a variável de política entra na formação da expectativa do tomador, o parâmetro histórico não é invariante ao cenário testado.</p>
+
+    <h3>Tornando a crítica testável: estabilidade de parâmetros</h3>
+    <p>Se a mudança de regra desloca o coeficiente, o deslocamento deixa rastro nos dados. Duas ferramentas clássicas procuram esse rastro. O teste de Chow compara o ajuste antes e depois de uma data candidata — exige saber onde procurar. O CUSUM de Brown, Durbin e Evans dispensa a data: acumula os erros de previsão um passo à frente de uma estimação recursiva e sinaliza quando a soma sai de uma banda que se alarga com o tempo.</p>
+    <p>É a versão operacional da super-exogeneidade: um coeficiente que permanece estável enquanto a regra de política comprovadamente mudou é evidência a favor da invariância. Um coeficiente que quebra junto com a regra é a crítica de Lucas aparecendo nos dados.</p>
+  </div>
+
+  <button class="eq anim" data-eq="cusum"><span class="lbl">Resíduos recursivos e estatística CUSUM</span>
+    <span class="m"><span class="tk"><i class="sy" data-s="resíduo recursivo padronizado">w</i><sub>t</sub></span><span class="tk op">=</span><span class="tk"><span class="frac"><span class="n"><i class="sy" data-s="observação no período t">y</i><sub>t</sub> − <i class="sy" data-s="regressores do período t">x</i><sub>t</sub>′<i class="sy" data-s="estimativa com dados até t−1">β̂</i><sub>t−1</sub></span><span class="d">√(1 + <i class="sy" data-s="regressores do período t">x</i><sub>t</sub>′(<i class="sy" data-s="matriz de regressores até t−1">X</i>′<sub>t−1</sub><i class="sy" data-s="matriz de regressores até t−1">X</i><sub>t−1</sub>)<sup>−1</sup><i class="sy" data-s="regressores do período t">x</i><sub>t</sub>)</span></span></span><span class="tk op">·</span><span class="tk"><i class="sy" data-s="soma acumulada padronizada">W</i><sub>t</sub></span><span class="tk op">=</span><span class="tk"><span class="frac"><span class="n">1</span><span class="d"><i class="sy" data-s="desvio-padrão estimado dos resíduos recursivos">σ̂</i></span></span></span><span class="tk"><span class="sum"><span class="lim">t</span><span class="sg">Σ</span><span class="lim">j = k+1</span></span> <i class="sy" data-s="resíduo recursivo padronizado">w</i><sub>j</sub></span></span>
+    <span class="open">abrir inspetor</span></button>
+
+  <div class="panel wide">
+    <div class="phead"><h5>Estimação recursiva e CUSUM diante de uma quebra de regime</h5><span class="tag">160 trimestres sintéticos</span></div>
+    <div class="pbody"><div class="chart dbl" id="c_cusum"></div>
+      <div class="legend"><span><i style="background:var(--chalk)"></i>θ̂ recursivo ± 2 erros-padrão</span><span><i style="background:var(--amber)"></i>θ verdadeiro</span><span><i style="background:var(--slate)"></i>CUSUM</span><span><i style="background:var(--rose)"></i>bandas de 5%</span></div>
+      <div class="readout" id="r_cusum"></div>
+    </div>
+    <div class="ctrls">
+      <div class="ctrl"><label>Deslocamento de θ na quebra <b id="v_cd">0,40</b></label>
+        <input type="range" id="s_cd" min="0" max="1.5" step="0.05" value="0.4"><div class="hint">padrão 0,40 · em zero o coeficiente é invariante</div></div>
+      <div class="ctrl"><label>Momento da quebra (fração da amostra) <b id="v_cl">0,60</b></label>
+        <input type="range" id="s_cl" min="0.3" max="0.9" step="0.05" value="0.6"><div class="hint">padrão 0,60 · quebras tardias deixam pouco tempo para o CUSUM reagir</div></div>
+      <div class="ctrl"><label>Ruído da equação σ <b id="v_cs">1,00</b></label>
+        <input type="range" id="s_cs" min="0.3" max="2.5" step="0.1" value="1"><div class="hint">padrão 1,00 · mais ruído reduz o poder dos dois testes</div></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <h4>O que observar</h4>
+    <p>Na configuração padrão a soma acumulada sai pela borda poucos trimestres depois da quebra. Zere o deslocamento: a estimativa recursiva se estabiliza e o CUSUM vagueia dentro das bandas. Agora mova a quebra para o fim da amostra: o mesmo deslocamento passa a ser difícil de detectar. O teste de Chow, que conhece a data, continua rejeitando com folga — o preço de não saber onde procurar é poder. A conclusão prática é a do livro: não rejeitar estabilidade não prova invariância, e a avaliação de uma mudança de regime exige amostras que contenham regimes diferentes.</p>
+    <div data-code="m5"></div>
     <div class="ref">
       <div class="rt">Leitura técnica referenciada</div>
       <p>O capítulo trata a crítica como um problema de invariância de parâmetros e a conecta ao conceito de exogeneidade em suas três formas — fraca, forte e super-exogeneidade. Essa conexão é o que torna a crítica testável em vez de retórica: super-exogeneidade é uma hipótese com implicações empíricas verificáveis, e a resposta da escola LSE consiste precisamente em testá-la.</p>
-      <div class="cite">Favero, C. A. (2001). <em>Applied macroeconometrics</em> (cap. 4). Oxford University Press. · Lucas, R. E. (1976). Econometric policy evaluation: A critique. <em>Carnegie-Rochester Conference Series on Public Policy, 1</em>, 19–46. https://doi.org/10.1016/S0167-2231(76)80003-6 · Engle, R. F., Hendry, D. F., &amp; Richard, J.-F. (1983). Exogeneity. <em>Econometrica, 51</em>(2), 277–304. https://doi.org/10.2307/1911990</div>
+      <div class="cite">Favero, C. A. (2001). <em>Applied macroeconometrics</em> (cap. 4). Oxford University Press. · Lucas, R. E. (1976). Econometric policy evaluation: A critique. <em>Carnegie-Rochester Conference Series on Public Policy, 1</em>, 19–46. https://doi.org/10.1016/S0167-2231(76)80003-6 · Engle, R. F., Hendry, D. F., &amp; Richard, J.-F. (1983). Exogeneity. <em>Econometrica, 51</em>(2), 277–304. https://doi.org/10.2307/1911990 · Chow, G. C. (1960). Tests of equality between sets of coefficients in two linear regressions. <em>Econometrica, 28</em>(3), 591–605. https://doi.org/10.2307/1910133 · Brown, R. L., Durbin, J., &amp; Evans, J. M. (1975). Techniques for testing the constancy of regression relationships over time. <em>Journal of the Royal Statistical Society: Series B, 37</em>(2), 149–192. https://doi.org/10.1111/j.2517-6161.1975.tb01532.x</div>
     </div>
   </div>
 </section>
@@ -904,6 +1000,199 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--rule2);border-
 </section>
 <div class="hr"></div>
 
+<!-- ============ M9 — REGRAS DE POLÍTICA ============ -->
+<section id="m9">
+  <div class="col">
+    <span class="chnum">Módulo 09 · aplicação — regras de política monetária</span>
+    <h2>Regras de política: quando o juro precisa reagir mais que a inflação</h2>
+    <p class="lede">As três estratégias se encontram em um objeto concreto: a função de reação do banco central. Estimá-la exige VAR, GMM e cuidado com a crítica de Lucas ao mesmo tempo.</p>
+    <h3>Intuição</h3>
+    <p>Uma regra de Taylor descreve a taxa de juros como resposta ao desvio da inflação em relação à meta e ao hiato do produto. O coeficiente da inflação carrega a propriedade mais importante: se ele for maior que um, um aumento de inflação eleva o <em>juro real</em>, esfria a demanda e devolve a inflação à meta. Se for menor que um, o juro nominal sobe, mas o real cai — a política alimenta a inflação que pretendia combater. Essa condição é o princípio de Taylor.</p>
+  </div>
+
+  <button class="eq anim" data-eq="taylor"><span class="lbl">Regra de Taylor com suavização da taxa de juros</span>
+    <span class="m"><span class="tk"><i class="sy" data-s="taxa de juros nominal de política">i</i><sub>t</sub></span><span class="tk op">=</span><span class="tk"><i class="sy" data-s="suavização: peso do juro anterior">ρ</i> <i class="sy" data-s="taxa de juros nominal de política">i</i><sub>t−1</sub></span><span class="tk op">+</span><span class="tk">(1 − <i class="sy" data-s="suavização: peso do juro anterior">ρ</i>)[&thinsp;<i class="sy" data-s="juro real neutro">r</i>* + <i class="sy" data-s="meta de inflação">π</i>* + <i class="sy" data-s="reação à inflação; o princípio de Taylor exige φπ &gt; 1">φ</i><sub>π</sub>(<i class="sy" data-s="inflação">π</i><sub>t</sub> − <i class="sy" data-s="meta de inflação">π</i>*) + <i class="sy" data-s="reação ao hiato do produto">φ</i><sub>x</sub> <i class="sy" data-s="hiato do produto">x</i><sub>t</sub>&thinsp;]</span></span>
+    <span class="open">abrir inspetor</span></button>
+
+  <div class="col">
+    <p>O painel abaixo coloca essa regra dentro de uma economia mínima com defasagens: a inflação depende do hiato do período anterior, o hiato depende do juro real do período anterior. Um choque inflacionário unitário atinge o sistema em t = 0, e a regra decide se ele se dissipa ou se acumula.</p>
+  </div>
+
+  <div class="panel wide">
+    <div class="phead"><h5>Resposta a um choque inflacionário sob a regra escolhida</h5><span class="tag">economia com defasagens · 40 trimestres</span></div>
+    <div class="pbody"><div class="chart tall" id="c_taylor"></div>
+      <div class="legend"><span><i style="background:var(--chalk)"></i>inflação</span><span><i style="background:var(--slate)"></i>hiato do produto</span><span><i style="background:var(--amber)"></i>juro nominal</span><span><i style="background:var(--rose)"></i>inflação sob a regra contrafactual</span></div>
+      <div class="readout" id="r_taylor"></div>
+    </div>
+    <div class="ctrls">
+      <div class="ctrl"><label>Reação à inflação φπ <b id="v_fp">1,50</b></label>
+        <input type="range" id="s_fp" min="0.5" max="3" step="0.05" value="1.5"><div class="hint">padrão 1,50 (valor de Taylor, 1993) · abaixo de 1,00 o juro real cai quando a inflação sobe</div></div>
+      <div class="ctrl"><label>Reação ao hiato φx <b id="v_fx">0,50</b></label>
+        <input type="range" id="s_fx" min="0" max="1.5" step="0.05" value="0.5"><div class="hint">padrão 0,50 · amortece o produto, não substitui a reação à inflação</div></div>
+      <div class="ctrl"><label>Suavização ρ <b id="v_trho">0,50</b></label>
+        <input type="range" id="s_trho" min="0" max="0.9" step="0.05" value="0.5"><div class="hint">padrão 0,50 · bancos centrais movem o juro em passos graduais</div></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <h4>O que observar</h4>
+    <p>Desça φπ até 1,00: o maior autovalor do sistema encosta em um e a inflação deixa de voltar à meta — cada choque vira permanente. Abaixo disso o sistema diverge. Acima, a inflação retorna, e o custo aparece no hiato negativo que a regra precisa produzir. Repare também na leitura sobre a forma reduzida: o coeficiente do juro sobre a inflação defasada muda a cada movimento dos controles. Quem estimasse um VAR em um regime e o usasse para simular outro cometeria exatamente o erro descrito no Módulo 05.</p>
+
+    <h3>Estimando a regra: expectativas e GMM</h3>
+    <p>Bancos centrais reagem à inflação <em>esperada</em>, não à observada. Clarida, Galí e Gertler especificaram a regra em termos de previsões e substituíram as expectativas pelos valores realizados; o erro de previsão resultante é ortogonal a tudo o que o banco central conhecia, e isso gera condições de momento — a mesma lógica da equação de Euler do Módulo 08.</p>
+  </div>
+
+  <button class="eq anim" data-eq="cgg"><span class="lbl">Regra prospectiva e condição de ortogonalidade</span>
+    <span class="m"><span class="tk"><i class="sy" data-s="juro-alvo do banco central">i</i>*<sub>t</sub></span><span class="tk op">=</span><span class="tk"><i class="sy" data-s="juro nominal de equilíbrio">ī</i></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="reação à inflação esperada">β</i>(E<sub>t</sub><i class="sy" data-s="inflação k períodos à frente">π</i><sub>t+k</sub> − <i class="sy" data-s="meta de inflação">π</i>*)</span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="reação ao hiato esperado">γ</i> E<sub>t</sub><i class="sy" data-s="hiato do produto">x</i><sub>t+q</sub></span><span class="tk op">⟹</span><span class="tk">E[&thinsp;(<i class="sy" data-s="juro observado">i</i><sub>t</sub> − <i class="sy" data-s="suavização">ρ</i><i class="sy" data-s="juro observado">i</i><sub>t−1</sub> − (1−<i class="sy" data-s="suavização">ρ</i>)<i class="sy" data-s="juro-alvo do banco central">i</i>*<sub>t</sub>) · <i class="sy" data-s="instrumentos: informação disponível em t">z</i><sub>t</sub>&thinsp;]</span><span class="tk op">=</span><span class="tk">0</span></span>
+    <span class="open">abrir inspetor</span></button>
+
+  <div class="col">
+    <p>O resultado empírico que tornou a abordagem famosa é uma quebra: nos Estados Unidos, a reação estimada à inflação esperada fica abaixo de um no período anterior a Volcker e próxima de dois depois. A leitura proposta é que a instabilidade inflacionária dos anos 1970 foi, em parte, consequência de uma regra que violava o princípio de Taylor — uma explicação que só é possível porque a regra foi estimada separadamente em cada regime.</p>
+    <h4>Aplicação</h4>
+    <p>Em cenários de estresse de crédito, a trajetória de juros não pode ser desenhada independentemente da trajetória de inflação: uma regra de reação estimada fecha o cenário e evita combinações macroeconomicamente incoerentes, como inflação persistente com juro real negativo por muitos trimestres sem efeito sobre o produto.</p>
+    <div data-code="m9"></div>
+    <div class="ref">
+      <div class="rt">Leitura técnica referenciada</div>
+      <p>A regra de política é o ponto em que as discussões do livro convergem: o VAR mede desvios da regra (os choques), o GMM estima a regra sob expectativas racionais e a crítica de Lucas explica por que os coeficientes do sistema mudam quando a regra muda. A função de reação deixa de ser um apêndice da política monetária e passa a ser parte da identificação do modelo inteiro.</p>
+      <div class="cite">Favero, C. A. (2001). <em>Applied macroeconometrics</em>. Oxford University Press. · Taylor, J. B. (1993). Discretion versus policy rules in practice. <em>Carnegie-Rochester Conference Series on Public Policy, 39</em>, 195–214. https://doi.org/10.1016/0167-2231(93)90009-L · Clarida, R., Galí, J., &amp; Gertler, M. (2000). Monetary policy rules and macroeconomic stability: Evidence and some theory. <em>Quarterly Journal of Economics, 115</em>(1), 147–180. https://doi.org/10.1162/003355300554692</div>
+    </div>
+  </div>
+</section>
+<div class="hr"></div>
+
+<!-- ============ M10 — ESTRUTURA A TERMO ============ -->
+<section id="m10">
+  <div class="col">
+    <span class="chnum">Módulo 10 · aplicação — estrutura a termo das taxas de juros</span>
+    <h2>A curva de juros como previsão: testando a hipótese das expectativas</h2>
+    <p class="lede">Se taxas longas fossem apenas a média das taxas curtas esperadas, o spread entre elas preveria exatamente o caminho futuro dos juros. Os dados dizem que não preveem — e a diferença tem nome: prêmio de prazo.</p>
+    <h3>Intuição</h3>
+    <p>A hipótese das expectativas impõe uma restrição forte e testável: a taxa de um título de n períodos é a média das taxas curtas esperadas ao longo da vida do título, mais uma constante. Daí sai uma previsão precisa — quando o spread entre longo e curto está alto, a taxa longa deve <em>subir</em> no período seguinte, em proporção conhecida. Campbell e Shiller transformaram isso em uma regressão cujo coeficiente deveria ser exatamente um.</p>
+  </div>
+
+  <button class="eq anim" data-eq="eh"><span class="lbl">Hipótese das expectativas com prêmio de prazo</span>
+    <span class="m"><span class="tk"><i class="sy" data-s="taxa de um título de n períodos">R</i><sub>t</sub><sup>(<i class="sy" data-s="prazo do título, em períodos">n</i>)</sup></span><span class="tk op">=</span><span class="tk"><span class="frac"><span class="n">1</span><span class="d"><i class="sy" data-s="prazo do título, em períodos">n</i></span></span></span><span class="tk"><span class="sum"><span class="lim">n−1</span><span class="sg">Σ</span><span class="lim">i = 0</span></span> E<sub>t</sub> <i class="sy" data-s="taxa curta de um período">r</i><sub>t+i</sub></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="prêmio de prazo; constante sob a hipótese pura">τ</i><sub>t</sub><sup>(<i class="sy" data-s="prazo do título, em períodos">n</i>)</sup></span></span>
+    <span class="open">abrir inspetor</span></button>
+
+  <button class="eq anim" data-eq="cs"><span class="lbl">Regressão de Campbell–Shiller</span>
+    <span class="m"><span class="tk"><i class="sy" data-s="taxa longa no período seguinte, prazo remanescente n−1">R</i><sub>t+1</sub><sup>(n−1)</sup> − <i class="sy" data-s="taxa longa hoje">R</i><sub>t</sub><sup>(n)</sup></span><span class="tk op">=</span><span class="tk"><i class="sy" data-s="constante: absorve prêmio constante">a</i></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="coeficiente testado; igual a 1 sob a hipótese das expectativas">b</i></span><span class="tk"><span class="frac"><span class="n"><i class="sy" data-s="taxa longa hoje">R</i><sub>t</sub><sup>(n)</sup> − <i class="sy" data-s="taxa curta hoje">r</i><sub>t</sub></span><span class="d">n − 1</span></span></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="erro de expectativa, imprevisível em t">e</i><sub>t+1</sub></span><span class="tk op">·</span><span class="tk">H₀ : <i class="sy" data-s="coeficiente testado; igual a 1 sob a hipótese das expectativas">b</i> = 1</span></span>
+    <span class="open">abrir inspetor</span></button>
+
+  <div class="panel wide">
+    <div class="phead"><h5>Taxas simuladas e coeficiente de Campbell–Shiller por prazo</h5><span class="tag">curto AR(1) · prêmio AR(1) independente</span></div>
+    <div class="pbody"><div class="chart dbl" id="c_term"></div>
+      <div class="legend"><span><i style="background:var(--slate)"></i>taxa curta</span><span><i style="background:var(--chalk)"></i>taxa de 40 trimestres observada</span><span><i style="background:var(--amber)"></i>taxa de 40 trimestres sob a hipótese pura · b = 1</span><span><i style="background:var(--rose)"></i>b estimado em amostra de 60 anos</span></div>
+      <div class="readout" id="r_term"></div>
+    </div>
+    <div class="ctrls">
+      <div class="ctrl"><label>Persistência da taxa curta ρ <b id="v_tr">0,95</b></label>
+        <input type="range" id="s_tr" min="0.5" max="0.99" step="0.01" value="0.95"><div class="hint">padrão 0,95 · quanto mais persistente, mais a taxa longa acompanha a curta</div></div>
+      <div class="ctrl"><label>Volatilidade do prêmio de prazo <b id="v_tps">0,10</b></label>
+        <input type="range" id="s_tps" min="0" max="0.5" step="0.01" value="0.1"><div class="hint">padrão 0,10 · em zero vale a hipótese pura e b = 1 em todos os prazos</div></div>
+      <div class="ctrl"><label>Persistência do prêmio <b id="v_tpp">0,80</b></label>
+        <input type="range" id="s_tpp" min="0" max="0.97" step="0.01" value="0.8"><div class="hint">padrão 0,80 · prêmios persistentes contaminam o spread por mais tempo</div></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <h4>O que observar</h4>
+    <p>Com volatilidade zero do prêmio, a curva populacional fica colada em um — a hipótese é verdadeira por construção. Basta um prêmio pequeno e variável para o coeficiente despencar, sobretudo nos prazos curtos: o spread passa a misturar duas coisas, expectativas de juros e prêmio, e só a primeira prevê o movimento futuro da taxa. Os pontos vermelhos mostram outro problema: mesmo quando a hipótese vale, uma amostra de 60 anos produz estimativas dispersas, porque o regressor é muito persistente.</p>
+    <p>A lição de identificação é a mesma dos módulos anteriores. Rejeitar b = 1 não diz se o problema está no prêmio variável, em expectativas não racionais ou em mudanças na regra de política que alteram a persistência da taxa curta — esta última, aliás, é outra manifestação da crítica de Lucas.</p>
+    <h4>Aplicação</h4>
+    <p>A curva de juros entra em praticamente todo cenário macroeconômico usado em risco de crédito e de mercado. Tratar a taxa longa como média das curtas esperadas subestima o risco de um choque de prêmio — o movimento em que a curva se inclina sem que a política monetária tenha mudado.</p>
+    <div data-code="m10"></div>
+    <div class="ref">
+      <div class="rt">Leitura técnica referenciada</div>
+      <p>A estrutura a termo é o laboratório natural para a abordagem VAR de testes de modelos de valor presente: estima-se um VAR para a taxa curta e o spread, calcula-se o spread "teórico" implicado pela hipótese das expectativas e compara-se com o observado. A forma da comparação — restrições não lineares nos coeficientes do VAR — ilustra como uma teoria pode ser testada sem que seja preciso especificar a estrutura completa da economia.</p>
+      <div class="cite">Favero, C. A. (2001). <em>Applied macroeconometrics</em>. Oxford University Press. · Campbell, J. Y., &amp; Shiller, R. J. (1987). Cointegration and tests of present value models. <em>Journal of Political Economy, 95</em>(5), 1062–1088. https://doi.org/10.1086/261502 · Campbell, J. Y., &amp; Shiller, R. J. (1991). Yield spreads and interest rate movements: A bird's eye view. <em>Review of Economic Studies, 58</em>(3), 495–514. https://doi.org/10.2307/2298008</div>
+    </div>
+  </div>
+</section>
+<div class="hr"></div>
+
+<!-- ============ M11 — DEPOIS DE 2001 ============ -->
+<section id="m11">
+  <div class="col">
+    <span class="chnum">Módulo 11 · extensão — a fronteira depois do livro</span>
+    <h2>Depois de 2001: o que mudou na identificação</h2>
+    <p class="lede">O livro fecha um ciclo. As duas décadas seguintes não escolheram um vencedor entre as estratégias: multiplicaram as fontes de identificação e passaram a reportar a incerteza que vem delas.</p>
+    <h3>Intuição</h3>
+    <p>O VAR com Cholesky impõe zeros exatos; a crítica a essa prática gerou três movimentos. O primeiro troca zeros por <em>sinais</em> — são as restrições de sinal: em vez de afirmar que o produto não reage no impacto, afirma-se apenas que um aperto monetário eleva o juro e não eleva a inflação, e aceita-se todo modelo compatível com isso. O segundo busca choques medidos fora do modelo — variações de preços de ativos em janelas de minutos em torno de anúncios, ou leituras narrativas das atas. O terceiro questiona a própria extrapolação do VAR e estima cada horizonte da resposta diretamente, por projeções locais.</p>
+  </div>
+
+  <button class="eq anim" data-eq="sign"><span class="lbl">Identificação por restrições de sinal</span>
+    <span class="m"><span class="tk"><i class="sy" data-s="resíduos de forma reduzida">u</i><sub>t</sub></span><span class="tk op">=</span><span class="tk"><i class="sy" data-s="matriz de impacto candidata">B</i> <i class="sy" data-s="choques estruturais ortogonais">ε</i><sub>t</sub></span><span class="tk op">,</span><span class="tk"><i class="sy" data-s="matriz de impacto candidata">B</i> = <i class="sy" data-s="fator de Cholesky de Σ">P</i> <i class="sy" data-s="rotação ortogonal sorteada">Q</i></span><span class="tk op">,</span><span class="tk"><i class="sy" data-s="rotação ortogonal sorteada">Q</i><i class="sy" data-s="rotação ortogonal sorteada">Q</i>′ = <i class="sy" data-s="identidade">I</i></span><span class="tk op">⟹</span><span class="tk"><i class="sy" data-s="matriz de impacto candidata">B</i><i class="sy" data-s="matriz de impacto candidata">B</i>′ = <i class="sy" data-s="covariância dos resíduos: igual para toda rotação">Σ</i></span><span class="tk op">·</span><span class="tk"><span class="wh">aceita-se</span> <i class="sy" data-s="matriz de impacto candidata">B</i> <span class="wh">se as respostas têm os sinais exigidos</span></span></span>
+    <span class="open">abrir inspetor</span></button>
+
+  <div class="panel wide">
+    <div class="phead"><h5>Resposta do produto a um aperto monetário: conjunto identificado</h5><span class="tag">mesmo VAR do Módulo 07 · rotações aleatórias</span></div>
+    <div class="pbody"><div class="chart tall" id="c_sign"></div>
+      <div class="legend"><span><i style="background:rgba(99,214,176,.35)"></i>modelos aceitos</span><span><i style="background:var(--chalk)"></i>mediana pontual</span><span><i style="background:rgba(99,214,176,.18)"></i>percentis 16–84</span><span><i style="background:var(--amber)"></i>Cholesky (produto → inflação → juro)</span></div>
+      <div class="readout" id="r_sign"></div>
+    </div>
+    <div class="ctrls">
+      <div class="ctrl"><label>Horizonte das restrições K (trimestres) <b id="v_sk">4</b></label>
+        <input type="range" id="s_sk" min="0" max="8" step="1" value="4"><div class="hint">padrão 4 · juro ≥ 0 e inflação ≤ 0 de h = 0 até h = K</div></div>
+      <div class="ctrl"><label>Rotações sorteadas <b id="v_sn">800</b></label>
+        <input type="range" id="s_sn" min="200" max="2000" step="100" value="800"><div class="hint">padrão 800 · cada rotação gera três candidatos a choque monetário</div></div>
+    </div>
+    <div class="btnrow"><button class="b" id="b_sout" aria-pressed="false">Restringir também o produto (≤ 0)</button></div>
+  </div>
+
+  <div class="col">
+    <h4>O que observar</h4>
+    <p>Com K = 0 as restrições valem só no impacto, e o conjunto aceito inclui respostas do produto com os dois sinais: os dados, sozinhos, não dizem se o aperto é recessivo. Estenda K e o conjunto se estreita. Os controles do Módulo 07 continuam ativos aqui — mude a sensibilidade do produto ao juro e o conjunto inteiro se desloca. Ative a restrição sobre o produto e veja o problema oposto: a resposta passa a ser negativa porque foi <em>imposta</em>, não porque foi descoberta. É o mesmo dilema de Cowles com outra roupa.</p>
+    <p>Duas cautelas acompanham o método. A mediana pontual combina modelos diferentes em cada horizonte e não corresponde a nenhum deles; e a distribuição uniforme sobre rotações, que parece neutra, carrega informação a priori sobre as respostas.</p>
+  </div>
+
+  <button class="eq anim" data-eq="lp"><span class="lbl">Projeção local para o horizonte h</span>
+    <span class="m"><span class="tk"><i class="sy" data-s="variável de resposta h períodos à frente">y</i><sub>t+h</sub></span><span class="tk op">=</span><span class="tk"><i class="sy" data-s="intercepto específico do horizonte">α</i><sub>h</sub></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="resposta ao impulso no horizonte h">β</i><sub>h</sub> <i class="sy" data-s="choque identificado: por exemplo, surpresa de alta frequência">s</i><sub>t</sub></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="coeficientes dos controles">γ</i><sub>h</sub>′ <i class="sy" data-s="controles: defasagens das variáveis do sistema">w</i><sub>t</sub></span><span class="tk op">+</span><span class="tk"><i class="sy" data-s="erro com autocorrelação MA(h−1)">e</i><sub>t+h</sub></span><span class="tk op">,</span><span class="tk"><i class="sy" data-s="horizonte">h</i> = 0, 1, …, H</span></span>
+    <span class="open">abrir inspetor</span></button>
+
+  <div class="col">
+    <h3>Mapa da fronteira</h3>
+    <p>Cada desenvolvimento abaixo responde a uma fragilidade discutida no livro e cria a sua própria. A coluna de custo é tão importante quanto a de ganho.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><h5>Projeções locais</h5><p>Estimam a resposta horizonte a horizonte, sem impor a extrapolação de um VAR de ordem baixa. Ganho: robustez à má-especificação dinâmica. Custo: variância maior; em população, VAR com defasagens suficientes e projeção local estimam a mesma resposta.</p></div>
+    <div class="card"><h5>Identificação de alta frequência</h5><p>Usa a variação de juros futuros em janelas curtas ao redor de decisões de política como instrumento externo do choque monetário. Ganho: exogeneidade crível. Custo: instrumentos fracos e efeito-informação — a surpresa também revela o que o banco central sabe.</p></div>
+    <div class="card"><h5>Choques narrativos</h5><p>Constroem a série de choques a partir de documentos e previsões internas do banco central, removendo a parte da decisão que responde à informação disponível. Ganho: ataca diretamente a causa do price puzzle. Custo: julgamento do pesquisador e amostras curtas.</p></div>
+    <div class="card"><h5>DSGE estimado por métodos bayesianos</h5><p>Leva a otimização intertemporal do Módulo 08 a sistemas completos, com priors sobre parâmetros profundos e verossimilhança completa. Ganho: contrafactuais de política coerentes. Custo: a identificação pode vir mais do prior do que dos dados.</p></div>
+    <div class="card"><h5>FAVAR e grandes conjuntos de dados</h5><p>Resumem centenas de séries em poucos fatores e os incluem no VAR. Ganho: amplia o conjunto de informação do econometrista — a resposta direta ao diagnóstico do price puzzle. Custo: fatores sem interpretação econômica imediata.</p></div>
+    <div class="card"><h5>Parâmetros variáveis no tempo</h5><p>Permitem que coeficientes e volatilidades do VAR mudem gradualmente. Ganho: mede a mudança de regime em vez de supô-la ausente. Custo: separar mudança de regra de mudança na variância dos choques é difícil — e a resposta muda a história contada.</p></div>
+  </div>
+
+  <div class="col">
+    <h3>Linha do tempo</h3>
+  </div>
+  <ol class="tl">
+    <li class="k"><span class="y">1944</span><b>Haavelmo — a abordagem probabilística</b><span class="s">Modelos econômicos passam a ser tratados como sistemas estocásticos; a simultaneidade se torna um problema estatístico formal.</span></li>
+    <li><span class="y">1950</span><b>Comissão Cowles</b><span class="s">Condições de identificação e estimação de sistemas simultâneos: a base do Módulo 04.</span></li>
+    <li class="k"><span class="y">1976</span><b>Lucas — a crítica</b><span class="s">Coeficientes de forma reduzida dependem da regra de política. Módulo 05.</span></li>
+    <li class="k"><span class="y">1980</span><b>Sims — "Macroeconomics and reality"</b><span class="s">Restrições incríveis e a proposta do VAR. Módulo 07.</span></li>
+    <li><span class="y">1982</span><b>Hansen — GMM · Kydland e Prescott — calibração</b><span class="s">As duas faces da resposta da otimização intertemporal. Módulo 08.</span></li>
+    <li><span class="y">1987–1990</span><b>Engle–Granger · Johansen</b><span class="s">Cointegração e inferência por máxima verossimilhança. Módulo 03.</span></li>
+    <li><span class="y">1993</span><b>Taylor — regras de política</b><span class="s">A função de reação vira objeto empírico central. Módulo 09.</span></li>
+    <li><span class="y">1995</span><b>Hendry — <em>Dynamic Econometrics</em></b><span class="s">Sistematização da metodologia LSE. Módulo 06.</span></li>
+    <li class="k"><span class="y">2001</span><b>Favero — <em>Applied Macroeconometrics</em></b><span class="s">As três estratégias lidas como respostas ao colapso do programa de Cowles.</span></li>
+    <li><span class="y">2004–2005</span><b>Romer e Romer · Jordà · Uhlig · Primiceri · Bernanke, Boivin e Eliasz</b><span class="s">Choques narrativos, projeções locais, restrições de sinal, VAR com parâmetros variáveis e FAVAR.</span></li>
+    <li><span class="y">2007</span><b>Smets e Wouters</b><span class="s">DSGE bayesiano com ajuste comparável ao de um VAR.</span></li>
+    <li><span class="y">2015</span><b>Gertler e Karadi</b><span class="s">Surpresas de alta frequência como instrumento externo em VAR.</span></li>
+    <li><span class="y">2021</span><b>Plagborg-Møller e Wolf</b><span class="s">Projeções locais e VAR estimam a mesma resposta em população: a escolha passa a ser de viés contra variância.</span></li>
+  </ol>
+
+  <div class="col">
+    <div data-code="m11"></div>
+    <div class="ref">
+      <div class="rt">Leitura complementar</div>
+      <p>Este módulo vai além do conteúdo do livro e serve de ponte para a literatura posterior. A tese de Favero sobrevive intacta: nenhuma das técnicas novas elimina a necessidade de hipóteses de identificação — elas mudam o lugar em que as hipóteses são feitas e, no melhor dos casos, tornam mais fácil discuti-las.</p>
+      <div class="cite">Uhlig, H. (2005). What are the effects of monetary policy on output? Results from an agnostic identification procedure. <em>Journal of Monetary Economics, 52</em>(2), 381–419. https://doi.org/10.1016/j.jmoneco.2004.05.007 · Jordà, Ò. (2005). Estimation and inference of impulse responses by local projections. <em>American Economic Review, 95</em>(1), 161–182. https://doi.org/10.1257/0002828053828518 · Fry, R., &amp; Pagan, A. (2011). Sign restrictions in structural vector autoregressions: A critical review. <em>Journal of Economic Literature, 49</em>(4), 938–960. https://doi.org/10.1257/jel.49.4.938 · Plagborg-Møller, M., &amp; Wolf, C. K. (2021). Local projections and VARs estimate the same impulse responses. <em>Econometrica, 89</em>(2), 955–980. https://doi.org/10.3982/ECTA17813</div>
+    </div>
+  </div>
+</section>
+<div class="hr"></div>
+
 <!-- ============ SÍNTESE ============ -->
 <section id="sintese">
   <div class="col">
@@ -978,6 +1267,21 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--rule2);border-
   </div>
 
   <div class="col">
+    <h3>Protocolo aplicado</h3>
+    <p>Os onze módulos podem ser lidos como uma sequência de decisões em qualquer projeto macroeconométrico — de um modelo satélite de inadimplência a uma avaliação de política. Cada passo abaixo corresponde a uma pergunta que, deixada sem resposta, invalida as seguintes.</p>
+  </div>
+  <ol class="steps">
+    <li><b>Defina o uso antes do modelo</b>Previsão, mensuração de choques e avaliação de regime pedem estruturas diferentes. <a href="#sintese">Síntese</a></li>
+    <li><b>Classifique a ordem de integração</b>ADF e KPSS juntos; decida nível, diferença ou correção de erros com argumento econômico. <a href="#m2">Módulo 02</a></li>
+    <li><b>Teste cointegração antes de regredir em nível</b>Sem relação de equilíbrio, a regressão em nível é candidata a espúria. <a href="#m3">Módulo 03</a></li>
+    <li><b>Escreva a hipótese de identificação</b>Ordenação, exclusões, sinais ou instrumento externo — explícita e defendida, nunca implícita. <a href="#m4">Módulo 04</a></li>
+    <li><b>Garanta a congruência</b>Resíduos sem estrutura, defasagens suficientes, parcimônia só depois. <a href="#m6">Módulo 06</a></li>
+    <li><b>Teste a estabilidade dos parâmetros</b>Recursivos, CUSUM e Chow nas datas de mudança de regra conhecidas. <a href="#m5">Módulo 05</a></li>
+    <li><b>Reporte a sensibilidade à identificação</b>Ordenações alternativas, conjuntos de sinais, bandas que incluam a incerteza da hipótese. <a href="#m11">Módulo 11</a></li>
+    <li><b>Avalie fora da amostra e na cauda</b>RMSE contra o passeio aleatório e quantis extremos, não só a projeção central. <a href="#sintese">Síntese</a></li>
+  </ol>
+
+  <div class="col">
     <div data-code="syn"></div>
     <div class="ref">
       <div class="rt">Leitura técnica referenciada</div>
@@ -988,25 +1292,55 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--rule2);border-
 </section>
 <div class="hr"></div>
 
+<!-- ============ AUTOAVALIAÇÃO ============ -->
+<section id="quiz">
+  <div class="col">
+    <span class="chnum">Autoavaliação</span>
+    <h2>Doze perguntas para fechar o percurso</h2>
+    <p class="lede">Cada pergunta testa um mecanismo, não uma definição. A explicação aparece depois da resposta, com o caminho de volta ao módulo correspondente.</p>
+    <div class="qscore"><span>Acertos <b id="qok">0</b> de <b id="qtot">12</b> · respondidas <b id="qdone">0</b></span><div class="bar"><i id="qbar"></i></div><button class="b" id="qreset" type="button">Recomeçar</button></div>
+    <div class="quiz" id="quizbox"></div>
+  </div>
+</section>
+<div class="hr"></div>
+
 <!-- ============ REFERÊNCIAS ============ -->
 <section id="ref">
   <div class="col">
     <span class="chnum">Referências</span>
     <h2>Bibliografia</h2>
-    <p class="small">Obra de referência primária deste companion e trabalhos citados nas seções de leitura referenciada. Formatação APA 7.</p>
+    <p class="small">Obra de referência primária deste companion, trabalhos citados nas seções de leitura referenciada e literatura posterior discutida no Módulo 11. Formatação APA 7.</p>
     <ol class="reflist">
       <li>Bagliano, F. C., &amp; Favero, C. A. (1998). Measuring monetary policy with VAR models: An evaluation. <em>European Economic Review, 42</em>(6), 1069–1112. https://doi.org/10.1016/S0014-2921(98)00005-1</li>
+      <li>Bernanke, B. S., Boivin, J., &amp; Eliasz, P. (2005). Measuring the effects of monetary policy: A factor-augmented vector autoregressive (FAVAR) approach. <em>Quarterly Journal of Economics, 120</em>(1), 387–422. https://doi.org/10.1162/0033553053327452</li>
+      <li>Brown, R. L., Durbin, J., &amp; Evans, J. M. (1975). Techniques for testing the constancy of regression relationships over time. <em>Journal of the Royal Statistical Society: Series B, 37</em>(2), 149–192. https://doi.org/10.1111/j.2517-6161.1975.tb01532.x</li>
+      <li>Campbell, J. Y., &amp; Shiller, R. J. (1987). Cointegration and tests of present value models. <em>Journal of Political Economy, 95</em>(5), 1062–1088. https://doi.org/10.1086/261502</li>
+      <li>Campbell, J. Y., &amp; Shiller, R. J. (1991). Yield spreads and interest rate movements: A bird's eye view. <em>Review of Economic Studies, 58</em>(3), 495–514. https://doi.org/10.2307/2298008</li>
+      <li>Chow, G. C. (1960). Tests of equality between sets of coefficients in two linear regressions. <em>Econometrica, 28</em>(3), 591–605. https://doi.org/10.2307/1910133</li>
       <li>Christiano, L. J., Eichenbaum, M., &amp; Evans, C. L. (1999). Monetary policy shocks: What have we learned and to what end? In J. B. Taylor &amp; M. Woodford (Eds.), <em>Handbook of macroeconomics</em> (Vol. 1A, pp. 65–148). Elsevier.</li>
+      <li>Clarida, R., Galí, J., &amp; Gertler, M. (2000). Monetary policy rules and macroeconomic stability: Evidence and some theory. <em>Quarterly Journal of Economics, 115</em>(1), 147–180. https://doi.org/10.1162/003355300554692</li>
       <li>Dickey, D. A., &amp; Fuller, W. A. (1979). Distribution of the estimators for autoregressive time series with a unit root. <em>Journal of the American Statistical Association, 74</em>(366), 427–431. https://doi.org/10.2307/2286348</li>
       <li>Engle, R. F., &amp; Granger, C. W. J. (1987). Co-integration and error correction: Representation, estimation, and testing. <em>Econometrica, 55</em>(2), 251–276. https://doi.org/10.2307/1913236</li>
       <li>Engle, R. F., Hendry, D. F., &amp; Richard, J.-F. (1983). Exogeneity. <em>Econometrica, 51</em>(2), 277–304. https://doi.org/10.2307/1911990</li>
       <li><strong>Favero, C. A. (2001). <em>Applied macroeconometrics</em>. Oxford University Press.</strong> ISBN 978-0-19-877583-6.</li>
+      <li>Fry, R., &amp; Pagan, A. (2011). Sign restrictions in structural vector autoregressions: A critical review. <em>Journal of Economic Literature, 49</em>(4), 938–960. https://doi.org/10.1257/jel.49.4.938</li>
+      <li>Gertler, M., &amp; Karadi, P. (2015). Monetary policy surprises, credit costs, and economic activity. <em>American Economic Journal: Macroeconomics, 7</em>(1), 44–76. https://doi.org/10.1257/mac.20130329</li>
+      <li>Granger, C. W. J., &amp; Newbold, P. (1974). Spurious regressions in econometrics. <em>Journal of Econometrics, 2</em>(2), 111–120. https://doi.org/10.1016/0304-4076(74)90034-7</li>
+      <li>Haavelmo, T. (1944). The probability approach in econometrics. <em>Econometrica, 12</em>(Suppl.), iii–115. https://doi.org/10.2307/1906935</li>
       <li>Hansen, L. P. (1982). Large sample properties of generalized method of moments estimators. <em>Econometrica, 50</em>(4), 1029–1054. https://doi.org/10.2307/1912775</li>
       <li>Hendry, D. F. (1995). <em>Dynamic econometrics</em>. Oxford University Press.</li>
       <li>Johansen, S., &amp; Juselius, K. (1990). Maximum likelihood estimation and inference on cointegration — with applications to the demand for money. <em>Oxford Bulletin of Economics and Statistics, 52</em>(2), 169–210. https://doi.org/10.1111/j.1468-0084.1990.mp52002003.x</li>
+      <li>Jordà, Ò. (2005). Estimation and inference of impulse responses by local projections. <em>American Economic Review, 95</em>(1), 161–182. https://doi.org/10.1257/0002828053828518</li>
       <li>Kydland, F. E., &amp; Prescott, E. C. (1982). Time to build and aggregate fluctuations. <em>Econometrica, 50</em>(6), 1345–1370. https://doi.org/10.2307/1913386</li>
       <li>Lucas, R. E. (1976). Econometric policy evaluation: A critique. <em>Carnegie-Rochester Conference Series on Public Policy, 1</em>, 19–46. https://doi.org/10.1016/S0167-2231(76)80003-6</li>
+      <li>Phillips, P. C. B. (1986). Understanding spurious regressions in econometrics. <em>Journal of Econometrics, 33</em>(3), 311–340. https://doi.org/10.1016/0304-4076(86)90001-1</li>
+      <li>Plagborg-Møller, M., &amp; Wolf, C. K. (2021). Local projections and VARs estimate the same impulse responses. <em>Econometrica, 89</em>(2), 955–980. https://doi.org/10.3982/ECTA17813</li>
+      <li>Primiceri, G. E. (2005). Time varying structural vector autoregressions and monetary policy. <em>Review of Economic Studies, 72</em>(3), 821–852. https://doi.org/10.1111/j.1467-937X.2005.00353.x</li>
+      <li>Romer, C. D., &amp; Romer, D. H. (2004). A new measure of monetary shocks: Derivation and implications. <em>American Economic Review, 94</em>(4), 1055–1084. https://doi.org/10.1257/0002828042002651</li>
       <li>Sims, C. A. (1980). Macroeconomics and reality. <em>Econometrica, 48</em>(1), 1–48. https://doi.org/10.2307/1912017</li>
+      <li>Smets, F., &amp; Wouters, R. (2007). Shocks and frictions in US business cycles: A Bayesian DSGE approach. <em>American Economic Review, 97</em>(3), 586–606. https://doi.org/10.1257/aer.97.3.586</li>
+      <li>Taylor, J. B. (1993). Discretion versus policy rules in practice. <em>Carnegie-Rochester Conference Series on Public Policy, 39</em>, 195–214. https://doi.org/10.1016/0167-2231(93)90009-L</li>
+      <li>Uhlig, H. (2005). What are the effects of monetary policy on output? Results from an agnostic identification procedure. <em>Journal of Monetary Economics, 52</em>(2), 381–419. https://doi.org/10.1016/j.jmoneco.2004.05.007</li>
     </ol>
   </div>
 </section>
@@ -1204,7 +1538,10 @@ var MAP=[
  {n:"Módulo 05",t:"A crítica de Lucas",d:"Parâmetros que mudam quando a regra de política muda.",p:"Ruptura",id:"m5",w:1},
  {n:"Módulo 06",t:"A resposta LSE",d:"Do geral para o específico, com congruência e encompassing.",p:"Estratégias",id:"m6",w:0},
  {n:"Módulo 07",t:"A resposta VAR",d:"Identificação mínima, impulso-resposta e decomposição.",p:"Estratégias",id:"m7",w:1},
- {n:"Módulo 08",t:"Otimização intertemporal",d:"Equação de Euler, GMM e o preço da calibração.",p:"Estratégias",id:"m8",w:0}
+ {n:"Módulo 08",t:"Otimização intertemporal",d:"Equação de Euler, GMM e o preço da calibração.",p:"Estratégias",id:"m8",w:0},
+ {n:"Módulo 09",t:"Regras de política monetária",d:"Princípio de Taylor, regras prospectivas e estimação por GMM.",p:"Aplicação",id:"m9",w:0},
+ {n:"Módulo 10",t:"Estrutura a termo",d:"Hipótese das expectativas, prêmio de prazo e Campbell–Shiller.",p:"Aplicação",id:"m10",w:0},
+ {n:"Módulo 11",t:"Depois de 2001",d:"Restrições de sinal, projeções locais e a fronteira da identificação.",p:"Extensão",id:"m11",w:1}
 ];
 (function(){var el=document.getElementById("bookmap");if(!el)return;var html="";
  for(var i=0;i<MAP.length;i++){var m=MAP[i];
@@ -1214,10 +1551,10 @@ var MAP=[
 
 /* nav */
 (function(){
- var items=[{id:"mapa",t:"Mapa"}].concat(MAP.map(function(m){return {id:m.id,t:m.t};}),[{id:"sintese",t:"Síntese e decisão"},{id:"ref",t:"Referências"}]);
+ var items=[{id:"mapa",t:"Mapa"}].concat(MAP.map(function(m){return {id:m.id,t:m.t};}),[{id:"sintese",t:"Síntese e decisão"},{id:"quiz",t:"Autoavaliação"},{id:"ref",t:"Referências"}]);
  var rail=document.getElementById("railnav"),top=document.getElementById("topnav");
  rail.innerHTML=items.map(function(i){return '<a href="#'+i.id+'" data-s="'+i.id+'">'+i.t+'</a>';}).join("");
- top.innerHTML=[{id:"mapa",t:"Mapa"},{id:"m4",t:"Identificação"},{id:"m5",t:"Lucas"},{id:"m7",t:"VAR"},{id:"sintese",t:"Síntese"},{id:"ref",t:"Referências"}]
+ top.innerHTML=[{id:"mapa",t:"Mapa"},{id:"m4",t:"Identificação"},{id:"m5",t:"Lucas"},{id:"m7",t:"VAR"},{id:"m9",t:"Regras"},{id:"m11",t:"Fronteira"},{id:"sintese",t:"Síntese"},{id:"quiz",t:"Quiz"},{id:"ref",t:"Referências"}]
    .map(function(i){return '<a href="#'+i.id+'">'+i.t+'</a>';}).join("");
  var btn=document.getElementById("menu");
  btn.addEventListener("click",function(){document.getElementById("mapa").scrollIntoView();});
@@ -1308,7 +1645,55 @@ var EQ={
   s:[["g(θ)","vetor de condições de momento amostrais"],["W","matriz de ponderação; a ótima é a inversa da covariância de g"],["J","estatística de sobreidentificação"],["m, k","número de momentos e de parâmetros"]],
   a:"Estimação de modelos de otimização intertemporal, regras de política monetária prospectivas e curvas de Phillips novo-keynesianas.",
   l:"Instrumentos fracos achatam o critério: a estimativa existe, mas o intervalo de confiança usual é enganoso.",
-  c:"O achatamento da superfície é visível no painel do Módulo 08 ao reduzir a qualidade dos instrumentos."}
+  c:"O achatamento da superfície é visível no painel do Módulo 08 ao reduzir a qualidade dos instrumentos."},
+ spur:{t:"Regressão espúria",
+  i:"Duas séries integradas e independentes, regredidas uma sobre a outra em nível, produzem estatísticas t que não convergem para nenhuma distribuição: crescem com a raiz do tamanho da amostra. O teste rejeita a hipótese nula verdadeira com frequência que aumenta com T.",
+  s:[["y_t, x_t","passeios aleatórios independentes"],["β","coeficiente verdadeiro, igual a zero"],["u_t","resíduo: herda a raiz unitária das séries"],["t_β","estatística t, de ordem √T"],["O_p(√T)","cresce em probabilidade à taxa √T"]],
+  a:"Diagnóstico obrigatório antes de interpretar qualquer regressão em nível entre agregados macroeconômicos com tendência.",
+  l:"O fenômeno não depende de tendência determinística nem de amostras pequenas; persiste com séries altamente persistentes mesmo quando ρ < 1.",
+  c:"Inverte o Módulo 03: na cointegração o resíduo é estacionário; na regressão espúria, não. Os testes de Engle–Granger e Johansen separam os dois casos."},
+ cusum:{t:"Resíduos recursivos e CUSUM",
+  i:"Estima-se o modelo com dados até t−1, prevê-se t e padroniza-se o erro. Sob estabilidade, os resíduos recursivos são independentes com média zero, e sua soma acumulada vagueia dentro de bandas que crescem linearmente com o tempo.",
+  s:[["w_t","resíduo recursivo padronizado"],["β̂_{t−1}","estimativa com informação até t−1"],["X_{t−1}","matriz de regressores até t−1"],["W_t","soma acumulada padronizada"],["σ̂","desvio-padrão estimado dos resíduos recursivos"],["k","número de observações usadas na inicialização"]],
+  a:"Verificação de estabilidade em equações de comportamento antes de usá-las em simulações de política; monitoramento de modelos de risco em produção.",
+  l:"Poder baixo contra quebras tardias e contra mudanças que não deslocam a média dos erros de previsão. Não rejeitar não prova invariância.",
+  c:"Operacionaliza o teste de super-exogeneidade do Módulo 05 e é parte do critério de congruência da escola LSE (Módulo 06)."},
+ taylor:{t:"Regra de Taylor com suavização",
+  i:"A taxa de juros reage ao desvio da inflação em relação à meta e ao hiato do produto, ajustando-se gradualmente. O coeficiente da inflação acima de um garante que o juro real suba quando a inflação sobe.",
+  s:[["i_t","taxa nominal de política"],["ρ","suavização: peso do juro do período anterior"],["r*","juro real neutro"],["π*","meta de inflação"],["φ_π","reação à inflação; o princípio de Taylor exige φ_π > 1"],["φ_x","reação ao hiato do produto"]],
+  a:"Descrição e avaliação de políticas monetárias; fechamento de cenários macroeconômicos em testes de estresse.",
+  l:"r* e o hiato não são observados e são revisados ex post; a regra estimada com dados revisados pode diferir muito da regra que o banco central de fato seguiu em tempo real.",
+  c:"É a equação do juro do VAR do Módulo 07 escrita com interpretação estrutural; mudá-la desloca toda a forma reduzida, como prevê o Módulo 05."},
+ cgg:{t:"Regra prospectiva estimada por GMM",
+  i:"O banco central reage a previsões. Substituindo as expectativas por valores realizados, o erro composto é ortogonal à informação disponível em t, o que fornece condições de momento estimáveis por GMM.",
+  s:[["i*_t","juro-alvo"],["ī","juro nominal de equilíbrio"],["β","reação à inflação esperada k períodos à frente"],["γ","reação ao hiato esperado"],["ρ","suavização"],["z_t","instrumentos: defasagens de inflação, hiato, juros e commodities"]],
+  a:"Comparação de regimes de política monetária e teste do princípio de Taylor em subamostras.",
+  l:"Instrumentos fracos e escolha arbitrária dos horizontes k e q; a regra estimada é condicional à hipótese de expectativas racionais.",
+  c:"Mesma lógica de ortogonalidade da equação de Euler do Módulo 08, aplicada ao comportamento do banco central em vez do consumidor."},
+ eh:{t:"Hipótese das expectativas",
+  i:"A taxa longa é a média das taxas curtas esperadas ao longo do prazo do título, mais um prêmio. Na versão pura, o prêmio é constante e toda a variação do spread reflete expectativas sobre a política futura.",
+  s:[["R_t^(n)","taxa de um título de n períodos"],["r_t","taxa curta de um período"],["E_t","expectativa condicional à informação em t"],["τ_t^(n)","prêmio de prazo"],["n","prazo, em períodos"]],
+  a:"Extração de expectativas de mercado sobre juros futuros; construção de cenários consistentes para a curva de juros.",
+  l:"Prêmios de prazo variáveis no tempo são a regra empiricamente; a versão pura é rejeitada na maior parte das amostras.",
+  c:"Modelo de valor presente: pode ser testado como restrição sobre os coeficientes de um VAR (Módulo 07) e, por envolver séries I(1), como restrição de cointegração (Módulo 03)."},
+ cs:{t:"Regressão de Campbell–Shiller",
+  i:"Se a hipótese das expectativas vale, um spread alto prevê aumento da taxa longa na proporção exata de um para um, após ajuste pelo prazo. O coeficiente b é o objeto do teste.",
+  s:[["R_{t+1}^(n−1)","taxa do mesmo título no período seguinte"],["R_t^(n) − r_t","spread entre taxa longa e curta"],["b","coeficiente testado, igual a 1 sob H₀"],["a","constante: absorve prêmio constante"],["e_{t+1}","erro de expectativa"]],
+  a:"Teste padrão da hipótese das expectativas; medida indireta da importância de prêmios de prazo variáveis.",
+  l:"O regressor é muito persistente, o que gera viés e dispersão em amostras finitas; a rejeição não identifica a causa.",
+  c:"O coeficiente abaixo de um é o análogo, na curva de juros, do viés de variável omitida do Módulo 01: o prêmio omitido contamina o spread."},
+ sign:{t:"Identificação por restrições de sinal",
+  i:"Toda matriz B = PQ, com Q ortogonal, reproduz a mesma covariância dos resíduos. Os dados não distinguem entre elas; as restrições de sinal selecionam o subconjunto economicamente plausível, e o resultado é um conjunto de respostas, não uma resposta única.",
+  s:[["u_t","resíduos de forma reduzida"],["B","matriz de impacto candidata"],["P","fator de Cholesky de Σ"],["Q","rotação ortogonal sorteada"],["Σ","covariância dos resíduos, comum a todas as rotações"]],
+  a:"Identificação de choques monetários, de demanda, de oferta e de petróleo quando restrições de zero não são críveis.",
+  l:"A mediana pontual não corresponde a nenhum modelo aceito; a distribuição sobre rotações é um prior informativo, ainda que pareça neutro.",
+  c:"Generaliza a ordenação de Cholesky do Módulo 07: Cholesky é um único ponto do conjunto de rotações."},
+ lp:{t:"Projeção local",
+  i:"Para cada horizonte h, regride-se diretamente a variável futura sobre o choque e controles. A sequência de coeficientes β_h é a função de resposta a impulso, sem passar pela iteração de um VAR.",
+  s:[["y_{t+h}","variável de resposta h períodos à frente"],["s_t","choque identificado ou variável de política"],["β_h","resposta no horizonte h"],["w_t","controles: defasagens do sistema"],["e_{t+h}","erro com autocorrelação até a ordem h−1"]],
+  a:"Respostas a choques medidos externamente, como surpresas de alta frequência ou choques narrativos; respostas não lineares e dependentes de estado.",
+  l:"Variância maior que a do VAR em horizontes longos; erros-padrão precisam de correção para autocorrelação.",
+  c:"Com defasagens suficientes, estima em população a mesma resposta do VAR do Módulo 07; a escolha entre os dois é de viés contra variância."}
 };
 (function(){
  var mo=document.getElementById("modal"),mt=document.getElementById("mtitle"),mb=document.getElementById("mbody"),last=null;
@@ -2047,7 +2432,16 @@ var GL=[
  ["parâmetros profundos","Parâmetros profundos","Parâmetros de preferências e tecnologia, supostos invariantes a mudanças de política — o objeto da estratégia de otimização intertemporal.","Módulo 08"],
  ["calibração","Calibração","Atribuição de valores a parâmetros a partir de evidência externa, avaliando o modelo por sua capacidade de reproduzir momentos selecionados em vez de por testes de rejeição.","Módulo 08"],
  ["decomposição da variância","Decomposição da variância do erro de previsão","Repartição da incerteza de previsão de cada variável entre os choques estruturais, por horizonte.","Módulo 07"],
- ["tendência estocástica","Tendência estocástica","Componente não-estacionário acumulado de choques passados. Duas séries podem compartilhar a mesma tendência estocástica e por isso cointegrar.","Módulo 03"]
+ ["tendência estocástica","Tendência estocástica","Componente não-estacionário acumulado de choques passados. Duas séries podem compartilhar a mesma tendência estocástica e por isso cointegrar.","Módulo 03"],
+ ["regressão espúria","Regressão espúria","Relação aparentemente significativa entre séries integradas independentes. A estatística t cresce com o tamanho da amostra e o resíduo herda a raiz unitária.","Módulo 03"],
+ ["CUSUM","CUSUM","Soma acumulada dos resíduos recursivos padronizados. Sair das bandas de 5% indica instabilidade dos parâmetros, sem exigir que a data da quebra seja conhecida.","Módulo 05"],
+ ["teste de Chow","Teste de Chow","Teste F que compara o ajuste de uma regressão estimada em duas subamostras com o ajuste da regressão conjunta, em uma data de quebra especificada a priori.","Módulo 05"],
+ ["princípio de Taylor","Princípio de Taylor","Exigência de que a taxa nominal reaja mais que um para um à inflação, de modo que o juro real suba quando a inflação sobe.","Módulo 09"],
+ ["regra de Taylor","Regra de Taylor","Função de reação em que a taxa de juros responde ao desvio da inflação em relação à meta e ao hiato do produto.","Módulo 09"],
+ ["hipótese das expectativas","Hipótese das expectativas","Proposição de que a taxa longa é a média das taxas curtas esperadas mais um prêmio constante. Implica que o spread prevê os movimentos futuros dos juros.","Módulo 10"],
+ ["prêmio de prazo","Prêmio de prazo","Compensação adicional exigida para manter títulos longos. Quando varia no tempo, o spread deixa de refletir apenas expectativas sobre a política futura.","Módulo 10"],
+ ["restrições de sinal","Restrições de sinal","Identificação que exige apenas que certas respostas tenham sinal determinado em alguns horizontes. Produz um conjunto de modelos compatíveis, não um modelo único.","Módulo 11"],
+ ["projeções locais","Projeções locais","Estimação da resposta a impulso por uma regressão separada para cada horizonte, sem iterar um VAR.","Módulo 11"]
 ];
 (function(){
  var tip=document.getElementById("tip"),idx={};
@@ -2115,7 +2509,17 @@ m7:["VAR, impulso-resposta e decomposição","Python · statsmodels",
 m8:["GMM sobre a equação de Euler","Python · numpy + scipy",
 "import numpy as np\nfrom scipy.optimize import minimize\n\ndef momentos(theta, c, r, Z):\n    beta, gamma = theta\n    h = beta * (1 + r[1:]) * (c[1:] / c[:-1]) ** (-gamma) - 1\n    return Z[:-1].T @ h / h.size          # g(theta)\n\ndef criterio(theta, c, r, Z, W):\n    g = momentos(theta, c, r, Z)\n    return float(g @ W @ g)\n\nW = np.eye(Z.shape[1])                    # primeiro estagio\nest = minimize(criterio, [0.97, 2.0], args=(c, r, Z, W),\n               method=\"Nelder-Mead\")\n\n# segundo estagio com ponderacao otima e teste J\ng = momentos(est.x, c, r, Z)\nS = np.cov((Z[:-1] * momentos_i(est.x, c, r, Z)[:, None]).T)\nJ = c.size * criterio(est.x, c, r, Z, np.linalg.pinv(S))\n# J ~ qui-quadrado(m - k): rejeicao nao diz QUAL hipotese falhou"],
 syn:["Avaliação recursiva fora da amostra","Python · statsmodels",
-"import numpy as np\nfrom statsmodels.tsa.api import VAR\nfrom statsmodels.tsa.ar_model import AutoReg\n\nH, INICIO = 8, 140\nerros = {\"rw\": [], \"ar\": [], \"var\": []}\n\nfor origem in range(INICIO, len(df) - H):\n    hist = df.iloc[:origem]\n    real = df[\"y\"].iloc[origem:origem + H].to_numpy()\n\n    fc_var = VAR(hist).fit(1).forecast(hist.to_numpy()[-1:], steps=H)[:, 0]\n    fc_ar = AutoReg(hist[\"y\"], lags=2, old_names=False).fit().forecast(H).to_numpy()\n\n    erros[\"rw\"].append(real - hist[\"y\"].iloc[-1])\n    erros[\"ar\"].append(real - fc_ar)\n    erros[\"var\"].append(real - fc_var)\n\nrmse = {k: np.sqrt(np.mean(np.square(v), axis=0)) for k, v in erros.items()}\nprint(rmse[\"var\"] / rmse[\"rw\"])    # < 1 => ganho sobre o passeio aleatorio\nprint(rmse[\"var\"] / rmse[\"ar\"])    # mede o valor da informacao multivariada"]
+"import numpy as np\nfrom statsmodels.tsa.api import VAR\nfrom statsmodels.tsa.ar_model import AutoReg\n\nH, INICIO = 8, 140\nerros = {\"rw\": [], \"ar\": [], \"var\": []}\n\nfor origem in range(INICIO, len(df) - H):\n    hist = df.iloc[:origem]\n    real = df[\"y\"].iloc[origem:origem + H].to_numpy()\n\n    fc_var = VAR(hist).fit(1).forecast(hist.to_numpy()[-1:], steps=H)[:, 0]\n    fc_ar = AutoReg(hist[\"y\"], lags=2, old_names=False).fit().forecast(H).to_numpy()\n\n    erros[\"rw\"].append(real - hist[\"y\"].iloc[-1])\n    erros[\"ar\"].append(real - fc_ar)\n    erros[\"var\"].append(real - fc_var)\n\nrmse = {k: np.sqrt(np.mean(np.square(v), axis=0)) for k, v in erros.items()}\nprint(rmse[\"var\"] / rmse[\"rw\"])    # < 1 => ganho sobre o passeio aleatorio\nprint(rmse[\"var\"] / rmse[\"ar\"])    # mede o valor da informacao multivariada"],
+spur:["Regressão em nível ou espúria?","Python · statsmodels",
+"import statsmodels.api as sm\nfrom statsmodels.tsa.stattools import coint\n\n# 1. regressao em nivel: R2 alto e DW baixo sao o primeiro alarme\nfit = sm.OLS(y, sm.add_constant(x)).fit()\ndw = sm.stats.durbin_watson(fit.resid)\nprint(f\"R2 = {fit.rsquared:.2f}   DW = {dw:.2f}\")\n\n# 2. Engle-Granger: H0 = residuo com raiz unitaria (sem cointegracao)\nstat, pval, crit = coint(y, x, trend=\"c\")\nprint(f\"EG = {stat:.2f}   p = {pval:.3f}\")\n\nif pval > 0.05:\n    # sem cointegracao: a relacao em nivel e candidata a espuria\n    fit_d = sm.OLS(y.diff().dropna(),\n                   sm.add_constant(x.diff().dropna())).fit()\n    print(fit_d.summary())"],
+m5:["Estabilidade: recursivos, CUSUM e Chow","Python · statsmodels",
+"import numpy as np, statsmodels.api as sm\nfrom statsmodels.stats.diagnostic import recursive_olsresiduals, breaks_cusumolsresid\n\nX = sm.add_constant(z)\nfit = sm.OLS(y, X).fit()\n\n# resíduos recursivos, estimativas recursivas e CUSUM com bandas de 5%\nrres, rparams, rypred, rresid_std, rresid_scaled, rcusum, rcusumci = \\\n    recursive_olsresiduals(fit, skip=8, alpha=0.95)\nfora = np.where((rcusum < rcusumci[0]) | (rcusum > rcusumci[1]))[0]\nprint(\"primeira saida das bandas:\", fora[:1])\n\n# Chow na data da mudanca de regra (conhecida a priori)\nquebra = 96\nrss = fit.ssr\nrss1 = sm.OLS(y[:quebra], X[:quebra]).fit().ssr\nrss2 = sm.OLS(y[quebra:], X[quebra:]).fit().ssr\nk, T = X.shape[1], len(y)\nF = ((rss - rss1 - rss2) / k) / ((rss1 + rss2) / (T - 2 * k))\nprint(f\"Chow F = {F:.2f}\")"],
+m9:["Regra de Taylor prospectiva por GMM","Python · linearmodels",
+"import pandas as pd\nfrom linearmodels.iv import IVGMM\n\n# i: juro de politica, pi4: inflacao 4 trimestres a frente (realizada)\n# x: hiato do produto, instrumentos: defasagens datadas em t-1 ou antes\nd = df.assign(i_lag=df[\"i\"].shift(1), pi4=df[\"pi\"].shift(-4)).dropna()\ninst = pd.concat([d[c].shift(k) for c in [\"pi\", \"x\", \"i\", \"comm\"]\n                  for k in (1, 2, 3)], axis=1).dropna()\nd = d.loc[inst.index]\n\nmod = IVGMM(d[\"i\"], d[[\"i_lag\"]].assign(const=1.0),\n            d[[\"pi4\", \"x\"]], inst).fit(cov_type=\"kernel\")\n\nrho = mod.params[\"i_lag\"]\nphi_pi = mod.params[\"pi4\"] / (1 - rho)    # reacao de longo prazo\nphi_x = mod.params[\"x\"] / (1 - rho)\nprint(f\"rho = {rho:.2f}  phi_pi = {phi_pi:.2f}  phi_x = {phi_x:.2f}\")\nprint(mod.j_stat)    # teste J de sobreidentificacao\n\n# principio de Taylor: estimar por subamostra (regimes) e comparar phi_pi com 1"],
+m10:["Teste de Campbell–Shiller por prazo","Python · statsmodels",
+"import statsmodels.api as sm\n\n# R: DataFrame de taxas zero-cupom por prazo em periodos (colunas 1..N)\n# r = R[1] e a taxa curta de um periodo\nfor n in (2, 4, 8, 12, 20, 40):\n    lhs = R[n - 1].shift(-1) - R[n]\n    spread = (R[n] - R[1]) / (n - 1)\n    d = sm.add_constant(spread.rename(\"s\")).join(lhs.rename(\"y\")).dropna()\n    fit = sm.OLS(d[\"y\"], d[[\"const\", \"s\"]]).fit(\n        cov_type=\"HAC\", cov_kwds={\"maxlags\": 4})\n    b, se = fit.params[\"s\"], fit.bse[\"s\"]\n    print(f\"n = {n:2d}   b = {b:6.2f}   t(b = 1) = {(b - 1) / se:6.2f}\")\n\n# b < 1 (ou negativo) => premio de prazo variavel ou expectativas nao racionais"],
+m11:["Restrições de sinal (algoritmo de rotação)","Python · numpy + statsmodels",
+"import numpy as np\nfrom statsmodels.tsa.api import VAR\n\nres = VAR(df[[\"y\", \"pi\", \"i\"]]).fit(2)\nP = np.linalg.cholesky(res.sigma_u)\nma = res.ma_rep(20)                       # Phi_h, h = 0..20\nrng = np.random.default_rng(0)\naceitas = []\n\nfor _ in range(5000):\n    Q, R = np.linalg.qr(rng.standard_normal((3, 3)))\n    Q = Q @ np.diag(np.sign(np.diag(R)))   # rotacao uniforme (Haar)\n    for j in range(3):\n        b = P @ Q[:, j]\n        b = b if b[2] > 0 else -b          # choque monetario eleva o juro\n        irf = ma @ b                        # (21, 3)\n        if (irf[:5, 2] >= 0).all() and (irf[:5, 1] <= 0).all():\n            aceitas.append(irf / b[2])\n\nA = np.array(aceitas)\nprint(len(A), \"modelos aceitos\")\nprint(np.percentile(A[:, :, 0], [16, 50, 84], axis=0))  # produto"]
 };
 (function(){
  function hl(src){
@@ -2225,14 +2629,18 @@ syn:["Avaliação recursiva fora da amostra","Python · statsmodels",
   {id:"m5",l:"Crítica de Lucas",s:"Invariância de parâmetros"},
   {id:"m6",l:"LSE",s:"Geral para específico"},
   {id:"m7",l:"VAR",s:"Choques e propagação"},
-  {id:"m8",l:"Otimização",s:"Parâmetros profundos"}
+  {id:"m8",l:"Otimização",s:"Parâmetros profundos"},
+  {id:"m9",l:"Regras de política",s:"Princípio de Taylor"},
+  {id:"m10",l:"Estrutura a termo",s:"Expectativas e prêmio"},
+  {id:"m11",l:"Fronteira",s:"Sinais e projeções locais"}
  ];
- var E=[[0,1,2],[0,3,2],[1,2,2],[1,6,2],[2,5,1],[3,4,2],[3,6,2],[4,5,2],[4,7,2],[5,2,1],[6,7,1],[5,6,1]];
+ var E=[[0,1,2],[0,3,2],[1,2,2],[1,6,2],[2,5,1],[3,4,2],[3,6,2],[4,5,2],[4,7,2],[5,2,1],[6,7,1],[5,6,1],
+  [4,8,2],[6,8,2],[7,8,2],[6,9,1],[2,9,1],[4,9,1],[6,10,2],[3,10,2],[7,10,1]];
  var pos=[],hov=-1,oN;
  oN=mount("c_net",function(g,w,h){
-  var cx=w/2,cy=h/2,R=Math.min(w,h)*0.37,i;
+  var cx=w/2,cy=h/2,Rx=Math.min(w*0.33,h*0.8),Ry=h*0.40,i;
   pos=[];
-  for(i=0;i<N.length;i++){var a=-Math.PI/2+i*2*Math.PI/N.length;pos.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}
+  for(i=0;i<N.length;i++){var a=-Math.PI/2+i*2*Math.PI/N.length;pos.push([cx+Rx*Math.cos(a),cy+Ry*Math.sin(a)]);}
   for(i=0;i<E.length;i++){
    var f=pos[E[i][0]],t=pos[E[i][1]],strong=E[i][2]===2;
    var on=(hov===E[i][0]||hov===E[i][1]);
@@ -2305,6 +2713,9 @@ syn:["Avaliação recursiva fora da amostra","Python · statsmodels",
   if(sp){sp.scrollIntoView({block:"center"});setTimeout(function(){sp.focus();},RM?0:260);}
   else{var id=e[3].replace("Módulo 0","m").replace("Módulo ","m");var el=document.getElementById(id);if(el)el.scrollIntoView();}}});});
  items.push({k:"Seção",t:"Síntese e camada executiva",d:"Comparação entre estratégias, previsão e postura de decisão",go:function(){document.getElementById("sintese").scrollIntoView();}});
+ items.push({k:"Seção",t:"Protocolo aplicado em oito passos",d:"Sequência de decisões de um projeto macroeconométrico",go:function(){var el=document.querySelector(".steps");if(el)el.scrollIntoView({block:"center"});}});
+ items.push({k:"Seção",t:"Autoavaliação",d:"Doze perguntas sobre os mecanismos de cada módulo",go:function(){document.getElementById("quiz").scrollIntoView();}});
+ items.push({k:"Seção",t:"Linha do tempo da macroeconometria",d:"De Haavelmo (1944) às projeções locais",go:function(){var el=document.querySelector(".tl");if(el)el.scrollIntoView({block:"center"});}});
  items.push({k:"Seção",t:"Referências",d:"Bibliografia em APA com DOI",go:function(){document.getElementById("ref").scrollIntoView();}});
  var cur=[],sel=0;
  function norm(t){return t.normalize?t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase():t.toLowerCase();}
@@ -2878,6 +3289,415 @@ var mount=A.mount,paint=A.paint,axes=A.axes,poly=A.poly,label=A.label,C=A.C,nf=A
   var e=document.getElementById(id);if(e)e.addEventListener(e.tagName==="BUTTON"?"click":"input",function(){paint(o);});});
  if(!RM)(function loop(){phase+=0.016;if(vis)paint(o);requestAnimationFrame(loop);})();
 })();
+})();
+</script>
+<script>
+/* =====================================================================
+   v5 — EXPANSÃO: REGRESSÃO ESPÚRIA, ESTABILIDADE, REGRA DE TAYLOR,
+   ESTRUTURA A TERMO, RESTRIÇÕES DE SINAL E AUTOAVALIAÇÃO
+   ===================================================================== */
+(function(){
+"use strict";
+var A=window.ATLAS;if(!A)return;
+var mount=A.mount,schedule=A.schedule,axes=A.axes,poly=A.poly,band=A.band,label=A.label,C=A.C,nf=A.nf,
+    clamp=A.clamp,rng=A.rng,gaussFactory=A.gaussFactory,STATE=A.STATE,VARMOD=A.VARMOD,
+    matmul=A.matmul,eye=A.eye,wire=A.wire;
+
+function clipTo(g,Ax){g.save();g.beginPath();g.rect(Ax.m.l,Ax.m.t,Ax.iw,Ax.ih);g.clip();}
+function vline(g,Ax,x,col,dash){g.save();g.strokeStyle=col;g.lineWidth=1.2;if(dash)g.setLineDash(dash);
+ g.beginPath();g.moveTo(Math.round(Ax.X(x))+0.5,Ax.m.t);g.lineTo(Math.round(Ax.X(x))+0.5,Ax.m.t+Ax.ih);g.stroke();g.restore();}
+function hline(g,Ax,y,col,dash){g.save();g.strokeStyle=col;g.lineWidth=1.2;if(dash)g.setLineDash(dash);
+ g.beginPath();g.moveTo(Ax.m.l,Math.round(Ax.Y(y))+0.5);g.lineTo(Ax.m.l+Ax.iw,Math.round(Ax.Y(y))+0.5);g.stroke();g.restore();}
+function Phi(z){var t=1/(1+0.2316419*Math.abs(z)),d=0.3989423*Math.exp(-z*z/2);
+ var p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;}
+function pct(v){return nf(v*100,0)+"%";}
+function f2(v){return Math.abs(v)<0.005?"0,00":nf(v,2);}
+function on(ids,fn){ids.forEach(function(id){var e=document.getElementById(id);
+ if(e)e.addEventListener(e.tagName==="BUTTON"?"click":"input",fn);});}
+
+/* ---------------------------------------------------------------------
+   M3 — REGRESSÃO ESPÚRIA
+   --------------------------------------------------------------------- */
+(function(){
+ var P={T:100,rho:1},R=400,cache=null,o;
+ function reg(x,y,n){var mx=0,my=0,i;for(i=0;i<n;i++){mx+=x[i];my+=y[i];}mx/=n;my/=n;
+  var sxx=0,sxy=0,syy=0;for(i=0;i<n;i++){var a=x[i]-mx,b=y[i]-my;sxx+=a*a;sxy+=a*b;syy+=b*b;}
+  var be=sxy/sxx,rss=Math.max(syy-be*sxy,1e-12);
+  var dw=0,u0=null;for(i=0;i<n;i++){var u=(y[i]-my)-be*(x[i]-mx);if(u0!==null)dw+=(u-u0)*(u-u0);u0=u;}
+  return {t:be/Math.sqrt(rss/(n-2)/sxx),r2:1-rss/syy,dw:dw/rss};}
+ function sim(){
+  var key=P.T+"|"+P.rho;if(cache&&cache.key===key)return cache;
+  var r=rng(1974),gs=gaussFactory(r),T=P.T,x=new Float64Array(T),y=new Float64Array(T),
+      dx=new Float64Array(T-1),dy=new Float64Array(T-1),ts=[],r2=[],dws=[],rej=0,rejd=0,k,t;
+  for(k=0;k<R;k++){
+   x[0]=gs();y[0]=gs();
+   for(t=1;t<T;t++){x[t]=P.rho*x[t-1]+gs();y[t]=P.rho*y[t-1]+gs();dx[t-1]=x[t]-x[t-1];dy[t-1]=y[t]-y[t-1];}
+   var a=reg(x,y,T);ts.push(a.t);r2.push(a.r2);dws.push(a.dw);if(Math.abs(a.t)>1.96)rej++;
+   if(Math.abs(reg(dx,dy,T-1).t)>1.96)rejd++;
+  }
+  function med(v){var s=v.slice().sort(function(p,q){return p-q;});return s[s.length>>1];}
+  var ab=ts.map(Math.abs).sort(function(p,q){return p-q;});
+  cache={key:key,ts:ts,rej:rej/R,rejd:rejd/R,r2:med(r2),dw:med(dws),q95:ab[Math.floor(0.95*R)]};
+  return cache;
+ }
+ o=mount("c_spur",function(g,w,h){
+  var S=sim(),X=Math.max(5,Math.ceil(S.q95*1.08)),nb=Math.min(61,Math.max(25,Math.round(X*3))),bw=2*X/nb,cnt=[],i;
+  for(i=0;i<nb;i++)cnt.push(0);
+  for(i=0;i<S.ts.length;i++){var b=Math.floor((S.ts[i]+X)/bw);if(b>=0&&b<nb)cnt[b]++;}
+  var dens=cnt.map(function(c){return c/(R*bw);}),ym=Math.max(0.42,Math.max.apply(null,dens)*1.12);
+  var Ax=axes(g,w,h,[-X,X],[0,ym],{yn:4,xn:6,m:{l:46,r:14,t:14,b:30},yf:function(v){return nf(v,2);}});
+  g.save();g.fillStyle="rgba(99,214,176,.32)";
+  for(i=0;i<nb;i++){if(!cnt[i])continue;var x0=Ax.X(-X+i*bw),x1=Ax.X(-X+(i+1)*bw),y0=Ax.Y(dens[i]);
+   g.fillRect(x0+0.5,y0,Math.max(1,x1-x0-1),Ax.Y(0)-y0);}
+  g.restore();
+  var nd=[];for(var z=-X;z<=X;z+=X/120)nd.push([z,Math.exp(-z*z/2)/Math.sqrt(2*Math.PI)]);
+  poly(g,nd,Ax.X,Ax.Y,C.slate,1.8);
+  vline(g,Ax,-1.96,C.rose,[4,3]);vline(g,Ax,1.96,C.rose,[4,3]);
+  label(g,"estatística t de β̂ (níveis)",Ax.m.l+Ax.iw-4,Ax.m.t+10,C.dim,"right");
+  var warn=S.r2>S.dw?" · R² mediano maior que o DW mediano: <b>alarme de Granger–Newbold</b>":"";
+  document.getElementById("r_spur").innerHTML="rejeição de H₀: β = 0 a 5% em níveis <b>"+pct(S.rej)+
+   "</b> (deveria ser 5%) · em diferenças <b>"+pct(S.rejd)+"</b> · R² mediano <b>"+nf(S.r2,2)+
+   "</b> · Durbin–Watson mediano <b>"+nf(S.dw,2)+"</b>"+warn;
+ });
+ wire("s_spT","v_spT",function(v){return String(v);},function(v){P.T=v;schedule(o);});
+ wire("s_sprho","v_sprho",function(v){return nf(v,2);},function(v){P.rho=v;schedule(o);});
+})();
+
+/* ---------------------------------------------------------------------
+   M5 — ESTIMAÇÃO RECURSIVA, CUSUM E CHOW
+   --------------------------------------------------------------------- */
+(function(){
+ var P={d:0.4,loc:0.6,sig:1},T=160,K0=10,o,r=rng(1960),gs=gaussFactory(r),ez=[],ey=[],t;
+ for(t=0;t<T;t++){ez.push(gs());ey.push(gs());}
+ function sim(){
+  var z=[],y=[],th=[],tau=Math.round(P.loc*T),zl=0;
+  for(t=0;t<T;t++){zl=0.7*zl+0.5*ez[t];z.push(2+zl);th.push(t<tau?1:1+P.d);y.push(th[t]*z[t]+P.sig*ey[t]);}
+  var Szz=0,Szy=0,Syy=0,est=[],w=[];
+  for(t=0;t<T;t++){
+   if(t>=K0){var b=Szy/Szz,f=1+z[t]*z[t]/Szz;w.push({t:t,v:(y[t]-b*z[t])/Math.sqrt(f)});}
+   Szz+=z[t]*z[t];Szy+=z[t]*y[t];Syy+=y[t]*y[t];
+   if(t>=K0-1){var bt=Szy/Szz,rss=Math.max(Syy-Szy*Szy/Szz,1e-9),se=Math.sqrt(rss/Math.max(t,1)/Szz);est.push({t:t,b:bt,se:se});}
+  }
+  var mw=0,sw=0,i;for(i=0;i<w.length;i++)mw+=w[i].v;mw/=w.length;
+  for(i=0;i<w.length;i++)sw+=(w[i].v-mw)*(w[i].v-mw);sw=Math.sqrt(sw/(w.length-1));
+  var cs=[],acc=0,n=T-K0,cross=-1;
+  for(i=0;i<w.length;i++){acc+=w[i].v/sw;var rr=i+1,bd=0.948*(Math.sqrt(n)+2*rr/Math.sqrt(n));
+   cs.push({t:w[i].t,c:acc,bd:bd});if(cross<0&&Math.abs(acc)>bd)cross=w[i].t;}
+  function rssOf(a,b2){var zz=0,zy=0,yy=0;for(var j=a;j<b2;j++){zz+=z[j]*z[j];zy+=z[j]*y[j];yy+=y[j]*y[j];}return yy-zy*zy/zz;}
+  var rr0=rssOf(0,T),ru=rssOf(0,tau)+rssOf(tau,T),F=(rr0-ru)/(ru/(T-2)),pv=2*(1-Phi(Math.sqrt(Math.max(F,0))));
+  return {th:th,est:est,cs:cs,tau:tau,cross:cross,F:F,p:pv};
+ }
+ o=mount("c_cusum",function(g,w,h){
+  var S=sim(),i,lo=1e9,hi=-1e9;
+  for(i=0;i<S.est.length;i++){lo=Math.min(lo,S.est[i].b-2*S.est[i].se);hi=Math.max(hi,S.est[i].b+2*S.est[i].se);}
+  lo=Math.min(lo,0.8);hi=Math.max(hi,1+P.d+0.2);lo=Math.max(lo,-1);hi=Math.min(hi,3.5);
+  var h1=h*0.5,h2=h-h1;
+  var Ax=axes(g,w,h1,[0,T-1],[lo,hi],{yn:4,xn:6,m:{l:46,r:14,t:12,b:16},xf:function(v){return nf(v,0);},yf:function(v){return nf(v,1);}});
+  clipTo(g,Ax);
+  band(g,S.est.map(function(e){return [e.t,e.b+2*e.se];}),S.est.map(function(e){return [e.t,e.b-2*e.se];}),Ax.X,Ax.Y,"rgba(99,214,176,.16)");
+  poly(g,S.th.map(function(v,j){return [j,v];}),Ax.X,Ax.Y,C.amber,1.6,[5,3]);
+  poly(g,S.est.map(function(e){return [e.t,e.b];}),Ax.X,Ax.Y,C.chalk,1.9);
+  g.restore();
+  vline(g,Ax,S.tau,"rgba(233,161,59,.45)",[2,3]);
+  label(g,"θ̂ recursivo",Ax.m.l+6,Ax.m.t+10,C.dim);
+  g.save();g.translate(0,h1);
+  var cm=0;for(i=0;i<S.cs.length;i++)cm=Math.max(cm,Math.abs(S.cs[i].c),S.cs[i].bd);
+  var B=axes(g,w,h2,[0,T-1],[-cm*1.08,cm*1.08],{yn:4,xn:6,m:{l:46,r:14,t:18,b:26},xf:function(v){return nf(v,0);},yf:function(v){return nf(v,0);}});
+  poly(g,S.cs.map(function(e){return [e.t,e.bd];}),B.X,B.Y,C.rose,1.2,[4,3]);
+  poly(g,S.cs.map(function(e){return [e.t,-e.bd];}),B.X,B.Y,C.rose,1.2,[4,3]);
+  poly(g,S.cs.map(function(e){return [e.t,e.c];}),B.X,B.Y,C.slate,1.9);
+  vline(g,B,S.tau,"rgba(233,161,59,.45)",[2,3]);
+  if(S.cross>=0){var cc=S.cs.filter(function(e){return e.t===S.cross;})[0];
+   g.save();g.fillStyle=C.rose;g.beginPath();g.arc(B.X(cc.t),B.Y(cc.c),4,0,6.283);g.fill();g.restore();}
+  label(g,"CUSUM dos resíduos recursivos",B.m.l+6,B.m.t+2,C.dim);
+  label(g,"trimestres",B.m.l+B.iw-4,B.m.t+B.ih-10,C.dim,"right");
+  g.restore();
+  var lag=S.cross>=0?(S.cross-S.tau):null;
+  document.getElementById("r_cusum").innerHTML="quebra em t = <b>"+S.tau+"</b> · CUSUM: "+
+   (S.cross<0?"<b>não sai das bandas</b> — estabilidade não rejeitada":
+    (lag<0?"sai das bandas em t = <b>"+S.cross+"</b>, antes da quebra (falso alarme)":"sai das bandas em t = <b>"+S.cross+"</b>, <b>"+lag+"</b> trimestres depois da quebra"))+
+   " · Chow na data verdadeira: F = <b>"+nf(S.F,2)+"</b>, p ≈ <b>"+(S.p<0.001?"&lt; 0,001":nf(S.p,3))+"</b>"+
+   (S.p<0.05?" (rejeita estabilidade)":" (não rejeita)");
+ });
+ wire("s_cd","v_cd",function(v){return nf(v,2);},function(v){P.d=v;schedule(o);});
+ wire("s_cl","v_cl",function(v){return nf(v,2);},function(v){P.loc=v;schedule(o);});
+ wire("s_cs","v_cs",function(v){return nf(v,2);},function(v){P.sig=v;schedule(o);});
+})();
+
+/* ---------------------------------------------------------------------
+   M9 — REGRA DE TAYLOR EM ECONOMIA COM DEFASAGENS
+   π_t = π_{t−1} + κ x_{t−1} ;  x_t = a x_{t−1} − σ (i_{t−1} − π_{t−1})
+   i_t = ρ i_{t−1} + (1−ρ)(φπ π_t + φx x_t)
+   --------------------------------------------------------------------- */
+(function(){
+ var KAP=0.2,AX=0.6,SG=0.15,H=40,P={fp:1.5,fx:0.5,rho:0.5},o;
+ function Amat(fp,fx,rho){
+  var rp=[1,KAP,0],rx=[SG,AX,-SG],ri=[0,0,rho],j;
+  for(j=0;j<3;j++)ri[j]+=(1-rho)*(fp*rp[j]+fx*rx[j]);
+  return [rp,rx,ri];
+ }
+ function cmul(a,b){return [a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];}
+ function cdiv(a,b){var d=b[0]*b[0]+b[1]*b[1]||1e-300;return [(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];}
+ function specrad(M){
+  var tr=M[0][0]+M[1][1]+M[2][2],
+      m2=(M[0][0]*M[1][1]-M[0][1]*M[1][0])+(M[0][0]*M[2][2]-M[0][2]*M[2][0])+(M[1][1]*M[2][2]-M[1][2]*M[2][1]),
+      det=M[0][0]*(M[1][1]*M[2][2]-M[1][2]*M[2][1])-M[0][1]*(M[1][0]*M[2][2]-M[1][2]*M[2][0])+M[0][2]*(M[1][0]*M[2][1]-M[1][1]*M[2][0]);
+  var c=[-tr,m2,-det],z=[[1,0],[0.4,0.9],[-0.65,0.72]],it,i,j;
+  for(it=0;it<200;it++){
+   var nz=[];
+   for(i=0;i<3;i++){
+    var zi=z[i],z2=cmul(zi,zi),z3=cmul(z2,zi);
+    var p=[z3[0]+c[0]*z2[0]+c[1]*zi[0]+c[2],z3[1]+c[0]*z2[1]+c[1]*zi[1]];
+    var d=[1,0];for(j=0;j<3;j++)if(j!==i)d=cmul(d,[zi[0]-z[j][0],zi[1]-z[j][1]]);
+    var q=cdiv(p,d);nz.push([zi[0]-q[0],zi[1]-q[1]]);
+   }
+   z=nz;
+  }
+  var mx=0,cx=false;for(i=0;i<3;i++){var m=Math.hypot(z[i][0],z[i][1]);if(m>mx){mx=m;cx=Math.abs(z[i][1])>1e-6;}}
+  return {r:mx,complex:cx};
+ }
+ function path(fp,fx,rho){
+  var M=Amat(fp,fx,rho),s=[1,0,(1-rho)*fp],out=[s.slice()],h,i,j;
+  for(h=1;h<=H;h++){var n=[0,0,0];for(i=0;i<3;i++)for(j=0;j<3;j++)n[i]+=M[i][j]*s[j];s=n;out.push(s.slice());}
+  return out;
+ }
+ o=mount("c_taylor",function(g,w,h){
+  var Pp=path(P.fp,P.fx,P.rho),alt=P.fp>=1?0.8:1.5,Pa=path(alt,P.fx,P.rho),i,lo=-0.4,hi=1.2;
+  for(i=0;i<=H;i++){lo=Math.min(lo,Pp[i][0],Pp[i][1],Pp[i][2]);hi=Math.max(hi,Pp[i][0],Pp[i][1],Pp[i][2]);}
+  lo=Math.max(lo,-4);hi=Math.min(hi,4);
+  var pad=(hi-lo)*0.08;
+  var Ax=axes(g,w,h,[0,H],[lo-pad,hi+pad],{yn:5,xn:8,m:{l:46,r:14,t:14,b:30},xf:function(v){return nf(v,0);},yf:function(v){return nf(v,1);}});
+  clipTo(g,Ax);
+  poly(g,Pa.map(function(s,k){return [k,s[0]];}),Ax.X,Ax.Y,C.rose,1.4,[5,4]);
+  poly(g,Pp.map(function(s,k){return [k,s[2]];}),Ax.X,Ax.Y,C.amber,1.7);
+  poly(g,Pp.map(function(s,k){return [k,s[1]];}),Ax.X,Ax.Y,C.slate,1.8);
+  poly(g,Pp.map(function(s,k){return [k,s[0]];}),Ax.X,Ax.Y,C.chalk,2.2);
+  g.restore();
+  label(g,"contrafactual: φπ = "+nf(alt,2),Ax.m.l+Ax.iw-4,Ax.m.t+10,C.rose,"right");
+  label(g,"trimestres após o choque",Ax.m.l+Ax.iw-4,Ax.m.t+Ax.ih-10,C.dim,"right");
+  var SR=specrad(Amat(P.fp,P.fx,P.rho)),hl=null,sac=0,k;
+  for(k=0;k<=H;k++){if(hl===null&&Math.abs(Pp[k][0])<0.5)hl=k;sac+=Pp[k][1];}
+  var coef=(1-P.rho)*(P.fp+P.fx*SG),unit=Math.abs(SR.r-1)<0.0005,stable=!unit&&SR.r<1;
+  var verdict=unit?"<b>raiz unitária</b> — o choque inflacionário se torna permanente":
+   (stable?"<b>estável</b>"+(SR.complex?", com oscilações":""):"<b>explosivo</b> — a inflação se afasta da meta");
+  document.getElementById("r_taylor").innerHTML="princípio de Taylor <b>"+(P.fp>1.0001?"satisfeito":(P.fp<0.9999?"violado":"no limite"))+
+   "</b> · juro real de longo prazo reage a +1 p.p. de inflação com <b>"+(P.fp-1>=0?"+":"")+nf(P.fp-1,2)+"</b> · maior autovalor |λ| = <b>"+nf(SR.r,3)+"</b>: sistema "+verdict+
+   " · meia-vida da inflação <b>"+(hl===null?"&gt; 40 trimestres":hl+" trimestres")+"</b> · hiato acumulado em 40 trimestres <b>"+nf(sac,2)+
+   "</b> · coeficiente de forma reduzida do juro sobre π<sub>t−1</sub> <b>"+nf(coef,2)+"</b> — muda com a regra";
+ });
+ wire("s_fp","v_fp",function(v){return nf(v,2);},function(v){P.fp=v;schedule(o);});
+ wire("s_fx","v_fx",function(v){return nf(v,2);},function(v){P.fx=v;schedule(o);});
+ wire("s_trho","v_trho",function(v){return nf(v,2);},function(v){P.rho=v;schedule(o);});
+})();
+
+/* ---------------------------------------------------------------------
+   M10 — ESTRUTURA A TERMO E CAMPBELL–SHILLER
+   r_t AR(1) · prêmio τ^(n)_t = ((n−1)/n) q_t, q_t AR(1) independente
+   --------------------------------------------------------------------- */
+(function(){
+ var P={rho:0.95,s:0.1,phi:0.8},MU=4,SR=0.5,N=40,TS=240,o,r=rng(1991),gs=gaussFactory(r),er=[],eq=[],t;
+ for(t=0;t<TS+60;t++){er.push(gs());eq.push(gs());}
+ function an(n){return Math.abs(1-P.rho)<1e-9?1:(1-Math.pow(P.rho,n))/(n*(1-P.rho));}
+ function cn(n){return (n-1)/n;}
+ function bPop(n){
+  var Vr=SR*SR/(1-P.rho*P.rho),Vq=(P.phi<1?P.s*P.s/(1-P.phi*P.phi):0),a=an(n),a1=an(n-1),c=cn(n),c1=cn(n-1);
+  var cov=(a1*P.rho-a)*(a-1)*Vr+(c1*P.phi-c)*c*Vq,vx=(a-1)*(a-1)*Vr+c*c*Vq;
+  return vx>1e-12?(n-1)*cov/vx:1;
+ }
+ function sample(){
+  var rs=[],q=[],x=0,y=0,i;
+  for(i=0;i<TS+60;i++){x=P.rho*x+SR*er[i];y=P.phi*y+P.s*eq[i];if(i>=60){rs.push(MU+x);q.push(y);}}
+  function R(n,k){return MU+(rs[k]-MU)*an(n)+cn(n)*q[k];}
+  function bHat(n){var X=[],Y=[],k,mx=0,my=0,sxx=0,sxy=0;
+   for(k=0;k<TS-1;k++){X.push((R(n,k)-rs[k])/(n-1));Y.push(R(n-1,k+1)-R(n,k));}
+   for(k=0;k<X.length;k++){mx+=X[k];my+=Y[k];}mx/=X.length;my/=X.length;
+   for(k=0;k<X.length;k++){sxx+=(X[k]-mx)*(X[k]-mx);sxy+=(X[k]-mx)*(Y[k]-my);}
+   return sxx>1e-12?sxy/sxx:1;}
+  var ns=[2,4,8,12,16,20,28,40],est=ns.map(function(n){return [n,bHat(n)];});
+  return {rs:rs,R40:rs.map(function(_,k){return R(N,k);}),EH40:rs.map(function(v){return MU+(v-MU)*an(N);}),est:est};
+ }
+ o=mount("c_term",function(g,w,h){
+  var S=sample(),i,lo=1e9,hi=-1e9;
+  for(i=0;i<TS;i++){lo=Math.min(lo,S.rs[i],S.R40[i],S.EH40[i]);hi=Math.max(hi,S.rs[i],S.R40[i],S.EH40[i]);}
+  var h1=h*0.5,h2=h-h1,pad=(hi-lo)*0.08+0.1;
+  var Ax=axes(g,w,h1,[0,TS-1],[lo-pad,hi+pad],{yn:4,xn:6,m:{l:46,r:14,t:12,b:16},xf:function(v){return nf(v,0);},yf:function(v){return nf(v,1);}});
+  poly(g,S.rs.map(function(v,k){return [k,v];}),Ax.X,Ax.Y,"rgba(138,166,232,.85)",1.3);
+  poly(g,S.EH40.map(function(v,k){return [k,v];}),Ax.X,Ax.Y,C.amber,1.4,[4,3]);
+  poly(g,S.R40.map(function(v,k){return [k,v];}),Ax.X,Ax.Y,C.chalk,1.8);
+  label(g,"taxas, % a.a. · 60 anos trimestrais",Ax.m.l+6,Ax.m.t+10,C.dim);
+  var pop=[],n;for(n=2;n<=N;n++)pop.push([n,bPop(n)]);
+  var bl=Math.min(0,Math.min.apply(null,pop.map(function(p){return p[1];}))),bh=1.3;
+  S.est.forEach(function(e){bl=Math.min(bl,e[1]);bh=Math.max(bh,e[1]);});
+  bl=Math.max(bl,-6);bh=Math.min(bh,4);
+  g.save();g.translate(0,h1);
+  var B=axes(g,w,h2,[1,N+1],[bl-0.15,bh+0.15],{yn:4,xn:6,m:{l:46,r:14,t:18,b:26},xf:function(v){return nf(v,0);},yf:function(v){return Math.abs(v)<1e-9?"0":nf(v,1);}});
+  hline(g,B,1,C.amber,[5,4]);
+  clipTo(g,B);
+  poly(g,pop,B.X,B.Y,C.chalk,2.2);
+  g.fillStyle=C.rose;S.est.forEach(function(e){g.beginPath();g.arc(B.X(e[0]),B.Y(clamp(e[1],bl,bh)),3.6,0,6.283);g.fill();});
+  g.restore();
+  label(g,"coeficiente b de Campbell–Shiller · curva = valor populacional",B.m.l+6,B.m.t+2,C.dim);
+  label(g,"prazo n (trimestres)",B.m.l+B.iw-4,B.m.t+B.ih-10,C.dim,"right");
+  g.restore();
+  var a=an(N),c=cn(N),Vr=SR*SR/(1-P.rho*P.rho),Vq=(P.phi<1?P.s*P.s/(1-P.phi*P.phi):0);
+  var sh=(c*c*Vq)/((a-1)*(a-1)*Vr+c*c*Vq||1);
+  var ev=S.est.map(function(e){return e[1];});
+  document.getElementById("r_term").innerHTML="b populacional: n = 4 <b>"+f2(bPop(4))+"</b> · n = 20 <b>"+f2(bPop(20))+
+   "</b> · n = 40 <b>"+f2(bPop(40))+"</b> (hipótese pura: 1,00) · fração da variância do spread de 40 trimestres devida ao prêmio <b>"+
+   pct(sh)+"</b> · na amostra de 60 anos, b estimado varia entre <b>"+f2(Math.min.apply(null,ev))+
+   "</b> e <b>"+f2(Math.max.apply(null,ev))+"</b>";
+ });
+ wire("s_tr","v_tr",function(v){return nf(v,2);},function(v){P.rho=v;schedule(o);});
+ wire("s_tps","v_tps",function(v){return nf(v,2);},function(v){P.s=v;schedule(o);});
+ wire("s_tpp","v_tpp",function(v){return nf(v,2);},function(v){P.phi=v;schedule(o);});
+})();
+
+/* ---------------------------------------------------------------------
+   M11 — RESTRIÇÕES DE SINAL SOBRE O VAR DO MÓDULO 07
+   --------------------------------------------------------------------- */
+(function(){
+ var P={K:4,N:800,out:false},H=20,o,cache=null;
+ function rotation(gs){
+  var M=[[gs(),gs(),gs()],[gs(),gs(),gs()],[gs(),gs(),gs()]],Q=[],j,k,i;
+  for(j=0;j<3;j++){var v=[M[0][j],M[1][j],M[2][j]];
+   for(k=0;k<j;k++){var d=0;for(i=0;i<3;i++)d+=v[i]*Q[k][i];for(i=0;i<3;i++)v[i]-=d*Q[k][i];}
+   var nn=Math.hypot(v[0],v[1],v[2])||1;Q.push([v[0]/nn,v[1]/nn,v[2]/nn]);}
+  return [[Q[0][0],Q[1][0],Q[2][0]],[Q[0][1],Q[1][1],Q[2][1]],[Q[0][2],Q[1][2],Q[2][2]]];
+ }
+ function compute(){
+  var key=[P.K,P.N,P.out,STATE.pers,STATE.sens,STATE.pass].join("|");
+  if(cache&&cache.key===key)return cache;
+  var Am=VARMOD.A1(STATE),Pc=VARMOD.chol3(),Mp=[eye(3)],h,d,j,i,k;
+  for(h=1;h<=H;h++)Mp.push(matmul(Mp[h-1],Am));
+  var r=rng(2005),gs=gaussFactory(r),acc=[],tot=0;
+  for(d=0;d<P.N;d++){
+   var B=matmul(Pc,rotation(gs));
+   for(j=0;j<3;j++){
+    tot++;var c=[B[0][j],B[1][j],B[2][j]];
+    if(Math.abs(c[2])<0.05)continue;
+    if(c[2]<0)c=[-c[0],-c[1],-c[2]];
+    var ok=true,pth=[];
+    for(h=0;h<=H;h++){var v=[0,0,0];
+     for(i=0;i<3;i++){for(k=0;k<3;k++)v[i]+=Mp[h][i][k]*c[k];v[i]/=c[2];}
+     if(h<=P.K&&(v[2]<0||v[1]>0||(P.out&&v[0]>0))){ok=false;break;}
+     pth.push(v[0]);}
+    if(ok)acc.push(pth);
+   }
+  }
+  var med=[],lo=[],hi=[];
+  for(h=0;h<=H;h++){
+   var col=acc.map(function(p){return p[h];}).sort(function(a,b){return a-b;}),n=col.length;
+   if(!n){med.push([h,0]);lo.push([h,0]);hi.push([h,0]);continue;}
+   med.push([h,col[n>>1]]);lo.push([h,col[Math.floor(0.16*(n-1))]]);hi.push([h,col[Math.ceil(0.84*(n-1))]]);
+  }
+  var neg4=acc.length?acc.filter(function(p){return p[4]<0;}).length/acc.length:0;
+  var ch=VARMOD.irf(STATE,1,H).map(function(v,hh){return [hh,v[0]];});
+  cache={key:key,acc:acc,tot:tot,med:med,lo:lo,hi:hi,neg4:neg4,ch:ch};
+  return cache;
+ }
+ o=mount("c_sign",function(g,w,h){
+  var S=compute(),i,lo=-0.3,hi=0.3;
+  for(i=0;i<=H;i++){lo=Math.min(lo,S.lo[i][1],S.ch[i][1]);hi=Math.max(hi,S.hi[i][1],S.ch[i][1]);}
+  var span=hi-lo;lo-=span*0.35;hi+=span*0.35;
+  var Ax=axes(g,w,h,[0,H],[lo,hi],{yn:5,xn:5,m:{l:46,r:14,t:14,b:30},xf:function(v){return nf(v,0);},yf:function(v){return nf(v,2);}});
+  clipTo(g,Ax);
+  if(P.K>0){g.fillStyle="rgba(233,161,59,.06)";g.fillRect(Ax.X(0),Ax.m.t,Ax.X(P.K)-Ax.X(0),Ax.ih);}
+  var step=Math.max(1,Math.floor(S.acc.length/260));
+  for(i=0;i<S.acc.length;i+=step)poly(g,S.acc[i].map(function(v,hh){return [hh,v];}),Ax.X,Ax.Y,"rgba(99,214,176,.10)",1);
+  if(S.acc.length)band(g,S.hi,S.lo,Ax.X,Ax.Y,"rgba(99,214,176,.16)");
+  hline(g,Ax,0,"rgba(255,255,255,.28)");
+  poly(g,S.ch,Ax.X,Ax.Y,C.amber,1.8,[6,4]);
+  if(S.acc.length)poly(g,S.med,Ax.X,Ax.Y,C.chalk,2.3);
+  g.restore();
+  if(P.K>0)label(g,"restrições ativas",Ax.X(P.K)-4,Ax.m.t+10,C.amber,"right",10.5);
+  label(g,"resposta do produto por unidade de juro no impacto · trimestres",Ax.m.l+Ax.iw-4,Ax.m.t+Ax.ih-10,C.dim,"right");
+  var n=S.acc.length;
+  document.getElementById("r_sign").innerHTML=n?("modelos aceitos <b>"+n+"</b> de "+S.tot+" candidatos (<b>"+nf(100*n/S.tot,1)+"%</b>) · produto negativo em h = 4 em <b>"+pct(S.neg4)+
+   "</b> dos modelos · intervalo 16–84 em h = 8: <b>["+nf(S.lo[8][1],2)+" ; "+nf(S.hi[8][1],2)+"]</b> · Cholesky em h = 8: <b>"+nf(S.ch[8][1],2)+"</b>"+
+   (P.out?" · <b>atenção:</b> o sinal do produto foi imposto, não estimado":"")):
+   "nenhuma rotação satisfez as restrições — o conjunto identificado é vazio nesta configuração";
+ });
+ wire("s_sk","v_sk",function(v){return String(v);},function(v){P.K=v;schedule(o);});
+ wire("s_sn","v_sn",function(v){return String(v);},function(v){P.N=v;schedule(o);});
+ var bo=document.getElementById("b_sout");
+ if(bo)bo.addEventListener("click",function(){P.out=!P.out;bo.setAttribute("aria-pressed",String(P.out));schedule(o);});
+ on(["s_pers","s_sens","s_pass"],function(){schedule(o);});
+})();
+
+/* ---------------------------------------------------------------------
+   AUTOAVALIAÇÃO
+   --------------------------------------------------------------------- */
+(function(){
+ var box=document.getElementById("quizbox");if(!box)return;
+ var QZ=[
+  {m:"m1",q:"Em uma regressão com variável omitida correlacionada com o regressor, a amostra passa de 120 para 600 trimestres. O que acontece com a distribuição do coeficiente estimado?",
+   o:["O viés desaparece, porque o estimador é consistente","Fica mais estreita e continua centrada no valor errado","Fica mais larga, porque há mais variação omitida"],a:1,
+   e:"Mais dados reduzem a variância, não o viés. Sem a variável omitida, o estimador converge para β₁ + β₂δ — eficiência não substitui especificação."},
+  {m:"m2",q:"Por que não usar −1,64 como valor crítico na regressão de Dickey–Fuller?",
+   o:["Porque sob raiz unitária a estatística t tem distribuição deslocada para a esquerda e assimétrica","Porque o teste é bicaudal","Porque a amostra macro é sempre pequena demais"],a:0,
+   e:"Sob a nula o regressor é integrado e a teoria assintótica usual não vale. Usar a normal faz um teste de 5% rejeitar com frequência muito maior."},
+  {m:"m3",q:"Você regride o consumo em nível sobre o crédito em nível e obtém t = 6 e R² = 0,85, com Durbin–Watson de 0,3. Qual a conclusão mais prudente?",
+   o:["Há uma relação forte e significativa","O R² alto compensa a autocorrelação","A regressão é candidata a espúria até que um teste de cointegração rejeite raiz unitária no resíduo"],a:2,
+   e:"R² maior que o DW é o alarme clássico de Granger e Newbold. Só um resíduo estacionário — cointegração — autoriza interpretar a relação em nível."},
+  {m:"m4",q:"Sobre a condição de ordem para identificação de uma equação em um sistema simultâneo:",
+   o:["É necessária mas não suficiente","É suficiente mas não necessária","É testável com os dados da forma reduzida"],a:0,
+   e:"A contagem de exclusões é necessária; a condição de posto é a que garante identificação. E restrições exatamente identificadoras não são testáveis."},
+  {m:"m5",q:"Em qual situação a crítica de Lucas perde força quantitativa?",
+   o:["Quando a amostra é longa","Quando os agentes dão peso quase nulo às expectativas sobre a política","Quando o modelo é estimado por máxima verossimilhança"],a:1,
+   e:"Com δ próximo de zero o coeficiente de forma reduzida quase não depende da regra. A crítica é uma questão de magnitude, não um veto geral."},
+  {m:"m5",q:"O CUSUM de uma equação de demanda não sai das bandas de 5% ao longo de toda a amostra. Isso prova que a equação é invariante a mudanças de política?",
+   o:["Sim, por construção do teste","Sim, desde que a amostra tenha mais de 100 observações","Não: só indica que a estabilidade não foi rejeitada, e o teste tem pouco poder contra certas quebras"],a:2,
+   e:"Não rejeitar não é confirmar. Quebras tardias ou pequenas passam despercebidas, e a invariância só é informativa se a amostra contiver regimes de política diferentes."},
+  {m:"m7",q:"Ao trocar a ordenação de Cholesky, a resposta do produto no impacto muda. A origem dessa mudança é:",
+   o:["Erro de estimação do VAR","A hipótese de identificação sobre quem reage contemporaneamente a quem","Instabilidade dos autovalores"],a:1,
+   e:"A forma reduzida é a mesma; muda apenas o fator P que distribui a covariância dos resíduos entre os choques. O resultado é condicional à ordenação."},
+  {m:"m7",q:"Qual a resposta-padrão da literatura ao price puzzle?",
+   o:["Ampliar o conjunto de informação do VAR, por exemplo com preços de commodities","Aumentar o número de defasagens até a inflação cair","Diferenciar todas as séries"],a:0,
+   e:"O resíduo de juros contém a reação do banco central a pressões inflacionárias que o econometrista não observa. Incluir essa informação limpa o choque."},
+  {m:"m8",q:"Com instrumentos fracos, a superfície do critério GMM:",
+   o:["Fica mais íngreme e o mínimo, mais preciso","Não se altera","Achata-se: muitos parâmetros dão ajuste parecido e os intervalos usuais enganam"],a:2,
+   e:"O estimador continua devolvendo um número com erro-padrão de aparência razoável, mas a identificação é frágil — o vale vira uma calha."},
+  {m:"m9",q:"O que o princípio de Taylor garante em um modelo como o do Módulo 09?",
+   o:["Que o juro real suba quando a inflação sobe, devolvendo a inflação à meta","Que o produto nunca fique abaixo do potencial","Que a taxa de juros seja sempre positiva"],a:0,
+   e:"Com φπ > 1 o juro real aumenta diante de inflação mais alta. Com φπ < 1 o juro real cai e a política alimenta o choque — no modelo, o sistema diverge."},
+  {m:"m10",q:"A regressão de Campbell–Shiller devolve b bem abaixo de um. A interpretação mais cuidadosa é:",
+   o:["As expectativas de mercado são irracionais","A hipótese das expectativas pura é rejeitada; prêmio de prazo variável é uma explicação candidata, não a única","O mercado de títulos é ineficiente"],a:1,
+   e:"O spread mistura expectativas e prêmio. Rejeitar b = 1 não identifica qual hipótese auxiliar falhou — o mesmo problema do teste J no GMM."},
+  {m:"m11",q:"O que um VAR identificado por restrições de sinal entrega?",
+   o:["Uma resposta pontual mais precisa que a de Cholesky","Um conjunto de modelos compatíveis com os dados e com os sinais; a mediana não corresponde a nenhum deles","Respostas livres de hipóteses de identificação"],a:1,
+   e:"A identificação é por conjunto. Reportar só a mediana esconde que o resultado é uma família de modelos e que a distribuição sobre rotações funciona como prior."}
+ ];
+ var state=QZ.map(function(){return -1;});
+ function modn(m){var n=m.replace("m","");return n.length<2?"0"+n:n;}
+ function score(){
+  var ok=0,done=0;state.forEach(function(s,i){if(s>=0){done++;if(s===QZ[i].a)ok++;}});
+  document.getElementById("qok").textContent=ok;document.getElementById("qdone").textContent=done;
+  document.getElementById("qtot").textContent=QZ.length;
+  document.getElementById("qbar").style.width=(100*ok/QZ.length)+"%";
+ }
+ function render(){
+  box.innerHTML=QZ.map(function(q,i){
+   return '<div class="qz" data-i="'+i+'"><div class="qn">Pergunta '+(i+1)+' · Módulo '+modn(q.m)+'</div><div class="qt">'+q.q+'</div><div class="opts">'+
+    q.o.map(function(op,j){return '<button type="button" class="op" data-j="'+j+'">'+op+'</button>';}).join("")+
+    '</div><div class="fb" aria-live="polite"></div></div>';}).join("");
+  score();
+ }
+ box.addEventListener("click",function(e){
+  var b=e.target.closest("button.op");if(!b)return;
+  var card=b.closest(".qz"),i=+card.getAttribute("data-i"),j=+b.getAttribute("data-j"),q=QZ[i];
+  if(state[i]>=0)return;state[i]=j;
+  var bs=card.querySelectorAll("button.op");
+  for(var k=0;k<bs.length;k++){bs[k].disabled=true;if(k===q.a)bs[k].classList.add("ok");else if(k===j)bs[k].classList.add("no");}
+  var fb=card.querySelector(".fb");
+  fb.innerHTML='<b style="color:'+(j===q.a?C.chalk:C.rose)+'">'+(j===q.a?"Correto.":"Não exatamente.")+"</b> "+q.e+
+   ' <a href="#'+q.m+'">Rever o Módulo '+modn(q.m)+" →</a>";
+  fb.classList.add("on");score();
+ });
+ var rs=document.getElementById("qreset");
+ if(rs)rs.addEventListener("click",function(){state=QZ.map(function(){return -1;});render();});
+ render();
+})();
+
 })();
 </script>
 </body>
