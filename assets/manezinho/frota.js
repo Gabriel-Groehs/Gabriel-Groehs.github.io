@@ -83,6 +83,14 @@ window.MTAFleet = (() => {
         paintClearcoat: true,
       };
     }
+    for (const key of ["tubarao", "marlim", "bernuncia", "taxi", "berbigao"]) {
+      catalog[key].legacyPaint = true;
+    }
+    catalog.viatura_classica = {
+      ...catalog.viatura,
+      name: "Viatura da Polícia da Ilha · clássica",
+      legacyPaint: true,
+    };
     catalog.cruze_ltz_2014.mirrorWidth = 2.098;
     catalog.cruze_ltz_2014.headlightGlow = .80;
     catalog.cruze_ltz_2014.detailRange = 15;
@@ -118,17 +126,17 @@ window.MTAFleet = (() => {
   }
 
   function traffic(regular, premium) {
-    regular.push(["cruze", 3.4], ["cruze_ltz_2014", 3.2], ["equinox", 1.05], ["compass", 1.25],
-      ["camaro_ss", .86], ["camaro_z28", .23], ["camaro_zl1", .30],
+    regular.push(["cruze", 3.4], ["cruze_ltz_2014", 11.6], ["equinox", 1.05], ["compass", 1.25],
+      ["camaro_ss", 8.2], ["camaro_z28", .23], ["camaro_zl1", .30], ["ferrari_458", 6.2],
       ["mustang_gt", .85], ["mustang_mach", .26], ["mustang_shelby", .21],
       ["f150_raptor", .72], ["f150_monster", .24], ["ranger_raptor", 1.15],
       ["ranger_exped", .43], ["audi", .5], ["bmw", .53], ["mercedes", .23],
       ["skyline", .35], ["urus", .22]);
-    premium.push(["camaro_ss", .9], ["camaro_zl1", .65], ["mustang_mach", .5],
+    premium.push(["camaro_ss", 4.1], ["cruze_ltz_2014", 4.3], ["camaro_zl1", .65], ["mustang_mach", .5],
       ["mustang_shelby", .55], ["f150_raptor", .45], ["ranger_raptor", .46],
       ["aventador", .64], ["huracan", .80], ["urus", .82], ["ferrari", .78],
       ["porsche", .90], ["audi", .85], ["bmw", .80], ["mercedes", .70], ["skyline", .48],
-      ["ferrari_458", .24]);
+      ["ferrari_458", 7.3]);
   }
 
 
@@ -883,6 +891,33 @@ window.MTAFleet = (() => {
     ["urus", 380, -1343, -Math.PI / 2, 0x292b37],
     ["f150_monster", -546, 53, 0, 0x454a51],
     ["ferrari_458", 174, 719, Math.PI / 2, 0xad151c],
+    // Vagas adicionais perto dos pontos onde estes carros já aparecem.
+    ["ferrari_458", 23.1, 63.6, 0, 0xad151c],
+    ["camaro_ss", 23.1, 70.8, 0, 0xf8ae25],
+    ["cruze_ltz_2014", 23.1, 78, 0, 0xf6f4f1],
+    ["ferrari_458", 153, 719, Math.PI / 2, 0xad151c],
+    ["camaro_ss", 162, 726, Math.PI / 2, 0xf8ae25],
+    ["cruze_ltz_2014", 154, 726, Math.PI / 2, 0xf6f4f1],
+    ["ferrari_458", -546, 60.2, 0, 0xad151c],
+    ["camaro_ss", -546, 67.4, 0, 0xc83732],
+    ["cruze_ltz_2014", -546, 74.6, 0, 0xf6f4f1],
+    ["ferrari_458", 300, -1422, Math.PI / 2, 0xad151c],
+    ["camaro_ss", 300, -1406, Math.PI / 2, 0xd8dbe2],
+    ["cruze_ltz_2014", 300, -1414, Math.PI / 2, 0xf6f4f1],
+    ["ferrari_458", 631, -1400, Math.PI / 2, 0xad151c],
+    ["camaro_ss", 624, -1400, Math.PI / 2, 0xf8ae25],
+    ["cruze_ltz_2014", 617, -1400, Math.PI / 2, 0xf6f4f1],
+    ["ferrari_458", 878, 45.5, 0, 0xad151c],
+    ["camaro_ss", 878, 53, 0, 0xc83732],
+    ["cruze_ltz_2014", 878, 60.4, 0, 0xf6f4f1],
+    ["ferrari_458", 388, 1000, Math.PI, 0xad151c],
+    ["camaro_ss", 396, 1000, Math.PI, 0xf8ae25],
+    ["cruze_ltz_2014", 404, 1000, Math.PI, 0xf6f4f1],
+    ["viatura_classica", 108, 97, 0],
+    ["viatura_classica", 712, -1404, Math.PI / 2],
+    ["viatura_classica", 884, 836, Math.PI],
+    ["viatura_classica", 586, 34, 0],
+    ["viatura_classica", -513, 20, 0],
   ];
 
 
@@ -902,12 +937,8 @@ window.MTAFleet = (() => {
     equinox: "suv",
     compass: "suv",
     urus: "suv",
-    marlim: "suv",
     onibus: "city-bus",
-    bernuncia: "delivery-van",
-    berbigao: "hatchback",
     baiacu: "rally-car",
-    taxi: "city-taxi",
     viatura: "police-car",
     garoupa: "family-sedan",
     siri: "pickup-truck",
@@ -915,7 +946,6 @@ window.MTAFleet = (() => {
     camaro_zl1: "muscle-car",
     mustang_gt: "classic-coupe",
     mustang_shelby: "muscle-car",
-    tubarao: "classic-coupe",
   };
   const models = new Map();
   const paints = new WeakMap();
