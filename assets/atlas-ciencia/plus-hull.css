@@ -1,0 +1,7 @@
+/* Atlas Plus · ajustes específicos do Hull (letras gregas e conceitos dentro de leituras executivas). */
+.kpi-l .nt{text-transform:none;letter-spacing:0;font-family:var(--serif);font-style:italic;font-size:.82rem;margin:0 4px 0 0}
+.kpi-l>.nt:not(:first-child){margin-left:4px}
+.sim-take b.cx{font:inherit;font-weight:700;letter-spacing:normal;text-transform:none;margin-right:0;color:var(--cx1)}
+.sim-take b.cx[data-c="m"]{color:var(--cx2)}.sim-take b.cx[data-c="mod"]{color:var(--cx3)}.sim-take b.cx[data-c="reg"]{color:var(--cx4)}
+.deep-h .no-cx{color:inherit}
+#mapa-livro-hull{margin:22px 0 18px}

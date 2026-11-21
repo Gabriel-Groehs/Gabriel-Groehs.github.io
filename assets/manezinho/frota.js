@@ -95,8 +95,16 @@ window.MTAFleet = (() => {
     catalog.cruze_ltz_2014.headlightGlow = .80;
     catalog.cruze_ltz_2014.detailRange = 15;
     Object.assign(catalog.ferrari_458, {
-      seat: { x:.365, y:.265, z:-.055, s:.590 }, detailRange: 12, headlightGlow: .79,
+      seat: { x:.365, y:.265, z:-.055, s:.590 }, detailRange: 9, headlightGlow: .79,
     });
+    catalog.boeing_737 = {
+      ...catalog.tecoteco, name: "Boeing 737 · jato comercial", prop: false, airliner: true,
+      L: 35, Wd: 3.8, H: 11.1, wb: 11.7, wr: .475,
+      mass: 42000, accel: 9.6, top: 105, brake: 18, steer: .44, engine: .83, tough: 3.5,
+      stall: 28, vr: 35, cam: 35,
+      seat: { x: .62, y: 4.15, z: 12.3, s: .78 },
+      colors: [0xf7f5f0],
+    };
     catalog.pirata_escuna = {
       ...catalog.traineira, name: "Escuna Pirata da Ilha", model: "pirata_escuna",
       pirate: 2, L: 15.8, Wd: 4.5, H: 9, mass: 18500, accel: 3.1,
@@ -126,17 +134,21 @@ window.MTAFleet = (() => {
   }
 
   function traffic(regular, premium) {
-    regular.push(["cruze", 3.4], ["cruze_ltz_2014", 11.6], ["equinox", 1.05], ["compass", 1.25],
-      ["camaro_ss", 8.2], ["camaro_z28", .23], ["camaro_zl1", .30], ["ferrari_458", 6.2],
+    regular.push(["cruze", 3.4], ["equinox", 1.05], ["compass", 1.25],
+      ["camaro_ss", 8.2], ["camaro_z28", .23], ["camaro_zl1", .30],
       ["mustang_gt", .85], ["mustang_mach", .26], ["mustang_shelby", .21],
       ["f150_raptor", .72], ["f150_monster", .24], ["ranger_raptor", 1.15],
       ["ranger_exped", .43], ["audi", .5], ["bmw", .53], ["mercedes", .23],
       ["skyline", .35], ["urus", .22]);
-    premium.push(["camaro_ss", 4.1], ["cruze_ltz_2014", 4.3], ["camaro_zl1", .65], ["mustang_mach", .5],
+    premium.push(["camaro_ss", 4.1], ["camaro_zl1", .65], ["mustang_mach", .5],
       ["mustang_shelby", .55], ["f150_raptor", .45], ["ranger_raptor", .46],
       ["aventador", .64], ["huracan", .80], ["urus", .82], ["ferrari", .78],
-      ["porsche", .90], ["audi", .85], ["bmw", .80], ["mercedes", .70], ["skyline", .48],
-      ["ferrari_458", 7.3]);
+      ["porsche", .90], ["audi", .85], ["bmw", .80], ["mercedes", .70], ["skyline", .48]);
+    for (const pool of [regular,premium]) {
+      // Keep the relative weights of the remaining vehicles as a single share.
+      const other = pool.reduce((sum,[,weight]) => sum+weight,0);
+      pool.push(["ferrari_458",25*other],["cruze_ltz_2014",15*other]);
+    }
   }
 
 
@@ -875,6 +887,7 @@ window.MTAFleet = (() => {
   }
 
   const parked = [
+    ["boeing_737", 142, 485, 0, 0xf7f5f0],
     ["bicicleta_urbana", 24.4, 13, 0, 0x4b746d],
     ["patinete", 24.4, 22, Math.PI, 0x4e807b],
     ["patinete", -529, 26, 0, 0xe2973d],
@@ -918,6 +931,27 @@ window.MTAFleet = (() => {
     ["viatura_classica", 884, 836, Math.PI],
     ["viatura_classica", 586, 34, 0],
     ["viatura_classica", -513, 20, 0],
+    // Vagas dos favoritos em áreas que já têm acesso pela rua.
+    ["ferrari_458", 23.1, 85.2, 0, 0xad151c, 320],
+    ["ferrari_458", 23.1, 92.4, 0, 0xf6f4f1, 320],
+    ["ferrari_458", 145, 719, Math.PI / 2, 0xad151c, 320],
+    ["ferrari_458", 137, 719, Math.PI / 2, 0xf3ad2b, 320],
+    ["ferrari_458", 129, 719, Math.PI / 2, 0xad151c, 320],
+    ["ferrari_458", 145, 726, Math.PI / 2, 0x292b37, 320],
+    ["ferrari_458", 137, 726, Math.PI / 2, 0xad151c, 320],
+    ["ferrari_458", -555, 67.4, 0, 0xad151c, 320],
+    ["ferrari_458", -546, 89, 0, 0xf6f4f1, 320],
+    ["ferrari_458", 300, -1430, Math.PI / 2, 0xad151c, 320],
+    ["ferrari_458", 292, -1422, Math.PI / 2, 0xf3ad2b, 320],
+    ["ferrari_458", 610, -1400, Math.PI / 2, 0xad151c, 320],
+    ["ferrari_458", 603, -1400, Math.PI / 2, 0x292b37, 320],
+    ["ferrari_458", 878, 67.8, 0, 0xad151c, 320],
+    ["ferrari_458", 887, 53.5, 0, 0xad151c, 320],
+    ["ferrari_458", 412, 1000, Math.PI, 0xf3ad2b, 320],
+    ["ferrari_458", 420, 1000, Math.PI, 0xad151c, 320],
+    ["cruze_ltz_2014", 129, 726, Math.PI / 2, 0xf6f4f1, 320],
+    ["cruze_ltz_2014", -546, 96.2, 0, 0xf6f4f1, 320],
+    ["cruze_ltz_2014", 595, -1400, Math.PI / 2, 0xf6f4f1, 320],
   ];
 
 
@@ -998,7 +1032,8 @@ window.MTAFleet = (() => {
   // The imported vehicles share a rig. These proportions give each design a distinct silhouette.
   const profiles = {
     cruze: { roof: .025, rear: .043, nose: .049, fender: .014, cabinForward: .058, noseTaper: .063 },
-    eq: { roof: .02, rear: .046, nose: .022, fender: .012 },
+    eq: { roof: .031, rear: .093, nose: .043, fender: .026,
+      cabinForward: .044, noseTaper: .020, equinox: true },
     compass: { roof: -.045, rear: -.085, nose: -.032, fender: .027 },
     urus: { roof: .095, rear: .115, nose: .045, fender: .032 },
     camaro: { roof: .07, rear: .045, nose: -.012, fender: .038 },
@@ -1059,6 +1094,18 @@ window.MTAFleet = (() => {
           point.z += size.z * profile.cabinForward * travel;
           const lateral = Math.min(1, Math.abs(point.x - center.x) / (size.x * .5));
           point.z -= size.z * profile.noseTaper * lateral ** 2.75 * nose;
+        }
+        if (profile.equinox) {
+          const across = Math.min(1, Math.abs(point.x-center.x)/(size.x*.5));
+          const movingRearGlass = fade((-along-.43)/.42)*fade((height-.58)/.29);
+          const cowl = fade((along+.10)/.28)*fade((.54-along)/.20);
+          const nearBelt = fade((height-.45)/.13)*(1-fade((height-.70)/.20));
+          point.z += size.z*(.061*movingRearGlass + .071*cowl*nearBelt);
+          const hood = fade((along-.24)/.22)*fade((.96-along)/.27)*fade((height-.37)/.18)*(1-greenhouse);
+          const ridge = Math.exp(-(((across-.72)/.14)**2));
+          point.y += size.y*hood*(.028*(1-across*across)+.014*ridge);
+          const tailShoulder = fade((-along-.48)/.4)*fade((height-.33)/.23)*(1-greenhouse);
+          point.y += size.y*.024*tailShoulder;
         }
         if (profile.sculptedHood && height > .40) {
           const lateral = Math.abs(point.x - center.x) / (size.x * .5);
@@ -1200,7 +1247,7 @@ window.MTAFleet = (() => {
     }
   }
 
-  function simplifyRoadBatch(geometry, limit, tools, dense = false) {
+  function simplifyRoadBatch(geometry, limit, tools, dense = false, fraction = dense ? .31 : .46) {
     const current = geometry.getIndex();
     const optimizer = roadSimplifier;
     if (!optimizer || current.count < 720) return;
@@ -1216,7 +1263,7 @@ window.MTAFleet = (() => {
       if (uv) attributes.set(uv.array.subarray(i * 2, i * 2 + 2), at + 3);
     }
 
-    const target = Math.max(216, Math.floor(current.count * (dense ? .31 : .46) / 3) * 3);
+    const target = Math.max(216, Math.floor(current.count * fraction / 3) * 3);
     const flags = dense ? ["Permissive", "Prune", "ErrorAbsolute"] : ["LockBorder", "ErrorAbsolute"];
     const [reduced] = optimizer.simplifyWithAttributes(Uint32Array.from(current.array), position.array, 3,
       attributes, width, weights, null, target, limit, flags);
@@ -1363,20 +1410,36 @@ window.MTAFleet = (() => {
       }
       const batches = [];
       for (const {reference,meshes} of perMaterial.values()) {
-        batches.push({ reference, geometry: roadMeshBatch(meshes,transform,tools,key==="ferrari_458") });
+        const geometry = roadMeshBatch(meshes,transform,tools,key==="ferrari_458");
+        let far = null;
+        if ((key==="ferrari_458" || key==="cruze_ltz_2014") && geometry.index.count>=720) {
+          const reduced = geometry.clone();
+          const ferrari=key==="ferrari_458";
+          simplifyRoadBatch(reduced,ferrari?.075:.052,tools,true,ferrari?.16:.22);
+          if (reduced.index.count < geometry.index.count) {
+            reduced.computeBoundingSphere();
+            far = reduced;
+          } else {
+            reduced.dispose();
+          }
+        }
+        batches.push({ reference, geometry, far });
       }
       roadBatches.set(key,batches);
     }
     const shell = new tools.Group();
     shell.name = "carroceria-media:" + key;
     shell.visible = false;
-    for (const {reference,geometry} of roadBatches.get(key)) {
+    const distanceParts = [];
+    for (const {reference,geometry,far} of roadBatches.get(key)) {
       const material = mediumRoadMaterial(key, visible[reference].material, tools);
       const mesh = new tools.Mesh(geometry,material);
       mesh.receiveShadow = true;
       mesh.castShadow = !material.transparent;
       shell.add(mesh);
+      if (far) distanceParts.push({node:mesh,medium:geometry,far});
     }
+    shell.userData.distanceParts = distanceParts;
     holder.add(shell);
     return shell;
   }
@@ -1473,7 +1536,19 @@ window.MTAFleet = (() => {
       chassis.add(grille);
       holder.attach(grille);
     }
-    for (const part of window.MTAFronts?.mountCamaroSides(key, car, original, tools) ?? []) {
+    const equinoxPanels = window.MTAFronts?.mountEquinox(key, car, original, tools) ?? [];
+    const tailPanel = equinoxPanels.find(part => part.name==="eq-rear");
+    if (tailPanel) {
+      const paint = original.getObjectByName("body_1")?.material;
+      if (paint?.name==="paint_body") {
+        original.traverse(node => {
+          if (node.isMesh && /^(lamp_red_body|light_rear_body)$/.test(node.material?.name)) node.material=paint;
+        });
+        brakes.clear();
+      }
+      brakes.set(tailPanel.material,tailPanel.material);
+    }
+    for (const part of [...equinoxPanels, ...(window.MTAFronts?.mountCamaroSides(key, car, original, tools) ?? [])]) {
       chassis.add(part);
       holder.attach(part);
     }
@@ -1488,7 +1563,8 @@ window.MTAFleet = (() => {
     const cabin = cabinControls(original, tools);
     const medium = mountMediumRoadBody(key, original, holder, tools);
     const wheelDetails = medium && ["cruze_ltz_2014","ferrari_458"].includes(key) ? buildWheelDetails(wheels, tools) : [];
-    return { holder, near: adjustment, medium, wheels, wheelDetails, brakes: [...brakes.values()],
+    return { holder, near: adjustment, medium, wheels, wheelDetails, distanceParts:medium?.userData.distanceParts,
+      brakes: [...brakes.values()],
       headlights: [...headlights.values()], ...cabin };
   }
 
