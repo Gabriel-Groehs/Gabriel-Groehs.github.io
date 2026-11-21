@@ -153,9 +153,14 @@ body.touch #prompt { top: 46%; font-size: 17px; }
 /* ---------- telas ---------- */
 .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: calc(20px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)); overflow-y: auto; }
 #loading { background: radial-gradient(ellipse at 50% 120%, #ff8a3d 0%, #c8406a 30%, #3a1f5e 62%, var(--ink) 100%); z-index: 20; }
-#title { background: linear-gradient(180deg, rgba(20, 13, 34, 0.15) 0%, rgba(20, 13, 34, 0) 40%, rgba(20, 13, 34, 0.82) 100%); z-index: 15; justify-content: flex-end; }
+#title { background: linear-gradient(180deg, rgba(20, 13, 34, 0.15) 0%, rgba(20, 13, 34, 0) 40%, rgba(20, 13, 34, 0.82) 100%); z-index: 15; justify-content: flex-start; }
+/* Auto margins center a menu that fits, while taller menus scroll from the top. */
+#title > * { flex-shrink: 0; box-sizing: border-box; }
+#title > .logo, #title > .tag, #title > .row { max-width: 100%; }
+#title > .logo { margin-top: auto; padding-top: clamp(18px, 2.5vw, 32px); }
+#title > :last-child { margin-bottom: auto; }
 .logo { line-height: 0.82; }
-.logo .m { font-family: var(--f-display); font-size: clamp(54px, 12vw, 138px); background: linear-gradient(180deg, #fff6b8 8%, #ffb347 42%, #ff5e62 72%, #c2367a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(4px 5px 0 var(--stroke)); transform: rotate(-4deg); display: inline-block; padding: 0 0.1em; }
+.logo .m { font-family: var(--f-display); font-size: clamp(38px, 12vw, 138px); background: linear-gradient(180deg, #fff6b8 8%, #ffb347 42%, #ff5e62 72%, #c2367a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(4px 5px 0 var(--stroke)); transform: rotate(-4deg); display: inline-block; padding: 0 0.1em; }
 .logo .ta { display: block; font-family: var(--f-num); font-size: clamp(40px, 8vw, 92px); color: transparent; -webkit-text-stroke: 3px var(--sea); text-shadow: 0 0 18px rgba(31, 183, 179, 0.9), 0 0 42px rgba(31, 183, 179, 0.5); letter-spacing: 0.18em; margin-top: 0.12em; transform: rotate(-4deg); }
 .tag { font-family: var(--f-script); font-size: clamp(20px, 3.4vw, 30px); color: var(--cream); text-shadow: 2px 2px 0 var(--stroke); }
 #bar { width: min(420px, 80%); height: 10px; background: rgba(0, 0, 0, 0.45); border: 2px solid var(--stroke); border-radius: 2px; overflow: hidden; }
@@ -266,7 +271,7 @@ body.touch #wanted { font-size: 18px; }
 .music input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 #err { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 50; background: #2a0d14; border: 2px solid var(--sc-red); padding: 10px 14px; font-size: 16px; display: none; }
 @media (max-height: 520px) {
-  .logo .m { font-size: 56px; }
+  .logo .m { font-size: clamp(34px, 12vw, 56px); }
   .logo .ta { font-size: 38px; }
   #title { gap: 10px; }
   .keys { display: none; }
