@@ -37,7 +37,7 @@ const NAV = [
   { g: 'Visão', items: [{ id: 'balanca', t: 'Balança da intermediação', ic: 'scale' }, { id: 'painel', t: 'Painel de métricas', ic: 'grid', tag: 'A×B' }, { id: 'universo', t: 'Universo & ranking', ic: 'dots' }] },
   { g: 'Demonstrações', items: [{ id: 'balancete', t: 'Balancete COSIF', ic: 'book', tag: '4010' }, { id: 'dre', t: 'DRE', ic: 'bars' }, { id: 'sankey', t: 'Resultado em fluxo', ic: 'sankey', tag: 'P&L' }, { id: 'dfc', t: 'DFC · fluxo de caixa', ic: 'flow' }, { id: 'spread', t: 'Spread', ic: 'spread' }] },
   { g: 'Riscos', items: [{ id: 'credito', t: 'Risco de crédito', ic: 'shield', tag: 'SCR' }, { id: 'capital', t: 'Capital & Basileia', ic: 'pillar' }, { id: 'mercado', t: 'Mercado & tesouraria', ic: 'wave', tag: 'VaR' }, { id: 'alm', t: 'ALM, IRRBB & liquidez', ic: 'ladder' }, { id: 'nii', t: 'NII & pricing', ic: 'coin' }, { id: 'frm', t: 'FRM 360°', ic: 'radar' }] },
-  { g: 'Análises', items: [{ id: 'camels', t: 'CAMELS', ic: 'camel' }, { id: 'pearls', t: 'PEARLS (WOCCU)', ic: 'pearl' }, { id: 'ras', t: 'RAS · apetite a riscos', ic: 'ras' }, { id: 'rating', t: 'Rating estilo FGCoop', ic: 'star' }, { id: 'comparar', t: 'Comparar IFs', ic: 'versus' }] },
+  { g: 'Análises', items: [{ id: 'camels', t: 'CAMELS', ic: 'camel' }, { id: 'pearls', t: 'PEARLS (WOCCU)', ic: 'pearl' }, { id: 'ras', t: 'RAS · apetite a riscos', ic: 'ras' }, { id: 'rating', t: 'Rating Radar (ilustrativo)', ic: 'star' }, { id: 'comparar', t: 'Comparar IFs', ic: 'versus' }] },
   { g: 'Referências', items: [{ id: 'biblioteca', t: 'Biblioteca', ic: 'books' }, { id: 'metodologia', t: 'Metodologia & dados', ic: 'info' }] },
 ];
 const VIEW_IDS = NAV.flatMap(g => g.items.map(i => i.id));
