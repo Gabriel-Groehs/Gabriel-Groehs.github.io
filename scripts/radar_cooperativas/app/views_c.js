@@ -35,7 +35,7 @@ function ratingBadge(host, rt, size = 200) {
 /* ---------------- Rating ---------------- */
 VIEWS.rating = (V, n) => {
   const m = metrics(n), rt = ratingOf(n);
-  head(V, 'Avaliação · Rating', 'Rating Radar (estilo FGCoop) — ' + esc(nameOf(n)), `Classificação ilustrativa de 0 a 100 em seis pilares — capital, carteira, rentabilidade, eficiência, liquidez e funding — inspirada na lógica de monitoramento de fundos garantidores e nos sistemas PEARLS (WOCCU) e CAMELS. <b>Não é um rating oficial</b>: o FGCoop não divulga classificações individuais.`);
+  head(V, 'Avaliação · Rating', 'Rating Radar (ilustrativo) — ' + esc(nameOf(n)), `Classificação ilustrativa de 0 a 100 em seis pilares — capital, carteira, rentabilidade, eficiência, liquidez e funding — inspirada nos sistemas PEARLS (WOCCU) e CAMELS. <b>Não é um rating oficial</b> e não tem relação com o FGCoop, o Banco Central ou agências de rating.`);
   const G = grid(V);
   const b = card(G, { cls: 'c4 hero', title: 'Classificação', sub: 'Score ponderado dos pilares', fx: 'rating' });
   const bh = el('div'); b.b.appendChild(bh); ratingBadge(bh, rt);
