@@ -1,0 +1,9 @@
+/* Atlas Plus · ajustes específicos de Deep Credit Risk (Rösch & Scheule) */
+
+/* mapa do livro na cartografia: nós um pouco mais largos para os nomes das partes */
+body[data-book=credit] #mapa-livro-dcr{margin-top:18px}
+body[data-book=credit] #mapa-livro-dcr .xf-nodes>li:not(.xf-arrow){max-width:260px}
+
+/* lições e coluna de texto precisam poder encolher no grid: sem isso,
+   equações sem quebra (.fx-eq) alargam a lição no celular (a .fx-eq rola por dentro) */
+body[data-book=credit] .lesson-top>div,body[data-book=credit] .course>.lesson{min-width:0}

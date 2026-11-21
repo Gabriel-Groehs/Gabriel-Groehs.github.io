@@ -6,6 +6,10 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 
 ## Livros e atlas de estudo
 
+- [Risk Management & Financial Institutions · Hull](01_hull_risk_management.html) — `01_hull_risk_management.html`
+- [Applied Time Series Analysis & Forecasting with Python](02_series_temporais_python.html) — `02_series_temporais_python.html`
+- [Deep Credit Risk · Machine Learning with Python](03_deep_credit_risk_python.html) — `03_deep_credit_risk_python.html`
+
 - [Macroeconomia · Olivier Blanchard | Revista Interativa de Estudo](macroeconomia_blanchard.html) — `macroeconomia_blanchard.html`
 - [Guia de Modelagem Estatística e Econometria — Baseado no Bacharelado em Estatística](guia_estatistica_econometria.html) — `guia_estatistica_econometria.html`
 - [Bank Valuation & Value-Based Management — Atlas Técnico Interativo](bank_valuation.html) — `bank_valuation.html`
@@ -19,6 +23,8 @@ A classificação descreve o tipo de material. Um guia baseado em um livro não 
 - [Market Risk and Financial Markets Modeling — Atlas Técnico Interativo](market_risk.html) — `market_risk.html`
 
 ## Laboratórios e ferramentas
+
+- [Radar de Riscos · Cooperativas e Bancos](radar_cooperativas.html) — `radar_cooperativas.html`
 
 - [Macrópolis · Laboratório Groehs de Macroeconomia](laboratorio_macroeconomia.html) — `laboratorio_macroeconomia.html`
 - [Cidade do Crédito · Dados Abertos Bacen e SCR](cidade_credito.html) — `cidade_credito.html`

@@ -1,0 +1,7 @@
+/* Atlas Plus · ajustes específicos de Séries Temporais (Springer azul/amarelo).
+   Conceitos de modelo em lavanda e testes em laranja: vermelho e verde ficam reservados a indicações. */
+body[data-book=series]{--cx3:#c9bcff;--cx4:#ffb877}
+/* definições das fórmulas anotadas: um único bloco de texto ao lado do símbolo */
+body[data-book=series] .fx-terms li>span{min-width:0}
+/* itens de grid com conteúdo sem quebra (fórmulas, fluxos) não podem alargar o tópico além da coluna */
+body[data-book=series] .course>.lesson,body[data-book=series] .lesson-top>*{min-width:0}

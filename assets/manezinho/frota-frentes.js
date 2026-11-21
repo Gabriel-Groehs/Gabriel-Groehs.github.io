@@ -357,5 +357,170 @@ window.MTAFronts = (() => {
     return lamp;
   }
 
-  return Object.freeze({ mount, mountCamaroSides, mountCamaroTail });
+  const equinoxPanels = {
+    "eq-front": { width:.887,low:.177,high:.623,columns:38 },
+    "eq-rear": { width:.886,low:.206,high:.654,columns:34 },
+    "eq-doors": { width:.59,low:.195,high:.615,sideCenter:-.26,columns:34 },
+  };
+
+  function makeEquinoxMaterial(name, tools) {
+    const canvas=document.createElement("canvas");
+    canvas.width=512;
+    canvas.height=256;
+    const ctx=canvas.getContext("2d");
+    ctx.scale(canvas.width,canvas.height);
+    const mirror=(points,side)=>points.map(([x,y])=>[.5+side*x,y]);
+    const path=(points,close=true)=>{
+      ctx.beginPath();
+      points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));
+      if(close)ctx.closePath();
+    };
+    const fill=(points,color)=>{path(points);ctx.fillStyle=color;ctx.fill();};
+    const line=(points,color,width)=>{
+      path(points,false);
+      ctx.lineWidth=width;
+      ctx.lineJoin="round";
+      ctx.lineCap="round";
+      ctx.strokeStyle=color;
+      ctx.stroke();
+    };
+    function grille(points,chrome) {
+      path(points);
+      const backing=ctx.createLinearGradient(0,.22,0,.77);
+      backing.addColorStop(0,"#343a43");
+      backing.addColorStop(.39,"#141a22");
+      backing.addColorStop(1,"#252930");
+      ctx.fillStyle=backing;
+      ctx.fill();
+      ctx.save();
+      ctx.clip();
+      for(let y=.24;y<.86;y+=.059){
+        ctx.fillStyle="#4c5257";
+        ctx.fillRect(0,y,1,.014);
+        ctx.fillStyle="#13171e";
+        ctx.fillRect(0,y+.015,1,.011);
+        for(let x=.13;x<.90;x+=.046)ctx.fillRect(x,y+.029,.0028,.025);
+      }
+      ctx.restore();
+      if(chrome){
+        path(points);
+        const rim=ctx.createLinearGradient(0,.23,0,.79);
+        rim.addColorStop(0,"#d0d5d7");
+        rim.addColorStop(.43,"#6d777f");
+        rim.addColorStop(.81,"#a8aeb0");
+        rim.addColorStop(1,"#474b53");
+        ctx.strokeStyle=rim;
+        ctx.lineWidth=.010;
+        ctx.stroke();
+      }
+    }
+    function badge(cx,cy,w,h){
+      const dl=w/2,dy=h/2;
+      const points=[
+        [cx-dl,cy-dy*.46],[cx-dl*.51,cy-dy*.46],[cx-dl*.51,cy-dy],[cx+dl*.52,cy-dy],
+        [cx+dl*.52,cy-dy*.46],[cx+dl,cy-dy*.46],[cx+dl,cy+dy*.45],[cx+dl*.52,cy+dy*.45],
+        [cx+dl*.52,cy+dy],[cx-dl*.51,cy+dy],[cx-dl*.51,cy+dy*.45],[cx-dl,cy+dy*.45],
+      ];
+      fill(points,"#aa833e");
+      path(points);
+      ctx.strokeStyle="#bac0c0";
+      ctx.lineWidth=.006;
+      ctx.stroke();
+    }
+    let emission=null;
+    if(name==="eq-front"){
+      grille([[.22,.259],[.78,.259],[.749,.422],[.25,.422]],true);
+      grille([[.214,.457],[.786,.457],[.743,.665],[.681,.713],[.320,.713],[.255,.665]],true);
+      grille([[.268,.782],[.732,.782],[.701,.882],[.299,.882]],false);
+      badge(.5,.368,.088,.084);
+      for(const side of [-1,1]){
+        const map=points=>mirror(points,side);
+        const lens=map([[.225,.31],[.359,.286],[.459,.247],[.451,.356],[.384,.435],[.270,.442]]);
+        const gradient=ctx.createLinearGradient(0,.245,0,.44);
+        gradient.addColorStop(0,"#242b32");
+        gradient.addColorStop(.51,"#74828a");
+        gradient.addColorStop(.83,"#5e646e");
+        gradient.addColorStop(1,"#1b242d");
+        fill(lens,gradient);
+        const cx=.5+side*.355,cy=.331;
+        const bulb=ctx.createRadialGradient(cx,cy,.010,cx,cy,.034);
+        bulb.addColorStop(0,"#eff5e8");
+        bulb.addColorStop(.45,"#ced8cd");
+        bulb.addColorStop(.71,"#657781");
+        bulb.addColorStop(1,"#1e2b37");
+        ctx.beginPath();
+        ctx.ellipse(cx,cy,.024,.063,0,0,Math.PI*2);
+        ctx.fillStyle=bulb;
+        ctx.fill();
+        fill(map([[.425,.305],[.456,.277],[.450,.349],[.431,.38]]),"#a47745");
+        fill(map([[.293,.58],[.426,.564],[.417,.743],[.316,.768]]),"#252b32");
+        line(map([[.322,.735],[.398,.708],[.408,.607],[.344,.624]]),"#7e8a92",.013);
+        line(map([[.345,.686],[.386,.676],[.394,.634]]),"#a6adb0",.013);
+      }
+    }else if(name==="eq-rear"){
+      for(const side of [-1,1]){
+        const map=points=>mirror(points,side);
+        const lens=map([[.187,.221],[.321,.196],[.457,.155],[.473,.33],[.441,.405],[.319,.416],[.213,.372]]);
+        const gradient=ctx.createLinearGradient(0,.15,0,.416);
+        gradient.addColorStop(0,"#58131f");
+        gradient.addColorStop(.42,"#af243c");
+        gradient.addColorStop(.75,"#6f162a");
+        gradient.addColorStop(1,"#390f20");
+        fill(lens,gradient);
+        line(map([[.206,.26],[.327,.245],[.438,.216],[.447,.315],[.416,.356],[.333,.36]]),"#dd4456",.023);
+        line(map([[.241,.309],[.317,.3],[.353,.336]]),"#bdc4bb",.011);
+      }
+      const luminousSurface=document.createElement("canvas");
+      luminousSurface.width=canvas.width;
+      luminousSurface.height=canvas.height;
+      luminousSurface.getContext("2d").drawImage(canvas,0,0);
+      emission=tools.makeTexture(luminousSurface,{repeat:false,aniso:2});
+      badge(.5,.289,.078,.078);
+      const recess=[[.345,.4],[.655,.4],[.633,.626],[.367,.626]];
+      fill(recess,"#282b31");
+      fill([[.405,.445],[.595,.445],[.595,.572],[.405,.572]],"#8a939b");
+      fill([[.405,.448],[.595,.448],[.595,.472],[.405,.472]],"#334d66");
+      line([[.173,.729],[.331,.752],[.669,.752],[.827,.729]],"#1b2027",.011);
+      fill([[.20,.834],[.80,.834],[.715,.935],[.285,.935]],"#696f75");
+    }else if(name==="eq-doors"){
+      for(const x of [.174,.484,.837]){
+        line([[x,.049],[x-.015,.287],[x-.027,.659],[x-.019,.896]],"rgba(29,19,25,.62)",.0036);
+      }
+      line([[.15,.887],[.37,.91],[.65,.91],[.836,.887]],"rgba(29,25,31,.55)",.006);
+      for(const x of [.287,.628]){
+        line([[x,.193],[x+.062,.181]],"rgba(28,24,27,.63)",.012);
+        line([[x+.007,.185],[x+.057,.176]],"rgba(196,154,150,.58)",.005);
+      }
+    }
+    return new tools.Material({
+      map:tools.makeTexture(canvas,{repeat:false,aniso:4}),
+      ...(emission ? {emissiveMap:emission,emissive:0x983146,emissiveIntensity:.12} : {}),
+      transparent:true,alphaTest:.14,depthWrite:false,
+      roughness:.52,metalness:.12,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1,
+    });
+  }
+
+  function mountEquinox(key, car, original, tools) {
+    if(key!=="equinox")return [];
+    const parts=[];
+    for(const [name,layout] of Object.entries(equinoxPanels)){
+      const signs=layout.sideCenter!==undefined ? [-1,1] : [name==="eq-rear"?-1:1];
+      if(!materials.has(name))materials.set(name,makeEquinoxMaterial(name,tools));
+      for(const sign of signs){
+        const id=name+"/"+sign;
+        if(!meshes.has(id))meshes.set(id,project(original,car,layout,tools,sign));
+        const geometry=meshes.get(id);
+        if(!geometry)continue;
+        const base=materials.get(name);
+        const part=new tools.Mesh(geometry,name==="eq-rear" ? base.clone() : base);
+        part.name=name;
+        part.receiveShadow=true;
+        part.renderOrder=2;
+        parts.push(part);
+      }
+    }
+    return parts;
+  }
+
+  return Object.freeze({ mount, mountCamaroSides, mountCamaroTail, mountEquinox });
 })();
