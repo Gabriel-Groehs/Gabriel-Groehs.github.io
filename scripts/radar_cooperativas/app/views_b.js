@@ -1,7 +1,8 @@
 /* =====================================================================
    Telas de riscos: crédito, capital, mercado, ALM/IRRBB, NII & pricing, FRM
    ===================================================================== */
-const STAGE_COL = { e1: 'var(--s1)', e2: 'var(--s4)', e3: 'var(--neg)' };
+const OPX_CRED = .6;   // hipótese: 60% das despesas de pessoal e administrativas atribuídas ao crédito (RAROC)
+const STAGE_COL = { e1: 'var(--s1)', e2: 'var(--s4)', e3: 'var(--neg)', sn: 'var(--s7)', sp: 'var(--neg-3)' };
 const SEG_LBL = ['Prefixado', 'CDI', 'Selic', 'TR', 'TJLP/TLP', 'IPCA/IGP-M', 'Outros'];
 function idxParts(r) {
   const x = k => r.ix[XI[k]] || 0;
@@ -12,8 +13,8 @@ function idxParts(r) {
   ].filter(p => p.value > 0);
 }
 function peerQ(n, key) { // mediana trimestral dos pares
-  const L = peersOf(n);
-  return D.Q.map((_, i) => median(L.map(e => metrics(node(e.id)).q[key][i])));
+  const L = peerList(n);
+  return D.Q.map((_, i) => median(L.map(x => metrics(x).q[key][i])));
 }
 
 /* ---------------- Risco de crédito ---------------- */
@@ -22,9 +23,10 @@ VIEWS.credito = (V, n) => {
   head(V, 'Riscos · Crédito', 'Risco de crédito — ' + esc(nameOf(n)), `Qualidade da carteira com dados do SCR (documento 3040, via IF.data), estágios de risco do balancete COSIF (Res. CMN 4.966 · IFRS 9) e um modelo de perdas Vasicek/ASRF para separar perda esperada de perda inesperada.`);
   const K = el('div', 'kpis'); V.appendChild(K);
   kpi(K, { l: 'Carteira ativa (SCR)', v: { n: m.scr, f: 'brl' }, d: int(m.ops) + ' operações' });
-  kpi(K, { l: 'Inadimplência 90d', v: { n: m.inadR, f: 'pct2' }, d: stChip('inadR', m.inadR), fx: 'inad' });
+  kpi(K, { l: 'Atraso > 90 dias (SCR)', v: { n: m.inadR, f: 'pct2' }, d: stChip('inadR', m.inadR), fx: 'inad' });
   kpi(K, { l: 'Ativos problemáticos', v: { n: m.probR, f: 'pct2' }, d: stChip('probR', m.probR), fx: 'prob' });
-  kpi(K, { l: 'Estágio 3', v: ok(m.e3R) ? { n: m.e3R, f: 'pct2' } : '—', d: ok(m.e2R) ? 'estágio 2: ' + pct(m.e2R) : '', fx: 'stages' });
+  kpi(K, { l: 'Estágio 3 · metodologia completa', v: ok(m.e3R) ? { n: m.e3R, f: 'pct2' } : '—', d: ok(m.e2R) ? 'E2 ' + pct(m.e2R) + (m.stSimp ? ' · ' + pct(m.stFullSh, 0) + ' da carteira' : '') : (m.stSimp ? 'sem carteira nessa metodologia' : ''), fx: 'stages' });
+  if (m.stSimp) kpi(K, { l: 'Problemáticos · metodologia simplificada', v: ok(m.spR) ? { n: m.spR, f: 'pct2' } : '—', d: pct(1 - (m.stFullSh || 0), 0) + ' da carteira', fx: 'stages' });
   kpi(K, { l: 'Perda esperada (estoque)', v: { n: m.pe, f: 'brl' }, d: pct(m.peR) + ' da carteira bruta' });
   kpi(K, { l: 'Cobertura PE ÷ problemáticos', v: { n: m.cob, f: 'pct' }, d: stChip('cob', m.cob), fx: 'cob' });
   kpi(K, { l: 'Custo do risco 12m', v: { n: m.cor, f: 'pct2' }, d: stChip('cor', m.cor), fx: 'cor' });
@@ -33,13 +35,13 @@ VIEWS.credito = (V, n) => {
   // estágios
   const st = card(G, { cls: 'c6', title: 'Estágios de risco · IFRS 9 / Res. 4.966', sub: 'Ativos financeiros por estágio (balancete, contas 3.3.1)', src: [['COSIF', 'r']], fx: 'stages' });
   const rowsSt = [];
-  const stRow = (lbl, nn) => { const mm = metrics(nn); if (!mm.cz) return; rowsSt.push({ label: lbl, parts: [{ label: 'Estágio 1', value: mm.cz.e1 + mm.cz.sn, color: STAGE_COL.e1 }, { label: 'Estágio 2', value: mm.cz.e2, color: STAGE_COL.e2 }, { label: 'Estágio 3', value: mm.cz.e3 + mm.cz.sp, color: STAGE_COL.e3 }] }); };
+  const stRow = (lbl, nn) => { const mm = metrics(nn); if (!mm.cz) return; rowsSt.push({ label: lbl, parts: [{ label: 'Estágio 1', value: mm.cz.e1, color: STAGE_COL.e1 }, { label: 'Estágio 2', value: mm.cz.e2, color: STAGE_COL.e2 }, { label: 'Estágio 3', value: mm.cz.e3, color: STAGE_COL.e3 }, { label: 'Simplificada · sem problema', value: mm.cz.sn, color: STAGE_COL.sn }, { label: 'Simplificada · com problema', value: mm.cz.sp, color: STAGE_COL.sp }] }); };
   stRow(n.name.length > 18 ? n.name.slice(0, 17) + '…' : n.name, n);
   if (n.kind === 'coop' || n.kind === 'central') stRow('Sistema ' + SYS_NAME[n.sys], node('S:' + n.sys));
   if (n.id !== 'G:coop') stRow('Cooperativas', node('G:coop'));
-  if (n.id !== 'G:bank') stRow('Bancões', node('G:bank'));
+  if (n.id !== 'G:bank') stRow('Grandes bancos', node('G:bank'));
   if (rowsSt.length) stack100(chartEl(st.b, 160), rowsSt, { rh: 28, lw: 130, fmt: brl }); else st.b.innerHTML = '<p class="note">Sem balancete COSIF para esta seleção.</p>';
-  st.b.appendChild(el('div', 'take', `Estágio 1: risco não aumentou desde a concessão (perda esperada de 12 meses). Estágio 2: aumento significativo de risco (perda esperada para a vida toda). Estágio 3: ativo com problema de recuperação de crédito. ${ok(m.e3R) ? `Aqui, <b>${pct(m.e3R)}</b> dos ativos financeiros estão no estágio 3.` : ''}`));
+  st.b.appendChild(el('div', 'take', `Estágio 1: risco não aumentou desde a concessão (perda esperada de 12 meses). Estágio 2: aumento significativo de risco (perda esperada para a vida toda). Estágio 3: ativo com problema de recuperação de crédito. Na metodologia simplificada (permitida a instituições menores) não há estágio 2: os ativos são só com ou sem problema de recuperação, então as duas metodologias aparecem separadas. ${ok(m.e3R) ? `Aqui, <b>${pct(m.e3R)}</b> da carteira na metodologia completa está no estágio 3` : ''}${ok(m.e3R) && ok(m.spR) ? ' e ' : ok(m.spR) ? 'Aqui, ' : ''}${ok(m.spR) ? `<b>${pct(m.spR)}</b> da carteira na simplificada tem problema de recuperação` : ''}${ok(m.e3R) || ok(m.spR) ? '.' : ''}`));
   // C1..C5
   const cc = card(G, { cls: 'c6', title: 'Carteiras C1 a C5 (Res. BCB 352)', sub: 'Classificação da carteira ativa para a perda incorrida mínima · SCR', src: [['SCR · IF.data', 'r']], fx: 'c15' });
   const ck = ['k1', 'k2', 'k3', 'k4', 'k5'], cl = ['C1 · menor perda mínima', 'C2', 'C3', 'C4', 'C5 · maior perda mínima'];
@@ -71,6 +73,7 @@ VIEWS.credito = (V, n) => {
   const pd0 = clamp(ok(m.inadR) ? m.inadR * 0.9 : 0.03, 0.004, 0.25);
   const S0 = { pd: ui.pd ?? +(pd0 * 100).toFixed(1), lgd: ui.lgd ?? (isCoop(n) ? 40 : 45), rho: ui.rho ?? +(rhoRetail(pd0) * 100).toFixed(1), q: ui.q ?? 99.9, ccf: ui.ccf ?? 50 };
   const wrap = el('div', 'grid g12'); vk.b.appendChild(wrap);
+  vk.b.appendChild(el('p', 'note', '<b>Premissas do modelo.</b> Vasicek/ASRF supõe carteira muito pulverizada (granularidade infinita), um único fator sistêmico, devedores homogêneos e LGD fixa. A PD inicial (0,9 × atraso > 90 dias) é <b>hipótese editável</b>: o estoque de atraso não é a probabilidade de default em 12 meses. LGD e CCF também são hipóteses. A perda do modelo não equivale à provisão contábil nem a uma frequência de “uma vez em X anos”.'));
   const ctl = el('div', 'ctl c3'); wrap.appendChild(ctl);
   const out = el('div', 'c9'); wrap.appendChild(out);
   const kp = el('div', 'kpis'); out.appendChild(kp);
@@ -82,13 +85,13 @@ VIEWS.credito = (V, n) => {
     const pd = S0.pd / 100, lgd = S0.lgd / 100, rho = S0.rho / 100, q = S0.q / 100;
     const ead = m.scr + undrawn * S0.ccf / 100;
     const el_ = pd * lgd * ead, wc = vasicekQ(pd, rho, q), var_ = wc * lgd * ead, ul = var_ - el_;
-    const regK = m.rwac * 0.105;
+    const regK = m.rwac * capK(m);
     kp.innerHTML = '';
     kpi(kp, { l: 'EAD', v: brl(ead), d: 'carteira + ' + S0.ccf + '% do limite a liberar' });
     kpi(kp, { l: 'Perda esperada (EL)', v: brl(el_), d: pct(el_ / ead, 2) + ' · provisão atual ' + brl(m.pe) });
     kpi(kp, { l: 'Taxa de inadimplência condicional', v: pct(wc, 2), d: 'cenário ' + nf(1).format(S0.q) + '%' });
     kpi(kp, { l: 'Perda inesperada (UL)', v: brl(ul), d: 'capital econômico de crédito', cls: 'accent' });
-    kpi(kp, { l: 'Capital regulatório de crédito', v: brl(regK), d: 'RWA crédito × 10,5% · ' + (ul > 0 ? mult(regK / ul, 2) + ' a UL' : '') });
+    kpi(kp, { l: 'Capital regulatório de crédito', v: brl(regK), d: 'RWA crédito × ' + pct(capK(m), 1) + ' (mínimo aplicável) · ' + (ul > 0 ? mult(regK / ul, 2) + ' a UL' : '') });
     const xs = [], ys = [], xmax = Math.min(1, Math.max(wc * 1.6, pd * 4, 0.02));
     for (let i = 1; i < 240; i++) { const x = xmax * i / 240; xs.push(x * lgd * 100); ys.push(vasicekPdf(x, pd, rho)); }
     densityChart(ch, { xs, series: [{ name: 'densidade', color: 'var(--s1)', ys, fill: true }], fmt: x => nf(1).format(x) + '%', markers: [{ x: pd * lgd * 100, label: 'EL ' + pct(pd * lgd, 2), color: 'var(--s3)' }, { x: wc * lgd * 100, label: 'VaR ' + nf(1).format(S0.q) + '% ' + pct(wc * lgd, 2), color: 'var(--crit)', dash: true }], shade: { from: wc * lgd * 100, dir: 1 }, h: 230 });
@@ -110,16 +113,16 @@ VIEWS.capital = (V, n) => {
   const K = el('div', 'kpis'); V.appendChild(K);
   kpi(K, { l: 'Patrimônio de referência', v: { n: m.pr, f: 'brl' }, d: 'nível I ' + brl(m.n1) });
   kpi(K, { l: 'RWA total', v: { n: m.rwa, f: 'brl' }, d: 'densidade ' + pct(m.rwaD, 0) + ' do ativo', fx: 'rwa' });
-  kpi(K, { l: 'Índice de Basileia', v: { n: m.ib, f: 'pct' }, d: stChip('ib', m.ib), cls: 'accent', fx: 'ib' });
+  kpi(K, { l: m.cap.nS && !m.cap.nF ? 'PRS5 ÷ RWAS5' : 'Índice de Basileia', v: { n: m.ib, f: 'pct' }, d: stChip('ib', m.ib, null, m.capMin) + ' mín. ' + pct(m.capMin, 1), cls: 'accent', fx: 'ib' });
   kpi(K, { l: 'Capital principal', v: ok(m.icp) ? { n: m.icp, f: 'pct' } : 'n/a', d: ok(m.icp) ? stChip('icp', m.icp) + (n.members.length > 1 ? ' ' + m.capCov + ' IFs' : '') : 'regime S5 simplificado' });
   kpi(K, { l: 'Razão de alavancagem', v: ok(m.ra) ? { n: m.ra, f: 'pct' } : 'n/a', d: ok(m.ra) ? stChip('ra', m.ra) : 'não informada (S5)', fx: 'ra' });
-  kpi(K, { l: 'Folga sobre 10,5%', v: { n: m.buf, f: 'brl' }, d: 'capacidade ≈ ' + brl(m.buf / 0.105) + ' de RWA', fx: 'buffer' });
+  kpi(K, { l: 'Folga sobre o mínimo', v: { n: m.buf, f: 'brl' }, d: n.members.length > 1 ? (m.cap.below ? m.cap.below + ' de ' + m.cap.n + ' abaixo do mínimo' : 'todas acima do mínimo') : 'capacidade ≈ ' + brl(m.buf / capK(m)) + ' de RWA', fx: 'buffer' });
   kpi(K, { l: 'Adicional (ACP) exigido', v: pct(div(m.acp, m.rwa), 2), d: brl(m.acp) });
   kpi(K, { l: 'Índice de imobilização', v: ok(m.imob) ? pct(m.imob, 1) : '—', d: 'limite 50% do PR' });
   const G = grid(V); G.classList.add('mt');
   const g1 = card(G, { cls: 'c4', title: 'Índice de Basileia', sub: 'PR ÷ RWA, com faixas de requerimento', fx: 'ib' });
-  gauge(g1.b, { value: m.ib, min: 0, max: .3, fmt: x => pct(x, 1), label: 'mediana pares ' + pct(peerMed(n, 'ib')), bands: [{ to: .08, color: 'var(--crit)' }, { to: .105, color: 'var(--serious)' }, { to: .13, color: 'var(--warn)' }, { to: .3, color: 'var(--good)' }], ticks: [{ v: .08, l: '8%' }, { v: .105, l: '10,5%' }, { v: .15, l: '15%' }, { v: .2, l: '20%' }] });
-  g1.b.appendChild(el('p', 'note', `Mínimo de PR de 8% + adicional de conservação de 2,5% = 10,5% (segmentos S1–S4). Cooperativas S5 no regime simplificado informam apenas PR e RWAS5 (sem capital principal, nível I e alavancagem)${n.members.length > 1 ? ` — aqui, ${m.capCov} de ${n.members.length} instituições informam capital principal; índices de CP, nível I e alavancagem usam só essas` : ''}.`));
+  gauge(g1.b, { value: m.ib, min: 0, max: .3, fmt: x => pct(x, 1), label: 'mediana pares ' + pct(peerMed(n, 'ib')), bands: capBands(m), ticks: [{ v: capK(m), l: pct(capK(m), 1) }, { v: .2, l: '20%' }] });
+  g1.b.appendChild(el('p', 'note', capNote(m, n) + (n.members.length > 1 ? ` Capital principal, nível I e alavancagem usam só as ${m.capCov} instituições que os informam.` : '')));
   const g2 = card(G, { cls: 'c4', title: 'Composição do patrimônio de referência', sub: 'Capital principal, complementar e nível II' });
   donut(chartEl(g2.b, 180), [{ label: 'Capital principal (CET1)', value: m.cp, color: 'var(--s1)' }, { label: 'Capital complementar (AT1)', value: m.at1, color: 'var(--s7)' }, { label: 'Nível II', value: m.n2, color: 'var(--s4)' }], { center: { v: brl(m.pr), l: 'PR' } });
   const g3 = card(G, { cls: 'c4', title: 'RWA por tipo de risco', sub: 'Crédito, mercado, operacional e serviços de pagamento', fx: 'rwa' });
@@ -133,7 +136,7 @@ VIEWS.capital = (V, n) => {
     { label: 'Razão de alavancagem', value: m.ra, color: 'var(--s5)', tip: ttRow('Mínimo (S1/S2)', '3%') },
   ], { fmt: x => pct(x, 1), lw: 170, max: Math.max(.25, m.ib * 1.1), ref: { value: 0.08 + acpR, label: 'PR mín. + ACP ' + pct(0.08 + acpR, 1), color: 'var(--crit)' } });
   const hs = card(G, { cls: 'c6', title: 'Trajetória trimestral', sub: 'Basileia, capital principal e mediana dos pares' });
-  lineChart(chartEl(hs.b, 190), { cats: qcats(), series: [{ name: 'Basileia', color: 'var(--gold)', values: m.q.ib }, { name: 'Capital principal', color: 'var(--s1)', values: m.q.icp }, { name: 'Mediana Basileia pares', color: 'var(--ink-3)', values: peerQ(n, 'ib'), dash: '5 4' }], refs: [{ y: .105, label: '10,5%', color: 'var(--crit)' }], h: 190 });
+  lineChart(chartEl(hs.b, 190), { cats: qcats(), series: [{ name: 'Basileia', color: 'var(--gold)', values: m.q.ib }, { name: 'Capital principal', color: 'var(--s1)', values: m.q.icp }, { name: 'Mediana Basileia pares', color: 'var(--ink-3)', values: peerQ(n, 'ib'), dash: '5 4' }], refs: capRef(m), h: 190 });
   // estresse de capital
   const sx = card(G, { cls: 'c12', title: 'Estresse de capital e capacidade de crescimento', sub: 'Quanto de perda o capital absorve e quanto crédito novo a folga sustenta', src: [['modelo', 'm']], fx: 'buffer' });
   const ui = ST.ui.cap || (ST.ui.cap = { loss: 2, grow: 10, rw: 85 });
@@ -145,23 +148,23 @@ VIEWS.capital = (V, n) => {
     const loss = m.scr * ui.loss / 100, newCred = m.cart * ui.grow / 100;
     const pr1 = m.pr - loss, rwa1 = m.rwa + newCred * ui.rw / 100 - loss * ui.rw / 100;
     const ib1 = div(pr1, rwa1);
-    const absorb = (m.pr - 0.105 * m.rwa) / (1 - 0.105 * ui.rw / 100);
-    const growMax = m.buf / (0.105 * ui.rw / 100);
+    const mn = capK(m), absorb = (m.pr - mn * m.rwa) / (1 - mn * ui.rw / 100);
+    const growMax = (m.pr - mn * m.rwa) / (mn * ui.rw / 100);
     ko.innerHTML = '';
-    kpi(ko, { l: 'Basileia após choque', v: pct(ib1, 1), d: stChip('ib', ib1) });
-    kpi(ko, { l: 'Perda que leva a 10,5%', v: brl(absorb), d: pct(absorb / m.scr, 1) + ' da carteira' });
+    kpi(ko, { l: 'Basileia após choque', v: pct(ib1, 1), d: stChip('ib', ib1, null, mn) });
+    kpi(ko, { l: 'Perda que leva ao mínimo (' + pct(mn, 1) + ')', v: brl(absorb), d: pct(absorb / m.scr, 1) + ' da carteira' });
     kpi(ko, { l: 'Crescimento máximo com a folga', v: brl(growMax), d: pct(growMax / m.cart, 0) + ' da carteira atual', cls: 'accent' });
     kpi(ko, { l: 'Multiplicador do capital', v: mult(m.alav, 1), d: 'ativo por R$ 1 de PL' });
     const sens = [0, 1, 2, 3, 4, 5, 6, 8, 10].map(p => { const L = m.scr * p / 100; return div(m.pr - L, m.rwa + newCred * ui.rw / 100 - L * ui.rw / 100); });
-    barChart(chs, { cats: [0, 1, 2, 3, 4, 5, 6, 8, 10].map(p => p + '%'), series: [{ name: 'Basileia', values: sens, colors: sens.map(x => x >= .13 ? 'var(--s3)' : x >= .105 ? 'var(--s4)' : 'var(--s8)') }], fmt: x => pct(x, 0), h: 190, labels: true, maxBar: 40 });
-    tk.innerHTML = `Eixo: perda adicional de crédito (% da carteira SCR), já considerando o crescimento de <b>${ui.grow}%</b>. Uma perda de <b>${brl(absorb)}</b> consome toda a folga sobre 10,5%; sem perdas, a folga permitiria ampliar a carteira em ${brl(growMax)} com ponderação média de ${ui.rw}%.`;
+    barChart(chs, { cats: [0, 1, 2, 3, 4, 5, 6, 8, 10].map(p => p + '%'), series: [{ name: 'Basileia', values: sens, colors: sens.map(x => x >= mn + .025 ? 'var(--s3)' : x >= mn ? 'var(--s4)' : 'var(--s8)') }], fmt: x => pct(x, 0), h: 190, labels: true, maxBar: 40 });
+    tk.innerHTML = `Eixo: perda adicional de crédito (% da carteira SCR), já considerando o crescimento de <b>${ui.grow}%</b>. Uma perda de <b>${brl(absorb)}</b> consome toda a folga sobre o mínimo de ${pct(mn, 1)}; sem perdas, a folga permitiria ampliar a carteira em ${brl(growMax)} com ponderação média de ${ui.rw}%.`;
   };
   slider(ctl, { label: 'Perda adicional de crédito', min: 0, max: 15, step: .5, value: ui.loss, fmt: v => nf(1).format(v) + '% da carteira', onInput: v => { ui.loss = v; run(); } });
   slider(ctl, { label: 'Crescimento da carteira', min: 0, max: 40, step: 1, value: ui.grow, fmt: v => v + '%', onInput: v => { ui.grow = v; run(); } });
   slider(ctl, { label: 'Ponderação média de risco (RW)', min: 20, max: 150, step: 5, value: ui.rw, fmt: v => v + '%', onInput: v => { ui.rw = v; run(); } });
   run();
   const hp = card(G, { cls: 'c12', title: 'Basileia entre pares', sub: 'Distribuição do índice nas ' + peerLbl(n) });
-  histogram(chartEl(hp.b, 170), peers()[n.grp].ib, { fmt: x => pct(x, 0), marker: m.ib, markerLabel: n.name.slice(0, 24) + ': ' + pct(m.ib), h: 170, min: 0.05, max: 0.45, bins: 32, colorFn: x => x < .105 ? 'var(--neg)' : x < .13 ? 'var(--s4)' : 'var(--s1)' });
+  histogram(chartEl(hp.b, 170), peerSet(n).ib, { fmt: x => pct(x, 0), marker: m.ib, markerLabel: n.name.slice(0, 24) + ': ' + pct(m.ib), h: 170, min: 0.05, max: 0.45, bins: 32, colorFn: x => { const pm = n.grp === 'coop' ? .12 : .105; return x < pm ? 'var(--neg)' : x < pm + .025 ? 'var(--s4)' : 'var(--s1)'; } });
 };
 
 /* ---------------- Mercado & tesouraria ---------------- */
@@ -223,7 +226,7 @@ VIEWS.mercado = (V, n) => {
   slider(ctl, { label: 'Horizonte', min: 1, max: 20, step: 1, value: ui.hz, fmt: v => v + ' dias', onInput: v => { ui.hz = v; run(); } });
   ctl.appendChild(segCtl([['t', 't de Student'], ['n', 'Normal']], ui.dist, k => { ui.dist = k; run(); }));
   // backtesting
-  const bk = card(G, { cls: 'c12', title: 'Backtesting do VaR · teste de Kupiec (POF)', sub: '250 dias de P&L simulados com caudas gordas contra o VaR diário normal de 99% — zonas de Basileia', src: [['simulação', 'm']], fx: 'kupiec' });
+  const bk = card(G, { cls: 'c12', title: 'Backtesting do VaR · experimento didático (Kupiec)', sub: '250 dias de P&L simulados com caudas gordas contra o VaR diário normal de 99% — zonas de Basileia', src: [['simulação', 'm']], fx: 'kupiec' });
   const bkc = el('div', 'chart'); bk.b.appendChild(bkc); const bkt = el('div', 'take'); bk.b.appendChild(bkt);
   function bt() {
     RNG_S = 2027;
@@ -231,7 +234,7 @@ VIEWS.mercado = (V, n) => {
     const pnl = []; for (let i = 0; i < 250; i++) { let c = 0; for (let k = 0; k < 4; k++) { const g = gauss(); c += g * g; } pnl.push(gauss() / Math.sqrt(c / 4) * Math.sqrt(2 / 4) * sd1); }
     const v99 = 2.326 * sd1, exc = pnl.filter(x => -x > v99).length, T = 250, p = 0.01;
     const ph = exc / T;
-    const lr = exc === 0 ? -2 * (T * Math.log(1 - p)) : -2 * ((T - exc) * Math.log(1 - p) + exc * Math.log(p) - ((T - exc) * Math.log(1 - ph) + exc * Math.log(ph)));
+    const lr = exc >= T ? -2 * T * Math.log(p) : exc === 0 ? -2 * (T * Math.log(1 - p)) : -2 * ((T - exc) * Math.log(1 - p) + exc * Math.log(p) - ((T - exc) * Math.log(1 - ph) + exc * Math.log(ph)));
     const pv = 1 - (erf(Math.sqrt(lr / 2)));
     const zone = exc <= 4 ? ['verde', 'good'] : exc <= 9 ? ['amarela', 'warn'] : ['vermelha', 'crit'];
     barChart(bkc, { cats: pnl.map((_, i) => 'd' + (i + 1)), series: [{ name: 'P&L diário', values: pnl, colors: pnl.map(x => -x > v99 ? 'var(--crit)' : x < 0 ? 'var(--s2)' : 'var(--s1)') }], lines: [{ name: '−VaR 99%', values: pnl.map(() => -v99), color: 'var(--crit)' }], fmt: brl, h: 200, maxBar: 6 });
@@ -403,15 +406,15 @@ VIEWS.nii = (V, n) => {
   const lb = el('label', '', '<span style="font-size:12px;color:var(--ink-2);font-weight:500">Produto</span>'); lb.style.cssText = 'display:grid;gap:4px'; lb.appendChild(sel); ctl.appendChild(lb);
   const ko = el('div', 'kpis'); out.appendChild(ko); const chp = el('div', 'chart'); out.appendChild(chp); const tk = el('div', 'take'); out.appendChild(tk);
   const run = () => {
-    const CF = CDI_LTM * ps.fund / 100, K = ps.rw / 100 * 0.105, EL = ps.pd / 100 * ps.lgd / 100, OP = ps.opx / 100, h = ps.hurdle / 100, t = ps.tax / 100;
+    const CF = CDI_LTM * ps.fund / 100, K = ps.rw / 100 * capK(m), EL = ps.pd / 100 * ps.lgd / 100, OP = ps.opx / 100, h = ps.hurdle / 100, t = ps.tax / 100;
     const fundC = CF * (1 - K), capC = h * K / (1 - t);
     const rate = fundC + EL + OP + capC;
-    const raroc = div((m.yld - m.cof - m.cor - div(m.opx, m.avg.crb) * .6) * (1 - t), 0.105 * (m.rwac / Math.max(1, m.cart)));
+    const raroc = div((m.yld - m.cof - m.cor - div(m.opx, m.avg.crb) * OPX_CRED) * (1 - t), capK(m) * (m.rwac / Math.max(1, m.cart)));
     ko.innerHTML = '';
     kpi(ko, { l: 'Taxa mínima', v: pct(rate, 2), u: 'a.a.', d: pct(Math.pow(1 + rate, 1 / 12) - 1, 2) + ' a.m.', cls: 'accent' });
     kpi(ko, { l: 'Spread mínimo sobre CDI', v: pp(rate - CDI_LTM, 2) });
-    kpi(ko, { l: 'Capital alocado', v: pct(K, 1), d: 'RW ' + ps.rw + '% × 10,5%' });
-    kpi(ko, { l: 'RAROC implícito da carteira', v: pct(raroc, 1), d: 'hurdle ' + ps.hurdle + '%' });
+    kpi(ko, { l: 'Capital alocado', v: pct(K, 1), d: 'RW ' + ps.rw + '% × ' + pct(capK(m), 1) + ' · hipótese: capital no mínimo aplicável' });
+    kpi(ko, { l: 'RAROC implícito da carteira', v: pct(raroc, 1), d: 'hurdle ' + ps.hurdle + '% · hipótese: ' + pct(OPX_CRED, 0) + ' das despesas no crédito' });
     waterfall(chp, [{ label: 'Funding (CDI × % do CDI)', value: fundC, kind: 'start', color: 'var(--neg)' }, { label: 'Perda esperada (PD × LGD)', value: EL, color: 'var(--neg-2)' }, { label: 'Custo operacional', value: OP, color: 'var(--neg-3)' }, { label: 'Custo do capital (com tributos)', value: capC, color: 'var(--neg-4)' }, { label: 'Taxa mínima', value: rate, kind: 'total', color: 'var(--gold)' }, { label: 'Taxa da carteira atual', value: m.yld, kind: 'total', color: 'var(--s1)' }], { fmt: x => pct(x, 1), h: 240, rot: false });
     tk.innerHTML = `Para <b>${PRODUCTS[u.p].t}</b>: com funding a ${ps.fund}% do CDI (${pct(CF, 2)}), perda esperada de ${pct(EL, 2)}, custo operacional de ${pct(OP, 1)} e retorno exigido de ${ps.hurdle}% sobre ${pct(K, 1)} de capital (alíquota ${ps.tax}%), a taxa que paga o risco é <b>${pct(rate, 2)} a.a.</b> A taxa média da carteira atual é ${pct(m.yld, 1)} — comparação de ordem de grandeza (estoque, todas as modalidades).`;
   };
@@ -426,37 +429,38 @@ VIEWS.nii = (V, n) => {
 /* ---------------- FRM 360 ---------------- */
 VIEWS.frm = (V, n) => {
   const m = metrics(n);
-  head(V, 'Riscos · Visão integrada', 'FRM 360° — ' + esc(nameOf(n)), `Painel de apetite a risco com limites e pares, capital econômico agregado com correlações entre riscos (ICAAP simplificado) e testes de estresse combinados — a leitura de um comitê de riscos.`);
+  head(V, 'Riscos · Visão integrada', 'FRM 360° — ' + esc(nameOf(n)), `Painel de apetite a risco com limites e pares, capital econômico agregado com correlações entre riscos (exercício ilustrativo, não ICAAP) e testes de estresse combinados — a leitura de um comitê de riscos.`);
   const G = grid(V);
   const tb = card(G, { cls: 'c12', title: 'Painel de apetite a risco', sub: 'Indicador · limites (confortável / atenção / alerta) · mediana e percentil entre pares', fx: 'appetite' });
-  const keys = ['ib', 'icp', 'ra', 'inadR', 'probR', 'e3R', 'cob', 'cor', 'roe', 'roa', 'eff', 'ltdC', 'liqA', 'irrbbPR'];
+  const keys = ['ib', 'icp', 'ra', 'inadR', 'probR', 'pbR', 'cob', 'cor', 'roe', 'roa', 'eff', 'ltdC', 'liqA', 'irrbbPR'];
   const fm = k => ['eff', 'ltdC', 'liqA', 'cob'].includes(k) ? (x => pct(x, 0)) : k === 'roa' ? (x => pct(x, 2)) : (x => pct(x, 1));
-  tb.b.innerHTML = `<div class="tblwrap" style="max-height:none"><table class="tbl"><thead><tr><th>Indicador</th><th>Valor</th><th>Limites</th><th>Mediana pares</th><th>Percentil</th><th>Status</th></tr></thead><tbody>${keys.map(k => { const t = THR[k], x = m[k], p = pctile(n, k, x); const pp_ = ok(p) ? (t.dir > 0 ? p : 1 - p) : NaN; return `<tr><td class="l">${t.lab}</td><td><b>${ok(x) ? fm(k)(x) : 'n/a'}</b></td><td class="muted">${t.dir > 0 ? '≥' : '≤'} ${fm(k)(t.g)} · ${fm(k)(t.w)} · ${fm(k)(t.s)}</td><td>${fm(k)(peerMed(n, k))}</td><td><div class="pctl" style="display:block"><div class="bar" style="width:130px;display:inline-block;vertical-align:middle"><b></b><i style="left:${ok(pp_) ? (pp_ * 100).toFixed(0) : 50}%;width:11px;height:11px;border-width:2px"></i></div><span class="tnum" style="margin-left:8px">${ok(pp_) ? int(pp_ * 100) + 'º' : '—'}</span></div></td><td>${stChip(k, x)}</td></tr>`; }).join('')}</tbody></table></div>`;
+  tb.b.innerHTML = `<div class="tblwrap" style="max-height:none"><table class="tbl"><thead><tr><th>Indicador</th><th>Valor</th><th>Limites</th><th>Mediana pares</th><th>Percentil</th><th>Status</th></tr></thead><tbody>${keys.map(k => { const t = thrOf(k, m.capMin), x = m[k], p = pctile(n, k, x); const pp_ = ok(p) ? (t.dir > 0 ? p : 1 - p) : NaN; return `<tr><td class="l">${t.lab}</td><td><b>${ok(x) ? fm(k)(x) : 'n/a'}</b></td><td class="muted">${t.dir > 0 ? '≥' : '≤'} ${fm(k)(t.g)} · ${fm(k)(t.w)} · ${fm(k)(t.s)}</td><td>${fm(k)(peerMed(n, k))}</td><td><div class="pctl" style="display:block"><div class="bar" style="width:130px;display:inline-block;vertical-align:middle"><b></b><i style="left:${ok(pp_) ? (pp_ * 100).toFixed(0) : 50}%;width:11px;height:11px;border-width:2px"></i></div><span class="tnum" style="margin-left:8px">${ok(pp_) ? int(pp_ * 100) + 'º' : '—'}</span></div></td><td>${stChip(k, x)}</td></tr>`; }).join('')}</tbody></table></div>`;
   const rd = card(G, { cls: 'c4', title: 'Radar de pilares (rating)', sub: 'Pontuação 0–100 por pilar · comparação com o grupo', fx: 'rating' });
   const rt = ratingOf(n), rg = ratingOf(node(n.grp === 'bank' ? 'G:bank' : 'G:coop'));
-  radarChart(chartEl(rd.b, 300), rt.pillars.map(p => p.t), [{ name: n.name, color: 'var(--s1)', values: rt.pillars.map(p => p.s / 100) }, { name: n.grp === 'bank' ? 'Bancões (soma)' : 'Cooperativas (soma)', color: 'var(--gold)', values: rg.pillars.map(p => p.s / 100) }], { size: 300 });
+  radarChart(chartEl(rd.b, 300), rt.pillars.map(p => p.t), [{ name: n.name, color: 'var(--s1)', values: rt.pillars.map(p => p.s / 100) }, { name: n.grp === 'bank' ? 'Grandes bancos (soma)' : 'Cooperativas (soma)', color: 'var(--gold)', values: rg.pillars.map(p => p.s / 100) }], { size: 300 });
   // capital econômico
-  const ec = card(G, { cls: 'c8', title: 'Capital econômico agregado (ICAAP simplificado)', sub: 'Crédito (Vasicek 99,9%), mercado (VaR 99,9%), operacional (RWA × 8%) e IRRBB — com benefício de diversificação', src: [['modelo', 'm']], fx: 'ecap' });
+  const ec = card(G, { cls: 'c8', title: 'Capital econômico agregado · exercício ilustrativo', sub: 'Crédito (Vasicek 99,9%), mercado (VaR 99,9%), operacional (RWA × 8%, proxy regulatória) e IRRBB — medidas e horizontes diferentes; não é capital econômico calibrado nem ICAAP', src: [['modelo', 'm']], fx: 'ecap' });
   const u = ST.ui.ec || (ST.ui.ec = { rCM: 30, rCO: 20, rCI: 30, rMI: 50 });
   const w = el('div', 'grid g12'); ec.b.appendChild(w); const ctl = el('div', 'ctl c3'); w.appendChild(ctl); const o = el('div', 'c9'); w.appendChild(o);
   const ko = el('div', 'kpis'); o.appendChild(ko); const chx = el('div', 'chart'); o.appendChild(chx); const tk = el('div', 'take'); o.appendChild(tk);
   const pd = clamp((m.inadR || .03) * .9, .004, .25), lgd = isCoop(n) ? .4 : .45;
   const ecC = Math.max(0, (vasicekQ(pd, rhoRetail(pd), .999) - pd) * lgd * m.scr);
-  const mvFix = m.tvm * (isCoop(n) ? .15 : .35), ecM = mvFix * 2.5 / 10000 * 9 * 3.09 * Math.sqrt(10) + m.rwam * 0.08;
+  const mvFix = m.tvm * (isCoop(n) ? .15 : .35), ecM = mvFix * 2.5 / 10000 * 9 * 3.09 * Math.sqrt(10);   // só o VaR econômico (somar o RWA de mercado contaria duas vezes)
   const ecO = m.rwao * 0.08;
   const Ralm = almCalc(n, almDefaults(n)); const ecI = Math.max(m.irrbb, -Math.min(0, ...Ralm.eve.map(e => e.v)));
   const runE = () => {
     const v = [ecC, ecM, ecO, ecI];
     const C = [[1, u.rCM / 100, u.rCO / 100, u.rCI / 100], [u.rCM / 100, 1, .2, u.rMI / 100], [u.rCO / 100, .2, 1, .1], [u.rCI / 100, u.rMI / 100, .1, 1]];
+    const psd = cholOk(C);   // matriz de correlação válida (positiva semidefinida)?
     let tot = 0; for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) tot += v[i] * v[j] * C[i][j];
     tot = Math.sqrt(Math.max(0, tot)); const st = sum(v);
     ko.innerHTML = '';
-    kpi(ko, { l: 'Soma dos capitais isolados', v: brl(st) });
+    kpi(ko, { l: 'Soma dos capitais isolados', v: brl(st), d: psd ? 'matriz de correlação válida' : '<span class="st crit"><i>×</i>matriz inválida: ajuste as correlações</span>' });
     kpi(ko, { l: 'Capital econômico diversificado', v: brl(tot), d: 'diversificação ' + pct(1 - tot / st, 0), cls: 'accent' });
     kpi(ko, { l: 'PR disponível', v: brl(m.pr), d: 'cobertura ' + mult(m.pr / tot, 1) });
     kpi(ko, { l: 'Excedente econômico', v: brl(m.pr - tot), d: m.pr > tot ? 'capital suficiente' : 'déficit' });
     waterfall(chx, [{ label: 'Crédito', value: ecC, kind: 'start', color: 'var(--gold)' }, { label: 'Mercado', value: ecM, color: 'var(--s7)' }, { label: 'Operacional', value: ecO, color: 'var(--s5)' }, { label: 'IRRBB', value: ecI, color: 'var(--s1)' }, { label: 'Diversificação', value: tot - st, color: 'var(--pos)' }, { label: 'Capital econômico', value: tot, kind: 'total', color: 'var(--ink-2)' }, { label: 'PR disponível', value: m.pr, kind: 'total', color: 'var(--gold)' }], { h: 250, rot: false });
-    tk.innerHTML = `Agregação por matriz de correlação (variância-covariância): <i>CE = √(vᵀ C v)</i>. Crédito usa PD = ${pct(pd, 1)}, LGD = ${pct(lgd, 0)} e ρ de varejo; mercado usa VaR 99,9%/10 dias do TVM prefixado + requisito do RWA de mercado; IRRBB usa o maior entre o capital reportado e a pior perda de EVE estimada.`;
+    tk.innerHTML = `Agregação por matriz de correlação (variância-covariância): <i>CE = √(vᵀ C v)</i>. Crédito usa PD = ${pct(pd, 1)}, LGD = ${pct(lgd, 0)} e ρ de varejo; mercado usa só o VaR 99,9%/10 dias do TVM prefixado; IRRBB usa o maior entre o capital reportado e a pior perda de EVE estimada.`;
   };
   const s = (lbl, k) => slider(ctl, { label: lbl, min: -20, max: 90, step: 5, value: u[k], fmt: v => (v / 100).toFixed(2).replace('.', ','), onInput: v => { u[k] = v; runE(); } });
   s('ρ crédito × mercado', 'rCM'); s('ρ crédito × operacional', 'rCO'); s('ρ crédito × IRRBB', 'rCI'); s('ρ mercado × IRRBB', 'rMI');
@@ -470,16 +474,16 @@ VIEWS.frm = (V, n) => {
     const extraLoss = Math.max(0, (pd0 * pdm * (lgd + lgdUp) - pd0 * lgd)) * m.scr;
     const dEve = Math.min(0, sum(Ralm.gap.map((g, j) => g * (Math.exp(-(Ralm.r0 + bp / 10000) * BK6[j].t) - Math.exp(-Ralm.r0 * BK6[j].t)))));
     const dNii = Ralm.nii(bp / 10000);
-    const pr1 = m.pr - extraLoss + Math.min(0, dNii) + dEve * 0.5;
+    const pr1 = m.pr - extraLoss + Math.min(0, dNii);   // ΔEVE é valor econômico, não perda contábil: mostrado à parte, fora do PR
     const ib1 = div(pr1, m.rwa);
     const ll1 = m.ll - extraLoss + dNii;
     const hq = m.disp + m.aplic + .85 * m.tvm + m.cent, outf = (m.dvis + m.dpou + m.dpra) * Math.max(run, 3) / 100 + m.comp * .5;
     const c = el('div', 'cmp-card'); c.style.borderTop = `4px solid ${i === 0 ? 'var(--s3)' : i === 1 ? 'var(--s4)' : 'var(--s8)'}`;
     c.innerHTML = `<b style="font-family:var(--serif);font-size:20px">${nm}</b><div class="muted" style="font-size:11.5px;margin-top:2px">PD ×${nf(1).format(pdm)} · LGD +${int(lgdUp * 100)} p.p. · juros +${bp} bp · saque ${run}%</div>`;
     const gg = el('div'); c.appendChild(gg);
-    gauge(gg, { value: ib1, min: 0, max: .3, fmt: x => pct(x, 1), label: 'Basileia pós-estresse', w: 240, h: 140, bands: [{ to: .08, color: 'var(--crit)' }, { to: .105, color: 'var(--serious)' }, { to: .13, color: 'var(--warn)' }, { to: .3, color: 'var(--good)' }], ticks: [{ v: .105, l: '10,5%' }] });
+    gauge(gg, { value: ib1, min: 0, max: .3, fmt: x => pct(x, 1), label: 'Basileia pós-estresse', w: 240, h: 140, bands: capBands(m), ticks: [{ v: capK(m), l: pct(capK(m), 1) }] });
     c.insertAdjacentHTML('beforeend', `<div style="display:grid;gap:4px;font-size:12.5px;margin-top:6px">${['Perda de crédito adicional', 'Resultado 12m estressado', 'ΔEVE (juros)', 'Cobertura de liquidez'].map((l, j) => `<div style="display:flex;justify-content:space-between;color:var(--ink-2)"><span>${l}</span><b style="color:var(--ink)">${j === 0 ? brl(extraLoss) : j === 1 ? brl(ll1) : j === 2 ? brl(dEve) : mult(div(hq, outf), 1)}</b></div>`).join('')}</div>`);
     grid3.appendChild(c);
   });
-  sx.b.appendChild(el('p', 'note', 'Choques aplicados instantaneamente sobre o balanço de jun/26. Perda de crédito = PD estressada × LGD estressada − perda esperada base, sobre a carteira SCR; metade do ΔEVE afeta o capital (marcação parcial do banking book); ΔNII via gap de repactuação do ALM.'));
+  sx.b.appendChild(el('p', 'note', 'Choques aplicados instantaneamente sobre o balanço da data-base ' + mlab(D.Q[QI]) + '. Perda de crédito = PD estressada × LGD estressada − perda esperada base, sobre a carteira SCR; o ΔEVE é mostrado à parte e não reduz o PR (valor econômico não é perda contábil); ΔNII via gap de repactuação do ALM.'));
 };

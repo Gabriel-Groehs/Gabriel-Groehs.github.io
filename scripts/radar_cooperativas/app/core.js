@@ -62,7 +62,7 @@ COOPS.sort((a, b) => at0(b) - at0(a)); BANKS.sort((a, b) => at0(b) - at0(a));
 const NODES = new Map();
 function addNode(n) { NODES.set(n.id, n); return n; }
 addNode({ id: 'G:coop', name: 'Cooperativas', sub: 'Soma das ' + COOPS.length + ' cooperativas singulares', kind: 'group', grp: 'coop', members: COOPS, color: 'var(--s3)', path: ['G:coop'] });
-addNode({ id: 'G:bank', name: 'Bancos', sub: 'Soma dos ' + BANKS.length + ' bancões (conglomerados prudenciais)', kind: 'group', grp: 'bank', members: BANKS, color: BANK_COLOR, path: ['G:bank'] });
+addNode({ id: 'G:bank', name: 'Bancos', sub: 'Soma dos ' + BANKS.length + ' grandes bancos (conglomerados prudenciais)', kind: 'group', grp: 'bank', members: BANKS, color: BANK_COLOR, path: ['G:bank'] });
 for (const s of SYS_ORDER) {
   const mem = COOPS.filter(e => e.s === s);
   if (!mem.length) continue;
@@ -91,6 +91,26 @@ function capCover(L) {
   }
   return x;
 }
+/* mínimo de capital aplicável a uma instituição na data-base q:
+   - regime completo: PR ≥ 8% do RWA + adicional de capital principal informado no IF.data (conservação e, quando houver,
+     importância sistêmica e contracíclico) — Res. CMN 4.958/2021; sem o adicional informado, 2,5% de conservação;
+   - regime simplificado do S5 (só PR e RWAS5): 12% do RWAS5 na cooperativa singular filiada a central e 17% nas demais
+     — Res. CMN 4.606/2017, art. 12. */
+function cholOk(C) {   // decomposição de Cholesky: falha se a matriz não for positiva semidefinida
+  const n = C.length, L = C.map(() => new Array(n).fill(0));
+  for (let i = 0; i < n; i++) for (let j = 0; j <= i; j++) {
+    let s = C[i][j]; for (let k = 0; k < j; k++) s -= L[i][k] * L[j][k];
+    if (i === j) { if (s < -1e-12) return false; L[i][i] = Math.sqrt(Math.max(s, 0)); } else L[i][j] = L[j][j] ? s / L[j][j] : 0;
+  }
+  return true;
+}
+function capReq(e, q) {
+  const v = k => e.V[q][FI[k]] || 0, pr = v('pr'), rwa = v('rwa');
+  if (!(pr > 0 && rwa > 0)) return null;
+  const simp = !(v('cp') > 0), fil = e.k === 'c' && (!!e.ce || (!!e.s && e.s !== 'indep'));
+  const acp = simp ? 0 : (v('acp') > 0 ? v('acp') / rwa : 0.025);
+  return { pr, rwa, simp, fil, acp, min: simp ? (fil ? 0.12 : 0.17) : 0.08 + acp };
+}
 function bcMap(flat) {
   const mp = new Map(); if (!flat) return mp;
   for (let i = 0; i < flat.length; i += NQ + 1) mp.set(flat[i], flat.slice(i + 1, i + 1 + NQ));
@@ -103,15 +123,21 @@ function aggregate(n) {
   if (L.length === 1) {
     const e = L[0];
     r = { V: e.V, R: e.R, X: e.X, PF: e.PF || null, PJ: e.PJ || null, CZ: e.CZ || null, BCf: e.BC || null, M: e.M || null, IQ: e.IQ || zeros(NQ), nm: 1,
-      imob: e.V.map(v => (v[FI.imob] || 0) / 1000), x: capCover([e]), nCz: (e.CZ || []).map(c => c ? 1 : 0) };
+      imob: e.V.map(v => (v[FI.imob] || 0) / 1000), x: capCover([e]), nCz: (e.CZ || []).map(c => c ? 1 : 0), AV: e.AV || null };
+    // cobertura da DRE por trimestre: 1 presente, 0 ausente (instituição ativa), NaN instituição inexistente na data
+    r.cov4 = D.Q.map((_, q) => { const a = e.AV && e.AV.r4 ? e.AV.r4[q] : (e.R[q].some(x => x) ? '1' : '0'); return a === '1' ? 1 : a === '0' ? 0 : NaN; });
+    r.miss4 = r.cov4.map(c => c === 0 ? 1 : 0);
   } else {
     r = { V: D.Q.map(() => zeros(NF_)), R: D.Q.map(() => zeros(ND_)), X: D.Q.map(() => zeros(NX_)), PF: D.Q.map(() => zeros(49)), PJ: D.Q.map(() => zeros(63)),
       CZ: D.Q.map(() => zeros(NC_)), M: D.MF.map(() => new Array(NM).fill(null)), IQ: zeros(NQ), nm: L.length, nCz: zeros(NQ), imob: zeros(NQ) };
-    const bc = new Map(), imW = zeros(NQ), prW = zeros(NQ);
+    const bc = new Map(), imW = zeros(NQ), prW = zeros(NQ), actAt = zeros(NQ), presAt = zeros(NQ);
+    r.miss4 = zeros(NQ);
     let anyPF = false, anyPJ = false;
     for (const e of L) {
       for (let q = 0; q < NQ; q++) {
         const V = e.V[q], R = e.R[q], X = e.X[q], RV = r.V[q], RR = r.R[q], RX = r.X[q];
+        const av = e.AV && e.AV.r4 ? e.AV.r4[q] : (R.some(x => x) ? '1' : '0');
+        if (av !== '-') { const a_ = Math.max(0, V[FI.at] || 0); actAt[q] += a_; if (av === '1') presAt[q] += a_; else r.miss4[q]++; }
         for (let i = 0; i < NF_; i++) RV[i] += V[i];
         for (let i = 0; i < ND_; i++) RR[i] += R[i];
         for (let i = 0; i < NX_; i++) RX[i] += X[i];
@@ -125,6 +151,7 @@ function aggregate(n) {
       if (e.BC) for (let i = 0; i < e.BC.length; i += NQ + 1) { const k = e.BC[i]; let c = bc.get(k); if (!c) { c = zeros(NQ); bc.set(k, c); } for (let q = 0; q < NQ; q++) c[q] += e.BC[i + 1 + q] || 0; }
     }
     r.imob = imW.map((w, q) => prW[q] ? w / prW[q] : NaN);
+    r.cov4 = actAt.map((a, q) => a > 0 ? presAt[q] / a : NaN);   // parcela do ativo das instituições ativas com DRE presente
     if (!anyPF) r.PF = null; if (!anyPJ) r.PJ = null;
     r.CZ = r.CZ.map((c, q) => r.nCz[q] ? c : null); if (!r.CZ.some(Boolean)) r.CZ = null;
     r.BC = bc; r.x = capCover(L);
@@ -145,15 +172,28 @@ function metricsAt(n, qi) {
   const Vq = (k, q = qi) => r.V[q][FI[k]] || 0;
   const flow = (k, q) => { const j = DI[k], c = r.R[q][j] || 0; return (semEnd(q) && q > 0) ? c - (r.R[q - 1][j] || 0) : c; };
   const nz = a => { if (!a) return false; for (const x of a) if (x) return true; return false; };
-  const hasV = q => nz(r.V[q]), hasR = q => nz(r.R[q]);
+  const single = n.members.length === 1;
+  // presença dos relatórios: máscara do pipeline (1/0/-) na instituição; nos agregados, DRE de quase todo o ativo (≥ 98%)
+  const hasV = q => r.AV && r.AV.r2 ? r.AV.r2[q] === '1' : nz(r.V[q]);
+  const hasR = q => r.AV && r.AV.r4 ? r.AV.r4[q] === '1' : (!single && r.cov4 ? r.cov4[q] >= 0.98 : nz(r.R[q]));
   // fluxo do trimestre nas séries: NaN quando falta o relatório 4 do trimestre — ou do anterior, em jun e dez —, porque a DRE do
   // IF.data acumula no semestre e, sem o trimestre anterior, jun e dez carregariam o semestre inteiro
   const flowQ = (k, q) => (!hasR(q) || (semEnd(q) && q > 0 && !hasR(q - 1))) ? NaN : flow(k, q);
   const w0 = Math.max(0, qi - 3), W = range(w0, qi), ann = 4 / W.length;
   const a0 = Math.max(0, qi - 4), A = range(a0, qi).filter(q => q === qi || hasV(q));   // saldos médios só com datas-base informadas
-  const L = k => sum(W.map(q => flow(k, q))) * ann;
-  const avg = k => mean(A.map(q => Vq(k, q)));
+  // pontos da DRE de que o acumulado da janela depende: em jun/dez o trimestre anterior entra e sai, então só contam
+  // os pontos com coeficiente líquido diferente de zero (ex.: 12 meses até jun = dez + jun)
+  const needW = (() => { const c = new Map(); for (const q of W) { c.set(q, (c.get(q) || 0) + 1); if (semEnd(q) && q > 0) c.set(q - 1, (c.get(q - 1) || 0) - 1); } return [...c].filter(([, v]) => v !== 0).map(([q]) => q); })();
+  const okL = single ? needW.every(hasR) : true;   // instituição: janela incompleta vira NaN; agregado: soma com cobertura informada
+  const L = k => okL ? sum(W.map(q => flow(k, q))) * ann : NaN;
+  // saldo médio: regra do trapézio sobre as datas-base (pontas com meio peso) — aproxima melhor o saldo médio do período
+  const meanA = fn => { if (A.length < 2 || A[A.length - 1] - A[0] !== A.length - 1) return mean(A.map(fn)); let s = 0; A.forEach((q, i) => { s += fn(q) * (i === 0 || i === A.length - 1 ? .5 : 1); }); return s / (A.length - 1); };
+  const avg = k => meanA(q => Vq(k, q));
   const m = { n, r, nm: r.nm, qi, W, ann: W.length < 4 ? W.length : 0 };
+  m.lOk = okL;                                                                    // DRE completa na janela de 12 meses
+  m.lMiss = needW.filter(q => !hasR(q));                                          // trimestres sem DRE (instituição)
+  m.covL = Math.min(...needW.map(q => ok(r.cov4 && r.cov4[q]) ? r.cov4[q] : 0)); // menor cobertura do ativo na janela
+  m.missL = Math.max(...needW.map(q => (r.miss4 && r.miss4[q]) || 0));          // instituições sem DRE em algum ponto
   for (const f of D.F) m[f] = Vq(f);
   m.imob = r.imob[qi];
   m.L = {}; for (const f of D.DREF) m.L[f] = L(f);
@@ -172,7 +212,21 @@ function metricsAt(n, qi) {
   m.ib = div(Vq('pr'), Vq('rwa')); m.icp = X.rwaCp[qi] ? X.cp[qi] / X.rwaCp[qi] : NaN; m.in1 = X.rwaCp[qi] ? X.n1[qi] / X.rwaCp[qi] : NaN; m.ra = X.expo[qi] ? X.n1e[qi] / X.expo[qi] : NaN;
   m.capCov = X.nFull[qi]; m.s5 = !X.nFull[qi];
   m.alav = div(Vq('at'), Vq('pl')); m.rwaD = div(Vq('rwa'), Vq('at'));
-  m.buf = Vq('pr') - 0.105 * Vq('rwa');
+  // mínimo de capital aplicável a cada instituição na data-base (capReq) e, nos agregados, a soma das folgas individuais
+  const capAt = q => {
+    const o = { rw: 0, req: 0, buf: 0, def: 0, below: 0, n: 0, nS: 0, nF: 0, prF: 0, rwF: 0, prS: 0, rwS: 0 };
+    for (const e of n.members) {
+      const c = capReq(e, q); if (!c) continue;
+      const b = c.pr - c.min * c.rwa;
+      o.n++; o.rw += c.rwa; o.req += c.min * c.rwa; o.buf += b; if (b < 0) { o.below++; o.def += b; }
+      if (c.simp) { o.nS++; o.prS += c.pr; o.rwS += c.rwa; } else { o.nF++; o.prF += c.pr; o.rwF += c.rwa; }
+    }
+    o.min = o.rw ? o.req / o.rw : NaN; o.ibF = div(o.prF, o.rwF); o.ibS = div(o.prS, o.rwS);
+    return o;
+  };
+  const CAP = capAt(qi);
+  m.cap = CAP; m.capMin = CAP.min;
+  m.buf = CAP.n ? CAP.buf : NaN;   // agregado: soma das folgas de cada instituição, não a folga do índice somado
   m.irrbbPR = X.prI[qi] ? X.irr[qi] / X.prI[qi] : NaN;
   m.mktPR = div(Vq('rwam') * 0.08, Vq('pr'));
   m.inadR = div(Vq('inad'), Vq('scr')); m.probR = div(Vq('prob'), Vq('scr'));
@@ -181,8 +235,13 @@ function metricsAt(n, qi) {
   m.ticket = div(Vq('scr'), Vq('cli'));
   if (cz) {
     const C = k => cz[CI[k]] || 0;
-    const st = C('e1') + C('e2') + C('e3') + C('sn') + C('sp');
-    m.stTot = st; m.e1R = div(C('e1') + C('sn'), st); m.e2R = div(C('e2'), st); m.e3R = div(C('e3') + C('sp'), st);
+    // perda esperada (Res. CMN 4.966): metodologia completa (estágios 1–3) e simplificada (sem/com problema de recuperação)
+    // têm denominadores próprios — não problemático da simplificada não equivale a estágio 1. O estágio 3 e o problemático
+    // da simplificada seguem o mesmo critério (problema de recuperação de crédito): pbR compara instituições das duas
+    const full = C('e1') + C('e2') + C('e3'), simp = C('sn') + C('sp');
+    m.stTot = full + simp; m.stFull = full; m.stSimp = simp; m.stFullSh = div(full, full + simp);
+    m.e1R = div(C('e1'), full); m.e2R = div(C('e2'), full); m.e3R = div(C('e3'), full);
+    m.spR = div(C('sp'), simp); m.pbR = div(C('e3') + C('sp'), full + simp);
     m.cz = {}; for (const f of D.CLF) m.cz[f] = C(f);
     m.fgcA = div(-C('fgc') * (semEnd(qi) ? 2 : 4), Vq('dep'));
   }
@@ -190,17 +249,22 @@ function metricsAt(n, qi) {
   m.liqA = div(m.liq, Vq('at'));
   m.depShare = div(Vq('dep'), Vq('capt'));
   m.repShare = div(Vq('emr'), Vq('capt'));
-  m.ll = L('ll'); m.roa = div(m.ll, aAt); m.roe = div(m.ll, aPl);
+  m.ll = L('ll'); m.roa = div(m.ll, aAt); m.roe = aPl > 0 ? div(m.ll, aPl) : NaN;   // PL ≤ 0: ROE sem sentido econômico
   m.nii = L('rif') - L('pe') + m.icoop;
   m.nim = div(m.nii, aAt);
   m.yld = div(L('rcre'), aCrb); m.cof = div(-L('dcp'), aCapt); m.spread = m.yld - m.cof;
+  // NIM sobre ativos rentáveis (crédito, arrendamento, outros créditos, TVM, aplicações e centralização), RORWA e DuPont
+  const cz_ = q => (r.CZ && r.CZ[q] ? r.CZ[q][CI.cent] || 0 : 0);
+  m.avg.earn = meanA(q => Vq('crb', q) + Math.max(Vq('occ', q), 0) + Math.max(Vq('arr', q), 0) + Vq('tvm', q) + Vq('aplic', q) + cz_(q));
+  m.nimR = div(m.nii, m.avg.earn); m.rorwa = div(m.ll, avg('rwa'));
   m.opx = -(L('pes') + L('adm'));
   m.rev = m.nii + L('tar') + L('srv') + L('rpag');
-  m.eff = div(m.opx, m.rev);
+  m.eff = m.rev > 0 ? div(m.opx, m.rev) : NaN;
+  m.dp = { margem: m.rev > 0 ? div(m.ll, m.rev) : NaN, giro: div(m.rev, aAt), mult: aPl > 0 ? div(aAt, aPl) : NaN };   // ROE = margem × giro × multiplicador   // receita ≤ 0: índice sem sentido
   m.opxA = div(m.opx, aAt);
   m.trib = -(L('trib') + L('ir'));
   m.feeCov = div(L('tar') + L('srv'), m.opx);
-  m.yTes = div(L('rtvm') + L('rapl') + m.icoop, mean(A.map(q => Vq('tvm', q) + Vq('disp', q) + Vq('aplic', q))) + m.cent);
+  m.yTes = div(L('rtvm') + L('rapl') + m.icoop, meanA((q => Vq('tvm', q) + Vq('disp', q) + Vq('aplic', q) + (r.CZ && r.CZ[q] ? r.CZ[q][CI.cent] || 0 : 0))));
   // DRE gerencial por segmento (v2.1): Total ÷ ativo; Crédito, Cartões, Tesouraria e Serviços e outros ÷ base própria
   const czv = (k, q) => { const c = r.CZ && r.CZ[q]; return c ? (c[CI[k]] || 0) : 0; };
   const czf = (k, q) => (semEnd(q) && q > 0) ? czv(k, q) - czv(k, q - 1) : czv(k, q);
@@ -212,7 +276,7 @@ function metricsAt(n, qi) {
     const f = k => q == null ? L(k) : flowQ(k, q) * 4;
     const fz = k => q == null ? sum(W.map(i => czf(k, i))) * ann : (czOK(q) ? czf(k, q) * 4 : NaN);
     const iq = q == null ? m.icoop : (czOK(q) ? (r.IQ[q] || 0) * 4 : NaN);
-    const bAvg = fn => q == null ? mean(A.map(fn)) : (q && hasV(q - 1) ? (fn(q) + fn(q - 1)) / 2 : fn(q));
+    const bAvg = fn => q == null ? meanA(fn) : (q && hasV(q - 1) ? (fn(q) + fn(q - 1)) / 2 : fn(q));
     const base = {
       cred: bAvg(i => Vq('crb', i) + Math.max(Vq('occ', i), 0) + Math.max(Vq('arr', i), 0)),
       card: bAvg(i => { const g = czv('pagb', i) + czv('trp', i); return g > 0 ? g : Math.max(0, Vq('pag', i)); }),
@@ -258,26 +322,29 @@ function metricsAt(n, qi) {
   const iqQ = i => czOK(i) ? (r.IQ[i] || 0) : NaN;   // ingressos intercooperativos do trimestre (balancete)
   const q = {};
   q.ib = Q.map(i => div(Vq('pr', i), Vq('rwa', i)));
+  q.capMin = Q.map(i => capAt(i).min);
   q.icp = Q.map(i => X.rwaCp[i] ? X.cp[i] / X.rwaCp[i] : NaN);
   q.ra = Q.map(i => X.expo[i] ? X.n1e[i] / X.expo[i] : NaN);
   q.inad = Q.map(i => div(Vq('inad', i), Vq('scr', i)));
   q.prob = Q.map(i => div(Vq('prob', i), Vq('scr', i)));
   q.cob = Q.map(i => div(Math.abs(Vq('pec', i)), Vq('prob', i)));
   q.ltd = Q.map(i => div(Vq('crb', i), Vq('dep', i)));
-  q.ltdC = Q.map(i => div(Vq('crb', i) + Math.max(0, Vq('occ', i)), Vq('capt', i)));
+  q.ltdC = Q.map(i => div(Vq('crb', i) + Math.max(0, Vq('occ', i)) + Math.max(0, Vq('arr', i)), Vq('capt', i)));
   q.alav = Q.map(i => div(Vq('at', i), Vq('pl', i)));
   q.liqA = Q.map(i => div(Vq('disp', i) + Vq('aplic', i) + Vq('tvm', i) + (r.CZ && r.CZ[i] ? r.CZ[i][CI.cent] || 0 : 0), Vq('at', i)));
-  q.roe = Q.map(i => div(4 * flowQ('ll', i), qa('pl', i)));
+  q.roe = Q.map(i => qa('pl', i) > 0 ? div(4 * flowQ('ll', i), qa('pl', i)) : NaN);
   q.roa = Q.map(i => div(4 * flowQ('ll', i), qa('at', i)));
   q.nim = Q.map(i => div(4 * (flowQ('rif', i) - flowQ('pe', i) + iqQ(i)), qa('at', i)));
   q.yld = Q.map(i => div(4 * flowQ('rcre', i), qa('crb', i)));
   q.cof = Q.map(i => div(-4 * flowQ('dcp', i), qa('capt', i)));
   q.spread = q.yld.map((y, i) => y - q.cof[i]);
   q.cor = Q.map(i => div(-4 * flowQ('pecr', i), qa('crb', i)));
-  q.eff = Q.map(i => div(-(flowQ('pes', i) + flowQ('adm', i)), flowQ('rif', i) - flowQ('pe', i) + iqQ(i) + flowQ('tar', i) + flowQ('srv', i) + flowQ('rpag', i)));
+  q.eff = Q.map(i => { const rv_ = flowQ('rif', i) - flowQ('pe', i) + iqQ(i) + flowQ('tar', i) + flowQ('srv', i) + flowQ('rpag', i); return rv_ > 0 ? div(-(flowQ('pes', i) + flowQ('adm', i)), rv_) : NaN; });
   q.irrbb = Q.map(i => X.prI[i] ? X.irr[i] / X.prI[i] : NaN);
-  q.e3 = Q.map(i => { const c = r.CZ && r.CZ[i]; if (!c) return NaN; const t = c[CI.e1] + c[CI.e2] + c[CI.e3] + c[CI.sn] + c[CI.sp]; return div(c[CI.e3] + c[CI.sp], t); });
-  q.e2 = Q.map(i => { const c = r.CZ && r.CZ[i]; if (!c) return NaN; const t = c[CI.e1] + c[CI.e2] + c[CI.e3] + c[CI.sn] + c[CI.sp]; return div(c[CI.e2], t); });
+  const stQ = (i, f) => { const c = r.CZ && r.CZ[i]; return c ? f(c, c[CI.e1] + c[CI.e2] + c[CI.e3], c[CI.sn] + c[CI.sp]) : NaN; };
+  q.e3 = Q.map(i => stQ(i, (c, fu) => div(c[CI.e3], fu)));             // metodologia completa
+  q.e2 = Q.map(i => stQ(i, (c, fu) => div(c[CI.e2], fu)));
+  q.pb = Q.map(i => stQ(i, (c, fu, si) => div(c[CI.e3] + c[CI.sp], fu + si)));   // problema de recuperação, ambas
   q.rwaD = Q.map(i => div(Vq('rwa', i), Vq('at', i)));
   q.mktPR = Q.map(i => div(Vq('rwam', i) * 0.08, Vq('pr', i)));
   m.q = q;
@@ -285,18 +352,24 @@ function metricsAt(n, qi) {
   m.H = k => Q.map(i => {
     if (HD[k]) return HD[k].reduce((s, x) => s + flowQ(x, i), 0);
     if (k === 'liq') return Vq('disp', i) + Vq('aplic', i);
+    if (k === 'cart') return Vq('crb', i) + Math.max(Vq('occ', i), 0) + Math.max(Vq('arr', i), 0);   // mesma carteira do cartão
     if (DI[k] != null) return flowQ(k, i);
     return Vq(k, i);
   });
   const me = mEnd(qi);
   m.r = { pf: r.PF ? mat2(r.PF[qi], 7) : null, pj: r.PJ ? mat2(r.PJ[qi], 9) : null, ix: r.X[qi], cz, m: r.M && me >= 0 ? r.M.map(a => a.slice(0, me + 1)) : null, BC: r.BC, IQ: r.IQ, V: r.V, R: r.R, CZ: r.CZ };
+  // concentração da carteira por modalidade (HHI e número efetivo 1/HHI — não mede concentração por devedor) e agro
+  { const tot = [...(m.r.pf || []).map(r_ => sum(r_)), ...(m.r.pj || []).map(r_ => sum(r_))], T_ = sum(tot);
+    m.hhiMod = T_ > 0 ? sum(tot.map(x => (x / T_) ** 2)) : NaN; m.nEffMod = div(1, m.hhiMod);
+    const ag = (m.r.pf ? sum(m.r.pf[D.PFM.findIndex(x => /rural/i.test(x))] || []) : 0) + (m.r.pj ? sum(m.r.pj[D.PJM.findIndex(x => /rural/i.test(x))] || []) : 0);
+    m.agroSh = T_ > 0 ? ag / T_ : NaN; }
   MC.set(key, m);
   return m;
 }
 const metrics = n => metricsAt(n, QI);
 
 /* universo de pares: métricas de todas as entidades na data-base */
-const PEER_KEYS = ['ib', 'icp', 'ra', 'alav', 'inadR', 'probR', 'e3R', 'cob', 'cor', 'roa', 'roe', 'nim', 'eff', 'ltdC', 'liqA', 'irrbbPR', 'yld', 'cof', 'spread', 'gCrb', 'gCapt', 'rwaD', 'opxA', 'depShare', 'at', 'cart', 'pl', 'capt', 'll'];
+const PEER_KEYS = ['ib', 'icp', 'ra', 'alav', 'inadR', 'probR', 'e3R', 'pbR', 'cob', 'cor', 'roa', 'roe', 'nim', 'eff', 'ltdC', 'liqA', 'irrbbPR', 'nimR', 'rorwa', 'agroSh', 'hhiMod', 'nEffMod', 'yld', 'cof', 'spread', 'gCrb', 'gCapt', 'rwaD', 'opxA', 'depShare', 'at', 'cart', 'pl', 'capt', 'll'];
 const PEERS = new Map();
 function peers() {
   if (PEERS.has(QI)) return PEERS.get(QI);
@@ -309,12 +382,19 @@ function peers() {
   PEERS.set(QI, P);
   return P;
 }
+/* pares comparáveis: singulares por faixa de porte, sistemas com sistemas, grandes bancos entre si */
+const SZB = [250e3, 2e6];   // R$ mil: até R$ 250 mi · R$ 250 mi a 2 bi · acima de R$ 2 bi
+const SZ_LBL = ['pequenas (até R$ 250 mi de ativo)', 'médias (R$ 250 mi a 2 bi de ativo)', 'grandes (acima de R$ 2 bi de ativo)'];
+const szBand = at => at < SZB[0] ? 0 : at < SZB[1] ? 1 : 2;
+const peerKey = n => n.grp === 'bank' ? 'bank' : (n.kind === 'system' || n.kind === 'group') ? 'sys' : 'coop' + szBand(at0(n.ent));
+function peerList(n) { const k = peerKey(n); if (k === 'bank') return BANKS.map(e => node(e.id)); if (k === 'sys') return [...NODES.values()].filter(x => x.kind === 'system'); return COOPS.filter(e => 'coop' + szBand(at0(e)) === k).map(e => node(e.id)); }
+function peerSet(n) { const k = QI + '|' + peerKey(n); if (PEERS.has(k)) return PEERS.get(k); const ms = peerList(n).map(x => metrics(x)), P = { n: ms.length }; for (const f of PEER_KEYS) P[f] = ms.map(m => m[f]).filter(ok); PEERS.set(k, P); return P; }
 function pctile(n, k, x) {
-  const arr = peers()[n.grp][k]; if (!arr || !arr.length || !ok(x)) return NaN;
+  const arr = peerSet(n)[k]; if (!arr || !arr.length || !ok(x)) return NaN;
   let c = 0; for (const y of arr) if (y < x) c++; else if (y === x) c += 0.5;
   return c / arr.length;
 }
-const peerMed = (n, k) => median(peers()[n.grp][k] || []);
+const peerMed = (n, k) => median(peerSet(n)[k] || []);
 
 
 /* limites de apetite a risco (bom → crítico) */
@@ -324,7 +404,8 @@ const THR = {
   ra: { dir: 1, g: .06, w: .04, s: .03, lab: 'Razão de alavancagem' },
   inadR: { dir: -1, g: .03, w: .05, s: .07, lab: 'Inadimplência (90d)' },
   probR: { dir: -1, g: .05, w: .08, s: .12, lab: 'Ativos problemáticos' },
-  e3R: { dir: -1, g: .03, w: .06, s: .09, lab: 'Estágio 3' },
+  e3R: { dir: -1, g: .03, w: .06, s: .09, lab: 'Estágio 3 (metodologia completa)' },
+  pbR: { dir: -1, g: .03, w: .06, s: .09, lab: 'Problema de recuperação (COSIF)' },
   cob: { dir: 1, g: 1, w: .7, s: .5, lab: 'Cobertura (PE/problemáticos)' },
   roe: { dir: 1, g: .15, w: .08, s: 0, lab: 'ROE' },
   roa: { dir: 1, g: .015, w: .008, s: 0, lab: 'ROA' },
@@ -334,14 +415,53 @@ const THR = {
   irrbbPR: { dir: -1, g: .05, w: .1, s: .15, lab: 'Capital IRRBB / PR' },
   cor: { dir: -1, g: .02, w: .035, s: .05, lab: 'Custo do risco' },
 };
-function status(k, x) {
-  const t = THR[k]; if (!t || !ok(x)) return 'na';
+// faixas do índice de capital relativas ao mínimo aplicável da instituição (mn): o alerta começa no próprio mínimo
+const thrOf = (k, mn) => { const t = THR[k]; if (!t || k !== 'ib' || !ok(mn)) return t; const d = mn - t.s; return { ...t, g: t.g + d, w: t.w + d, s: mn }; };
+function status(k, x, mn) {
+  const t = thrOf(k, mn); if (!t || !ok(x)) return 'na';
   if (t.dir > 0) return x >= t.g ? 'good' : x >= t.w ? 'warn' : x >= t.s ? 'serious' : 'crit';
   return x <= t.g ? 'good' : x <= t.w ? 'warn' : x <= t.s ? 'serious' : 'crit';
 }
 const ST_LBL = { good: 'Confortável', warn: 'Atenção', serious: 'Alerta', crit: 'Crítico', na: 's/ dado' };
 const ST_IC = { good: '✓', warn: '!', serious: '!', crit: '×', na: '·' };
-const stChip = (k, x, lbl) => { const s = status(k, x); return `<span class="st ${s}"><i>${ST_IC[s]}</i>${lbl || ST_LBL[s]}</span>`; };
+const stChip = (k, x, lbl, mn) => { const s = status(k, x, mn); return `<span class="st ${s}"><i>${ST_IC[s]}</i>${lbl || ST_LBL[s]}</span>`; };
+
+/* janela dos indicadores de 12 meses na data-base selecionada (ex.: "jul/25–jun/26"; antes de 4 trimestres, anualizada) */
+function winTxt() {
+  const q0 = D.Q[Math.max(0, QI - 3)], mm = +q0.slice(4) - 2, n = Math.min(4, QI + 1);
+  const ini = q0.slice(0, 4) + String(mm).padStart(2, '0');
+  return mlab(ini) + '–' + mlab(D.Q[QI]) + (n < 4 ? `, ${n} trimestre${n > 1 ? 's' : ''} anualizado${n > 1 ? 's' : ''}` : '');
+}
+/* aviso de DRE incompleta (instituição) ou de cobertura parcial (agregado) na janela de 12 meses */
+function dreCovNote(V, m) {
+  const single = m.n.members.length === 1;
+  let t = '';
+  if (single && !m.lOk) {
+    const av = (aggregate(m.n).AV || {}).r4 || '', off = m.lMiss.filter(q => av[q] === '-'), gap = m.lMiss.filter(q => av[q] !== '-');
+    t = '<b>DRE incompleta na janela de 12 meses:</b> ' + [gap.length ? `falta o relatório de resultado de ${gap.map(q => mlab(D.Q[q])).join(', ')}` : '', off.length ? `a instituição não enviou nenhum relatório em ${off.map(q => mlab(D.Q[q])).join(', ')} (encerrada, incorporada ou ainda sem dados)` : ''].filter(Boolean).join('; ') + '. Os indicadores de 12 meses ficam indisponíveis — ausência de dado não é tratada como zero.';
+  }
+  else if (!single && m.missL && m.covL < 0.995) t = `<b>Cobertura da DRE:</b> ${m.missL} ${m.missL > 1 ? 'instituições não informaram' : 'instituição não informou'} a DRE em algum trimestre da janela (${pct(1 - m.covL, 1)} do ativo); os totais de 12 meses somam só o que foi informado.`;
+  if (t) { const vh = V.querySelector('.vh'); const d = el('div', 'take', t); if (vh) vh.insertAdjacentElement('afterend', d); else V.appendChild(d); }
+}
+/* mínimo de capital aplicável nas telas: linha de referência, faixas do velocímetro e nota (ver capReq) */
+const capK = m => ok(m.capMin) ? m.capMin : .105;
+const capMinTxt = m => (m.n.members.length > 1 ? 'o mínimo médio ponderado de ' : 'o mínimo aplicável de ') + pct(capK(m), 1);
+const capRef = m => ok(m.capMin) ? [{ y: m.capMin, label: (m.n.members.length > 1 ? 'mínimo ponderado ' : 'mínimo ') + pct(m.capMin, 1), color: 'var(--crit)' }] : [];
+const capBands = m => { const b = capK(m), full = m.cap && m.cap.nF && !m.cap.nS; return (full ? [{ to: Math.min(.08, b), color: 'var(--crit)' }, { to: b, color: 'var(--serious)' }] : [{ to: b, color: 'var(--crit)' }]).concat([{ to: b + .025, color: 'var(--warn)' }, { to: .3, color: 'var(--good)' }]); };
+function capNote(m, n) {
+  const c = m.cap || {};
+  if (n.members.length === 1) {
+    const rq = capReq(n.members[0], m.qi);
+    if (!rq) return 'Sem PR e RWA informados nesta data-base.';
+    return rq.simp
+      ? `Regime simplificado do S5: a instituição informa só PR e RWAS5, e o mínimo é PRS5 ÷ RWAS5 ≥ ${pct(rq.min, 0)} (${rq.fil ? 'cooperativa singular filiada a central' : 'demais instituições'} — Res. CMN 4.606/2017, art. 12).`
+      : `Mínimo aplicável: 8% de PR + ${pct(rq.acp, 2)} de adicional de capital principal informado no IF.data = ${pct(rq.min, 2)} (Res. CMN 4.958/2021).`;
+  }
+  const parts = [];
+  if (c.nF) parts.push(`${c.nF} no regime completo (índice ${pct(c.ibF, 1)})`);
+  if (c.nS) parts.push(`${c.nS} no regime simplificado do S5 (PRS5 ÷ RWAS5 de ${pct(c.ibS, 1)})`);
+  return `Mínimo médio ponderado pelo RWA: ${pct(c.min, 2)}; ${parts.join(' e ')}. A folga somada não garante que cada instituição cumpra o próprio mínimo nem que o capital possa ser transferido entre elas${c.below ? ` — ${c.below} ${c.below > 1 ? 'estão' : 'está'} abaixo do próprio mínimo` : ''}.`;
+}
 
 /* ---------------- tooltip, popover, revelação ---------------- */
 const TT = $('#tt');
@@ -665,6 +785,7 @@ function radarChart(el, axes, series, o = {}) {
   axes.forEach((a, i) => { const p = P(i, R); S('line', { x1: cx, y1: cy, x2: p[0], y2: p[1], stroke: 'var(--grid)' }, svg); const q = P(i, R + 20); T(svg, q[0], q[1] + 4, a, { 'text-anchor': Math.abs(q[0] - cx) < 8 ? 'middle' : q[0] > cx ? 'start' : 'end', class: 'lbl', style: 'font-size:10.5px;fill:var(--ink-2)' }); });
   series.forEach((s, si) => {
     const pts = s.values.map((v, i) => P(i, R * clamp(ok(v) ? v : 0, 0, 1)));
+    s.values.forEach((v, i) => { if (ok(v)) return; const q = P(i, R * .2); T(svg, q[0], q[1] + 3, 'sem dado', { 'text-anchor': 'middle', class: 'lbl', style: 'font-size:9px;font-style:italic' }); });   // dado ausente não é desempenho zero
     const pg = S('polygon', { points: pts.map(p => p.join(',')).join(' '), fill: s.color, 'fill-opacity': .16, stroke: s.color, 'stroke-width': 2, style: `transform-origin:${cx}px ${cy}px;transform:scale(0);transition:transform 1s cubic-bezier(.2,.8,.2,1) ${si * 120}ms` }, svg);
     pts.forEach((p, i) => { const c = S('circle', { cx: p[0], cy: p[1], r: 3.5, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 1.5, class: 'fade' }, svg); bindTip(c, () => `<b>${esc(axes[i])}</b><hr>${ttRow(s.name, (o.fmt || (x => int(x * 100)))(s.values[i]), s.color)}`); });
     later(() => { pg.style.transform = 'scale(1)'; }, 80);
@@ -713,8 +834,10 @@ function histogram(el, vals, o) {
   const holder = document.createElement('div'); el.appendChild(holder);
   const { svg, W, H } = box(holder, o.h || 170);
   const lo = o.min != null ? o.min : quant(vals, 0.01), hi = o.max != null ? o.max : quant(vals, 0.99), nb = o.bins || 24;
-  const cnt = new Array(nb).fill(0); vals.forEach(v => { if (!ok(v)) return; const b = clamp(Math.floor((v - lo) / (hi - lo) * nb), 0, nb - 1); cnt[b]++; });
+  let nLo_ = 0, nHi_ = 0;
+  const cnt = new Array(nb).fill(0); vals.forEach(v => { if (!ok(v)) return; const b = clamp(Math.floor((v - lo) / (hi - lo) * nb), 0, nb - 1); cnt[b]++; if (v < lo) nLo_++; else if (v > hi) nHi_++; });
   const mx = Math.max(...cnt), ml = 10, mr = 10, mt = 16, mb = 24, bw = (W - ml - mr) / nb;
+  if (nLo_ || nHi_) T(svg, W - mr, 11, (nLo_ ? '◂ ' + nLo_ + ' abaixo de ' + (o.fmt || (x => x))(lo) : '') + (nLo_ && nHi_ ? ' · ' : '') + (nHi_ ? nHi_ + ' acima de ' + (o.fmt || (x => x))(hi) + ' ▸' : '') + ' (agrupados nas pontas)', { 'text-anchor': 'end', class: 'lbl', style: 'font-size:9.5px' });
   const Y = c => mt + (1 - c / mx) * (H - mt - mb);
   cnt.forEach((c, i) => {
     const x0 = lo + (hi - lo) * i / nb, x1 = lo + (hi - lo) * (i + 1) / nb;

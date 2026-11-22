@@ -50,8 +50,50 @@ Rode tudo de dentro desta pasta (Python 3.11; Pillow só é necessário para as 
   com menos de 200 navegações por processo. O app roda dentro de uma função assíncrona: para testar os
   internos, gere uma cópia que exponha o que for preciso em `window` logo antes de `init();`.
 - Taxas ao mês × ao ano (Spread e DRE gerencial, escolha compartilhada em `ST.ui.tx`): fluxo do período ÷ nº de
-  meses ÷ saldo médio do período. As séries trimestrais usam `flowQ`, que devolve NaN quando falta o relatório 4
-  do trimestre (ou do anterior, em jun/dez) — sem isso, jun e dez carregariam o semestre inteiro.
+  meses ÷ saldo médio do período (uma aproximação da divisão pela soma dos saldos mensais).
+
+## Integridade dos números (Onda 0)
+
+- **Páginas repetidas no Olinda.** Os relatórios de set/25 vieram com cada linha triplicada; `load()` no
+  `build_v2.py` descarta linhas idênticas. Os carregadores gravam por chave (não somam), então não houve
+  distorção, mas a deduplicação protege coletas futuras.
+- **Nada de dado futuro.** Com a coleta de 21/11/2026, os relatórios 7, 10, 11 e 13 existem para todos os
+  trimestres (`AVQ` = 0…5). Se uma coleta falhar de novo, o build ainda usa o perfil mais próximo e a tela avisa;
+  nesse caso, trate o perfil como indisponível nas séries históricas.
+- **Ausência ≠ zero.** Cada instituição leva `AV = {r2, r4, r5}` por trimestre: `1` relatório presente, `0` ausente
+  com a instituição ativa, `-` nenhum relatório na data. O acumulado de 12 meses só usa os pontos de que a conta
+  depende (até jun = dez + jun); se faltar um, a instituição fica sem o indicador e a DRE mostra o motivo; nos
+  agregados, a tela informa a cobertura. As séries trimestrais usam `flowQ` (NaN quando falta o trimestre ou, em
+  jun/dez, o anterior).
+- **Mínimo de capital por instituição** (`capReq` em `core.js`): regime completo = 8% de PR + adicional de capital
+  principal informado no IF.data (campo `acp`: 2,5% de conservação; ~3,5% nos grandes bancos S1, com o adicional
+  sistêmico) — Res. CMN 4.958; regime simplificado do S5 (sem capital principal informado) = 12% do RWAS5 na
+  singular filiada a central e 17% nas demais — Res. CMN 4.606, art. 12. Agregados: mínimo médio ponderado pelo
+  RWA, folga = soma das folgas individuais e contagem de instituições abaixo do próprio mínimo.
+- **Estágios.** Metodologia completa (E1–E3, denominador próprio) e simplificada (sem/com problema de
+  recuperação) ficam separadas; `pbR` = (E3 + problemáticos da simplificada) ÷ total é o indicador comparável.
+- **Perímetros e divisores.** Carteira = 1.6 + outros créditos + arrendamento no cartão e na série; rendimento da
+  tesouraria com centralização média; ROE só com PL médio positivo; eficiência só com receita positiva.
+
+## Ondas 1 a 5 (22/11/2026)
+
+- **Modelos declarados como o que são.** Vasicek com premissas e PD como hipótese; backtesting de VaR rotulado
+  como experimento didático (Kupiec tratando o caso de todas as exceções); estresse sem "½ ΔEVE" no PR; capital
+  econômico sem dupla contagem de mercado, com checagem de Cholesky da matriz de correlação e rótulo de exercício
+  ilustrativo; RAROC com a hipótese de 60% das despesas no crédito à vista (`OPX_CRED`); rating com cobertura,
+  redistribuição de pesos e sensibilidade a ±20% nos pesos.
+- **Nomes.** CAMELS · proxy, PEARLS adaptado (P1*/P2*), Limites estilo RAS, grandes bancos, atraso > 90 dias (SCR),
+  margem financeira antes da PE.
+- **Precisão e contexto.** Saldo médio pela regra do trapézio; pares por porte (até R$ 250 mi, R$ 250 mi a 2 bi,
+  acima de R$ 2 bi) e sistemas com sistemas (`peerSet`); NIM sobre ativos rentáveis, RORWA e DuPont; HHI e número
+  efetivo de modalidades, participação do agro; capital social ÷ PL (COSIF 6.1.1); quadro de qualidade dos dados.
+- **Séries.** Leitura da série no Painel (variações, 12 meses só com 5 pontos, real, base 100, maior queda,
+  descritivos marcados) e faixa P25–P75 dos pares. Ponte de resultado 12m × 12m anteriores fica para quando houver
+  8 trimestres.
+- **Gráficos** (mesmos tipos): radar marca eixo "sem dado"; histograma informa quantos valores foram agrupados nas
+  pontas; PEARLS separa a inadimplência das razões perto de 70%.
+- **Narrativa.** Resumo executivo como tela de entrada (forças, pontos de atenção e o que mudou no trimestre) e
+  navegação por pergunta.
 
 ## Interface
 

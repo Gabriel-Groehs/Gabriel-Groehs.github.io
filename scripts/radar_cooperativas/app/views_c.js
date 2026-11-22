@@ -11,8 +11,8 @@ function ratingOf(n) {
   const sc = (x, bad, good) => ok(x) ? clamp((x - bad) / (good - bad), 0, 1) * 100 : NaN;
   const p2 = x => pct(x, 2), p0 = x => pct(x, 0), p1 = x => pct(x, 1);
   const P = [
-    { t: 'Capital', w: .25, items: [['Índice de Basileia', m.ib, .105, .22, p1], ['PL ÷ ativo', div(m.pl, m.at), .06, .16, p1], ['Imobilização', m.imob, .5, .15, p1]] },
-    { t: 'Carteira', w: .25, items: [['Inadimplência 90d', m.inadR, .08, .015, p2], ['Ativos problemáticos', m.probR, .12, .03, p2], ['Estágio 3', m.e3R, .10, .025, p2], ['Cobertura PE ÷ problemáticos', m.cob, .4, 1.2, p0]] },
+    { t: 'Capital', w: .25, items: [['Índice de Basileia', m.ib, capK(m), capK(m) + .115, p1], ['PL ÷ ativo', div(m.pl, m.at), .06, .16, p1], ['Imobilização', m.imob, .5, .15, p1]] },
+    { t: 'Carteira', w: .25, items: [['Atraso > 90 dias (SCR)', m.inadR, .08, .015, p2], ['Ativos problemáticos', m.probR, .12, .03, p2], ['Problema de recuperação', m.pbR, .10, .025, p2], ['Cobertura PE ÷ problemáticos', m.cob, .4, 1.2, p0]] },
     { t: 'Rentabilidade', w: .15, items: [['ROA', m.roa, 0, .025, p2], ['ROE', m.roe, 0, .20, p1]] },
     { t: 'Eficiência', w: .10, items: [['Índice de eficiência', m.eff, .9, .4, p0]] },
     { t: 'Liquidez', w: .15, items: [['Ativos líquidos ÷ ativo', m.liqA, .08, .35, p0], ['Crédito ÷ captações', m.ltdC, 1.25, .7, p0]] },
@@ -21,8 +21,12 @@ function ratingOf(n) {
   let tw = 0, ts = 0;
   P.forEach(p => { p.items = p.items.map(([l, x, bad, good, f]) => ({ l, x, bad, good, f, s: sc(x, bad, good) })); const v = p.items.map(i => i.s).filter(ok); p.s = v.length ? mean(v) : NaN; if (ok(p.s)) { tw += p.w; ts += p.w * p.s; } });
   const score = tw ? ts / tw : NaN;
+  // cobertura: indicadores com dado e peso redistribuído entre os pilares disponíveis; sensibilidade: ±20% no peso de cada pilar
+  const nIt = P.reduce((s_, p) => s_ + p.items.length, 0), nOk = P.reduce((s_, p) => s_ + p.items.filter(i => ok(i.s)).length, 0);
+  let lo = score, hi = score;
+  P.forEach((p, k) => [0.8, 1.2].forEach(f => { let w2 = 0, s2 = 0; P.forEach((q, j) => { if (ok(q.s)) { const w = q.w * (j === k ? f : 1); w2 += w; s2 += w * q.s; } }); if (w2) { const v = s2 / w2; lo = Math.min(lo, v); hi = Math.max(hi, v); } }));
   const c = CLASSES.find(x => score >= x[1]) || CLASSES[CLASSES.length - 1];
-  const r = { score, cls: ok(score) ? c[0] : '—', band: ok(score) ? c[2] : '', pillars: P };
+  const r = { score, cls: ok(score) ? c[0] : '—', band: ok(score) ? c[2] : '', pillars: P, cov: { nIt, nOk, wOk: tw }, sens: [lo, hi] };
   RCACHE.set(rk_, r);
   return r;
 }
@@ -43,6 +47,7 @@ VIEWS.rating = (V, n) => {
   const pos = n.ent ? L.findIndex(x => x.e.id === n.id) + 1 : 0;
   b.b.appendChild(el('div', 'take', n.ent ? `<b>${pos}º</b> de ${L.length} ${peerLbl(n)} · percentil ${int(100 * (1 - (pos - 1) / L.length))}` : `Score do agregado de ${n.members.length} instituições.`));
   const pl = card(G, { cls: 'c8', title: 'Pilares', sub: 'Pontuação 0–100 e peso de cada pilar' });
+  pl.b.appendChild(el('p', 'note', `<b>Cobertura:</b> ${rt.cov.nOk} de ${rt.cov.nIt} indicadores com dado; os pilares sem dado saem e o peso dos demais é redistribuído (${int(rt.cov.wOk * 100)}% do peso original em uso). <b>Sensibilidade:</b> variando o peso de cada pilar em ±20%, o score fica entre ${int(rt.sens[0])} e ${int(rt.sens[1])}. As letras (AAA–CCC) são faixas do score, sem interpretação de probabilidade de default.`));
   hbars(chartEl(pl.b, 200), rt.pillars.map(p => ({ label: `${p.t} · peso ${int(p.w * 100)}%`, value: p.s, color: p.s >= 70 ? 'var(--s3)' : p.s >= 45 ? 'var(--s4)' : 'var(--s8)' })), { fmt: x => int(x), max: 100, lw: 200 });
   const it = card(G, { cls: 'c7', title: 'Indicadores e notas', sub: 'Cada indicador vira nota 0–100 entre a faixa "ruim" e a "boa" (linear, com teto e piso)' });
   it.b.innerHTML = `<div class="tblwrap" style="max-height:none"><table class="tbl"><thead><tr><th>Pilar · indicador</th><th>Valor</th><th>Ruim → bom</th><th>Nota</th></tr></thead><tbody>${rt.pillars.map(p => `<tr><td colspan="4" style="text-align:left;font:700 10px var(--mono);letter-spacing:.12em;color:var(--gold-ink);padding-top:10px">${p.t.toUpperCase()} · ${ok(p.s) ? int(p.s) : '—'}</td></tr>` + p.items.map(i => `<tr><td class="l">${i.l}</td><td><b>${i.f(i.x)}</b></td><td class="muted">${i.f(i.bad)} → ${i.f(i.good)}</td><td><span class="pill" style="border-color:${ok(i.s) ? (i.s >= 70 ? 'var(--good)' : i.s >= 45 ? 'var(--warn)' : 'var(--crit)') : 'var(--line)'}">${ok(i.s) ? int(i.s) : '—'}</span></td></tr>`).join('')).join('')}</tbody></table></div>`;
@@ -58,19 +63,19 @@ VIEWS.rating = (V, n) => {
   const row = (x, i) => { const mm = metrics(node(x.e.id)), r = ratingOf(node(x.e.id)); return `<tr data-id="${x.e.id}" style="cursor:pointer${x.e.id === n.id ? ';background:var(--gold-soft)' : ''}"><td class="l">${i}. ${esc(x.e.n)} <span class="muted">${x.e.uf || ''}</span></td><td><span class="pill" style="color:${CLS_COL[r.cls]}">${r.cls}</span></td><td>${int(x.s)}</td><td>${brl(mm.at)}</td><td>${pct(mm.ib)}</td><td>${pct(mm.inadR, 2)}</td><td>${pct(mm.roe)}</td><td>${pct(mm.liqA, 0)}</td></tr>`; };
   rk.b.innerHTML = `<div class="tblwrap"><table class="tbl"><thead><tr><th>Instituição</th><th>Classe</th><th>Score</th><th>Ativo</th><th>Basileia</th><th>Inad.</th><th>ROE</th><th>Liquidez</th></tr></thead><tbody>${top.map((x, i) => row(x, i + 1)).join('')}${bot.length ? `<tr><td colspan="8" class="muted" style="text-align:center">⋯</td></tr>` + bot.map(x => row(x, pool.indexOf(x) + 1)).join('') : ''}</tbody></table></div>`;
   $$('tr[data-id]', rk.b).forEach(tr => tr.addEventListener('click', () => go('rating', tr.dataset.id)));
-  V.appendChild(el('p', 'note', 'Metodologia ilustrativa: faixas calibradas por referência a requisitos prudenciais (p. ex. Basileia 10,5%) e a padrões de mercado; pesos editáveis no código. Indicadores sem dado são ignorados e o peso é redistribuído. Fontes: IF.data, balancetes COSIF e SCR — data-base ' + mlab(D.base) + '.'));
+  V.appendChild(el('p', 'note', 'Metodologia ilustrativa: faixas calibradas por referência a requisitos prudenciais (p. ex. o mínimo de capital aplicável a cada instituição) e a padrões de mercado; pesos editáveis no código. Indicadores sem dado são ignorados e o peso é redistribuído. Fontes: IF.data, balancetes COSIF e SCR — data-base ' + mlab(D.base) + '.'));
 };
 
 /* ---------------- Comparar ---------------- */
 const CMP = [
   ['Porte', null], ['Ativo total', 'at', 0, brl], ['Carteira de crédito', 'cart', 0, brl], ['Captações', 'capt', 0, brl], ['Patrimônio líquido', 'pl', 0, brl], ['Resultado 12m', 'll', 0, brl],
   ['Capital', null], ['Índice de Basileia', 'ib', 1, pct], ['Capital principal', 'icp', 1, pct], ['Ativo ÷ PL (multiplicador)', 'alav', -1, mult], ['Capital IRRBB ÷ PR', 'irrbbPR', -1, pct],
-  ['Crédito', null], ['Inadimplência 90d', 'inadR', -1, x => pct(x, 2)], ['Ativos problemáticos', 'probR', -1, x => pct(x, 2)], ['Estágio 3', 'e3R', -1, x => pct(x, 2)], ['Cobertura PE ÷ problemáticos', 'cob', 1, x => pct(x, 0)], ['Custo do risco', 'cor', -1, x => pct(x, 2)],
+  ['Crédito', null], ['Atraso > 90 dias (SCR)', 'inadR', -1, x => pct(x, 2)], ['Ativos problemáticos', 'probR', -1, x => pct(x, 2)], ['Problema de recuperação', 'pbR', -1, x => pct(x, 2)], ['Cobertura PE ÷ problemáticos', 'cob', 1, x => pct(x, 0)], ['Custo do risco', 'cor', -1, x => pct(x, 2)],
   ['Resultado', null], ['ROE', 'roe', 1, pct], ['ROA', 'roa', 1, x => pct(x, 2)], ['NIM', 'nim', 1, pct], ['Taxa da carteira', 'yld', 0, pct], ['Custo de captação', 'cof', -1, pct], ['Spread', 'spread', 1, pp], ['Eficiência', 'eff', -1, x => pct(x, 0)],
   ['Liquidez', null], ['Crédito ÷ captações', 'ltdC', -1, x => pct(x, 0)], ['Ativos líquidos ÷ ativo', 'liqA', 1, x => pct(x, 0)], ['Crescimento da carteira 12m', 'gCrb', 0, x => pct(x, 1, true)],
 ];
 VIEWS.comparar = (V) => {
-  head(V, 'Avaliação · Comparar', 'Comparar instituições', 'Escolha uma instituição à esquerda e outra à direita — cooperativas, sistemas, centrais ou bancões. Cada linha destaca quem está melhor no indicador (quando há direção de "melhor").');
+  head(V, 'Avaliação · Comparar', 'Comparar instituições', 'Escolha uma instituição à esquerda e outra à direita — cooperativas, sistemas, centrais ou grandes bancos. Cada linha destaca quem está melhor no indicador (quando há direção de "melhor").');
   const hp = el('div', 'cmp-h'); V.appendChild(hp);
   const pa = el('div', 'picker'), vs = el('div', 'cmp-vs', 'vs'), pb = el('div', 'picker');
   hp.appendChild(pa); hp.appendChild(vs); hp.appendChild(pb);
@@ -110,12 +115,12 @@ VIEWS.comparar = (V) => {
 };
 
 /* ---------------- Universo ---------------- */
-const AXES = { ib: ['Índice de Basileia', x => pct(x, 0), .05, .6], inadR: ['Inadimplência 90d', x => pct(x, 1), 0, .14], roe: ['ROE', x => pct(x, 0), -.15, .4], nim: ['NIM', x => pct(x, 1), 0, .16], eff: ['Eficiência', x => pct(x, 0), .2, 1.3], ltdC: ['Crédito ÷ captações', x => pct(x, 0), 0, 1.6], liqA: ['Ativos líquidos ÷ ativo', x => pct(x, 0), 0, .8], e3R: ['Estágio 3', x => pct(x, 1), 0, .2], spread: ['Spread', x => pp(x, 0), -.05, .3], cof: ['Custo de captação', x => pct(x, 1), 0, .2], gCrb: ['Crescimento da carteira 12m', x => pct(x, 0), -.3, .6], irrbbPR: ['Capital IRRBB ÷ PR', x => pct(x, 1), 0, .15], score: ['Score Radar', x => int(x), 0, 100] };
+const AXES = { ib: ['Índice de Basileia', x => pct(x, 0), .05, .6], inadR: ['Atraso > 90 dias (SCR)', x => pct(x, 1), 0, .14], roe: ['ROE', x => pct(x, 0), -.15, .4], nim: ['NIM', x => pct(x, 1), 0, .16], eff: ['Eficiência', x => pct(x, 0), .2, 1.3], ltdC: ['Crédito ÷ captações', x => pct(x, 0), 0, 1.6], liqA: ['Ativos líquidos ÷ ativo', x => pct(x, 0), 0, .8], pbR: ['Problema de recuperação', x => pct(x, 1), 0, .2], spread: ['Spread', x => pp(x, 0), -.05, .3], cof: ['Custo de captação', x => pct(x, 1), 0, .2], gCrb: ['Crescimento da carteira 12m', x => pct(x, 0), -.3, .6], irrbbPR: ['Capital IRRBB ÷ PR', x => pct(x, 1), 0, .15], score: ['Score Radar', x => int(x), 0, 100] };
 VIEWS.universo = (V, n) => {
   const ui = ST.ui.uni || (ST.ui.uni = { pop: n.grp === 'bank' ? 'bank' : 'coop', x: 'ib', y: 'inadR', off: new Set(), q: '', sort: 'at', dir: -1 });
-  head(V, 'Visão · Universo', 'Universo & ranking', `Todas as ${COOPS.length} cooperativas singulares, os sistemas e os ${BANKS.length} bancões em um só mapa: escolha os eixos, filtre sistemas na legenda e clique em uma bolha para abrir a instituição. Bolha = ativo total.`);
+  head(V, 'Visão · Universo', 'Universo & ranking', `Todas as ${COOPS.length} cooperativas singulares, os sistemas e os ${BANKS.length} grandes bancos em um só mapa: escolha os eixos, filtre sistemas na legenda e clique em uma bolha para abrir a instituição. Bolha = ativo total.`);
   const bar = el('div', ''); bar.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px'; V.appendChild(bar);
-  bar.appendChild(segCtl([['coop', 'Cooperativas singulares'], ['sys', 'Sistemas e bancões'], ['bank', 'Bancões']], ui.pop, k => { ui.pop = k; render(false); }));
+  bar.appendChild(segCtl([['coop', 'Cooperativas singulares'], ['sys', 'Sistemas e grandes bancos'], ['bank', 'Grandes bancos']], ui.pop, k => { ui.pop = k; render(false); }));
   const mk = (k, lab) => { const s = el('select', 'sel'); s.innerHTML = Object.entries(AXES).map(([a, v]) => `<option value="${a}" ${a === ui[k] ? 'selected' : ''}>${lab}: ${v[0]}</option>`).join(''); s.onchange = () => { ui[k] = s.value; render(false); }; bar.appendChild(s); };
   mk('x', 'Eixo X'); mk('y', 'Eixo Y');
   const G = grid(V);
@@ -128,14 +133,14 @@ VIEWS.universo = (V, n) => {
   const groups = ui.pop === 'coop' ? SYS_ORDER.filter(s => NODES.has('S:' + s)) : ui.pop === 'bank' ? ['banco'] : SYS_ORDER.filter(s => NODES.has('S:' + s)).concat(['banco']);
   const gOf = nn => nn.kind === 'bank' ? 'banco' : nn.sys;
   const lg = el('div', 'legend'); sc.b.appendChild(lg);
-  lg.innerHTML = groups.map(g => `<span data-g="${g}" class="${ui.off.has(g) ? 'off' : ''}" style="cursor:pointer"><i style="background:${g === 'banco' ? BANK_COLOR : SYS_COLOR[g]}"></i>${g === 'banco' ? 'Bancões' : SYS_NAME[g]} · ${pool.filter(x => gOf(x) === g).length}</span>`).join('') + '<span class="muted">clique para ocultar/mostrar</span>';
+  lg.innerHTML = groups.map(g => `<span data-g="${g}" class="${ui.off.has(g) ? 'off' : ''}" style="cursor:pointer"><i style="background:${g === 'banco' ? BANK_COLOR : SYS_COLOR[g]}"></i>${g === 'banco' ? 'Grandes bancos' : SYS_NAME[g]} · ${pool.filter(x => gOf(x) === g).length}</span>`).join('') + '<span class="muted">clique para ocultar/mostrar</span>';
   lg.addEventListener('click', e => { const s = e.target.closest('[data-g]'); if (!s) return; const g = s.dataset.g; ui.off.has(g) ? ui.off.delete(g) : ui.off.add(g); render(false); });
   const pts = pool.filter(nn => !ui.off.has(gOf(nn))).map(nn => ({ id: nn.id, x: val(nn, ui.x), y: val(nn, ui.y), r: metrics(nn).at, color: nn.kind === 'bank' ? BANK_COLOR : SYS_COLOR[nn.sys], label: nn.name, sel: nn.id === n.id || (n.kind === 'system' && ui.pop === 'sys' && nn.id === n.id), group: gOf(nn), nn }));
   const xs = pts.map(p => p.x).filter(ok), ys = pts.map(p => p.y).filter(ok);
   scatter(chartEl(sc.b, 460), pts, {
     h: 460, xFmt: AXES[ui.x][1], yFmt: AXES[ui.y][1], xLabel: AXES[ui.x][0], yLabel: AXES[ui.y][0], rMax: ui.pop === 'coop' ? 26 : 34,
     xmin: Math.max(AXES[ui.x][2], quant(xs, .01)), xmax: Math.min(AXES[ui.x][3], quant(xs, .99)), ymin: Math.max(AXES[ui.y][2], quant(ys, .01)), ymax: Math.min(AXES[ui.y][3], quant(ys, .99)),
-    refX: ui.x === 'ib' ? { v: .105, l: '10,5%' } : null, refY: { v: median(ys), l: 'mediana' },
+    refX: ui.x === 'ib' ? (ui.pop === 'coop' ? { v: .12, l: 'S5 filiada: 12%' } : { v: .105, l: 'S1–S4: 10,5% + adicionais' }) : null, refY: { v: median(ys), l: 'mediana' },
     tip: p => { const mm = metrics(p.nn), r = ratingOf(p.nn); return `<b>${esc(p.label)}</b><div style="opacity:.75">${esc(crumb(p.nn))}</div><hr>${ttRow(AXES[ui.x][0], AXES[ui.x][1](p.x))}${ttRow(AXES[ui.y][0], AXES[ui.y][1](p.y))}${ttRow('Ativo', brl(mm.at))}${ttRow('Rating', r.cls + ' · ' + int(r.score))}`; },
     onClick: p => { ST.e = p.id; writeHash(); if (PICK) PICK.set(p.id); render(false); },
   });
@@ -145,12 +150,12 @@ VIEWS.universo = (V, n) => {
   const tools = el('div', ''); tools.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap';
   const q = el('input', 'search'); q.type = 'search'; q.placeholder = 'Filtrar por nome, UF ou sistema'; q.value = ui.q; tools.appendChild(q); rk.b.appendChild(tools);
   const tw = el('div', 'tblwrap'); rk.b.appendChild(tw);
-  const COLS = [['n', 'Instituição'], ['sys', 'Sistema'], ['at', 'Ativo'], ['cart', 'Carteira'], ['ib', 'Basileia'], ['inadR', 'Inad.'], ['e3R', 'Estágio 3'], ['roe', 'ROE'], ['nim', 'NIM'], ['eff', 'Eficiência'], ['score', 'Score']];
-  const data = pool.map(nn => { const mm = metrics(nn); return { nn, n: nn.name, sys: nn.kind === 'bank' ? 'Banco' : SYS_NAME[nn.sys], uf: nn.ent ? nn.ent.uf : '', at: mm.at, cart: mm.cart, ib: mm.ib, inadR: mm.inadR, e3R: mm.e3R, roe: mm.roe, nim: mm.nim, eff: mm.eff, score: ratingOf(nn).score, cls: ratingOf(nn).cls }; });
+  const COLS = [['n', 'Instituição'], ['sys', 'Sistema'], ['at', 'Ativo'], ['cart', 'Carteira'], ['ib', 'Basileia'], ['inadR', 'Inad.'], ['pbR', 'Probl. recup.'], ['roe', 'ROE'], ['nim', 'NIM'], ['eff', 'Eficiência'], ['score', 'Score']];
+  const data = pool.map(nn => { const mm = metrics(nn); return { nn, n: nn.name, sys: nn.kind === 'bank' ? 'Banco' : SYS_NAME[nn.sys], uf: nn.ent ? nn.ent.uf : '', at: mm.at, cart: mm.cart, ib: mm.ib, inadR: mm.inadR, pbR: mm.pbR, roe: mm.roe, nim: mm.nim, eff: mm.eff, score: ratingOf(nn).score, cls: ratingOf(nn).cls }; });
   const paint = () => {
     ui.q = q.value; const qq = q.value.trim().toLowerCase();
     const rows = data.filter(d => !qq || (d.n + ' ' + d.sys + ' ' + d.uf).toLowerCase().includes(qq)).sort((a, b) => { const x = a[ui.sort], y = b[ui.sort]; if (typeof x === 'string') return ui.dir * x.localeCompare(y); return ui.dir * ((ok(x) ? x : -1e18) - (ok(y) ? y : -1e18)); });
-    const f = { at: brl, cart: brl, ib: pct, inadR: x => pct(x, 2), e3R: x => pct(x, 1), roe: pct, nim: pct, eff: x => pct(x, 0), score: x => int(x) };
+    const f = { at: brl, cart: brl, ib: pct, inadR: x => pct(x, 2), pbR: x => pct(x, 1), roe: pct, nim: pct, eff: x => pct(x, 0), score: x => int(x) };
     tw.innerHTML = `<table class="tbl"><thead><tr><th>#</th>${COLS.map(c => `<th data-s="${c[0]}" style="cursor:pointer;${c[0] === 'n' || c[0] === 'sys' ? 'text-align:left' : ''}">${c[1]}${ui.sort === c[0] ? (ui.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr></thead><tbody>${rows.slice(0, 150).map((d, i) => `<tr data-id="${d.nn.id}" style="cursor:pointer${d.nn.id === n.id ? ';background:var(--gold-soft)' : ''}"><td>${i + 1}</td><td class="l"><b style="font-weight:600">${esc(d.n)}</b> <span class="muted">${d.uf}</span></td><td class="l"><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${d.nn.kind === 'bank' ? BANK_COLOR : SYS_COLOR[d.nn.sys]};margin-right:6px"></i>${d.sys}</td>${COLS.slice(2).map(c => `<td>${c[0] === 'score' ? `<span class="pill" style="color:${CLS_COL[d.cls]}">${d.cls} ${int(d.score)}</span>` : f[c[0]](d[c[0]])}</td>`).join('')}</tr>`).join('')}</tbody></table>${rows.length > 150 ? `<p class="note" style="padding:0 10px">Mostrando 150 de ${rows.length}. Use o filtro.</p>` : ''}`;
   };
   tw.addEventListener('click', e => { const th = e.target.closest('th[data-s]'); if (th) { const s = th.dataset.s; ui.dir = ui.sort === s ? -ui.dir : (s === 'n' || s === 'sys' ? 1 : -1); ui.sort = s; paint(); return; } const tr = e.target.closest('tr[data-id]'); if (tr) go('balanca', tr.dataset.id); });
@@ -307,9 +312,10 @@ VIEWS.metodologia = (V) => {
     <p class="note">Música de abertura: <a href="https://zero-project.gr/music/tracks/sarabande/" target="_blank" rel="noopener">Sarabanda</a> da Suíte em ré menor HWV 437 de G. F. Händel (obra em domínio público), arranjo e gravação de <b>zero-project</b>, licença <a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>; arquivo recodificado em MP3 de ~120 kbps, com o silêncio das pontas aparado.</p>`;
   const tr = card(G, { title: 'Tratamentos', sub: 'Decisões de cálculo' });
   tr.b.innerHTML = `<ul class="refs">
-    <li><b>DRE em 12 meses</b>: o IF.data acumula a DRE no semestre (jun = 1S, dez = 2S). 12 meses = dez/25 + jun/26; trimestres: mar e set diretos, jun = jun − mar, dez = dez − set.</li>
-    <li><b>Saldos médios</b>: média de jun/25, set/25, dez/25, mar/26 e jun/26 para ROA, ROE, NIM, taxas e custos.</li>
-    <li><b>Taxas ao mês × ao ano</b> (Spread e DRE gerencial): receitas e despesas são fluxos e carteiras são saldos, então cada taxa divide o fluxo de um período pelo saldo médio do mesmo período — ao mês, fluxo ÷ nº de meses ÷ saldo médio (12 meses ÷ 12; trimestre ÷ 3), o mesmo que dividir pela soma dos saldos mensais; ao ano, 12 meses ÷ saldo médio (trimestre × 4).</li>
+    <li><b>DRE em 12 meses</b>: o IF.data acumula a DRE no semestre (jun = 1S, dez = 2S). 12 meses = soma dos quatro trimestres até a data-base (na data-base ${mlab(D.Q[QI])}: ${winTxt()}); trimestres: mar e set diretos, jun = jun − mar, dez = dez − set. Janela incompleta: instituição sem DRE num trimestre necessário fica sem o indicador; nos agregados, a tela informa a cobertura.</li>
+    <li><b>Saldos médios</b>: média pela regra do trapézio (pontas com meio peso) das datas-base ${D.Q.slice(Math.max(0, QI - 4), QI + 1).map(mlab).join(', ')} (as informadas) para ROA, ROE, NIM, taxas e custos — uma aproximação do saldo médio diário.</li>
+    <li><b>Pares</b>: singulares comparadas com singulares de porte semelhante (até R$ 250 mi, R$ 250 mi a 2 bi e acima de R$ 2 bi de ativo), sistemas com sistemas e grandes bancos entre si; medianas e percentis não ponderados.</li>
+    <li><b>Taxas ao mês × ao ano</b> (Spread e DRE gerencial): receitas e despesas são fluxos e carteiras são saldos, então cada taxa divide o fluxo de um período pelo saldo médio do mesmo período — ao mês, fluxo ÷ nº de meses ÷ saldo médio (12 meses ÷ 12; trimestre ÷ 3), uma aproximação da divisão pela soma dos saldos mensais; ao ano, 12 meses ÷ saldo médio (trimestre × 4).</li>
     <li><b>Sistemas</b>: soma das singulares (sem centrais, para não contar duas vezes) para os indicadores do IF.data; o balancete oferece também o <b>combinado oficial</b> do sistema.</li>
     <li><b>Índices de agregados</b> são recalculados a partir das somas (ex.: Basileia = ΣPR ÷ ΣRWA), nunca por média de índices.</li>
     <li><b>Centralização financeira</b> (cooperativas): o IF.data registra os recursos aplicados na central em "outros ativos" e sua remuneração em "outras receitas". O Radar soma o saldo da conta 1.4.5 do balancete 4010 à liquidez e os ingressos líquidos de depósitos intercooperativos (7.1.9.86 − 8.1.9.86) à margem financeira, por trimestre.</li>
@@ -321,7 +327,7 @@ VIEWS.metodologia = (V) => {
     <li>Prazos do SCR são <b>contratuais</b>; repactuação de pós-fixados usa a participação de CDI/Selic no total da carteira (não por modalidade).</li>
     <li>Depósitos sem vencimento e a parcela prefixada da tesouraria são <b>premissas</b>: o ΔEVE é indicativo e deve ser comparado ao capital IRRBB reportado.</li>
     <li>Taxas implícitas são sobre o <b>estoque</b> e misturam modalidades (inclui rural e direcionado); não se comparam diretamente às taxas de concessões do SGS.</li>
-    <li>Cooperativas S5 no regime simplificado têm requerimento de capital próprio (RWAS5); limites de 10,5% são referência para S1–S4.</li>
+    <li>Cooperativas S5 no regime simplificado têm requerimento de capital próprio (RWAS5); o mínimo é de 12% do RWAS5 na singular filiada a central e 17% nas demais (Res. CMN 4.606, art. 12); no regime completo, 8% de PR mais o adicional de capital principal informado no IF.data (Res. CMN 4.958).</li>
     <li>O <b>Rating Radar</b> é ilustrativo — não representa avaliação do FGCoop, do Banco Central ou de agências.</li></ul>`;
   const fx = card(G, { title: 'Fórmulas', sub: 'Clique em "i" nos cartões para ver cada uma no contexto' });
   fx.b.innerHTML = Object.entries(FX).filter(([k, f]) => f.tex).map(([k, f]) => `<div style="margin:0 0 10px"><b style="font-size:13px">${f.t}</b><span class="fx" data-tex="${esc(f.tex)}"></span></div>`).join('');
@@ -333,14 +339,14 @@ VIEWS.metodologia = (V) => {
 /* ---------------- registro de fórmulas ---------------- */
 const FX = {
   balanca: { t: 'Balança da intermediação', tex: '\\underbrace{\\text{Crédito}}_{\\text{tomadores}}\\;\\text{vs}\\;\\underbrace{\\text{Captações}}_{\\text{poupadores}}\\qquad \\theta \\propto \\frac{\\text{Crédito}}{\\text{Captações}}-1', d: 'A inclinação do travessão é proporcional à razão crédito/captações. O medalhão mostra o multiplicador do capital (ativo ÷ PL) e o painel inferior decompõe o spread da carteira. O quadro do SFN usa m = M1 ÷ base monetária, com c = papel-moeda em poder do público ÷ M1 e r = (base − papel-moeda do público) ÷ depósitos à vista, de forma que m = 1 ÷ [c + r(1 − c)].', s: 'IF.data; SGS 1788, 27789, 27790, 27791, 27810.' },
-  ib: { t: 'Índice de Basileia', tex: '\\text{IB}=\\frac{\\text{PR}}{\\text{RWA}_{\\text{cr}}+\\text{RWA}_{\\text{mer}}+\\text{RWA}_{\\text{op}}+\\text{RWA}_{\\text{sp}}}', d: 'Patrimônio de referência sobre ativos ponderados pelo risco. Referência: 8% de PR + 2,5% de adicional de conservação = 10,5% (S1–S4).', s: 'IF.data · Informações de Capital.' },
+  ib: { t: 'Índice de Basileia', tex: '\\text{IB}=\\frac{\\text{PR}}{\\text{RWA}_{\\text{cr}}+\\text{RWA}_{\\text{mer}}+\\text{RWA}_{\\text{op}}+\\text{RWA}_{\\text{sp}}}', d: 'Patrimônio de referência sobre ativos ponderados pelo risco. Mínimo aplicável a cada instituição: no regime completo, 8% de PR + adicional de capital principal informado no IF.data (2,5% de conservação e, nos grandes bancos S1, o adicional sistêmico — Res. CMN 4.958/2021); no regime simplificado do S5, PRS5 ÷ RWAS5 ≥ 12% na cooperativa filiada a central e 17% nas demais (Res. CMN 4.606/2017, art. 12). Nos agregados, o mínimo é a média ponderada pelo RWA.', s: 'IF.data · Informações de Capital.' },
   ra: { t: 'Razão de alavancagem', tex: '\\text{RA}=\\frac{\\text{Nível I}}{\\text{Exposição total}}', d: 'Capital de nível I sobre a exposição total sem ponderação de risco; mínimo de 3% para S1 e S2.', s: 'IF.data.' },
   rwa: { t: 'Densidade de RWA', tex: '\\text{densidade}=\\frac{\\text{RWA}}{\\text{Ativo total}}', d: 'Quanto do ativo "pesa" para capital: carteiras de varejo e PJ elevam a densidade; títulos públicos e operações garantidas reduzem.', s: 'IF.data.' },
   buffer: { t: 'Folga de capital e capacidade de crescimento', tex: '\\text{Folga}=\\text{PR}-10{,}5\\%\\times\\text{RWA}\\qquad \\Delta C_{\\max}=\\frac{\\text{Folga}}{10{,}5\\%\\times \\text{RW}}', d: 'A folga de PR sobre o requerimento sustenta novos ativos com ponderação RW; a perda que zera a folga considera que o RWA cai com a baixa.', s: 'Modelo sobre dados do IF.data.' },
   roe: { t: 'ROE e ROA', tex: '\\text{ROE}=\\frac{\\text{Resultado}_{12m}}{\\overline{\\text{PL}}}\\qquad \\text{ROA}=\\frac{\\text{Resultado}_{12m}}{\\overline{\\text{Ativo}}}', d: 'Resultado de 12 meses (lucro ou sobras) sobre saldos médios de cinco trimestres.', s: 'IF.data · DRE e balanço.' },
   inad: { t: 'Inadimplência (SCR)', tex: '\\text{Inad}=\\frac{\\text{Carteira inadimplida (90+ dias, arrastada)}}{\\text{Carteira ativa SCR}}', d: 'Operações com atraso acima de 90 dias, com arrasto do cliente, sobre a carteira ativa informada ao SCR.', s: 'IF.data · relatório 16 (SCR, documento 3040).' },
   prob: { t: 'Ativos problemáticos', tex: '\\text{AP}=\\frac{\\text{Inadimplência}+\\text{reestruturados e indícios de não pagamento}}{\\text{Carteira ativa}}', d: 'Conceito prudencial mais amplo que a inadimplência: inclui operações reestruturadas e com indícios de que não serão honradas.', s: 'IF.data · relatório 16.' },
-  stages: { t: 'Estágios de risco (IFRS 9 · Res. 4.966)', tex: '\\text{Estágio }3\\,\\%=\\frac{E_3+\\text{simplificada problemática}}{E_1+E_2+E_3+\\text{simplificada}}', d: 'Ativos financeiros classificados por estágio no balancete (contas 3.3.1). Estágio 1: perda esperada de 12 meses; estágio 2: aumento significativo do risco (vida inteira); estágio 3: problema de recuperação.', s: 'Balancetes 4010/4060.' },
+  stages: { t: 'Estágios de risco (IFRS 9 · Res. 4.966)', tex: '\\text{E3}=\\frac{E_3}{E_1+E_2+E_3}\\qquad \\text{Simplificada}=\\frac{P}{N+P}\\qquad \\text{Problema de recuperação}=\\frac{E_3+P}{E_1+E_2+E_3+N+P}', d: 'Ativos financeiros por metodologia de perda esperada no balancete (contas 3.3.1). Na completa: estágio 1 (perda esperada de 12 meses), estágio 2 (aumento significativo do risco, vida inteira) e estágio 3 (problema de recuperação). Na simplificada, permitida a instituições menores, só sem (N) ou com (P) problema de recuperação — não há estágio 2, então não se soma N ao estágio 1. O indicador comparável entre instituições é a parcela com problema de recuperação nas duas.', s: 'Balancetes 4010/4060.' },
   c15: { t: 'Carteiras C1 a C5', tex: '', d: 'Agrupamento da carteira previsto na Resolução BCB 352 para a perda mínima sobre ativos inadimplidos: de C1 (menores percentuais mínimos, garantias mais fortes) a C5 (maiores percentuais). A distribuição indica a qualidade das garantias e o piso de provisão em caso de atraso.', s: 'IF.data · relatório 16.' },
   cob: { t: 'Cobertura', tex: '\\text{Cobertura}=\\frac{\\text{Perda esperada (estoque)}}{\\text{Ativos problemáticos}}', d: 'Quanto da carteira problemática já está provisionado.', s: 'IF.data · Ativo e relatório 16.' },
   cor: { t: 'Custo do risco', tex: '\\text{CoR}=\\frac{-\\text{Resultado com perda esperada de crédito}_{12m}}{\\overline{\\text{Carteira bruta}}}', d: 'Despesa de provisão do ano sobre a carteira média.', s: 'IF.data · DRE (f3).' },
@@ -367,7 +373,7 @@ const FX = {
   raroc: { t: 'Precificação RAROC', tex: 'r_{\\min}=CF(1-K)+PD\\cdot LGD+c_{op}+\\frac{h\\,K}{1-t}\\qquad K=RW\\times 10{,}5\\%', d: 'Taxa que cobre funding da parcela não financiada por capital, perda esperada, custo operacional e o retorno exigido h sobre o capital alocado, bruto de tributos.', s: 'Zaik et al. (1996); Resti & Sironi.' },
   appetite: { t: 'Apetite a risco', tex: '', d: 'Limites em três níveis (confortável, atenção, alerta) definidos como referência executiva; o percentil é orientado para que valores maiores signifiquem melhor posição.', s: 'Radar de Riscos.' },
   ecap: { t: 'Capital econômico agregado', tex: 'CE=\\sqrt{\\mathbf{v}^{\\top}\\mathbf{C}\\,\\mathbf{v}}\\qquad \\mathbf{v}=(CE_{cr},CE_{mer},CE_{op},CE_{irrbb})', d: 'Agregação variância-covariância dos capitais isolados com matriz de correlação C ajustável; a diferença para a soma simples é o benefício de diversificação.', s: 'Bessis; Resti & Sironi.' },
-  stress: { t: 'Estresse integrado', tex: '\\text{IB}^{\\text{estr}}=\\frac{\\text{PR}-\\Delta PE+\\min(0,\\Delta NII)+\\tfrac12\\Delta EVE}{\\text{RWA}}', d: 'Choques simultâneos: PD e LGD estressadas, alta de juros e saques; efeitos sobre capital, resultado e liquidez.', s: 'Modelo ilustrativo.' },
+  stress: { t: 'Estresse integrado', tex: '\\text{IB}^{\\text{estr}}=\\frac{\\text{PR}-\\Delta PE+\\min(0,\\Delta NII)}{\\text{RWA}}', d: 'Choques simultâneos: PD e LGD estressadas, alta de juros e saques. O ΔEVE (valor econômico) aparece à parte e não é deduzido do PR, porque não é perda contábil; efeitos sobre capital, resultado e liquidez.', s: 'Modelo ilustrativo.' },
   rating: { t: 'Rating Radar', tex: '\\text{Score}=\\sum_p w_p\\,\\overline{s}_p,\\quad s=100\\cdot\\text{clamp}\\!\\left(\\frac{x-x_{\\text{ruim}}}{x_{\\text{bom}}-x_{\\text{ruim}}},0,1\\right)', d: 'Seis pilares (capital 25%, carteira 25%, rentabilidade 15%, eficiência 10%, liquidez 15%, funding 10%). Classes: AAA ≥ 90, AA ≥ 80, A ≥ 70, BBB ≥ 60, BB ≥ 50, B ≥ 40, CCC abaixo. Ilustrativo, inspirado em PEARLS/CAMELS.', s: 'Bressan et al. (2011); WOCCU PEARLS.' },
 };
 
