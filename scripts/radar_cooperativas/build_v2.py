@@ -16,7 +16,15 @@ MS = ["202507", "202508", "202509", "202510", "202511", "202512", "202601", "202
 
 def load(am, rel, tipo=1):
     p = os.path.join(D, "v_%s_t%d_r%s.json" % (am, tipo, rel))
-    return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else []
+    if not os.path.exists(p):
+        return []
+    # o Olinda às vezes repete páginas (os relatórios de set/25 vieram triplicados): descarta linhas idênticas
+    seen, out = set(), []
+    for r in json.load(open(p, encoding="utf-8")):
+        key = tuple(r.items())
+        if key not in seen:
+            seen.add(key); out.append(r)
+    return out
 
 def table(am, rel):
     """{CodInst: {Conta: Saldo}} e mapa conta->(grupo,nome)"""
@@ -355,6 +363,11 @@ for e in ents:
     c = e["id"]
     e["V"] = [bal_vec(c, am) for am in QS]
     e["R"] = [[k(DREt[am].get(c, {}).get(conta, 0)) for f, conta in DRE] for am in QS]
+    # disponibilidade por trimestre: 1 = relatório presente, 0 = ausente com a instituição ativa, - = instituição sem
+    # nenhum relatório na data (não aplicável). r2 balanço, r4 DRE, r5 capital — separa zero observado de dado ausente
+    act = [any(c in TAB[am][rr] for rr in ("2", "3", "5")) or c in DREt[am] for am in QS]
+    pres = {"r2": [c in TAB[am]["2"] for am in QS], "r4": [c in DREt[am] for am in QS], "r5": [c in TAB[am]["5"] for am in QS]}
+    e["AV"] = {s: "".join(("1" if p[i] else "0") if act[i] else "-" for i in range(len(QS))) for s, p in pres.items()}
     e["X"] = [idx_vec(c, am) for am in QS]
     pf = [MATS[AVQ["11"][i]][0].get(c) for i in range(len(QS))]
     pj = [MATS[AVQ["13"][i]][1].get(c) for i in range(len(QS))]

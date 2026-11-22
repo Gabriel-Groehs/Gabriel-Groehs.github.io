@@ -255,15 +255,15 @@ function drawScale(host, n, m) {
 
 /* ---------------- resumo executivo ---------------- */
 function execBullets(n, m) {
-  const P = peers()[n.grp], B = [];
+  const P = peerSet(n), B = [];
   const rank = (k, dir = 1) => { const a = P[k].slice().sort((x, y) => dir * (y - x)); const r = a.findIndex(x => dir > 0 ? x <= m[k] : x >= m[k]); return r < 0 ? a.length : r + 1; };
   if (n.kind === 'coop' || n.kind === 'bank') B.push(['n', `<b>Porte:</b> ${brl(m.at)} em ativos — ${rank('at')}º maior entre ${P.at.length} ${peerLbl(n)}; carteira de ${brl(m.cart)} e ${int(m.cli)} clientes com operações ativas.`]);
   else B.push(['n', `<b>Porte:</b> ${n.members.length} instituições somando ${brl(m.at)} em ativos, ${brl(m.cart)} em crédito e ${brl(m.capt)} em captações.`]);
-  const sIb = status('ib', m.ib); const med = peerMed(n, 'ib');
-  B.push([sIb === 'good' ? 'g' : sIb === 'warn' ? 'w' : 'c', `<b>Capital:</b> Basileia de ${pct(m.ib)} (mediana dos pares ${pct(med)}); folga de ${brl(m.buf)} sobre o mínimo de 10,5% — permitiria ${brl(m.buf / 0.105 / Math.max(.3, m.rwaD))} adicionais de ativos com a densidade atual de RWA.`]);
+  const sIb = status('ib', m.ib, m.capMin); const med = peerMed(n, 'ib');
+  B.push([sIb === 'good' ? 'g' : sIb === 'warn' ? 'w' : 'c', `<b>Capital:</b> Basileia de ${pct(m.ib)} (mediana dos pares ${pct(med)}); folga de ${brl(m.buf)} sobre ${capMinTxt(m)} — permitiria ${brl(m.buf / m.capMin / Math.max(.3, m.rwaD))} adicionais de ativos com a densidade atual de RWA${m.cap.below ? `; ${m.cap.below} ${m.cap.below > 1 ? 'instituições estão' : 'instituição está'} abaixo do próprio mínimo` : ''}.`]);
   const sIn = status('inadR', m.inadR);
   const tr = m.q.inad[NQ - 1] - m.q.inad[1];
-  B.push([sIn === 'good' ? 'g' : sIn === 'warn' ? 'w' : 'c', `<b>Crédito:</b> inadimplência (90d, SCR) de ${pct(m.inadR)} ${tr > 0.002 ? `subindo ${pp(tr)} em 12 meses` : tr < -0.002 ? `caindo ${pp(-tr)} em 12 meses` : 'estável em 12 meses'}; ativos problemáticos ${pct(m.probR)}${ok(m.e3R) ? `, estágio 3 em ${pct(m.e3R)} dos ativos financeiros` : ''} e cobertura de ${pct(m.cob, 0)}.`]);
+  B.push([sIn === 'good' ? 'g' : sIn === 'warn' ? 'w' : 'c', `<b>Crédito:</b> inadimplência (90d, SCR) de ${pct(m.inadR)} ${tr > 0.002 ? `subindo ${pp(tr)} em 12 meses` : tr < -0.002 ? `caindo ${pp(-tr)} em 12 meses` : 'estável em 12 meses'}; ativos problemáticos ${pct(m.probR)}${ok(m.pbR) ? `, problema de recuperação em ${pct(m.pbR)} dos ativos financeiros (estágio 3 + simplificada)` : ''} e cobertura de ${pct(m.cob, 0)}.`]);
   const sRoe = status('roe', m.roe);
   B.push([sRoe === 'good' ? 'g' : sRoe === 'warn' ? 'w' : 'c', `<b>Resultado:</b> ${lucroLbl(n).toLowerCase()} de ${brl(m.ll)} em 12 meses; ROE ${pct(m.roe)} e ROA ${pct(m.roa, 2)}; margem financeira (NIM) de ${pct(m.nim)} do ativo e eficiência de ${pct(m.eff, 0)}.`]);
   const sL = status('ltdC', m.ltdC);
@@ -273,7 +273,7 @@ function execBullets(n, m) {
   return B;
 }
 function pctlRows(n, m) {
-  const R = [['Índice de Basileia', 'ib', 1, pct], ['Inadimplência', 'inadR', -1, pct], ['Estágio 3', 'e3R', -1, pct], ['ROE', 'roe', 1, pct], ['NIM', 'nim', 1, pct], ['Eficiência', 'eff', -1, x => pct(x, 0)], ['Ativos líquidos', 'liqA', 1, x => pct(x, 0)], ['Crédito / captações', 'ltdC', -1, x => pct(x, 0)], ['Custo de captação', 'cof', -1, pct]];
+  const R = [['Índice de Basileia', 'ib', 1, pct], ['Inadimplência', 'inadR', -1, pct], ['Problema de recuperação', 'pbR', -1, pct], ['ROE', 'roe', 1, pct], ['NIM', 'nim', 1, pct], ['Eficiência', 'eff', -1, x => pct(x, 0)], ['Ativos líquidos', 'liqA', 1, x => pct(x, 0)], ['Crédito / captações', 'ltdC', -1, x => pct(x, 0)], ['Custo de captação', 'cof', -1, pct]];
   return R.map(([l, k, d, f]) => { let p = pctile(n, k, m[k]); if (d < 0 && ok(p)) p = 1 - p; return `<div class="r"><span>${l}</span><div class="bar"><b></b><i style="left:${ok(p) ? (p * 100).toFixed(1) : 50}%"></i></div><span class="v">${f(m[k])}</span></div>`; }).join('');
 }
 
@@ -288,9 +288,9 @@ VIEWS.balanca = (V, n) => {
   kpi(K, { l: 'Captações', v: { n: m.capt, f: 'brl' }, d: delta(m.gCapt) + ' 12m', sk: spark(h('capt'), 'var(--s1)') });
   kpi(K, { l: 'Patrimônio líquido', v: { n: m.pl, f: 'brl' }, d: delta(m.gPl) + ' 12m', sk: spark(h('pl'), 'var(--s3)') });
   kpi(K, { l: lucroK(n) + ' 12 meses', v: { n: m.ll, f: 'brl' }, d: 'ROE ' + pct(m.roe) + ' ' + stChip('roe', m.roe, ' '), sk: spark(m.q.roe, 'var(--s3)'), fx: 'roe' });
-  kpi(K, { l: 'Índice de Basileia', v: { n: m.ib, f: 'pct' }, d: stChip('ib', m.ib), sk: spark(m.q.ib, 'var(--s7)'), fx: 'ib', cls: 'accent' });
-  kpi(K, { l: 'Inadimplência 90d', v: { n: m.inadR, f: 'pct2' }, d: stChip('inadR', m.inadR), sk: spark(m.q.inad, 'var(--s8)'), fx: 'inad' });
-  kpi(K, { l: 'Estágio 3', v: ok(m.e3R) ? { n: m.e3R, f: 'pct' } : '—', d: stChip('e3R', m.e3R), fx: 'stages' });
+  kpi(K, { l: 'Índice de Basileia', v: { n: m.ib, f: 'pct' }, d: stChip('ib', m.ib, null, m.capMin), sk: spark(m.q.ib, 'var(--s7)'), fx: 'ib', cls: 'accent' });
+  kpi(K, { l: 'Atraso > 90 dias (SCR)', v: { n: m.inadR, f: 'pct2' }, d: stChip('inadR', m.inadR), sk: spark(m.q.inad, 'var(--s8)'), fx: 'inad' });
+  kpi(K, { l: 'Problema de recuperação', v: ok(m.pbR) ? { n: m.pbR, f: 'pct' } : '—', d: stChip('pbR', m.pbR) + ' estágio 3 + simplificada', fx: 'stages' });
   kpi(K, { l: 'NIM (margem/ativo)', v: { n: m.nim, f: 'pct' }, d: 'spread ' + pp(m.spread), sk: spark(m.q.nim, 'var(--s2)'), fx: 'nim' });
   const rt = ratingOf(n);
   kpi(K, { l: 'Rating Radar', v: `<span style="font-family:var(--serif);font-weight:700">${rt.cls}</span>`, d: `score ${int(rt.score)}/100 · <a href="#v=rating" style="color:var(--gold-ink)">detalhes</a>`, fx: 'rating' });
@@ -301,10 +301,10 @@ VIEWS.balanca = (V, n) => {
 
   const ex = card(G, { cls: 'c7', title: 'Diagnóstico executivo', sub: 'Leitura automática dos indicadores frente aos pares' });
   ex.b.innerHTML = `<ul class="bul">${execBullets(n, m).map(([k, t]) => `<li><span class="ic ${k}">${k === 'g' ? '✓' : k === 'w' ? '!' : k === 'c' ? '×' : '•'}</span><span>${t}</span></li>`).join('')}</ul>`;
-  const pc = card(G, { cls: 'c5', title: 'Posição relativa', sub: `Percentil entre ${peers()[n.grp].at.length} ${peerLbl(n)} — à direita é melhor` });
+  const pc = card(G, { cls: 'c5', title: 'Posição relativa', sub: `Percentil entre ${peerSet(n).n} ${peerLbl(n)} — à direita é melhor` });
   pc.b.innerHTML = `<div class="pctl">${pctlRows(n, m)}</div><p class="note">Marcador central = mediana dos pares. Para sistemas e grupos, o valor agregado é posicionado na distribuição das singulares.</p>`;
 
-  const c1 = card(G, { cls: 'c4', title: 'Basileia trimestral', sub: 'PR ÷ RWA', fx: 'ib' }); lineChart(chartEl(c1.b, 170), { cats: qcats(), series: [{ name: 'Basileia', color: 'var(--s1)', values: m.q.ib, area: true }], refs: [{ y: .105, label: 'mínimo + ACP 10,5%', color: 'var(--crit)' }], h: 170 });
+  const c1 = card(G, { cls: 'c4', title: 'Basileia trimestral', sub: 'PR ÷ RWA', fx: 'ib' }); lineChart(chartEl(c1.b, 170), { cats: qcats(), series: [{ name: 'Basileia', color: 'var(--s1)', values: m.q.ib, area: true }], refs: capRef(m), h: 170 });
   const c2 = card(G, { cls: 'c4', title: 'Inadimplência e ativos problemáticos', sub: 'SCR · % da carteira', fx: 'inad' }); lineChart(chartEl(c2.b, 170), { cats: qcats(), series: [{ name: 'Inadimplência', color: 'var(--s8)', values: m.q.inad }, { name: 'Problemáticos', color: 'var(--s2)', values: m.q.prob }], h: 170, fmt: x => pct(x, 1) });
   const c3 = card(G, { cls: 'c4', title: 'Rentabilidade trimestral anualizada', sub: 'ROE e NIM', fx: 'roe' }); lineChart(chartEl(c3.b, 170), { cats: qcats(), series: [{ name: 'ROE', color: 'var(--s1)', values: m.q.roe }, { name: 'NIM', color: 'var(--s2)', values: m.q.nim }], h: 170 });
 
@@ -425,12 +425,13 @@ const DRE_ROWS = [
 ];
 VIEWS.dre = (V, n) => {
   const m = metrics(n);
-  head(V, 'Demonstrações · Resultado', 'DRE — ' + esc(nameOf(n)), `Demonstração do resultado no leiaute do IF.data (Res. CMN 4.966), por semestre e em 12 meses (jul/25–jun/26). Em cooperativas, o resultado é chamado de <b>sobras</b>.`);
+  head(V, 'Demonstrações · Resultado', 'DRE — ' + esc(nameOf(n)), `Demonstração do resultado no leiaute do IF.data (Res. CMN 4.966), por trimestre e em 12 meses (${winTxt()}). Em cooperativas, o resultado é chamado de <b>sobras</b>.`);
+  dreCovNote(V, m);
   const L = m.L, rev = L.rcre + L.rtvm + L.rapl + L.rarr + L.rocc + Math.max(0, m.icoop);
   const IQa = m.r.IQ || [];
   const K = el('div', 'kpis'); V.appendChild(K);
   kpi(K, { l: 'Receitas de intermediação', v: { n: rev, f: 'brl' }, d: '12 meses · crédito = ' + pct(div(L.rcre, rev), 0) });
-  kpi(K, { l: 'Margem financeira (NII)', v: { n: m.nii, f: 'brl' }, d: '12 meses · NIM ' + pct(m.nim), fx: 'nim' });
+  kpi(K, { l: 'Margem financeira antes da PE (NII)', v: { n: m.nii, f: 'brl' }, d: '12 meses · NIM ' + pct(m.nim), fx: 'nim' });
   kpi(K, { l: 'Perda esperada', v: { n: -L.pe, f: 'brl' }, d: '12 meses · custo do risco ' + pct(m.cor), fx: 'cor' });
   kpi(K, { l: lucroK(n) + ' 12 meses', v: { n: m.ll, f: 'brl' }, d: 'ROE ' + pct(m.roe) + ' · ROA ' + pct(m.roa, 2), cls: 'accent', fx: 'roe' });
   kpi(K, { l: 'Índice de eficiência', v: { n: m.eff, f: 'pct' }, d: stChip('eff', m.eff), fx: 'eff' });
@@ -444,7 +445,7 @@ VIEWS.dre = (V, n) => {
     ...(m.icoop ? [{ label: 'Centralização financeira', value: m.icoop, color: 'var(--s3)', tip: ttRow('Fonte', 'balancete 4010 · conta 7.1.9.86 (os dispêndios 8.1.9.86 já estão nas despesas de captação)') }] : []),
     { label: 'Outras rendas e derivativos', value: L.rarr + L.rocc + L.rder + L.rout },
     { label: 'Despesas de captação', value: L.dcp + L.ddc },
-    { label: 'Margem financeira (NII)', value: m.nii, kind: 'total' },
+    { label: 'Margem financeira antes da PE (NII)', value: m.nii, kind: 'total' },
     { label: 'Perda esperada', value: L.pe },
     { label: 'Tarifas e serviços', value: L.tar + L.srv },
     { label: 'Despesas de pessoal', value: L.pes },
@@ -582,7 +583,7 @@ VIEWS.spread = (V, n) => {
   const hs = card(G, { cls: 'c6', title: 'Taxa, custo e spread por trimestre', sub: MO ? 'Média mensal de cada trimestre · fluxo trimestral ÷ 3 sobre saldos médios' : 'Anualizados · fluxos trimestrais sobre saldos médios' });
   lineChart(chartEl(hs.b, 220), { cats: qcats(), series: [{ name: 'Taxa implícita', color: 'var(--pos)', values: m.q.yld.map(R) }, { name: 'Custo de captação', color: 'var(--neg)', values: m.q.cof.map(R) }, { name: 'Spread', color: 'var(--s1)', values: m.q.spread.map(R), area: true }], h: 220, fmt: fr });
   const cp = card(G, { cls: 'c6', title: 'Spread entre pares', sub: 'Distribuição do spread bruto ' + (MO ? 'ao mês ' : '') + 'nas ' + peerLbl(n) });
-  histogram(chartEl(cp.b, 190), peers()[n.grp].spread.map(R), { fmt: x => pp(x, MO ? 1 : 0), marker: R(sd.spread), markerLabel: 'você: ' + fpp(R(sd.spread)), h: 190, colorFn: x => x < 0 ? 'var(--s8)' : 'var(--s1)' });
+  histogram(chartEl(cp.b, 190), peerSet(n).spread.map(R), { fmt: x => pp(x, MO ? 1 : 0), marker: R(sd.spread), markerLabel: 'você: ' + fpp(R(sd.spread)), h: 190, colorFn: x => x < 0 ? 'var(--s8)' : 'var(--s1)' });
   const sgc = card(G, { cls: 'c12', title: 'Contexto de mercado (SFN, SGS)', sub: `Taxa média e spread das novas concessões × Selic, em % ${UL} — concessões novas, não estoque`, src: [['SGS 20714 · 20783 · 432', '']] });
   const i0 = SG.meses.indexOf('202301');
   const mm = SG.meses.slice(i0).filter((_, i) => ok(SG.taxa[i0 + i]));

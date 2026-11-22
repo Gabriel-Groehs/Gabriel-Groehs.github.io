@@ -34,17 +34,17 @@ const IC = {
 const ico = (k, s = 18) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[k] || ''}</svg>`;
 
 const NAV = [
-  { g: 'Visão', items: [{ id: 'balanca', t: 'Balança da intermediação', ic: 'scale' }, { id: 'painel', t: 'Painel de métricas', ic: 'grid', tag: 'A×B' }, { id: 'universo', t: 'Universo & ranking', ic: 'dots' }] },
-  { g: 'Demonstrações', items: [{ id: 'balancete', t: 'Balancete COSIF', ic: 'book', tag: '4010' }, { id: 'dre', t: 'DRE', ic: 'bars' }, { id: 'sankey', t: 'Resultado em fluxo', ic: 'sankey', tag: 'P&L' }, { id: 'dfc', t: 'DFC · fluxo de caixa', ic: 'flow' }, { id: 'spread', t: 'Spread', ic: 'spread' }] },
-  { g: 'Riscos', items: [{ id: 'credito', t: 'Risco de crédito', ic: 'shield', tag: 'SCR' }, { id: 'capital', t: 'Capital & Basileia', ic: 'pillar' }, { id: 'mercado', t: 'Mercado & tesouraria', ic: 'wave', tag: 'VaR' }, { id: 'alm', t: 'ALM, IRRBB & liquidez', ic: 'ladder' }, { id: 'nii', t: 'NII & pricing', ic: 'coin' }, { id: 'frm', t: 'FRM 360°', ic: 'radar' }] },
-  { g: 'Análises', items: [{ id: 'camels', t: 'CAMELS', ic: 'camel' }, { id: 'pearls', t: 'PEARLS (WOCCU)', ic: 'pearl' }, { id: 'ras', t: 'RAS · apetite a riscos', ic: 'ras' }, { id: 'rating', t: 'Rating Radar (ilustrativo)', ic: 'star' }, { id: 'comparar', t: 'Comparar IFs', ic: 'versus' }] },
+  { g: 'Visão geral', items: [{ id: 'resumo', t: 'Resumo executivo', ic: 'radar' }, { id: 'balanca', t: 'Balança da intermediação', ic: 'scale' }, { id: 'painel', t: 'Painel de métricas', ic: 'grid', tag: 'A×B' }, { id: 'universo', t: 'Universo & ranking', ic: 'dots' }] },
+  { g: 'Como ganha dinheiro', items: [{ id: 'balancete', t: 'Balancete COSIF', ic: 'book', tag: '4010' }, { id: 'dre', t: 'DRE', ic: 'bars' }, { id: 'sankey', t: 'Resultado em fluxo', ic: 'sankey', tag: 'P&L' }, { id: 'dfc', t: 'DFC · fluxo de caixa', ic: 'flow' }, { id: 'spread', t: 'Spread', ic: 'spread' }] },
+  { g: 'Que riscos corre', items: [{ id: 'credito', t: 'Risco de crédito', ic: 'shield', tag: 'SCR' }, { id: 'capital', t: 'Capital & Basileia', ic: 'pillar' }, { id: 'mercado', t: 'Mercado & tesouraria', ic: 'wave', tag: 'VaR' }, { id: 'alm', t: 'ALM, IRRBB & liquidez', ic: 'ladder' }, { id: 'nii', t: 'NII & pricing', ic: 'coin' }, { id: 'frm', t: 'FRM 360°', ic: 'radar' }] },
+  { g: 'Como se compara', items: [{ id: 'camels', t: 'CAMELS · proxy', ic: 'camel' }, { id: 'pearls', t: 'PEARLS adaptado', ic: 'pearl' }, { id: 'ras', t: 'Limites estilo RAS', ic: 'ras' }, { id: 'rating', t: 'Rating Radar (ilustrativo)', ic: 'star' }, { id: 'comparar', t: 'Comparar IFs', ic: 'versus' }] },
   { g: 'Referências', items: [{ id: 'biblioteca', t: 'Biblioteca', ic: 'books' }, { id: 'metodologia', t: 'Metodologia & dados', ic: 'info' }] },
 ];
 const VIEW_IDS = NAV.flatMap(g => g.items.map(i => i.id));
 const VIEW_T = Object.fromEntries(NAV.flatMap(g => g.items.map(i => [i.id, i.t])));
 
 /* ---------------- estado / rota ---------------- */
-const ST = { v: 'balanca', e: 'G:coop', a: 'S:sicredi', b: 'S:sicoob', ui: {} };
+const ST = { v: 'resumo', e: 'G:coop', a: 'S:sicredi', b: 'S:sicoob', ui: {} };
 let HEAD_NODE = null;
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
@@ -212,7 +212,7 @@ function delta(x, o = {}) {
   return `<span class="dl ${cls}">${x > 0 ? '▲' : x < 0 ? '▼' : '■'} ${(o.fmt || (v => pct(v, 1)))(Math.abs(x))}</span>`;
 }
 function head(parent, eyebrow, title, desc, actions) {
-  const cr = HEAD_NODE ? `<div class="crumbs">${HEAD_NODE.path.map((id, i) => (i ? '<span>›</span>' : '') + `<a href="#" data-go="${id}">${esc(node(id).name)}</a>`).join('')}<span style="margin-left:8px">· data-base ${mlab(D.Q[QI])}${QI < NQ - 1 ? ' (histórica)' : ''}</span></div>` : '';
+  const cr = HEAD_NODE ? `<div class="crumbs">${HEAD_NODE.path.map((id, i) => (i ? '<span>›</span>' : '') + `<a href="#" data-go="${id}">${esc(node(id).name)}</a>`).join('')}<span style="margin-left:8px">· data-base ${mlab(D.Q[QI])}${QI < NQ - 1 ? ' (histórica)' : ''}${QI < 3 ? ` · indicadores de 12 meses anualizados de ${QI + 1} trimestre${QI ? 's' : ''}` : ''}</span></div>` : '';
   const h = el('div', 'vh', `<div style="min-width:0;flex:1 1 520px"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1>${cr}${desc ? `<p>${desc}</p>` : ''}</div>${actions ? `<div class="act">${actions}</div>` : ''}`);
   $$('[data-go]', h).forEach(a => a.addEventListener('click', ev => { ev.preventDefault(); ST.e = a.dataset.go; writeHash(); render(false); }));   // mesma tela: troca no lugar
   parent.appendChild(h); return h;
@@ -332,5 +332,5 @@ const MUSIC = (() => {
   return { start() { if (want) play(); }, au };
 })();
 
-const nameOf = n => n.kind === 'group' ? (n.id === 'G:coop' ? 'Cooperativas (soma das singulares)' : 'Bancões (soma)') : n.kind === 'system' ? 'Sistema ' + n.name + (n.sys === 'indep' ? '' : ' (soma das singulares)') : n.name;
-const peerLbl = n => n.grp === 'bank' ? 'bancões' : 'cooperativas singulares';
+const nameOf = n => n.kind === 'group' ? (n.id === 'G:coop' ? 'Cooperativas (soma das singulares)' : 'Grandes bancos (soma)') : n.kind === 'system' ? 'Sistema ' + n.name + (n.sys === 'indep' ? '' : ' (soma das singulares)') : n.name;
+const peerLbl = n => { const k = peerKey(n); return k === 'bank' ? 'grandes bancos' : k === 'sys' ? 'sistemas cooperativos' : 'cooperativas ' + SZ_LBL[+k.slice(4)]; };
